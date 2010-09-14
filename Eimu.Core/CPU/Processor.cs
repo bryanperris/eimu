@@ -37,6 +37,7 @@ namespace Eimu.Core.CPU
         protected Timer m_DelayTimer;
         protected Timer m_SoundTimer;
         protected GraphicsCallback m_GraphicsCallback;
+        private InputPressCallback m_InputCallback;
         protected Memory m_Memory;
         protected bool m_Paused = false;
         private BackgroundWorker m_Worker;

@@ -54,5 +54,10 @@ namespace Eimu.Core
 		{
 			get { return this.s_Memory;}
 		}
+
+        public int Size
+        {
+            get { return this.s_Memory.Length; }
+        }
     }
 }

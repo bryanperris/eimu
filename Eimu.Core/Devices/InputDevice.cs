@@ -23,6 +23,8 @@ using System.Text;
 
 namespace Eimu.Core.Devices
 {
+    public delegate void InputPressCallback (bool pressed, byte number);
+ 
     public abstract class InputDevice
     {
     }

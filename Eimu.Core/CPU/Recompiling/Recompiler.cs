@@ -31,42 +31,15 @@ namespace Eimu.Core.CPU.Recompiling
         private ILGenerator m_Emitter;
         string progName = "ChipProgram";
         DynamicMethod program;
-        Dictionary<ChipOpcodes, InstructionCall> m_MethodCallTable;
+        OpcodeCallTable m_Table;
+        
 
         public Recompiler()
             : base()
         {
-            m_MethodCallTable = new Dictionary<ChipOpcodes, InstructionCall>();
-            LoadMethodCalls();
+  
             program = new DynamicMethod(progName, MethodAttributes.Private, CallingConventions.Standard, typeof(void), null, this.GetType(), false);
             m_Emitter = program.GetILGenerator();
-        }
-
-        private void LoadMethodCalls()
-        {
-            MethodInfo[] infos = this.GetType().GetMethods(BindingFlags.Public |
-                BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Static);
-
-            foreach (MethodInfo info in infos)
-            {
-                object[] attrs = info.GetCustomAttributes(typeof(OpcodeTag), false);
-
-                if (attrs != null)
-                {
-                    OpcodeTag tag = ((OpcodeTag)attrs[0]);
-                    this.m_MethodCallTable.Add(tag.Opcode, (InstructionCall)Delegate.CreateDelegate(typeof(InstructionCall), info));
-                }
-            }
-        }
-
-        private void InvokeOpcodeMethod(ChipOpcodes opcode, ChipInstruction inst)
-        {
-            InstructionCall call;
-
-            if (this.m_MethodCallTable.TryGetValue(opcode, out call))
-                call(inst);
-            else
-                throw new Exception("Method doesn't exist for this opcode!");
         }
         
         private void GenerateChipProgram()
@@ -77,7 +50,6 @@ namespace Eimu.Core.CPU.Recompiling
 			{
 				ChipInstruction inst = new ChipInstruction((ushort)((mem[i] << 8) | mem[i+2]));
 				ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
-
 
 				
 			}

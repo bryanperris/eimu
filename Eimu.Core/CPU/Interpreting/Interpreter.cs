@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Eimu.Core.Devices;
+using System.ComponentModel;
 
 namespace Eimu.Core.CPU.Interpreting
 {
@@ -31,9 +32,13 @@ namespace Eimu.Core.CPU.Interpreting
             throw new NotImplementedException();
         }
 
-        protected override void Execute(object sender, System.ComponentModel.DoWorkEventArgs e)
+        protected override void Execute(object sender, DoWorkEventArgs e)
         {
-            throw new NotImplementedException();
+            while (this.m_ProgCounter < this.m_Memory.Size)
+            {
+                if (e.Cancel)
+                    break;
+            }
         }
     }
 }
