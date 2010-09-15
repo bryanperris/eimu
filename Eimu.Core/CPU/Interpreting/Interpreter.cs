@@ -27,6 +27,14 @@ namespace Eimu.Core.CPU.Interpreting
 {
     public sealed partial class Interpreter : Processor
     {
+        OpcodeCallTable table;
+
+        public Interpreter()
+        {
+            table = new OpcodeCallTable();
+            table.LoadMethods(this.GetType());
+        }
+
         public override void Step()
         {
             throw new NotImplementedException();
@@ -34,10 +42,20 @@ namespace Eimu.Core.CPU.Interpreting
 
         protected override void Execute(object sender, DoWorkEventArgs e)
         {
-            while (this.m_ProgCounter < this.m_Memory.Size)
+            ChipInstruction inst;
+
+            while (this.m_ProgCounter <= this.m_Memory.Size)
             {
                 if (e.Cancel)
                     break;
+
+                this.ProgramCounter &= 0x00000FFF;
+                inst = new ChipInstruction(this.m_Memory.GetValue(this.ProgramCounter));
+                ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
+                this.ProgramCounter += 2;
+
+                table.CallMethod(inst);
+
             }
         }
     }

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CPU\ChipOpcodes.cs" />
     <Compile Include="CPU\Disassembler.cs" />
+    <Compile Include="CPU\Interpreting\Interpreter_Graphics.cs" />
     <Compile Include="CPU\OpcodeCallTable.cs" />
     <Compile Include="CPU\OpcodeTag.cs" />
     <Compile Include="CPU\Recompiling\Recompiler.cs" />
