@@ -23,18 +23,9 @@ using System.Text;
 
 namespace Eimu.Core.Devices
 {
-    public enum GraphicsCommand : int
-    {
-        Nop = 0,
-        Cls,
-        SetPixel
-    }
-
-    public delegate void GraphicsCallback(GraphicsCommand command, ushort data);
-
     public abstract class GraphicsDevice
     {
-        private readonly byte[] FONT = {0xF0, 0x90, 0x90, 0x90, 0xF0,   //0
+        public readonly byte[] FONTDATA = {0xF0, 0x90, 0x90, 0x90, 0xF0,   //0
 	                                    0x20, 0x60, 0x20, 0x20, 0x70,   //1
 	                                    0xF0, 0x10, 0xF0, 0x80, 0xF0,   //2
 	                                    0xF0, 0x10, 0xF0, 0x10, 0xF0,   //3
@@ -57,6 +48,15 @@ namespace Eimu.Core.Devices
         public const int FONT_WIDHT = 4;
         public const int FONT_HEIGH = 5;
 
-        public abstract void SendGraphicsCommand(GraphicsCommand command, ushort data);
+        public event EventHandler OnPixelCollision;
+
+        public abstract bool SetPixel(byte x, byte y);
+        public abstract void ClearScreen();
+
+        protected void SetCollision()
+        {
+            if (OnPixelCollision != null)
+                OnPixelCollision(this, new EventArgs());
+        }
     }
 }

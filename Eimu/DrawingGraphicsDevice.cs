@@ -18,20 +18,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using Eimu.Core.Devices;
 
 namespace Eimu
 {
-    public partial class StartWindow : Form
+    public sealed class DrawingGraphicsDevice : GraphicsDevice
     {
-        public StartWindow()
+        public override bool SetPixel(byte x, byte y)
         {
-            InitializeComponent();
+            throw new NotImplementedException();
+        }
+
+        public override void ClearScreen()
+        {
+            throw new NotImplementedException();
         }
     }
 }

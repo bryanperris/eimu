@@ -49,17 +49,17 @@ namespace Eimu.Core
         // ------------------------------------------
         private Thread m_ThreadCPU;
 
-        public VirtualMachine(Stream programSource, DeviceListInfo deviceInfo, Processor core)
+        public VirtualMachine(MachineParamaters paramaters)
         {
-            this.m_ProgramSource = programSource;
-            this.m_DeviceAudio = deviceInfo.Audio;
-            this.m_DeviceGraphics = deviceInfo.Graphics;
-            this.m_DeviceInput = deviceInfo.Input;
+            m_Memory = new Memory();
+            this.m_ProgramSource = paramaters.RomSource;
+            this.m_DeviceAudio = paramaters.Audio;
+            this.m_DeviceGraphics = paramaters.Graphics;
+            this.m_DeviceInput = paramaters.Input;
             this.m_State = RunState.Stopped;
             this.m_Memory = new Memory();
-            this.m_CPU = core;
+            this.m_CPU = paramaters.CPU;
             this.m_CPU.SetMemory(this.m_Memory);
-            this.m_CPU.GraphicsDeviceCallback = new GraphicsCallback(this.m_DeviceGraphics.SendGraphicsCommand);
         }
     }
 }

@@ -25,7 +25,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Eimu.Core.Devices;
 
-namespace Eimu.Core.CPU.Recompiling
+namespace Eimu.Core.CPU
 {
     partial class Recompiler
 	{

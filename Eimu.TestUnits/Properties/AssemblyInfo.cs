@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Eimu")]
-[assembly: AssemblyDescription("Chip8 Emulator")]
+[assembly: AssemblyTitle("Eimu.TestUnits")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Eimu Project")]
-[assembly: AssemblyProduct("Eimu")]
-[assembly: AssemblyCopyright("Copyright © Eimu Project 2010")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("Eimu.TestUnits")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c1990b09-1ddd-4ff6-9d25-074e591075bb")]
+[assembly: Guid("f9036ba6-f68c-4523-95de-9ffbd67d9e2a")]
 
 // Version information for an assembly consists of the following four values:
 //

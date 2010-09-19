@@ -25,5 +25,6 @@ namespace Eimu.Core.Devices
 {
     public abstract class AudioDevice
     {
+        public abstract void Beep();
     }
 }

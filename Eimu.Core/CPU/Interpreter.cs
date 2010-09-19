@@ -23,7 +23,7 @@ using System.Text;
 using Eimu.Core.Devices;
 using System.ComponentModel;
 
-namespace Eimu.Core.CPU.Interpreting
+namespace Eimu.Core.CPU
 {
     public sealed partial class Interpreter : Processor
     {
@@ -54,7 +54,7 @@ namespace Eimu.Core.CPU.Interpreting
                 ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
                 this.ProgramCounter += 2;
 
-                table.CallMethod(inst);
+                table.CallMethod(opcode, inst);
 
             }
         }

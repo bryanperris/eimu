@@ -34,13 +34,13 @@ namespace Eimu.Core.CPU
             }
         }
 
-        public bool CallMethod(ChipInstruction inst)
+        public bool CallMethod(ChipOpcodes opcode, ChipInstruction instruction)
         {
             InstructionCall call;
 
             if (this.m_MethodCallTable.TryGetValue(opcode, out call))
             {
-                call(inst);
+                call(instruction);
                 return true;
             }
 

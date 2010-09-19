@@ -20,14 +20,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Eimu.Core.Devices;
+using Eimu.Core.CPU;
+using System.IO;
 
-namespace Eimu.Core.Devices
+namespace Eimu.Core
 {
-    public sealed class DrawingGraphicsDevice : GraphicsDevice
+    public struct MachineParamaters
     {
-        public override void SendGraphicsCommand(GraphicsCommand command, ushort data)
-        {
-            throw new NotImplementedException();
-        }
+        public AudioDevice Audio { get; set; }
+        public GraphicsDevice Graphics { get; set; }
+        public InputDevice Input { get; set; }
+        public Processor CPU { get; set; }
+        public Stream RomSource { get; set; }
     }
 }

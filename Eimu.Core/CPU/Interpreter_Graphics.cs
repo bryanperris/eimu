@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using Eimu.Core.Devices;
 
-namespace Eimu.Core.CPU.Interpreting
+namespace Eimu.Core.CPU
 {
     partial class Interpreter
     {
         [OpcodeTag(ChipOpcodes.Clr)]
         private void Clr(ChipInstruction inst)
         {
-            this.GraphicsDeviceCallback(Eimu.Core.Devices.GraphicsCommand.Cls, 0);
+            //this.GraphicsDeviceCallback(Eimu.Core.Devices.GraphicsCommand.Cls, 0);
         }
 
         [OpcodeTag(ChipOpcodes.Drw)]

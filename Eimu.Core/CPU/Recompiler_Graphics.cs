@@ -1,4 +1,4 @@
-﻿/*  
+/*  
 Eimu - Chip-8 Emulator
 Copyright (C) 2010  http://code.google.com/p/eimu
 
@@ -20,13 +20,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
+using System.Reflection;
+using System.Reflection.Emit;
+using Eimu.Core.Devices;
 
-namespace Eimu.Core.Devices
+namespace Eimu.Core.CPU
 {
-    public struct DeviceListInfo
+    partial class Recompiler
     {
-        public AudioDevice Audio { get; set; }
-        public GraphicsDevice Graphics { get; set; }
-        public InputDevice Input { get; set; }
+        [OpcodeTag(ChipOpcodes.Clr)]
+        private void Cls(byte local1, byte local2)
+        {
+			EmitMethodCall(this.GetType(), "GraphicsDeviceCallback", local1, local2);
+        }
     }
 }

@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E1F6BAA8-02B6-4FAE-86FE-FA8861BE55B0}</ProjectGuid>
+    <ProjectGuid>{D577FF5C-F396-4E9D-8D83-C8510BD5D1BE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Eimu.Core</RootNamespace>
-    <AssemblyName>Eimu.Core</AssemblyName>
+    <RootNamespace>Eimu.TestUnits</RootNamespace>
+    <AssemblyName>Eimu.TestUnits</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,10 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -45,27 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CPU\ChipOpcodes.cs" />
-    <Compile Include="CPU\Disassembler.cs" />
-    <Compile Include="CPU\Interpreter_Graphics.cs" />
-    <Compile Include="CPU\OpcodeCallTable.cs" />
-    <Compile Include="CPU\OpcodeTag.cs" />
-    <Compile Include="CPU\Recompiler.cs" />
-    <Compile Include="CPU\Recompiler_Graphics.cs" />
-    <Compile Include="MachineParamaters.cs" />
-    <Compile Include="CPU\Processor.cs" />
-    <Compile Include="Devices\AudioDevice.cs" />
-    <Compile Include="Devices\InputDevice.cs" />
-    <Compile Include="CPU\Interpreter.cs" />
-    <Compile Include="Devices\GraphicsDevice.cs" />
-    <Compile Include="Memory.cs" />
+    <Compile Include="TestProcessor.cs" />
+    <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunState.cs" />
-    <Compile Include="VirtualMachine.cs" />
-    <Compile Include="CPU\ChipInstruction.cs" />
-    <Compile Include="CPU\Recompiler_Common.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Eimu.Core\Eimu.Core.csproj">
+      <Project>{E1F6BAA8-02B6-4FAE-86FE-FA8861BE55B0}</Project>
+      <Name>Eimu.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

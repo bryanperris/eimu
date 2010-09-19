@@ -60,28 +60,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GLGraphicsWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GLGraphicsWindow.Designer.cs">
-      <DependentUpon>GLGraphicsWindow.cs</DependentUpon>
-    </Compile>
+    <Compile Include="BeepAudioDevice.cs" />
+    <Compile Include="DrawingGraphicsDevice.cs" />
+    <Compile Include="FormsInputDevice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GLGraphicsWindow.resx">
-      <DependentUpon>GLGraphicsWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="StartWindow.resx">
-      <DependentUpon>StartWindow.cs</DependentUpon>
+    <EmbeddedResource Include="RenderWindow.resx">
+      <DependentUpon>RenderWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartDialog.resx">
+      <DependentUpon>StartDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -92,11 +92,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="StartWindow.cs">
+    <Compile Include="RenderWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StartWindow.Designer.cs">
-      <DependentUpon>StartWindow.cs</DependentUpon>
+    <Compile Include="RenderWindow.Designer.cs">
+      <DependentUpon>RenderWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartDialog.Designer.cs">
+      <DependentUpon>StartDialog.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +110,12 @@
       <Project>{E1F6BAA8-02B6-4FAE-86FE-FA8861BE55B0}</Project>
       <Name>Eimu.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="menubar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menubar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
