@@ -28,7 +28,12 @@ namespace Eimu.Core
         public const int MEMORY_SIZE = 4096;
         public const int MEMORY_BIAS = 0x200;
 
-        private byte[] s_Memory = new byte[MEMORY_SIZE];
+        private byte[] s_Memory;
+
+        public Memory()
+        {
+            this.s_Memory = new byte[MEMORY_SIZE];
+        }
 
         public virtual byte GetValueByRawAddress(int address)
         {

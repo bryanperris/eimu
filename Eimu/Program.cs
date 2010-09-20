@@ -26,6 +26,8 @@ namespace Eimu
 {
     static class Program
     {
+        static bool closeApp = false;
+
         [STAThread]
         static void Main()
         {
@@ -33,9 +35,19 @@ namespace Eimu
             Application.SetCompatibleTextRenderingDefault(false);
 
             StartDialog startscreen = new StartDialog();
+            startscreen.FormClosed += new FormClosedEventHandler(startscreen_FormClosed);
             startscreen.ShowDialog();
-            MachineParamaters mparams = startscreen.MParams;
-            VirtualMachine vm = new VirtualMachine(mparams);
+
+            if (!closeApp)
+            {
+                MachineParamaters mparams = startscreen.MParams;
+                VirtualMachine vm = new VirtualMachine(mparams);
+            }
+        }
+
+        static void startscreen_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            closeApp = true;
         }
     }
 }

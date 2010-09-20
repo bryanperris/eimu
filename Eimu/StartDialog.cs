@@ -40,55 +40,19 @@ namespace Eimu
             InitializeComponent();
         }
 
-        void GetSelectedProcessor()
+        void SetParams()
         {
-            this.m_MParams.CPU = new Interpreter();
-
-            if (this.radioButton_CPUModeInterpreter.Checked)
-            {
-                return;
-            }
-            else if (this.radioButton_CPUModeRecompiler.Checked)
-            {
-                this.m_MParams.CPU = new Recompiler();
-            }
-            else
-            {
-                MessageBox.Show("Invalid CPU Mode selected, using interpreter as defualt");
-            }
-        }
-
-        void GetSelectedGraphicsDevice()
-        {
-            if (radioButton_GraphicsDrawing.Checked)
-            {
-                this.m_MParams.Graphics = new DrawingGraphicsDevice();
-            }
-        }
-
-        void GetSelectedInputDevice()
-        {
-            if (radioButton_InputWinForms.Checked)
-            {
-                m_MParams.Input = new FormsInputDevice();
-            }
-        }
-
-        void GetSelectedAudioDevice()
-        {
-            if (radioButton_AudioBeep.Checked)
-            {
-                m_MParams.Audio= new BeepAudioDevice();
-            }
         }
 
         private void button_RunProgram_Click(object sender, EventArgs e)
         {
-            GetSelectedProcessor();
-            GetSelectedGraphicsDevice();
-            GetSelectedInputDevice();
-            GetSelectedAudioDevice();
-            Hide();
+            if (this.m_MParams.RomSource != null)
+            {
+                SetParams();
+                Hide();
+            }
+            else
+                MessageBox.Show("You haven't selected a rom source yet!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public MachineParamaters MParams

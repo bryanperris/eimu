@@ -51,7 +51,6 @@ namespace Eimu.Core
 
         public VirtualMachine(MachineParamaters paramaters)
         {
-            m_Memory = new Memory();
             this.m_ProgramSource = paramaters.RomSource;
             this.m_DeviceAudio = paramaters.Audio;
             this.m_DeviceGraphics = paramaters.Graphics;
@@ -59,7 +58,7 @@ namespace Eimu.Core
             this.m_State = RunState.Stopped;
             this.m_Memory = new Memory();
             this.m_CPU = paramaters.CPU;
-            this.m_CPU.SetMemory(this.m_Memory);
+            this.m_CPU.SetMemory(m_Memory);
         }
     }
 }
