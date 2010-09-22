@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NullDevices\NullAudioDevice.cs" />
+    <Compile Include="NullDevices\NullGraphicsDevice.cs" />
+    <Compile Include="NullDevices\NullInputDevice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -26,7 +26,7 @@ namespace Eimu
 {
     public sealed class DrawingGraphicsDevice : GraphicsDevice
     {
-        public override bool SetPixel(byte x, byte y)
+        public override void SetPixel(byte x, byte y)
         {
             throw new NotImplementedException();
         }

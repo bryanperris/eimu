@@ -50,7 +50,7 @@ namespace Eimu.Core.Devices
 
         public event EventHandler OnPixelCollision;
 
-        public abstract bool SetPixel(byte x, byte y);
+        public abstract void SetPixel(byte x, byte y);
         public abstract void ClearScreen();
 
         protected void SetCollision()

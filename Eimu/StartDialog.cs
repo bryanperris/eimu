@@ -56,12 +56,26 @@ namespace Eimu
             this.m_PluginManager.LoadPluginsFromAssembly(Assembly.GetExecutingAssembly());
 
             // DLL plugins
+            DirectoryInfo dir = new DirectoryInfo("./Plugins");
+            FileInfo[] dlls = dir.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
+
+            foreach (FileInfo dll in dlls)
+            {
+                try
+                {
+                    m_PluginManager.LoadPluginsFromAssembly(Assembly.LoadFile(dll.FullName));
+                }
+                catch (BadImageFormatException)
+                {
+                    continue;
+                }
+            }
 
 
             // Fill comboboxes
             ListPlugins(this.m_PluginManager.AudioDeviceList, this.comboBox_SelectedAudio);
-            //ListPlugins<GraphicsDevice>(this.m_PluginManager.GraphicsDeviceList, this.comboBox_SelectedGraphics);
-            //ListPlugins<InputDevice>(this.m_PluginManager.InputDeviceDeviceList, this.comboBox_SelectedInput);
+            ListPlugins(this.m_PluginManager.GraphicsDeviceList, this.comboBox_SelectedGraphics);
+            ListPlugins(this.m_PluginManager.InputDeviceDeviceList, this.comboBox_SelectedInput);
         }
 
         private void ListPlugins(List<Type> deviceList, ComboBox box)
@@ -84,11 +98,49 @@ namespace Eimu
                 }
             }
 
-            box.SelectedIndex = 0;
+            if (box.Items.Count > 0)
+                box.SelectedIndex = 0;
+            else
+                box.SelectedIndex = -1;
         }
 
         private void button_RunProgram_Click(object sender, EventArgs e)
         {
+            if (m_RomFileSource == null)
+            {
+                MessageBox.Show("No rom file selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (comboBox_SelectedAudio.SelectedItem == null)
+            {
+                MessageBox.Show("No audio plugin selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (comboBox_SelectedGraphics.SelectedItem == null)
+            {
+                MessageBox.Show("No graphics plugin selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
+
+            if (comboBox_SelectedInput.SelectedItem == null)
+            {
+                MessageBox.Show("No input plugin selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (radioButton_CPUModeInterpreter.Checked)
+                this.m_MParams.CPU = new Interpreter();
+            else
+                this.m_MParams.CPU = new Recompiler();
+
+            this.m_MParams.Audio = (AudioDevice)Activator.CreateInstance(((DeviceListItem)comboBox_SelectedAudio.SelectedItem).DeviceType);
+            this.m_MParams.Graphics = (GraphicsDevice)Activator.CreateInstance(((DeviceListItem)comboBox_SelectedGraphics.SelectedItem).DeviceType);
+            this.m_MParams.Input = (InputDevice)Activator.CreateInstance(((DeviceListItem)comboBox_SelectedInput.SelectedItem).DeviceType);
+            this.m_MParams.RomSource = m_RomFileSource;
+
+            Hide();
         }
 
         public MachineParamaters MParams
@@ -99,8 +151,11 @@ namespace Eimu
         private void button_FileBrowse_Click(object sender, EventArgs e)
         {
             m_OpenFileDialog.ShowDialog();
-            m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            textBox_RomPath.Text = m_OpenFileDialog.FileName;
+            if (m_OpenFileDialog.FileName != "")
+            {
+                m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                textBox_RomPath.Text = m_OpenFileDialog.FileName;
+            }
         }
 
         internal class DeviceListItem

@@ -23,29 +23,37 @@ namespace Eimu.Plugins
 
         public void LoadPluginsFromAssembly(Assembly assembly)
         {
-            List<object> plugins = new List<object>();
+            List<Type> plugins = new List<Type>();
             Type[] types = assembly.GetTypes();
 
             // Make a list a IPlugins
             foreach (Type type in types)
             {
-                if (type.GetInterface(typeof(IPlugin).ToString()) == typeof(IPlugin))
+                Type[] interfaces = type.GetInterfaces();
+
+                foreach (Type face in interfaces)
                 {
-                    plugins.Add(type);
-                    break;
+                    if (face == typeof(IPlugin))
+                    {
+                       plugins.Add(type);
+                       break;
+                    }
                 }
             }
 
-            foreach (object plugin in plugins)
+            foreach (Type type in plugins)
             {
-                Type type = plugin.GetType().BaseType;
+                Type a = type.BaseType;
 
-                if (type.IsAssignableFrom(typeof(AudioDevice).GetType()))
-                    this.m_AudioDeviceList.Add((Type)plugin);
-                else if (type.IsAssignableFrom(typeof(GraphicsDevice).GetType()))
-                    this.m_GraphicsDeviceList.Add((Type)plugin);
-                else if (type.IsAssignableFrom(typeof(InputDevice).GetType()))
-                    this.m_InputDeviceList.Add((Type)plugin);
+                if (typeof(AudioDevice) == a)
+                    this.m_AudioDeviceList.Add(type);
+
+                else if (typeof(GraphicsDevice) == a)
+                    this.m_GraphicsDeviceList.Add(type);
+
+                else if (typeof(InputDevice) == a)
+                    this.m_InputDeviceList.Add(type);
+
                 else
                     continue;
             }
