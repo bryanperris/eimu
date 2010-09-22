@@ -24,35 +24,71 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using System.Reflection;
 using Eimu.Core;
 using Eimu.Core.CPU;
 using Eimu.Core.Devices;
-using System.IO;
+using Eimu.Plugins;
+
 
 namespace Eimu
 {
     public partial class StartDialog : Form
     {
         private MachineParamaters m_MParams;
+        private OpenFileDialog m_OpenFileDialog;
+        private FileStream m_RomFileSource;
+        private PluginManager m_PluginManager;
 
         public StartDialog()
         {
             InitializeComponent();
+            this.m_MParams = new MachineParamaters();
+            m_OpenFileDialog = new OpenFileDialog();
+            m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8)|*.ch8;|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
+            m_PluginManager = new PluginManager();
+            GetPlugins();
         }
 
-        void SetParams()
+        private void GetPlugins()
         {
+            this.m_PluginManager.LoadPluginsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // DLL plugins
+
+
+            // Fill comboboxes
+            ListPlugins(this.m_PluginManager.AudioDeviceList, this.comboBox_SelectedAudio);
+            //ListPlugins<GraphicsDevice>(this.m_PluginManager.GraphicsDeviceList, this.comboBox_SelectedGraphics);
+            //ListPlugins<InputDevice>(this.m_PluginManager.InputDeviceDeviceList, this.comboBox_SelectedInput);
+        }
+
+        private void ListPlugins(List<Type> deviceList, ComboBox box)
+        {
+            box.Items.Clear();
+
+            if (deviceList == null || box == null)
+                return;
+
+            foreach (Type device in deviceList)
+            {
+                if (device.IsDefined(typeof(PluginInfo), false))
+                {
+                    PluginInfo info = (PluginInfo)device.GetCustomAttributes(typeof(PluginInfo), false)[0];
+                    box.Items.Add(new DeviceListItem(device, info.Name + " " + info.Version));
+                }
+                else
+                {
+                    box.Items.Add(new DeviceListItem(device, device.ToString()));
+                }
+            }
+
+            box.SelectedIndex = 0;
         }
 
         private void button_RunProgram_Click(object sender, EventArgs e)
         {
-            if (this.m_MParams.RomSource != null)
-            {
-                SetParams();
-                Hide();
-            }
-            else
-                MessageBox.Show("You haven't selected a rom source yet!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public MachineParamaters MParams
@@ -62,11 +98,31 @@ namespace Eimu
 
         private void button_FileBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Chip8 Programs (*.ch8)|*.ch8;|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
-            dialog.ShowDialog();
-            this.m_MParams.RomSource = new FileStream(dialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            textBox_RomPath.Text = dialog.FileName;
+            m_OpenFileDialog.ShowDialog();
+            m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            textBox_RomPath.Text = m_OpenFileDialog.FileName;
+        }
+
+        internal class DeviceListItem
+        {
+            Type m_DeviceType;
+            string m_Name;
+
+            public DeviceListItem(Type type, string name)
+            {
+                m_DeviceType = type;
+                this.m_Name = name;
+            }
+
+            public override string ToString()
+            {
+                return this.m_Name;
+            }
+
+            public Type DeviceType
+            {
+                get { return this.m_DeviceType; }
+            }
         }
     }
 }

@@ -2,32 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using Eimu;
 using Eimu.Core.Devices;
 using Eimu.Plugins;
 
-namespace Eimu.Plugins.Legacy
+namespace Eimu.NullDevices
 {
-    [PluginInfo("Legacy Audio Plugin", "1.0", "Omegadox", "Uses system beep")]
-    public class BeepAudioDevice : AudioDevice, IPlugin
+    [PluginInfo("Null Audio Plugin", "1.0", "Omegadox", "Skips audio output")]
+    public class NullAudioDevice : AudioDevice, IPlugin
     {
-        Thread m_Thread;
-
-        public BeepAudioDevice()
-        {
-            m_Thread = new Thread(new ThreadStart(DoBeep));
-            m_Thread.IsBackground = false;
-        }
-
         public override void Beep()
         {
-            m_Thread.Start();
-        }
-
-        private void DoBeep()
-        {
-            System.Console.Beep(100, 1);
+            return;
         }
 
         #region IPlugin Members
@@ -44,6 +30,7 @@ namespace Eimu.Plugins.Legacy
 
         public void SetOption(string name, string value)
         {
+            return;
         }
 
         public string GetOption(string name)
@@ -53,14 +40,17 @@ namespace Eimu.Plugins.Legacy
 
         public void Initialize()
         {
+            
         }
 
         public void Shutdown()
         {
+            
         }
 
         public void SetState(Eimu.Core.RunState state)
         {
+            return;
         }
 
         #endregion
