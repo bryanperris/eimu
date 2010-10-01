@@ -3,25 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
-using Eimu.Core.Devices;
+using System.IO;
 using System.Reflection;
+using Eimu.Core.Devices;
 
 namespace Eimu.Plugins
 {
-    public sealed class PluginManager
+    public static class PluginManager
     {
-        List<Type> m_AudioDeviceList;
-        List<Type> m_GraphicsDeviceList;
-        List<Type> m_InputDeviceList;
+        static List<Type> s_AudioDeviceList;
+        static List<Type> s_GraphicsDeviceList;
+        static List<Type> s_InputDeviceList;
 
-        public PluginManager()
+        static PluginManager()
         {
-            m_AudioDeviceList = new List<Type>();
-            m_GraphicsDeviceList = new List<Type>();
-            m_InputDeviceList = new List<Type>();
+            s_AudioDeviceList = new List<Type>();
+            s_GraphicsDeviceList = new List<Type>();
+            s_InputDeviceList = new List<Type>();
+            ClearPluginLists();
         }
 
-        public void LoadPluginsFromAssembly(Assembly assembly)
+        public static void ClearPluginLists()
+        {
+            s_AudioDeviceList.Clear();
+            s_GraphicsDeviceList.Clear();
+            s_InputDeviceList.Clear();
+            AudioPluginIndex = -1;
+            InputPluginIndex = -1;
+            GraphicsPluginIndex = -1;
+        }
+
+        public static void LoadPluginsFromFile(string folderpath)
+        {
+            // DLL plugins
+            DirectoryInfo dir = new DirectoryInfo(folderpath);
+            FileInfo[] dlls = dir.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
+
+            foreach (FileInfo dll in dlls)
+            {
+                try
+                {
+                    LoadPluginsFromAssembly(Assembly.LoadFile(dll.FullName));
+                }
+                catch (BadImageFormatException)
+                {
+                    continue;
+                }
+            }
+        }
+
+        public static void LoadPluginsFromAssembly(Assembly assembly)
         {
             List<Type> plugins = new List<Type>();
             Type[] types = assembly.GetTypes();
@@ -46,32 +77,93 @@ namespace Eimu.Plugins
                 Type a = type.BaseType;
 
                 if (typeof(AudioDevice) == a)
-                    this.m_AudioDeviceList.Add(type);
+                    s_AudioDeviceList.Add(type);
 
                 else if (typeof(GraphicsDevice) == a)
-                    this.m_GraphicsDeviceList.Add(type);
+                    s_GraphicsDeviceList.Add(type);
 
                 else if (typeof(InputDevice) == a)
-                    this.m_InputDeviceList.Add(type);
+                    s_InputDeviceList.Add(type);
 
                 else
                     continue;
             }
         }
 
-        public List<Type> AudioDeviceList
+        public static void LoadPluginsFromCallingAssembly()
         {
-            get { return this.m_AudioDeviceList; }
+            LoadPluginsFromAssembly(Assembly.GetCallingAssembly());
         }
 
-        public List<Type> GraphicsDeviceList
+        public static PluginInfo GetPluginInfo(Type type)
         {
-            get { return this.m_GraphicsDeviceList; }
+            if (type.IsDefined(typeof(PluginInfo), false))
+            {
+                return (PluginInfo)type.GetCustomAttributes(typeof(PluginInfo), false)[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public List<Type> InputDeviceDeviceList
+        public static List<Type> AudioDeviceList
         {
-            get { return this.m_InputDeviceList; }
+            get { return s_AudioDeviceList; }
         }
+
+        public static List<Type> GraphicsDeviceList
+        {
+            get { return s_GraphicsDeviceList; }
+        }
+
+        public static List<Type> InputDeviceDeviceList
+        {
+            get { return s_InputDeviceList; }
+        }
+
+        public static IntPtr WindowHandle { get; set; }
+
+        public static IntPtr RenderContext { get; set; }
+
+        public static void SetSelectedPlugins(int audioIndex, int graphicsIndex, int inputIndex)
+        {
+            if (audioIndex > s_AudioDeviceList.Count || audioIndex < 0)
+                throw new ArgumentOutOfRangeException("audioIndex");
+
+            AudioPluginIndex = audioIndex;
+
+            if (graphicsIndex > s_GraphicsDeviceList.Count || graphicsIndex < 0)
+                throw new ArgumentOutOfRangeException("graphicsIndex");
+
+            GraphicsPluginIndex = graphicsIndex;
+
+            if (inputIndex > s_InputDeviceList.Count || inputIndex < 0)
+                throw new ArgumentOutOfRangeException("inputIndex");
+
+            InputPluginIndex = inputIndex;
+        }
+
+        public static Type SelectedAudioDevice
+        {
+            get { return s_AudioDeviceList[AudioPluginIndex]; }
+        }
+
+        public static Type SelectedGraphicsDevice
+        {
+            get { return s_GraphicsDeviceList[GraphicsPluginIndex]; }
+        }
+
+        public static Type SelectedInputDevice
+        {
+            get { return s_InputDeviceList[InputPluginIndex]; }
+        }
+
+
+        public static int AudioPluginIndex { get; set; }
+
+        static int InputPluginIndex { get; set; }
+
+        static int GraphicsPluginIndex { get; set; }
     }
 }

@@ -25,7 +25,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Reflection;
 using Eimu.Core;
 using Eimu.Core.CPU;
 using Eimu.Core.Devices;
@@ -39,7 +38,6 @@ namespace Eimu
         private MachineParamaters m_MParams;
         private OpenFileDialog m_OpenFileDialog;
         private FileStream m_RomFileSource;
-        private PluginManager m_PluginManager;
 
         public StartDialog()
         {
@@ -47,54 +45,39 @@ namespace Eimu
             this.m_MParams = new MachineParamaters();
             m_OpenFileDialog = new OpenFileDialog();
             m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8)|*.ch8;|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
-            m_PluginManager = new PluginManager();
             GetPlugins();
         }
 
         private void GetPlugins()
         {
-            this.m_PluginManager.LoadPluginsFromAssembly(Assembly.GetExecutingAssembly());
-
-            // DLL plugins
-            DirectoryInfo dir = new DirectoryInfo("./Plugins");
-            FileInfo[] dlls = dir.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
-
-            foreach (FileInfo dll in dlls)
-            {
-                try
-                {
-                    m_PluginManager.LoadPluginsFromAssembly(Assembly.LoadFile(dll.FullName));
-                }
-                catch (BadImageFormatException)
-                {
-                    continue;
-                }
-            }
-
+            PluginManager.ClearPluginLists();
+            PluginManager.LoadPluginsFromCallingAssembly();
+            PluginManager.LoadPluginsFromFile("./Plugins");
 
             // Fill comboboxes
-            ListPlugins(this.m_PluginManager.AudioDeviceList, this.comboBox_SelectedAudio);
-            ListPlugins(this.m_PluginManager.GraphicsDeviceList, this.comboBox_SelectedGraphics);
-            ListPlugins(this.m_PluginManager.InputDeviceDeviceList, this.comboBox_SelectedInput);
+            ListPlugins(PluginManager.AudioDeviceList, this.comboBox_SelectedAudio);
+            ListPlugins(PluginManager.GraphicsDeviceList, this.comboBox_SelectedGraphics);
+            ListPlugins(PluginManager.InputDeviceDeviceList, this.comboBox_SelectedInput);
         }
 
-        private void ListPlugins(List<Type> deviceList, ComboBox box)
+        private void ListPlugins(List<Type> deviceTypeList, ComboBox box)
         {
             box.Items.Clear();
 
-            if (deviceList == null || box == null)
+            if (deviceTypeList == null || box == null)
                 return;
 
-            foreach (Type device in deviceList)
+            foreach (Type deviceType in deviceTypeList)
             {
-                if (device.IsDefined(typeof(PluginInfo), false))
+                PluginInfo info = PluginManager.GetPluginInfo(deviceType);
+
+                if (info != null)
                 {
-                    PluginInfo info = (PluginInfo)device.GetCustomAttributes(typeof(PluginInfo), false)[0];
-                    box.Items.Add(new DeviceListItem(device, info.Name + " " + info.Version));
+                    box.Items.Add(info);
                 }
                 else
                 {
-                    box.Items.Add(new DeviceListItem(device, device.ToString()));
+                    box.Items.Add(deviceType);
                 }
             }
 
@@ -112,19 +95,19 @@ namespace Eimu
                 return;
             }
 
-            if (comboBox_SelectedAudio.SelectedItem == null)
+            if (comboBox_SelectedAudio.SelectedIndex == -1)
             {
                 MessageBox.Show("No audio plugin selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (comboBox_SelectedGraphics.SelectedItem == null)
+            if (comboBox_SelectedGraphics.SelectedIndex == -1)
             {
                 MessageBox.Show("No graphics plugin selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return; 
             }
 
-            if (comboBox_SelectedInput.SelectedItem == null)
+            if (comboBox_SelectedInput.SelectedIndex == -1)
             {
                 MessageBox.Show("No input plugin selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -135,9 +118,13 @@ namespace Eimu
             else
                 this.m_MParams.CPU = new Recompiler();
 
-            this.m_MParams.Audio = (AudioDevice)Activator.CreateInstance(((DeviceListItem)comboBox_SelectedAudio.SelectedItem).DeviceType);
-            this.m_MParams.Graphics = (GraphicsDevice)Activator.CreateInstance(((DeviceListItem)comboBox_SelectedGraphics.SelectedItem).DeviceType);
-            this.m_MParams.Input = (InputDevice)Activator.CreateInstance(((DeviceListItem)comboBox_SelectedInput.SelectedItem).DeviceType);
+            PluginManager.SetSelectedPlugins(comboBox_SelectedAudio.SelectedIndex,
+                                             comboBox_SelectedGraphics.SelectedIndex,
+                                             comboBox_SelectedInput.SelectedIndex);
+
+            this.m_MParams.Audio = (AudioDevice)Activator.CreateInstance(PluginManager.SelectedAudioDevice);
+            this.m_MParams.Graphics = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
+            this.m_MParams.Input = (InputDevice)Activator.CreateInstance(PluginManager.SelectedInputDevice);
             this.m_MParams.RomSource = m_RomFileSource;
 
             Hide();
@@ -155,28 +142,6 @@ namespace Eimu
             {
                 m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 textBox_RomPath.Text = m_OpenFileDialog.FileName;
-            }
-        }
-
-        internal class DeviceListItem
-        {
-            Type m_DeviceType;
-            string m_Name;
-
-            public DeviceListItem(Type type, string name)
-            {
-                m_DeviceType = type;
-                this.m_Name = name;
-            }
-
-            public override string ToString()
-            {
-                return this.m_Name;
-            }
-
-            public Type DeviceType
-            {
-                get { return this.m_DeviceType; }
             }
         }
     }

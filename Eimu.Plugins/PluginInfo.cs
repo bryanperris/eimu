@@ -39,5 +39,15 @@ namespace Eimu.Plugins
         {
             get { return this.m_Author; }
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(m_Name);
+            sb.Append(" ");
+            sb.Append(m_Version);
+
+            return sb.ToString();
+        }
     }
 }

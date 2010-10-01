@@ -60,5 +60,13 @@ namespace Eimu.Core
             this.m_CPU = paramaters.CPU;
             this.m_CPU.SetMemory(m_Memory);
         }
+
+        public void SetState(RunState state)
+        {
+            if (state == RunState.Running)
+            {
+                //this.m_DeviceAudio
+            }
+        }
     }
 }

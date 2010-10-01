@@ -54,6 +54,7 @@
     <Compile Include="CPU\OpcodeTag.cs" />
     <Compile Include="CPU\Recompiler.cs" />
     <Compile Include="CPU\Recompiler_Graphics.cs" />
+    <Compile Include="Devices\IDevice.cs" />
     <Compile Include="MachineParamaters.cs" />
     <Compile Include="CPU\Processor.cs" />
     <Compile Include="Devices\AudioDevice.cs" />

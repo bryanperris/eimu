@@ -23,8 +23,27 @@ using System.Text;
 
 namespace Eimu.Core.Devices
 {
-    public abstract class AudioDevice
+    public abstract class AudioDevice : IDevice
     {
         public abstract void Beep();
+
+        #region IDevice Members
+
+        public void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Shutdown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetState(RunState state)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

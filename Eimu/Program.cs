@@ -37,12 +37,19 @@ namespace Eimu
 
             StartDialog startscreen = new StartDialog();
             startscreen.FormClosed += new FormClosedEventHandler(startscreen_FormClosed);
-            startscreen.ShowDialog();
 
-            if (!closeApp)
+            while (!closeApp)
             {
-                MachineParamaters mparams = startscreen.MParams;
-                VirtualMachine vm = new VirtualMachine(mparams);
+                startscreen.ShowDialog();
+
+                if (!closeApp)
+                {
+                    MachineParamaters mparams = startscreen.MParams;
+                    VirtualMachine vm = new VirtualMachine(mparams);
+
+                    RenderWindow renderWindow = new RenderWindow(vm);
+                    renderWindow.ShowDialog();
+                }
             }
         }
 

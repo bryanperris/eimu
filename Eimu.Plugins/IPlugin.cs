@@ -12,8 +12,5 @@ namespace Eimu.Plugins
         string[] GetOptionsList();
         void SetOption(string name, string value);
         string GetOption(string name);
-        void Initialize();
-        void Shutdown();
-        void SetState(RunState state);
     }
 }
