@@ -20,8 +20,10 @@ using System;
 
 namespace Eimu.Core.CPU
 {
-
-
+    /// <summary>
+    /// A class representing a chip8 instruction
+    /// </summary>
+    [Serializable]
 	public struct ChipInstruction
 	{
 		ushort m_Instruction;

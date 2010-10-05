@@ -35,14 +35,14 @@ namespace Eimu
 {
     public partial class StartDialog : Form
     {
-        private MachineParamaters m_MParams;
+        private DeviceTypeList m_MParams;
         private OpenFileDialog m_OpenFileDialog;
         private FileStream m_RomFileSource;
 
         public StartDialog()
         {
             InitializeComponent();
-            this.m_MParams = new MachineParamaters();
+            this.m_MParams = new DeviceTypeList();
             m_OpenFileDialog = new OpenFileDialog();
             m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8)|*.ch8;|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
             GetPlugins();
@@ -130,7 +130,7 @@ namespace Eimu
             Hide();
         }
 
-        public MachineParamaters MParams
+        public DeviceTypeList MParams
         {
             get { return this.m_MParams; }
         }

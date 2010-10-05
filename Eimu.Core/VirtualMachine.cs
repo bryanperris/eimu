@@ -20,53 +20,166 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Eimu.Core.CPU;
-using Eimu.Core.Devices;
 using System.IO;
 using System.Threading;
 
+using Eimu.Core.CPU;
+using Eimu.Core.Devices;
+
 namespace Eimu.Core
 {
+    /// <summary>
+    /// A Chip-8 virtual machine which provides managment of the system and inter-communication between devices and CPU.
+    /// </summary>
+    [Serializable]
     public sealed class VirtualMachine
     {
-        // ------------------------------------------
-        // Hardware Components
-        // ------------------------------------------
-        private GraphicsDevice m_DeviceGraphics;
-        private InputDevice m_DeviceInput;
-        private AudioDevice m_DeviceAudio;
-        private Memory m_Memory;
-        private Processor m_CPU;
-
-        // ------------------------------------------
-        // Machine state control
-        // ------------------------------------------
         private RunState m_State;
-        private Stream m_ProgramSource;
 
-        // ------------------------------------------
-        // Thread runners
-        // ------------------------------------------
-        private Thread m_ThreadCPU;
-
-        public VirtualMachine(MachineParamaters paramaters)
+        /// <summary>
+        /// Creates an instance of a chip8 virtual machine.
+        /// </summary>
+        public VirtualMachine()
         {
-            this.m_ProgramSource = paramaters.RomSource;
-            this.m_DeviceAudio = paramaters.Audio;
-            this.m_DeviceGraphics = paramaters.Graphics;
-            this.m_DeviceInput = paramaters.Input;
-            this.m_State = RunState.Stopped;
-            this.m_Memory = new Memory();
-            this.m_CPU = paramaters.CPU;
-            this.m_CPU.SetMemory(m_Memory);
+
         }
 
-        public void SetState(RunState state)
+        /// <summary>
+        /// Loads a stream source into the virtual machine's memory.
+        /// 
+        /// Exceptions:
+        ///   System.IO.IOException
+        ///   System.ArgumentException
+        /// </summary>
+        /// <param name="source"></param>
+        public void LoadROM(Stream source)
         {
-            if (state == RunState.Running)
+            MachineMemory = new Memory();
+
+            if (!source.CanRead)
+                throw new IOException("source not readable!");
+
+            if (source.Length > MachineMemory.Size)
+                throw new ArgumentException("source is bigger than memory size!");
+
+            source.Position = 0;
+            int read = -1;
+
+            // Read source into RAM
+            for (int i = 0; i < MachineMemory.Size; i++)
             {
-                //this.m_DeviceAudio
+                if (-1 != (read = source.ReadByte()))
+                {
+                    MachineMemory[i] = (byte)read;
+                }
+                else
+                {
+                    MachineMemory[i] = 0;
+                }
             }
         }
+
+        /// <summary>
+        /// Starts the virtual machine
+        /// 
+        /// Exceptions:
+        ///   System.NullReferenceException
+        /// </summary>
+        public void Start()
+        {
+            if (CurrentAudioDevice == null)
+                throw new NullReferenceException();
+
+            if (CurrentGraphicsDevice == null)
+                throw new NullReferenceException();
+
+            if (CurrentInputDevice == null)
+                throw new NullReferenceException();
+
+            if (CurrentProcessor == null)
+                throw new NullReferenceException();
+
+            if (MachineMemory == null)
+                throw new NullReferenceException();
+
+            ((IDevice)CurrentAudioDevice).Initialize();
+            ((IDevice)CurrentGraphicsDevice).Initialize();
+            ((IDevice)CurrentInputDevice).Initialize();
+            ((IDevice)CurrentProcessor).Initialize();
+            CurrentProcessor.SetMemory(this.MachineMemory);
+
+            CurrentProcessor.StartExecution();
+
+            m_State = RunState.Running;
+        }
+
+        /// <summary>
+        /// Stops the virtual machine
+        /// 
+        /// Exceptions:
+        ///   System.InvalidOperationException
+        /// </summary>
+        public void Stop()
+        {
+            if (m_State != RunState.Stopped)
+            {
+                m_State = RunState.Stopped;
+
+                ((IDevice)CurrentProcessor).Shutdown();
+                ((IDevice)CurrentInputDevice).Shutdown();
+                ((IDevice)CurrentAudioDevice).Shutdown();
+                ((IDevice)CurrentGraphicsDevice).Shutdown();
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// Sets the pause state of the virtual machine.
+        /// 
+        /// Exceptions:
+        ///   System.InvalidOperationException
+        /// </summary>
+        /// <param name="paused">The virtual machine is paused</param>
+        public void SetPause(bool paused)
+        {
+            if (m_State == RunState.Running || m_State == RunState.Paused)
+            {
+                ((IDevice)CurrentProcessor.SetPauseState)(paused);
+                ((IDevice)CurrentAudioDevice.SetPauseState)(paused);
+                ((IDevice)CurrentGraphicsDevice.SetPauseState)(paused);
+                ((IDevice)CurrentInputDevice.SetPauseState)(paused);
+
+                if (paused)
+                    m_State = RunState.Paused;
+                else
+                    m_State = RunState.Running;
+            }
+            else
+                throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Machine state
+        /// </summary>
+        public RunState MachineRunState
+        {
+            get { return this.m_State; }
+        }
+
+        /// <summary>
+        /// Current Audio Context
+        /// </summary>
+        public AudioDevice CurrentAudioDevice { get; set; }
+
+        public GraphicsDevice CurrentGraphicsDevice { get; set; }
+
+        public InputDevice CurrentInputDevice { get; set; }
+
+        public Processor CurrentProcessor { get; set; }
+
+        public Memory MachineMemory { get; set; }
     }
 }

@@ -54,14 +54,16 @@
     <Compile Include="CPU\OpcodeTag.cs" />
     <Compile Include="CPU\Recompiler.cs" />
     <Compile Include="CPU\Recompiler_Graphics.cs" />
+    <Compile Include="Devices\ChipKeys.cs" />
     <Compile Include="Devices\IDevice.cs" />
-    <Compile Include="MachineParamaters.cs" />
     <Compile Include="CPU\Processor.cs" />
     <Compile Include="Devices\AudioDevice.cs" />
     <Compile Include="Devices\InputDevice.cs" />
     <Compile Include="CPU\Interpreter.cs" />
     <Compile Include="Devices\GraphicsDevice.cs" />
+    <Compile Include="Devices\PixelSetEventArgs.cs" />
     <Compile Include="Memory.cs" />
+    <Compile Include="MemoryEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
     <Compile Include="VirtualMachine.cs" />

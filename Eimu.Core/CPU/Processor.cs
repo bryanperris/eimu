@@ -18,38 +18,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
-using System.Timers;
-using Eimu.Core.Devices;
 using System.ComponentModel;
+using System.Threading;
+
+using Eimu.Core.Devices;
 
 namespace Eimu.Core.CPU
 {
-    public abstract class Processor
+    [Serializable]
+    public abstract class Processor : IDevice
     {
-        public const int STACK_SIZE = 100;
-        protected readonly byte[] m_VRegs = new byte[16];
-        protected ushort[] m_Stack = new ushort[STACK_SIZE];
-        protected int m_ProgCounter;
-        protected ushort m_IReg;
-        protected int m_StackPointer;
-        protected Timer m_DelayTimer;
-        protected Timer m_SoundTimer;
+        public const int STACK_SIZE = 12;
+        public const int DELAY_TIME_RATE = 60;
+        public const int SOUND_TIMER_RATE = 60;
+
         protected Memory m_Memory;
         protected bool m_Paused = false;
+        protected Stack<ushort> m_Stack;
         private BackgroundWorker m_Worker;
+        private EventWaitHandle m_CPUWait;
+
+        // Registers
+        protected readonly byte[] m_VRegs = new byte[16];
+        protected int m_ProgramCounter;
+        protected ushort m_IReg;
+        protected byte m_DT;
+        protected byte m_ST;
+
+        // CPU timers
+        private Thread m_DelayTimer;
+        private Thread m_SoundTimer;
+        
+        // Device Callbacks
+        public event EventHandler OnScreenClear;
+        public event EventHandler<PixelSetEventArgs> OnPixelSet;
+        public event EventHandler OnBeep;
 
         public Processor()
         {
+            ClearRegisters();
+
             this.m_Worker = new BackgroundWorker();
             this.m_Worker.WorkerSupportsCancellation = true;
-            this.m_Worker.DoWork += new DoWorkEventHandler(Execute);
-            m_ProgCounter = 0;
+            this.m_Worker.DoWork += new DoWorkEventHandler(DoExecution);
+
+            m_Stack = new Stack<ushort>(STACK_SIZE);
+        }
+
+        protected void ClearRegisters()
+        {
+            m_ProgramCounter = 0;
             m_IReg = 0;
             m_StackPointer = 0;
-            m_DelayTimer = new Timer();
-            m_SoundTimer = new Timer();
         }
 
         public void SetMemory(Memory memory)
@@ -57,11 +80,60 @@ namespace Eimu.Core.CPU
             this.m_Memory = memory;
         }
 
-        protected abstract void Execute(object sender, DoWorkEventArgs e);
+        private void DoExecution(object sender, DoWorkEventArgs e)
+        {
+            while (this.m_ProgramCounter <= this.m_Memory.Size)
+            {
+                if (e.Cancel)
+                    break;
 
-        public void Run()
+                Step();
+            }
+        }
+
+        public abstract void Step();
+
+        public void StartExecution()
         {
             this.m_Worker.RunWorkerAsync();
+        }
+
+        private void DelayThread()
+        {
+            // The timer thread
+
+            while (m_DT > 0)
+            {
+                Interlocked.Decrement(m_DT);
+            }
+            
+            m_CPUWait.Set();
+        }
+
+        private void SoundThread()
+        {
+            while (m_ST > 0)
+            {
+                Interlocked.Decrement(ref m_ST);
+            }
+
+            if (OnBeep != null)
+                OnBeep(this, new EventArgs());
+        }
+
+        public void SetDelayTimer(byte value)
+        {
+            m_CPUWait.WaitOne();
+            m_DT = value;
+            m_DelayTimer = new Thread(new ThreadStart(DelayThread));
+            m_DelayTimer.Start();
+        }
+
+        public void SetSoundTimer(byte value)
+        {
+            m_ST = value;
+            m_SoundTimer = new Thread(new ThreadStart(SoundThread));
+            m_SoundTimer.Start();
         }
 
         public virtual void SetPauseState(bool paused)
@@ -69,67 +141,48 @@ namespace Eimu.Core.CPU
             this.m_Paused = paused;
         }
 
-        public void Shutdown()
+        public virtual void Shutdown()
         {
             if (this.m_Worker.IsBusy)
                 this.m_Worker.CancelAsync();
         }
 
-        public void SetRegisterV(int number, byte value)
+        public virtual void Initialize()
         {
-            m_VRegs[number] = value;
-        }
-
-        public byte GetRegisterV(int number)
-        {
-            return m_VRegs[number];
-        }
-
-        public void StackPushValue(byte value)
-        {
-            m_Stack[m_StackPointer] = value;
-            m_StackPointer++;
-        }
-
-        public ushort StackPopValue()
-        {
-            ushort val = m_Stack[m_StackPointer];
-            m_Stack[m_StackPointer--] = 0;
-            return val;
         }
 
         public void IncrementPC()
         {
-            ++m_ProgCounter;
+            m_ProgramCounter += 2;
         }
-
-        public abstract void Step();
 
         public int ProgramCounter
         {
-            get { return this.m_ProgCounter; }
-            set { this.m_ProgCounter = value; }
+            get { return this.m_ProgramCounter; }
+            set { this.m_ProgramCounter = value; }
         }
 
-        public ushort RegisterI
+        public void SetCollision()
         {
-            get { return (ushort)(this.m_IReg & 0x0FFF); }
-            set { this.m_IReg = (ushort)(value & 0x0FFF); }
+            m_VRegs[0xF] = 1;
         }
 
-        public bool IsPaused
+        protected void Beep()
         {
-            get { return this.m_Paused; }
+            if (OnBeep != null)
+                OnBeep(this, new EventArgs());
         }
 
-        public ushort[] Stack
+        protected void PixelSet(int x, int y)
         {
-            get { return this.m_Stack; }
+            if (OnPixelSet != null)
+                OnPixelSet(this, new PixelSetEventArgs(x, y));
         }
 
-        public int StackIndex
+        protected void ScreenClear()
         {
-            get { return this.m_StackPointer; }
+            if (OnScreenClear != null)
+                OnScreenClear(this, new EventArgs());
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Eimu
 
                 if (!closeApp)
                 {
-                    MachineParamaters mparams = startscreen.MParams;
+                    DeviceTypeList mparams = startscreen.MParams;
                     VirtualMachine vm = new VirtualMachine(mparams);
 
                     RenderWindow renderWindow = new RenderWindow(vm);

@@ -29,17 +29,17 @@ namespace Eimu.Core.Devices
 
         #region IDevice Members
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             throw new NotImplementedException();
         }
 
-        public void Shutdown()
+        public virtual void Shutdown()
         {
             throw new NotImplementedException();
         }
 
-        public void SetState(RunState state)
+        public virtual void SetPauseState(bool paused)
         {
             throw new NotImplementedException();
         }

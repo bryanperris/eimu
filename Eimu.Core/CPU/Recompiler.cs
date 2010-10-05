@@ -59,12 +59,6 @@ namespace Eimu.Core.CPU
         {
             throw new NotImplementedException();
         }
-
-        protected override void Execute(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            GenerateChipProgram();
-            program.Invoke(this, new object[0]);
-        }
 		
         [OpcodeTag(ChipOpcodes.Ret)]
 		private void Ret()

@@ -20,49 +20,66 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Eimu.Core
 {
-    public class Memory
+    public sealed class Memory : IEnumerable
     {
         public const int MEMORY_SIZE = 4096;
-        public const int MEMORY_BIAS = 0x200;
+        public const int MEMORY_OFFSET = 0x200;
 
-        private byte[] s_Memory;
+        private byte[] m_Memory;
 
         public Memory()
         {
-            this.s_Memory = new byte[MEMORY_SIZE];
+            this.m_Memory = new byte[MEMORY_SIZE];
         }
 
-        public virtual byte GetValueByRawAddress(int address)
+        public byte GetValueByRawAddress(int address)
         {
-            return s_Memory[address];
+            return m_Memory[address];
         }
 
-        public virtual void SetValueByRawAddress(int address, byte value)
+        public void SetValueByRawAddress(int address, byte value)
         {
-            s_Memory[address] = value;
+            m_Memory[address] = value;
         }
 
-        public virtual byte GetValue(int address)
+        public byte GetValue(int address)
         {
-            return s_Memory[address - MEMORY_BIAS];
+            return m_Memory[address - MEMORY_OFFSET];
         }
 
-        public virtual void SetValue(int address, byte value)
+        public void SetValue(int address, byte value)
         {
-            s_Memory[address - MEMORY_BIAS] = value;
+            m_Memory[address - MEMORY_OFFSET] = value;
         }
-		
-		public byte[] MemoryBuffer
-		{
-			get { return this.s_Memory;}
-		}
 
         public int Size
         {
-            get { return this.s_Memory.Length; }
+            get { return this.m_Memory.Length; }
+        }
+
+        #region IEnumerable Members
+
+        public IEnumerator GetEnumerator()
+        {
+            return new MemoryEnumerator(this.m_Memory);
+        }
+
+        #endregion
+
+        public byte this[int index]
+        {
+            get
+            {
+                return m_Memory[index];
+            }
+            set
+            {
+                m_Memory[index] = value;
+            }
         }
     }
 }

@@ -71,15 +71,14 @@ namespace Eimu.Core.CPU
         public static ChipOpcodes DecodeInstruction(ChipInstruction instruction)
 		{
             ChipOpcodes opcode;
-            ushort mask = GetOpcodeMask(instruction);
 
-			if (s_Lookup.TryGetValue((ushort)(instruction.RawInstruction & mask), out opcode))
+			if (s_Lookup.TryGetValue((ushort)(instruction.RawInstruction & GetOpcodeMask(instruction)), out opcode))
 				return opcode;
 			else
 				return ChipOpcodes.Unknown;
 		}
 
-        private static ushort GetOpcodeMask(ChipInstruction instruction)
+        public static ushort GetOpcodeMask(ChipInstruction instruction)
         {
             ushort mask = 0xF000;
 

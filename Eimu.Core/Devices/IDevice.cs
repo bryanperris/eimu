@@ -9,6 +9,6 @@ namespace Eimu.Core.Devices
     {
         void Initialize();
         void Shutdown();
-        void SetState(RunState state);
+        void SetPauseState(bool paused);
     }
 }

@@ -32,7 +32,7 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Clr)]
         private void Cls(byte local1, byte local2)
         {
-			EmitMethodCall(this.GetType(), "GraphicsDeviceCallback", local1, local2);
+			//EmitMethodCall(this.GetType(), "GraphicsDeviceCallback", local1, local2);
         }
     }
 }

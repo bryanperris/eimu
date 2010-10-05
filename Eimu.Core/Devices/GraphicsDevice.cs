@@ -23,7 +23,7 @@ using System.Text;
 
 namespace Eimu.Core.Devices
 {
-    public abstract class GraphicsDevice
+    public abstract class GraphicsDevice : IDevice
     {
         public readonly byte[] FONTDATA = {0xF0, 0x90, 0x90, 0x90, 0xF0,   //0
 	                                    0x20, 0x60, 0x20, 0x20, 0x70,   //1
@@ -51,6 +51,7 @@ namespace Eimu.Core.Devices
         public event EventHandler OnPixelCollision;
 
         public abstract void SetPixel(byte x, byte y);
+
         public abstract void ClearScreen();
 
         protected void SetCollision()
@@ -58,5 +59,24 @@ namespace Eimu.Core.Devices
             if (OnPixelCollision != null)
                 OnPixelCollision(this, new EventArgs());
         }
+
+        #region IDevice Members
+
+        public void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Shutdown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPauseState(bool paused)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

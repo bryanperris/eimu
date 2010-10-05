@@ -20,43 +20,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
-namespace Eimu.Core.Devices 
+namespace Eimu.Core
 {
-    public delegate void KeyStateHandler(ChipKeys key);
-
-    public abstract class InputDevice : IDevice
+    public sealed class MemoryEnumerator : IEnumerator
     {
-        public event KeyStateHandler OnKeyPress;
-        public event KeyStateHandler OnKeyRelease;
+        private byte[] m_Buffer;
+        private int m_Position = -1;
 
-        protected void KeyPress(ChipKeys key)
+        public MemoryEnumerator(byte[] buffer)
         {
-            if (OnKeyPress != null)
-                OnKeyPress(this, key);
+            m_Buffer = buffer;
         }
 
-        protected void KeyRelease(ChipKeys key)
+        #region IEnumerator Members
+
+        public object Current
         {
-            if (OnKeyRelease != null)
-                OnKeyRelease(this, key);
+            get
+            {
+                try
+                {
+                    return m_Buffer[m_Position];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
         }
 
-        #region IDevice Members
-
-        public void Initialize()
+        public bool MoveNext()
         {
-            throw new NotImplementedException();
+            m_Position++;
+            return (m_Position < m_Buffer.Length);
         }
 
-        public void Shutdown()
+        public void Reset()
         {
-            throw new NotImplementedException();
-        }
-
-        public void SetPauseState(bool paused)
-        {
-            throw new NotImplementedException();
+            m_Position = -1;
         }
 
         #endregion
