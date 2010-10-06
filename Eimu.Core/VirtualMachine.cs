@@ -34,6 +34,26 @@ namespace Eimu.Core
     [Serializable]
     public sealed class VirtualMachine
     {
+        public const int FONT_SIZE = 5;
+
+        public static readonly byte[] FONTROM = {
+         0xF0, 0x90, 0x90, 0x90, 0xF0,   //0
+	     0x20, 0x60, 0x20, 0x20, 0x70,   //1
+	     0xF0, 0x10, 0xF0, 0x80, 0xF0,   //2
+	     0xF0, 0x10, 0xF0, 0x10, 0xF0,   //3
+	     0x90, 0x90, 0xF0, 0x10, 0x10,   //4
+	     0xF0, 0x80, 0xF0, 0x10, 0xF0,   //5
+	     0xF0, 0x80, 0xF0, 0x90, 0xF0,   //6
+	     0xF0, 0x10, 0x20, 0x40, 0x40,   //7
+	     0xF0, 0x90, 0xF0, 0x90, 0xF0,   //8
+	     0xF0, 0x90, 0xF0, 0x10, 0xF0,   //9
+	     0xF0, 0x90, 0xF0, 0x90, 0x90,   //A
+	     0xE0, 0x90, 0xE0, 0x90, 0xE0,   //B
+	     0xF0, 0x80, 0x80, 0x80, 0xF0,   //C
+	     0xE0, 0x90, 0x90, 0x90, 0xE0,   //D
+	     0xF0, 0x80, 0xF0, 0x80, 0xF0,   //E
+	     0xF0, 0x80, 0xF0, 0x80, 0x80,}; //F
+
         private RunState m_State;
 
         /// <summary>
@@ -41,7 +61,8 @@ namespace Eimu.Core
         /// </summary>
         public VirtualMachine()
         {
-
+            MachineMemory = new Memory();
+            LoadFont();
         }
 
         /// <summary>
@@ -54,19 +75,17 @@ namespace Eimu.Core
         /// <param name="source"></param>
         public void LoadROM(Stream source)
         {
-            MachineMemory = new Memory();
-
             if (!source.CanRead)
                 throw new IOException("source not readable!");
 
-            if (source.Length > MachineMemory.Size)
+            if (source.Length > MachineMemory.Size - 0x1FF)
                 throw new ArgumentException("source is bigger than memory size!");
 
             source.Position = 0;
             int read = -1;
 
             // Read source into RAM
-            for (int i = 0; i < MachineMemory.Size; i++)
+            for (int i = 0x200; i < MachineMemory.Size - 0x1FF; i++)
             {
                 if (-1 != (read = source.ReadByte()))
                 {
@@ -76,6 +95,17 @@ namespace Eimu.Core
                 {
                     MachineMemory[i] = 0;
                 }
+            }
+        }
+
+        private void LoadFont()
+        {
+            for (int i = 0; i < 0x1FF; i++)
+            {
+                if (i < FONTROM.Length)
+                    this.MachineMemory[i] = FONTROM[i];
+                else
+                    this.MachineMemory[i] = 0;
             }
         }
 

@@ -46,6 +46,7 @@ namespace Eimu.Core.CPU
 
             ChipInstruction inst = new ChipInstruction((ushort)((ushort)rbyte1 << 8 | rbyte2));
             ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
+            //Console.WriteLine("Opcode: " + opcode.ToString());
             table.CallMethod(this, opcode, inst);
         }
 

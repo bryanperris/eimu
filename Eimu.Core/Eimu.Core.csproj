@@ -50,6 +50,7 @@
     <Compile Include="CPU\ChipOpcodes.cs" />
     <Compile Include="CPU\Disassembler.cs" />
     <Compile Include="CPU\Interpreter_Graphics.cs" />
+    <Compile Include="CPU\Interpreter_LoadStore.cs" />
     <Compile Include="CPU\OpcodeCallTable.cs" />
     <Compile Include="CPU\OpcodeTag.cs" />
     <Compile Include="CPU\Recompiler.cs" />
@@ -69,6 +70,9 @@
     <Compile Include="VirtualMachine.cs" />
     <Compile Include="CPU\ChipInstruction.cs" />
     <Compile Include="CPU\Recompiler_Common.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

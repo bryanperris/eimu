@@ -25,28 +25,11 @@ namespace Eimu.Core.Devices
 {
     public abstract class GraphicsDevice : IDevice
     {
-        public readonly byte[] FONTDATA = {0xF0, 0x90, 0x90, 0x90, 0xF0,   //0
-	                                    0x20, 0x60, 0x20, 0x20, 0x70,   //1
-	                                    0xF0, 0x10, 0xF0, 0x80, 0xF0,   //2
-	                                    0xF0, 0x10, 0xF0, 0x10, 0xF0,   //3
-	                                    0x90, 0x90, 0xF0, 0x10, 0x10,   //4
-	                                    0xF0, 0x80, 0xF0, 0x10, 0xF0,   //5
-	                                    0xF0, 0x80, 0xF0, 0x90, 0xF0,   //6
-	                                    0xF0, 0x10, 0x20, 0x40, 0x40,   //7
-	                                    0xF0, 0x90, 0xF0, 0x90, 0xF0,   //8
-	                                    0xF0, 0x90, 0xF0, 0x10, 0xF0,   //9
-	                                    0xF0, 0x90, 0xF0, 0x90, 0x90,   //A
-	                                    0xE0, 0x90, 0xE0, 0x90, 0xE0,   //B
-	                                    0xF0, 0x80, 0x80, 0x80, 0xF0,   //C
-	                                    0xE0, 0x90, 0x90, 0x90, 0xE0,   //D
-	                                    0xF0, 0x80, 0xF0, 0x80, 0xF0,   //E
-	                                    0xF0, 0x80, 0xF0, 0x80, 0x80,}; //F
+
         public const int RESOLUTION_WIDTH = 64;
         public const int RESOLUTION_HEIGHT = 32;
         public const int SPRITE_WIDTH = 8;
         public const int SPRITE_HEIGHT = 1;
-        public const int FONT_WIDHT = 4;
-        public const int FONT_HEIGH = 5;
 
         public event EventHandler OnPixelCollision;
 

@@ -40,6 +40,8 @@ namespace Eimu.Core.CPU
         protected Stack<ushort> m_Stack;
         private BackgroundWorker m_Worker;
         private EventWaitHandle m_CPUWait;
+        private EventWaitHandle m_KeyWait;
+        protected byte m_LastKey = 0;
 
         public event EventHandler ProgramEnd;
 
@@ -61,6 +63,9 @@ namespace Eimu.Core.CPU
 
         public Processor()
         {
+            m_CPUWait = new EventWaitHandle(true, EventResetMode.ManualReset);
+            m_KeyWait = new EventWaitHandle(true, EventResetMode.ManualReset);
+
             ClearRegisters();
 
             this.m_Worker = new BackgroundWorker();
@@ -221,6 +226,17 @@ namespace Eimu.Core.CPU
         {
             if (OnScreenClear != null)
                 OnScreenClear(this, new EventArgs());
+        }
+
+        public void SetKeyPress(ChipKeys key)
+        {
+            m_LastKey = (byte)key;
+            m_KeyWait.Set();
+        }
+
+        protected void WaitForKey()
+        {
+            this.m_KeyWait.WaitOne();
         }
     }
 }
