@@ -23,7 +23,7 @@ using System.Text;
 
 namespace Eimu.Core.Devices 
 {
-    public delegate void KeyStateHandler(ChipKeys key);
+    public delegate void KeyStateHandler(object sender, ChipKeys key);
 
     public abstract class InputDevice : IDevice
     {
@@ -44,20 +44,11 @@ namespace Eimu.Core.Devices
 
         #region IDevice Members
 
-        public void Initialize()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Initialize();
 
-        public void Shutdown()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Shutdown();
 
-        public void SetPauseState(bool paused)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void SetPauseState(bool paused);
 
         #endregion
     }

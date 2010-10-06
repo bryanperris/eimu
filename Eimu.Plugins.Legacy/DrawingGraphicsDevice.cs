@@ -26,12 +26,27 @@ namespace Eimu
 {
     public sealed class DrawingGraphicsDevice : GraphicsDevice
     {
-        public override void SetPixel(byte x, byte y)
+        public override void SetPixel(int x, int y)
         {
             throw new NotImplementedException();
         }
 
         public override void ClearScreen()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Shutdown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetPauseState(bool paused)
         {
             throw new NotImplementedException();
         }

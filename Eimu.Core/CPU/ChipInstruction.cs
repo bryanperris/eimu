@@ -24,7 +24,7 @@ namespace Eimu.Core.CPU
     /// A class representing a chip8 instruction
     /// </summary>
     [Serializable]
-	public struct ChipInstruction
+	public class ChipInstruction
 	{
 		ushort m_Instruction;
 		

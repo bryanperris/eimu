@@ -66,5 +66,14 @@ namespace Eimu.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eimu 1.0 - Chip 8 Emulator (By Omegadox).
+        /// </summary>
+        internal static string WindowCaption {
+            get {
+                return ResourceManager.GetString("WindowCaption", resourceCulture);
+            }
+        }
     }
 }

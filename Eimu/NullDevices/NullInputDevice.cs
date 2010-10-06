@@ -32,21 +32,18 @@ namespace Eimu.NullDevices
             return "";
         }
 
-        public void Initialize()
-        {
-
-        }
-
-        public void Shutdown()
-        {
-
-        }
-
-        public void SetState(Eimu.Core.RunState state)
-        {
-
-        }
-
         #endregion
+
+        public override void Initialize()
+        {
+        }
+
+        public override void Shutdown()
+        {
+        }
+
+        public override void SetPauseState(bool paused)
+        {
+        }
     }
 }

@@ -41,12 +41,14 @@ namespace Eimu.Core.CPU
         private BackgroundWorker m_Worker;
         private EventWaitHandle m_CPUWait;
 
+        public event EventHandler ProgramEnd;
+
         // Registers
-        protected readonly byte[] m_VRegs = new byte[16];
+        protected byte[] m_VRegs = new byte[16];
         protected int m_ProgramCounter;
         protected ushort m_IReg;
-        protected byte m_DT;
-        protected byte m_ST;
+        protected int m_DT;
+        protected int m_ST;
 
         // CPU timers
         private Thread m_DelayTimer;
@@ -64,15 +66,21 @@ namespace Eimu.Core.CPU
             this.m_Worker = new BackgroundWorker();
             this.m_Worker.WorkerSupportsCancellation = true;
             this.m_Worker.DoWork += new DoWorkEventHandler(DoExecution);
+            this.m_Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(m_Worker_RunWorkerCompleted);
 
             m_Stack = new Stack<ushort>(STACK_SIZE);
+        }
+
+        void m_Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (ProgramEnd != null)
+                ProgramEnd(this, new EventArgs());
         }
 
         protected void ClearRegisters()
         {
             m_ProgramCounter = 0;
             m_IReg = 0;
-            m_StackPointer = 0;
         }
 
         public void SetMemory(Memory memory)
@@ -82,7 +90,7 @@ namespace Eimu.Core.CPU
 
         private void DoExecution(object sender, DoWorkEventArgs e)
         {
-            while (this.m_ProgramCounter <= this.m_Memory.Size)
+            while (this.m_ProgramCounter < this.m_Memory.Size)
             {
                 if (e.Cancel)
                     break;
@@ -104,7 +112,7 @@ namespace Eimu.Core.CPU
 
             while (m_DT > 0)
             {
-                Interlocked.Decrement(m_DT);
+                Interlocked.Decrement(ref m_DT);
             }
             
             m_CPUWait.Set();
@@ -165,6 +173,36 @@ namespace Eimu.Core.CPU
         public void SetCollision()
         {
             m_VRegs[0xF] = 1;
+        }
+
+        public byte[] VRegisters
+        {
+            get { return this.m_VRegs; }
+            set { this.m_VRegs = value;}
+        }
+
+        public int PC
+        {
+            get { return this.m_ProgramCounter; }
+            set { this.m_ProgramCounter = value; }
+        }
+
+        public ushort IRegister
+        {
+            get { return this.m_IReg; }
+            set { this.m_IReg = value; }
+        }
+
+        public int DT
+        {
+            get { return this.m_DT; }
+            set { this.m_DT = value; }
+        }
+
+        public int ST
+        {
+            get { return this.m_ST; }
+            set { this.m_ST = value; }
         }
 
         protected void Beep()

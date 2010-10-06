@@ -20,8 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Eimu.Core.Devices;
+using System.Threading;
 using System.ComponentModel;
+
+using Eimu.Core.Devices;
 
 namespace Eimu.Core.CPU
 {
@@ -29,7 +31,7 @@ namespace Eimu.Core.CPU
     {
         OpcodeCallTable table;
 
-        public Interpreter()
+        public Interpreter() : base()
         {
             table = new OpcodeCallTable();
             table.LoadMethods(this.GetType());
@@ -37,10 +39,14 @@ namespace Eimu.Core.CPU
 
         public override void Step()
         {
-            ChipInstruction inst = new ChipInstruction(this.m_Memory.GetValue(this.ProgramCounter));;
+            byte rbyte1 = this.m_Memory.GetValue(m_ProgramCounter);
+            Interlocked.Increment(ref m_ProgramCounter);
+            byte rbyte2 = this.m_Memory.GetValue(m_ProgramCounter);
+            Interlocked.Increment(ref m_ProgramCounter);
+
+            ChipInstruction inst = new ChipInstruction((ushort)((ushort)rbyte1 << 8 | rbyte2));
             ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
-            IncrementPC();
-            table.CallMethod(opcode, inst);
+            table.CallMethod(this, opcode, inst);
         }
 
 

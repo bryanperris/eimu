@@ -38,22 +38,20 @@ namespace Eimu.Core.CPU
             : base()
         {
   
-            program = new DynamicMethod(progName, MethodAttributes.Private, CallingConventions.Standard, typeof(void), null, this.GetType(), false);
-            m_Emitter = program.GetILGenerator();
+            //program = new DynamicMethod(progName, MethodAttributes.Private, CallingConventions.Standard, typeof(void), null, this.GetType(), false);
+            //m_Emitter = program.GetILGenerator();
         }
         
-        private void GenerateChipProgram()
-        {
-            byte[] mem = this.m_Memory.MemoryBuffer;
-			
-			for (int i = 0; i < mem.Length; i+=4)
-			{
-				ChipInstruction inst = new ChipInstruction((ushort)((mem[i] << 8) | mem[i+2]));
-				ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
+        //private void GenerateChipProgram()
+        //{
+        //    for (int i = 0; i < this.m_Memory.Length; i+=4)
+        //    {
+        //        ChipInstruction inst = new ChipInstruction((ushort)((mem[i] << 8) | mem[i+2]));
+        //        ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
 
 				
-			}
-        }
+        //    }
+        //}
 
         public override void Step()
         {

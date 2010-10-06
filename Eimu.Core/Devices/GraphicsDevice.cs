@@ -50,7 +50,7 @@ namespace Eimu.Core.Devices
 
         public event EventHandler OnPixelCollision;
 
-        public abstract void SetPixel(byte x, byte y);
+        public abstract void SetPixel(int x, int y);
 
         public abstract void ClearScreen();
 
@@ -62,20 +62,11 @@ namespace Eimu.Core.Devices
 
         #region IDevice Members
 
-        public void Initialize()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Initialize();
 
-        public void Shutdown()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Shutdown();
 
-        public void SetPauseState(bool paused)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void SetPauseState(bool paused);
 
         #endregion
     }

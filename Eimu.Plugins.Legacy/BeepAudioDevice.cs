@@ -51,16 +51,17 @@ namespace Eimu.Plugins.Legacy
             return "";
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
         }
 
-        public void Shutdown()
+        public override void Shutdown()
         {
         }
 
-        public void SetState(Eimu.Core.RunState state)
+        public override void SetPauseState(bool paused)
         {
+            throw new NotImplementedException();
         }
 
         #endregion

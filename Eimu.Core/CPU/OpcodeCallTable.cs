@@ -28,37 +28,36 @@ namespace Eimu.Core.CPU
 
     public class OpcodeCallTable
     {
-        private Dictionary<ChipOpcodes, InstructionCall> m_MethodCallTable;
+        private Dictionary<ChipOpcodes, MethodInfo> m_MethodCallTable;
 
         public OpcodeCallTable()
         {
-            m_MethodCallTable = new Dictionary<ChipOpcodes, InstructionCall>();
+            m_MethodCallTable = new Dictionary<ChipOpcodes, MethodInfo>();
         }
 
         public void LoadMethods(Type type)
         {
-            MethodInfo[] infos = type.GetMethods(BindingFlags.Public |
-                BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Static);
+            MethodInfo[] infos = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Instance);
 
             foreach (MethodInfo info in infos)
             {
                 object[] attrs = info.GetCustomAttributes(typeof(OpcodeTag), false);
 
-                if (attrs != null)
+                if (attrs.Length > 0)
                 {
                     OpcodeTag tag = ((OpcodeTag)attrs[0]);
-                    this.m_MethodCallTable.Add(tag.Opcode, (InstructionCall)Delegate.CreateDelegate(typeof(InstructionCall), info));
+                    this.m_MethodCallTable.Add(tag.Opcode, info);
                 }
             }
         }
 
-        public bool CallMethod(ChipOpcodes opcode, ChipInstruction instruction)
+        public bool CallMethod(object sender, ChipOpcodes opcode, ChipInstruction instruction)
         {
-            InstructionCall call;
+            MethodInfo call;
 
             if (this.m_MethodCallTable.TryGetValue(opcode, out call))
             {
-                call(instruction);
+                call.Invoke(sender, new object[] { instruction });
                 return true;
             }
 

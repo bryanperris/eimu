@@ -16,5 +16,20 @@ namespace Eimu
             else
                 KeyRelease(key);
         }
+
+        public override void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Shutdown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetPauseState(bool paused)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

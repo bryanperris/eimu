@@ -18,17 +18,24 @@ namespace Eimu
         public RenderWindow(VirtualMachine machine)
         {
             InitializeComponent();
+            this.Text = Eimu.Properties.Resources.WindowCaption;
             this.m_Machine = machine;
             PluginManager.WindowHandle = this.Handle;
             PluginManager.RenderContext = this.panel_RenderContext.Handle;
             this.Shown += new EventHandler(RenderWindow_Shown);
+            m_Machine.CurrentProcessor.ProgramEnd += new EventHandler(CurrentProcessor_ProgramEnd);
+        }
+
+        void CurrentProcessor_ProgramEnd(object sender, EventArgs e)
+        {
+            MessageBox.Show("Program has finished running!", "Eimu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         void RenderWindow_Shown(object sender, EventArgs e)
         {
             if (this.m_Machine != null)
             {
-                m_Machine.SetState(RunState.Running);
+                m_Machine.Start();
             }
         }
     }

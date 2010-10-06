@@ -35,17 +35,18 @@ namespace Eimu
 {
     public partial class StartDialog : Form
     {
-        private DeviceTypeList m_MParams;
         private OpenFileDialog m_OpenFileDialog;
         private FileStream m_RomFileSource;
+        private VirtualMachine m_VM;
 
-        public StartDialog()
+        public StartDialog(VirtualMachine vm)
         {
+            this.m_VM = vm;
             InitializeComponent();
-            this.m_MParams = new DeviceTypeList();
             m_OpenFileDialog = new OpenFileDialog();
             m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8)|*.ch8;|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
             GetPlugins();
+            this.Text = Eimu.Properties.Resources.WindowCaption;
         }
 
         private void GetPlugins()
@@ -114,25 +115,21 @@ namespace Eimu
             }
 
             if (radioButton_CPUModeInterpreter.Checked)
-                this.m_MParams.CPU = new Interpreter();
+                this.m_VM.CurrentProcessor = new Interpreter();
             else
-                this.m_MParams.CPU = new Recompiler();
+                this.m_VM.CurrentProcessor = new Recompiler();
 
             PluginManager.SetSelectedPlugins(comboBox_SelectedAudio.SelectedIndex,
                                              comboBox_SelectedGraphics.SelectedIndex,
                                              comboBox_SelectedInput.SelectedIndex);
 
-            this.m_MParams.Audio = (AudioDevice)Activator.CreateInstance(PluginManager.SelectedAudioDevice);
-            this.m_MParams.Graphics = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
-            this.m_MParams.Input = (InputDevice)Activator.CreateInstance(PluginManager.SelectedInputDevice);
-            this.m_MParams.RomSource = m_RomFileSource;
+            this.m_VM.CurrentAudioDevice = (AudioDevice)Activator.CreateInstance(PluginManager.SelectedAudioDevice);
+            this.m_VM.CurrentGraphicsDevice = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
+            this.m_VM.CurrentInputDevice = (InputDevice)Activator.CreateInstance(PluginManager.SelectedInputDevice);
+
+            this.m_VM.LoadROM(m_RomFileSource);
 
             Hide();
-        }
-
-        public DeviceTypeList MParams
-        {
-            get { return this.m_MParams; }
         }
 
         private void button_FileBrowse_Click(object sender, EventArgs e)
@@ -140,7 +137,7 @@ namespace Eimu
             m_OpenFileDialog.ShowDialog();
             if (m_OpenFileDialog.FileName != "")
             {
-                m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+               m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 textBox_RomPath.Text = m_OpenFileDialog.FileName;
             }
         }

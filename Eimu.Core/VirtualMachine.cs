@@ -102,12 +102,14 @@ namespace Eimu.Core
             if (MachineMemory == null)
                 throw new NullReferenceException();
 
+            LinkDeviceCallbacks();
+
             ((IDevice)CurrentAudioDevice).Initialize();
             ((IDevice)CurrentGraphicsDevice).Initialize();
             ((IDevice)CurrentInputDevice).Initialize();
             ((IDevice)CurrentProcessor).Initialize();
-            CurrentProcessor.SetMemory(this.MachineMemory);
 
+            CurrentProcessor.SetMemory(this.MachineMemory);
             CurrentProcessor.StartExecution();
 
             m_State = RunState.Running;
@@ -147,10 +149,10 @@ namespace Eimu.Core
         {
             if (m_State == RunState.Running || m_State == RunState.Paused)
             {
-                ((IDevice)CurrentProcessor.SetPauseState)(paused);
-                ((IDevice)CurrentAudioDevice.SetPauseState)(paused);
-                ((IDevice)CurrentGraphicsDevice.SetPauseState)(paused);
-                ((IDevice)CurrentInputDevice.SetPauseState)(paused);
+                ((IDevice)CurrentProcessor).SetPauseState(paused);
+                ((IDevice)CurrentAudioDevice).SetPauseState(paused);
+                ((IDevice)CurrentGraphicsDevice).SetPauseState(paused);
+                ((IDevice)CurrentInputDevice).SetPauseState(paused);
 
                 if (paused)
                     m_State = RunState.Paused;
@@ -181,5 +183,33 @@ namespace Eimu.Core
         public Processor CurrentProcessor { get; set; }
 
         public Memory MachineMemory { get; set; }
+
+        private void LinkDeviceCallbacks()
+        {
+            this.CurrentProcessor.OnBeep += new EventHandler(CurrentProcessor_OnBeep);
+            this.CurrentProcessor.OnPixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
+            this.CurrentProcessor.OnScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
+            this.CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
+        }
+
+        void CurrentGraphicsDevice_OnPixelCollision(object sender, EventArgs e)
+        {
+            this.CurrentProcessor.SetCollision();
+        }
+
+        void CurrentProcessor_OnScreenClear(object sender, EventArgs e)
+        {
+            this.CurrentGraphicsDevice.ClearScreen();
+        }
+
+        void CurrentProcessor_OnPixelSet(object sender, PixelSetEventArgs e)
+        {
+            this.CurrentGraphicsDevice.SetPixel(e.X, e.Y);
+        }
+
+        void CurrentProcessor_OnBeep(object sender, EventArgs e)
+        {
+            this.CurrentAudioDevice.Beep();
+        }
     }
 }

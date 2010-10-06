@@ -35,8 +35,8 @@
             this.radioButton_CPUModeRecompiler = new System.Windows.Forms.RadioButton();
             this.radioButton_CPUModeInterpreter = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button_RunProgram = new System.Windows.Forms.Button();
             this.comboBox_SelectedInput = new System.Windows.Forms.ComboBox();
+            this.button_RunProgram = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.comboBox_SelectedAudio = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -121,6 +121,14 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Input Backend";
             // 
+            // comboBox_SelectedInput
+            // 
+            this.comboBox_SelectedInput.FormattingEnabled = true;
+            this.comboBox_SelectedInput.Location = new System.Drawing.Point(7, 19);
+            this.comboBox_SelectedInput.Name = "comboBox_SelectedInput";
+            this.comboBox_SelectedInput.Size = new System.Drawing.Size(431, 21);
+            this.comboBox_SelectedInput.TabIndex = 0;
+            // 
             // button_RunProgram
             // 
             this.button_RunProgram.Location = new System.Drawing.Point(354, 260);
@@ -130,14 +138,6 @@
             this.button_RunProgram.Text = "Start Program";
             this.button_RunProgram.UseVisualStyleBackColor = true;
             this.button_RunProgram.Click += new System.EventHandler(this.button_RunProgram_Click);
-            // 
-            // comboBox_SelectedInput
-            // 
-            this.comboBox_SelectedInput.FormattingEnabled = true;
-            this.comboBox_SelectedInput.Location = new System.Drawing.Point(7, 19);
-            this.comboBox_SelectedInput.Name = "comboBox_SelectedInput";
-            this.comboBox_SelectedInput.Size = new System.Drawing.Size(431, 21);
-            this.comboBox_SelectedInput.TabIndex = 0;
             // 
             // groupBox3
             // 

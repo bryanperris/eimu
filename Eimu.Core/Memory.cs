@@ -36,24 +36,14 @@ namespace Eimu.Core
             this.m_Memory = new byte[MEMORY_SIZE];
         }
 
-        public byte GetValueByRawAddress(int address)
+        public byte GetValue(int address)
         {
             return m_Memory[address];
         }
 
-        public void SetValueByRawAddress(int address, byte value)
-        {
-            m_Memory[address] = value;
-        }
-
-        public byte GetValue(int address)
-        {
-            return m_Memory[address - MEMORY_OFFSET];
-        }
-
         public void SetValue(int address, byte value)
         {
-            m_Memory[address - MEMORY_OFFSET] = value;
+            m_Memory[address] = value;
         }
 
         public int Size

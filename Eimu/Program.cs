@@ -35,7 +35,8 @@ namespace Eimu
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            StartDialog startscreen = new StartDialog();
+            VirtualMachine vm = new VirtualMachine();
+            StartDialog startscreen = new StartDialog(vm);
             startscreen.FormClosed += new FormClosedEventHandler(startscreen_FormClosed);
 
             while (!closeApp)
@@ -44,9 +45,6 @@ namespace Eimu
 
                 if (!closeApp)
                 {
-                    DeviceTypeList mparams = startscreen.MParams;
-                    VirtualMachine vm = new VirtualMachine(mparams);
-
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();
                 }
