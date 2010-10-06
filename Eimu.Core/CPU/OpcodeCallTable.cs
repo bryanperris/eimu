@@ -57,7 +57,15 @@ namespace Eimu.Core.CPU
 
             if (this.m_MethodCallTable.TryGetValue(opcode, out call))
             {
-                call.Invoke(sender, new object[] { instruction });
+                try
+                {
+                    call.Invoke(sender, new object[] { instruction });
+                }
+                catch (TargetInvocationException)
+                {
+
+                }
+
                 return true;
             }
 

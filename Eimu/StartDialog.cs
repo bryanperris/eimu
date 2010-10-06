@@ -44,7 +44,7 @@ namespace Eimu
             this.m_VM = vm;
             InitializeComponent();
             m_OpenFileDialog = new OpenFileDialog();
-            m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8)|*.ch8;|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
+            m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8, *.c8)|*.ch8;*.c8|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
             GetPlugins();
             this.Text = Eimu.Properties.Resources.WindowCaption;
         }

@@ -79,7 +79,7 @@ namespace Eimu.Core
                 throw new IOException("source not readable!");
 
             if (source.Length > MachineMemory.Size - 0x1FF)
-                throw new ArgumentException("source is bigger than memory size!");
+                //throw new ArgumentException("source is bigger than memory size!");
 
             source.Position = 0;
             int read = -1;

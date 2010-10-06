@@ -42,11 +42,11 @@
             this.cPURegistersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cPUStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.memoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.projectSiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_RenderContext = new System.Windows.Forms.Panel();
-            this.codeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,14 +78,14 @@
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.pauseToolStripMenuItem.Text = "Pause";
             this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseToolStripMenuItem_Click);
             // 
@@ -163,6 +163,12 @@
             this.memoryToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.memoryToolStripMenuItem.Text = "Memory";
             // 
+            // codeViewToolStripMenuItem
+            // 
+            this.codeViewToolStripMenuItem.Name = "codeViewToolStripMenuItem";
+            this.codeViewToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.codeViewToolStripMenuItem.Text = "Code View";
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -175,30 +181,25 @@
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(133, 22);
             this.aboutToolStripMenuItem1.Text = "About";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
             // projectSiteToolStripMenuItem
             // 
             this.projectSiteToolStripMenuItem.Name = "projectSiteToolStripMenuItem";
-            this.projectSiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.projectSiteToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.projectSiteToolStripMenuItem.Text = "Project Site";
             this.projectSiteToolStripMenuItem.Click += new System.EventHandler(this.projectSiteToolStripMenuItem_Click);
             // 
             // panel_RenderContext
             // 
+            this.panel_RenderContext.BackColor = System.Drawing.Color.Black;
             this.panel_RenderContext.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_RenderContext.Location = new System.Drawing.Point(0, 24);
             this.panel_RenderContext.Name = "panel_RenderContext";
             this.panel_RenderContext.Size = new System.Drawing.Size(554, 400);
             this.panel_RenderContext.TabIndex = 1;
-            // 
-            // codeViewToolStripMenuItem
-            // 
-            this.codeViewToolStripMenuItem.Name = "codeViewToolStripMenuItem";
-            this.codeViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.codeViewToolStripMenuItem.Text = "Code View";
             // 
             // RenderWindow
             // 

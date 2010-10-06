@@ -20,35 +20,93 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+
 using Eimu.Core.Devices;
+using Eimu.Plugins;
+
 
 namespace Eimu
 {
-    public sealed class DrawingGraphicsDevice : GraphicsDevice
+    [PluginInfo("Legacy Video", "1.0", "Omegadox", "Draws using a bitmap")]
+    public sealed class DrawingGraphicsDevice : GraphicsDevice, IPlugin
     {
+        Bitmap m_Bitmap;
+        Graphics m_Render;
+        Control m_Context;
+        int m_Scale = 6;
+
+        public DrawingGraphicsDevice()
+        {
+
+        }
+
         public override void SetPixel(int x, int y)
         {
-            throw new NotImplementedException();
+            m_Render.FillRectangle(Brushes.White, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
+            m_Context.Invalidate();
         }
 
         public override void ClearScreen()
         {
-            throw new NotImplementedException();
+            m_Render.Clear(Color.Black);
+            m_Context.Invalidate();
         }
 
         public override void Initialize()
         {
-            throw new NotImplementedException();
+            m_Context = Control.FromHandle(PluginManager.RenderContext);
+            m_Bitmap = new Bitmap(GraphicsDevice.RESOLUTION_WIDTH * m_Scale, GraphicsDevice.RESOLUTION_HEIGHT * m_Scale);
+            m_Render = Graphics.FromImage(m_Bitmap);
+            m_Context.Paint += new PaintEventHandler(m_Context_Paint);
+        }
+
+        void m_Context_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.InterpolationMode = InterpolationMode.Bilinear;
+
+            e.Graphics.ResetTransform();
+
+            e.Graphics.ScaleTransform(
+                m_Context.Size.Width / (GraphicsDevice.RESOLUTION_WIDTH * m_Scale),
+                m_Context.Size.Height / (GraphicsDevice.RESOLUTION_HEIGHT * m_Scale), MatrixOrder.Prepend);
+
+            e.Graphics.DrawImage(m_Bitmap, 0, 0);
         }
 
         public override void Shutdown()
         {
-            throw new NotImplementedException();
         }
 
         public override void SetPauseState(bool paused)
         {
+        }
+
+        #region IPlugin Members
+
+        public void ShowConfigDialog()
+        {
             throw new NotImplementedException();
         }
+
+        public string[] GetOptionsList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetOption(string name, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetOption(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

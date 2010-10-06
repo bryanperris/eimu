@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Eimu.Core.Devices;
+using System.Reflection;
 
 namespace Eimu.Core.CPU
 {
