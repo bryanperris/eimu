@@ -36,8 +36,6 @@
             this.audioConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graphicsConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inputConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.changeSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.enableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +46,7 @@
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.projectSiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_RenderContext = new System.Windows.Forms.Panel();
+            this.codeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,12 +80,14 @@
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
             this.pauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pauseToolStripMenuItem.Text = "Pause";
+            this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -94,8 +95,6 @@
             this.audioConfigToolStripMenuItem,
             this.graphicsConfigToolStripMenuItem,
             this.inputConfigToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.changeSourceToolStripMenuItem,
             this.toolStripSeparator2,
             this.enableToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
@@ -107,29 +106,21 @@
             this.audioConfigToolStripMenuItem.Name = "audioConfigToolStripMenuItem";
             this.audioConfigToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.audioConfigToolStripMenuItem.Text = "Audio Config";
+            this.audioConfigToolStripMenuItem.Click += new System.EventHandler(this.audioConfigToolStripMenuItem_Click);
             // 
             // graphicsConfigToolStripMenuItem
             // 
             this.graphicsConfigToolStripMenuItem.Name = "graphicsConfigToolStripMenuItem";
             this.graphicsConfigToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.graphicsConfigToolStripMenuItem.Text = "Graphics Config";
+            this.graphicsConfigToolStripMenuItem.Click += new System.EventHandler(this.graphicsConfigToolStripMenuItem_Click);
             // 
             // inputConfigToolStripMenuItem
             // 
             this.inputConfigToolStripMenuItem.Name = "inputConfigToolStripMenuItem";
             this.inputConfigToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.inputConfigToolStripMenuItem.Text = "Input Config";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
-            // 
-            // changeSourceToolStripMenuItem
-            // 
-            this.changeSourceToolStripMenuItem.Name = "changeSourceToolStripMenuItem";
-            this.changeSourceToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.changeSourceToolStripMenuItem.Text = "Change ROM";
+            this.inputConfigToolStripMenuItem.Click += new System.EventHandler(this.inputConfigToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -141,13 +132,15 @@
             this.enableToolStripMenuItem.Name = "enableToolStripMenuItem";
             this.enableToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.enableToolStripMenuItem.Text = "Enable VSync";
+            this.enableToolStripMenuItem.Click += new System.EventHandler(this.enableToolStripMenuItem_Click);
             // 
             // debuggingToolStripMenuItem
             // 
             this.debuggingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cPURegistersToolStripMenuItem,
             this.cPUStackToolStripMenuItem,
-            this.memoryToolStripMenuItem});
+            this.memoryToolStripMenuItem,
+            this.codeViewToolStripMenuItem});
             this.debuggingToolStripMenuItem.Name = "debuggingToolStripMenuItem";
             this.debuggingToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
             this.debuggingToolStripMenuItem.Text = "Debugging";
@@ -155,19 +148,19 @@
             // cPURegistersToolStripMenuItem
             // 
             this.cPURegistersToolStripMenuItem.Name = "cPURegistersToolStripMenuItem";
-            this.cPURegistersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cPURegistersToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.cPURegistersToolStripMenuItem.Text = "CPU Registers";
             // 
             // cPUStackToolStripMenuItem
             // 
             this.cPUStackToolStripMenuItem.Name = "cPUStackToolStripMenuItem";
-            this.cPUStackToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cPUStackToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.cPUStackToolStripMenuItem.Text = "CPU Stack";
             // 
             // memoryToolStripMenuItem
             // 
             this.memoryToolStripMenuItem.Name = "memoryToolStripMenuItem";
-            this.memoryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.memoryToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.memoryToolStripMenuItem.Text = "Memory";
             // 
             // aboutToolStripMenuItem
@@ -184,12 +177,14 @@
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
             this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem1.Text = "About";
+            this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
             // projectSiteToolStripMenuItem
             // 
             this.projectSiteToolStripMenuItem.Name = "projectSiteToolStripMenuItem";
             this.projectSiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.projectSiteToolStripMenuItem.Text = "Project Site";
+            this.projectSiteToolStripMenuItem.Click += new System.EventHandler(this.projectSiteToolStripMenuItem_Click);
             // 
             // panel_RenderContext
             // 
@@ -198,6 +193,12 @@
             this.panel_RenderContext.Name = "panel_RenderContext";
             this.panel_RenderContext.Size = new System.Drawing.Size(554, 400);
             this.panel_RenderContext.TabIndex = 1;
+            // 
+            // codeViewToolStripMenuItem
+            // 
+            this.codeViewToolStripMenuItem.Name = "codeViewToolStripMenuItem";
+            this.codeViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.codeViewToolStripMenuItem.Text = "Code View";
             // 
             // RenderWindow
             // 
@@ -226,8 +227,6 @@
         private System.Windows.Forms.ToolStripMenuItem audioConfigToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem graphicsConfigToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem inputConfigToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem changeSourceToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggingToolStripMenuItem;
@@ -238,5 +237,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem projectSiteToolStripMenuItem;
         private System.Windows.Forms.Panel panel_RenderContext;
+        private System.Windows.Forms.ToolStripMenuItem codeViewToolStripMenuItem;
     }
 }

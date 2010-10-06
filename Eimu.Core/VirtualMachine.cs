@@ -220,6 +220,12 @@ namespace Eimu.Core
             this.CurrentProcessor.OnPixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
             this.CurrentProcessor.OnScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
             this.CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
+            this.CurrentInputDevice.OnKeyPress += new KeyStateHandler(CurrentInputDevice_OnKeyPress);
+        }
+
+        void CurrentInputDevice_OnKeyPress(object sender, ChipKeys key)
+        {
+            this.CurrentProcessor.SetKeyPress(key);
         }
 
         void CurrentGraphicsDevice_OnPixelCollision(object sender, EventArgs e)

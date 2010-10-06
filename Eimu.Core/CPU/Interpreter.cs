@@ -29,27 +29,42 @@ namespace Eimu.Core.CPU
 {
     public sealed partial class Interpreter : Processor
     {
-        OpcodeCallTable table;
+        OpcodeCallTable m_OpcodeCallTable;
+        Random m_Rand;
 
         public Interpreter() : base()
         {
-            table = new OpcodeCallTable();
-            table.LoadMethods(this.GetType());
+            m_Rand = new Random(System.Environment.TickCount);
+            m_OpcodeCallTable = new OpcodeCallTable();
+            m_OpcodeCallTable.LoadMethods(this.GetType());
         }
 
         public override void Step()
         {
             byte rbyte1 = this.m_Memory.GetValue(m_ProgramCounter);
-            Interlocked.Increment(ref m_ProgramCounter);
-            byte rbyte2 = this.m_Memory.GetValue(m_ProgramCounter);
-            Interlocked.Increment(ref m_ProgramCounter);
-
+            byte rbyte2 = this.m_Memory.GetValue(m_ProgramCounter + 1);
             ChipInstruction inst = new ChipInstruction((ushort)((ushort)rbyte1 << 8 | rbyte2));
             ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
             //Console.WriteLine("Opcode: " + opcode.ToString());
-            table.CallMethod(this, opcode, inst);
+            IncrementPC();
+
+
+            // Call the opcode method
+            m_OpcodeCallTable.CallMethod(this, opcode, inst);
+
+            // Thread sleep
+            Thread.Sleep(100);
         }
 
+        [OpcodeTag(ChipOpcodes.Ret)]
+        void Ret(ChipInstruction inst)
+        {
+            m_ProgramCounter = m_Stack.Pop();
+        }
 
+        public override string ToString()
+        {
+            return "PC: " + PC.ToString();
+        }
     }
 }

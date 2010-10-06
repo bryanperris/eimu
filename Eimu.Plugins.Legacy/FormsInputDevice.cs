@@ -9,12 +9,9 @@ namespace Eimu
 {
     public class FormsInputDevice : InputDevice
     {
-        public void SetKeyPress(ChipKeys key, bool pressed)
+        public void SetKeyPress(ChipKeys key)
         {
-            if (pressed)
-                KeyPress(key);
-            else
-                KeyRelease(key);
+            KeyPress(key);
         }
 
         public override void Initialize()

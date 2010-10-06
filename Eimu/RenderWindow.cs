@@ -14,6 +14,7 @@ namespace Eimu
     public partial class RenderWindow : Form
     {
         VirtualMachine m_Machine;
+        bool m_Paused = false;
 
         public RenderWindow(VirtualMachine machine)
         {
@@ -33,10 +34,60 @@ namespace Eimu
 
         void RenderWindow_Shown(object sender, EventArgs e)
         {
-            if (this.m_Machine != null)
+            m_Machine.Start();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_Machine.Stop();
+            this.Close();
+        }
+
+        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!m_Paused)
             {
-                m_Machine.Start();
+                m_Machine.SetPause(true);
+                m_Paused = true;
+                pauseToolStripMenuItem.Text = "Resume";
             }
+            else
+            {
+                m_Machine.SetPause(false);
+                m_Paused = false;
+                pauseToolStripMenuItem.Text = "Pause";
+            }
+        }
+
+        private void audioConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void graphicsConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void inputConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void enableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            AboutBox ab = new AboutBox();
+            ab.ShowDialog();
+        }
+
+        private void projectSiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://code.google.com/p/eimu"); 
         }
     }
 }

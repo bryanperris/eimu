@@ -60,6 +60,13 @@ namespace Eimu.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap logo {
+            get {
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap menubar {
             get {
                 object obj = ResourceManager.GetObject("menubar", resourceCulture);

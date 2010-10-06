@@ -50,7 +50,9 @@
     <Compile Include="CPU\ChipOpcodes.cs" />
     <Compile Include="CPU\Disassembler.cs" />
     <Compile Include="CPU\Interpreter_Graphics.cs" />
-    <Compile Include="CPU\Interpreter_LoadStore.cs" />
+    <Compile Include="CPU\Interpreter_Jump.cs" />
+    <Compile Include="CPU\Interpreter_Load.cs" />
+    <Compile Include="CPU\Interpreter_Math.cs" />
     <Compile Include="CPU\OpcodeCallTable.cs" />
     <Compile Include="CPU\OpcodeTag.cs" />
     <Compile Include="CPU\Recompiler.cs" />

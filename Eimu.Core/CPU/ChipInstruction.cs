@@ -70,5 +70,10 @@ namespace Eimu.Core.CPU
 		{
 			get { return (byte)(this.m_Instruction & 0x00FF);}
 		}
+
+        public override string ToString()
+        {
+            return m_Instruction.ToString("x");
+        }
 	}
 }

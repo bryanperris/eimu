@@ -47,7 +47,7 @@ namespace Eimu.Core.CPU
 
         // Registers
         protected byte[] m_VRegs = new byte[16];
-        protected int m_ProgramCounter;
+        protected ushort m_ProgramCounter;
         protected ushort m_IReg;
         protected int m_DT;
         protected int m_ST;
@@ -84,7 +84,7 @@ namespace Eimu.Core.CPU
 
         protected void ClearRegisters()
         {
-            m_ProgramCounter = 0;
+            m_ProgramCounter = 0x200;
             m_IReg = 0;
         }
 
@@ -99,6 +99,9 @@ namespace Eimu.Core.CPU
             {
                 if (e.Cancel)
                     break;
+
+                if (m_Paused)
+                    m_CPUWait.WaitOne();
 
                 Step();
             }
@@ -152,6 +155,9 @@ namespace Eimu.Core.CPU
         public virtual void SetPauseState(bool paused)
         {
             this.m_Paused = paused;
+
+            if (!m_Paused)
+                m_CPUWait.Set();
         }
 
         public virtual void Shutdown()
@@ -169,12 +175,6 @@ namespace Eimu.Core.CPU
             m_ProgramCounter += 2;
         }
 
-        public int ProgramCounter
-        {
-            get { return this.m_ProgramCounter; }
-            set { this.m_ProgramCounter = value; }
-        }
-
         public void SetCollision()
         {
             m_VRegs[0xF] = 1;
@@ -186,7 +186,7 @@ namespace Eimu.Core.CPU
             set { this.m_VRegs = value;}
         }
 
-        public int PC
+        public ushort PC
         {
             get { return this.m_ProgramCounter; }
             set { this.m_ProgramCounter = value; }

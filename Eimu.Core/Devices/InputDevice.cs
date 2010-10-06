@@ -28,18 +28,11 @@ namespace Eimu.Core.Devices
     public abstract class InputDevice : IDevice
     {
         public event KeyStateHandler OnKeyPress;
-        public event KeyStateHandler OnKeyRelease;
 
         protected void KeyPress(ChipKeys key)
         {
             if (OnKeyPress != null)
                 OnKeyPress(this, key);
-        }
-
-        protected void KeyRelease(ChipKeys key)
-        {
-            if (OnKeyRelease != null)
-                OnKeyRelease(this, key);
         }
 
         #region IDevice Members
