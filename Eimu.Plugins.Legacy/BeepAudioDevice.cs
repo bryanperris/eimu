@@ -13,21 +13,24 @@ namespace Eimu.Plugins.Legacy
     public class BeepAudioDevice : AudioDevice, IPlugin
     {
         Thread m_Thread;
+        private int m_Duration;
 
         public BeepAudioDevice()
         {
-            m_Thread = new Thread(new ThreadStart(DoBeep));
-            m_Thread.IsBackground = false;
+
         }
 
-        public override void Beep()
+        public override void Beep(int duruation)
         {
+            m_Duration = duruation;
+            m_Thread = new Thread(new ThreadStart(DoBeep));
+            m_Thread.IsBackground = false;
             m_Thread.Start();
         }
 
         private void DoBeep()
         {
-            System.Console.Beep(100, 50);
+            System.Console.Beep(250, m_Duration);
         }
 
         #region IPlugin Members

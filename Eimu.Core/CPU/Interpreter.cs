@@ -51,9 +51,6 @@ namespace Eimu.Core.CPU
 
             // Call the opcode method
             m_OpcodeCallTable.CallMethod(this, opcode, inst);
-
-            // Thread sleep
-            Thread.Sleep(100);
         }
 
         [OpcodeTag(ChipOpcodes.Ret)]

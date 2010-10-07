@@ -35,12 +35,13 @@ namespace Eimu
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            VirtualMachine vm = new VirtualMachine();
-            StartDialog startscreen = new StartDialog(vm);
+            StartDialog startscreen = new StartDialog();
             startscreen.FormClosed += new FormClosedEventHandler(startscreen_FormClosed);
 
             while (!closeApp)
             {
+                VirtualMachine vm = new VirtualMachine();
+                startscreen.SetVM(vm);
                 startscreen.ShowDialog();
 
                 if (!closeApp)
@@ -48,6 +49,8 @@ namespace Eimu
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();
                 }
+
+                vm.Stop();
             }
         }
 

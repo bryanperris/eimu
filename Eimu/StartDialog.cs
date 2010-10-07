@@ -39,14 +39,42 @@ namespace Eimu
         private FileStream m_RomFileSource;
         private VirtualMachine m_VM;
 
-        public StartDialog(VirtualMachine vm)
+        public StartDialog()
         {
-            this.m_VM = vm;
             InitializeComponent();
             m_OpenFileDialog = new OpenFileDialog();
             m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8, *.c8)|*.ch8;*.c8|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
             GetPlugins();
             this.Text = Eimu.Properties.Resources.WindowCaption;
+            LoadConfig();
+        }
+
+        public void SaveConfig()
+        {
+            Config.FileROMPath = m_OpenFileDialog.FileName;
+            Config.SelectedAudioPlugin = comboBox_SelectedAudio.SelectedIndex;
+            Config.SelectedGraphicsPlugin = comboBox_SelectedGraphics.SelectedIndex;
+            Config.SelectedInputPlugin = comboBox_SelectedInput.SelectedIndex;
+            Config.SaveConfigFile();
+        }
+
+        public void LoadConfig()
+        {
+            Config.LoadConfigFile();
+
+            if (File.Exists(Config.FileROMPath))
+            {
+                m_OpenFileDialog.FileName = Config.FileROMPath;
+                textBox_RomPath.Text = Config.FileROMPath;
+                comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
+                comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
+                comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
+            }
+        }
+
+        public void SetVM(VirtualMachine vm)
+        {
+            this.m_VM = vm;
         }
 
         private void GetPlugins()
@@ -90,7 +118,11 @@ namespace Eimu
 
         private void button_RunProgram_Click(object sender, EventArgs e)
         {
-            if (m_RomFileSource == null)
+            if (m_OpenFileDialog.FileName != "")
+            {
+                m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            else
             {
                 MessageBox.Show("No rom file selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -114,6 +146,8 @@ namespace Eimu
                 return;
             }
 
+            SaveConfig();
+
             if (radioButton_CPUModeInterpreter.Checked)
                 this.m_VM.CurrentProcessor = new Interpreter();
             else
@@ -129,17 +163,15 @@ namespace Eimu
 
             this.m_VM.LoadROM(m_RomFileSource);
 
+            m_RomFileSource.Close();
+
             Hide();
         }
 
         private void button_FileBrowse_Click(object sender, EventArgs e)
         {
             m_OpenFileDialog.ShowDialog();
-            if (m_OpenFileDialog.FileName != "")
-            {
-               m_RomFileSource = new FileStream(m_OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                textBox_RomPath.Text = m_OpenFileDialog.FileName;
-            }
+            textBox_RomPath.Text = m_OpenFileDialog.FileName;
         }
     }
 }

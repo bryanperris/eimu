@@ -57,6 +57,7 @@
     <Compile Include="CPU\OpcodeTag.cs" />
     <Compile Include="CPU\Recompiler.cs" />
     <Compile Include="CPU\Recompiler_Graphics.cs" />
+    <Compile Include="Devices\BeepEventArgs.cs" />
     <Compile Include="Devices\ChipKeys.cs" />
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="CPU\Processor.cs" />
@@ -75,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

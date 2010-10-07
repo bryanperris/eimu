@@ -10,22 +10,9 @@ namespace Eimu.NullDevices
     [PluginInfo("Null Graphics Plugin", "1.0", "Omegadox", "skips video drawing, but still supports collision dectection")]
     public sealed class NullGraphicsDevice : GraphicsDevice, IPlugin
     {
-        private bool[] m_FakeVideoBuffer;
-
         public NullGraphicsDevice()
         {
-            m_FakeVideoBuffer = new bool[NullGraphicsDevice.RESOLUTION_WIDTH * NullGraphicsDevice.RESOLUTION_HEIGHT];
-        }
-
-        public override void SetPixel(int x, int y)
-        {
-            if (!(m_FakeVideoBuffer[x * (y + 1)] ^= true))
-                SetCollision();
-        }
-
-        public override void ClearScreen()
-        {
-            m_FakeVideoBuffer.Initialize();
+            
         }
 
         #region IPlugin Members
@@ -61,6 +48,15 @@ namespace Eimu.NullDevices
         }
 
         public override void SetPauseState(bool paused)
+        {
+        }
+
+        public override void OnPixelSet(int x, int y, bool on)
+        {
+
+        }
+
+        public override void OnScreenClear()
         {
         }
     }

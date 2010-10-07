@@ -29,7 +29,7 @@ namespace Eimu
 
         void CurrentProcessor_ProgramEnd(object sender, EventArgs e)
         {
-            MessageBox.Show("Program has finished running!", "Eimu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //MessageBox.Show("Program has finished running!", "Eimu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         void RenderWindow_Shown(object sender, EventArgs e)
@@ -39,7 +39,6 @@ namespace Eimu
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_Machine.Stop();
             this.Close();
         }
 

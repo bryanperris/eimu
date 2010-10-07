@@ -162,10 +162,6 @@ namespace Eimu.Core
                 ((IDevice)CurrentAudioDevice).Shutdown();
                 ((IDevice)CurrentGraphicsDevice).Shutdown();
             }
-            else
-            {
-                throw new InvalidOperationException();
-            }
         }
 
         /// <summary>
@@ -216,7 +212,7 @@ namespace Eimu.Core
 
         private void LinkDeviceCallbacks()
         {
-            this.CurrentProcessor.OnBeep += new EventHandler(CurrentProcessor_OnBeep);
+            this.CurrentProcessor.OnBeep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
             this.CurrentProcessor.OnPixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
             this.CurrentProcessor.OnScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
             this.CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
@@ -243,9 +239,9 @@ namespace Eimu.Core
             this.CurrentGraphicsDevice.SetPixel(e.X, e.Y);
         }
 
-        void CurrentProcessor_OnBeep(object sender, EventArgs e)
+        void CurrentProcessor_OnBeep(object sender, BeepEventArgs e)
         {
-            this.CurrentAudioDevice.Beep();
+            this.CurrentAudioDevice.Beep(e.Duration);
         }
     }
 }

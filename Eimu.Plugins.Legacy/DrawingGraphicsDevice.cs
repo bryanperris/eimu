@@ -33,23 +33,35 @@ namespace Eimu
     [PluginInfo("Legacy Video", "1.0", "Omegadox", "Draws using a bitmap")]
     public sealed class DrawingGraphicsDevice : GraphicsDevice, IPlugin
     {
-        Bitmap m_Bitmap;
-        Graphics m_Render;
-        Control m_Context;
-        int m_Scale = 6;
+        private Bitmap m_Bitmap;
+        private Graphics m_Render;
+        private Control m_Context;
+        private int m_Scale = 5;
+        private int m_ResX;
+        private int m_ResY;
 
         public DrawingGraphicsDevice()
         {
-
+            m_ResX = GraphicsDevice.RESOLUTION_WIDTH * m_Scale;
+            m_ResY = GraphicsDevice.RESOLUTION_HEIGHT * m_Scale;
         }
 
-        public override void SetPixel(int x, int y)
+        public override void OnPixelSet(int x, int y, bool on)
         {
-            m_Render.FillRectangle(Brushes.White, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
+            m_Render.FillRectangle(on ? Brushes.White : Brushes.Black, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
+
             m_Context.Invalidate();
         }
 
-        public override void ClearScreen()
+        private void DrawToBuffer(Graphics g)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.InterpolationMode = InterpolationMode.Bilinear;
+            g.Clear(Color.Black);
+            g.DrawImage(m_Bitmap, 0, 0, m_Context.Size.Width, m_Context.Size.Height);
+        }
+
+        public override void OnScreenClear()
         {
             m_Render.Clear(Color.Black);
             m_Context.Invalidate();
@@ -58,23 +70,15 @@ namespace Eimu
         public override void Initialize()
         {
             m_Context = Control.FromHandle(PluginManager.RenderContext);
-            m_Bitmap = new Bitmap(GraphicsDevice.RESOLUTION_WIDTH * m_Scale, GraphicsDevice.RESOLUTION_HEIGHT * m_Scale);
-            m_Render = Graphics.FromImage(m_Bitmap);
             m_Context.Paint += new PaintEventHandler(m_Context_Paint);
+
+            m_Bitmap = new Bitmap(m_ResX, m_ResY);
+            m_Render = Graphics.FromImage(m_Bitmap);
         }
 
         void m_Context_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.InterpolationMode = InterpolationMode.Bilinear;
-
-            e.Graphics.ResetTransform();
-
-            e.Graphics.ScaleTransform(
-                m_Context.Size.Width / (GraphicsDevice.RESOLUTION_WIDTH * m_Scale),
-                m_Context.Size.Height / (GraphicsDevice.RESOLUTION_HEIGHT * m_Scale), MatrixOrder.Prepend);
-
-            e.Graphics.DrawImage(m_Bitmap, 0, 0);
+            DrawToBuffer(e.Graphics);
         }
 
         public override void Shutdown()

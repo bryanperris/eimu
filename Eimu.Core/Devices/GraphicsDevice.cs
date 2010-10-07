@@ -31,16 +31,54 @@ namespace Eimu.Core.Devices
         public const int SPRITE_WIDTH = 8;
         public const int SPRITE_HEIGHT = 1;
 
+        private bool[] m_Buffer;
+
+        public GraphicsDevice()
+        {
+            m_Buffer = new bool[RESOLUTION_WIDTH * RESOLUTION_HEIGHT];
+        }
+
         public event EventHandler OnPixelCollision;
 
-        public abstract void SetPixel(int x, int y);
+        public abstract void OnPixelSet(int x, int y, bool on);
 
-        public abstract void ClearScreen();
+        public abstract void OnScreenClear();
+
+        public void ClearScreen()
+        {
+            Array.Clear(this.m_Buffer, 0, this.m_Buffer.Length);
+            OnScreenClear();
+        }
+
+        public void SetPixel(int x, int y)
+        {
+            bool on = (GetPixel(x, y) ^ true);
+
+            if (!on)
+                SetCollision();
+
+            m_Buffer[x * (y + 1)]  = on;
+
+            OnPixelSet(x, y, on);
+
+            // src ^ 1 = 1 : Fill White
+            // src ^ 1 = 0 : Make Black, Set Collision
+        }
+
+        public bool GetPixel(int x, int y)
+        {
+            return m_Buffer[x * (y + 1)];
+        }
 
         protected void SetCollision()
         {
             if (OnPixelCollision != null)
                 OnPixelCollision(this, new EventArgs());
+        }
+
+        public bool[] InternalBuffer
+        {
+            get { return this.m_Buffer; }
         }
 
         #region IDevice Members

@@ -36,25 +36,7 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Drw)]
         private void Drw(ChipInstruction inst)
         {
-            this.m_VRegs[0xF] = 0;
-            byte x = this.m_VRegs[inst.X];
-            byte y = this.m_VRegs[inst.Y];
-            byte pixelWidth = GraphicsDevice.SPRITE_WIDTH;
-            byte pixelHeight = inst.N;
-            byte pixel;
-
-            for (byte i = 0; i < pixelHeight; i++)
-            {
-                pixel = this.m_Memory.GetValue(this.m_IReg + i);
-
-                for (byte j = 0; j < pixelWidth; j++)
-                {
-                    if ((pixel & (0x80 >> j)) != 0)
-                    {
-                        PixelSet(x + i, y + j);
-                    }
-                }
-            }
+            PixelSet(inst);
         }
     }
 }

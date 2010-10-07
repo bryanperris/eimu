@@ -59,7 +59,7 @@ namespace Eimu.Core.CPU
         // Device Callbacks
         public event EventHandler OnScreenClear;
         public event EventHandler<PixelSetEventArgs> OnPixelSet;
-        public event EventHandler OnBeep;
+        public event EventHandler<BeepEventArgs> OnBeep;
 
         public Processor()
         {
@@ -98,12 +98,15 @@ namespace Eimu.Core.CPU
             while (this.m_ProgramCounter < this.m_Memory.Size)
             {
                 if (e.Cancel)
-                    break;
+                    return;
 
                 if (m_Paused)
                     m_CPUWait.WaitOne();
 
                 Step();
+
+                // Thread sleep
+                Thread.Sleep(1);
             }
         }
 
@@ -128,13 +131,10 @@ namespace Eimu.Core.CPU
 
         private void SoundThread()
         {
-            while (m_ST > 0)
-            {
-                Interlocked.Decrement(ref m_ST);
-            }
-
             if (OnBeep != null)
-                OnBeep(this, new EventArgs());
+                OnBeep(this, new BeepEventArgs(m_ST));
+
+            m_ST = 0;
         }
 
         public void SetDelayTimer(byte value)
@@ -162,8 +162,7 @@ namespace Eimu.Core.CPU
 
         public virtual void Shutdown()
         {
-            if (this.m_Worker.IsBusy)
-                this.m_Worker.CancelAsync();
+            this.m_Worker.CancelAsync();
         }
 
         public virtual void Initialize()
@@ -210,16 +209,30 @@ namespace Eimu.Core.CPU
             set { this.m_ST = value; }
         }
 
-        protected void Beep()
-        {
-            if (OnBeep != null)
-                OnBeep(this, new EventArgs());
-        }
-
-        protected void PixelSet(int x, int y)
+        protected void PixelSet(ChipInstruction inst)
         {
             if (OnPixelSet != null)
-                OnPixelSet(this, new PixelSetEventArgs(x, y));
+            {
+                this.m_VRegs[0xF] = 0;
+                byte x = this.m_VRegs[inst.X];
+                byte y = this.m_VRegs[inst.Y];
+                byte pixelWidth = GraphicsDevice.SPRITE_WIDTH;
+                byte pixelHeight = inst.N;
+                byte pixel;
+
+                for (byte i = 0; i < pixelHeight; i++)
+                {
+                    pixel = this.m_Memory.GetValue(this.m_IReg + i);
+
+                    for (byte j = 0; j < pixelWidth; j++)
+                    {
+                        if ((pixel & (0x80 >> j)) != 0)
+                        {
+                            OnPixelSet(this, new PixelSetEventArgs(x + j, y + i));
+                        }
+                    }
+                }
+            }
         }
 
         protected void ScreenClear()

@@ -11,7 +11,7 @@ namespace Eimu.NullDevices
     [PluginInfo("Null Audio Plugin", "1.0", "Omegadox", "Skips audio output")]
     public class NullAudioDevice : AudioDevice, IPlugin
     {
-        public override void Beep()
+        public override void Beep(int duration)
         {
             return;
         }

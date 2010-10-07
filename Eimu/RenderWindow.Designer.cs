@@ -46,7 +46,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.projectSiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel_RenderContext = new System.Windows.Forms.Panel();
+            this.panel_RenderContext = new Eimu.RenderPanel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,8 +72,8 @@
             this.stopToolStripMenuItem,
             this.pauseToolStripMenuItem});
             this.proccesorToolStripMenuItem.Name = "proccesorToolStripMenuItem";
-            this.proccesorToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
-            this.proccesorToolStripMenuItem.Text = "CPU";
+            this.proccesorToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.proccesorToolStripMenuItem.Text = "Machine";
             // 
             // stopToolStripMenuItem
             // 
@@ -194,7 +194,6 @@
             // 
             // panel_RenderContext
             // 
-            this.panel_RenderContext.BackColor = System.Drawing.Color.Black;
             this.panel_RenderContext.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_RenderContext.Location = new System.Drawing.Point(0, 24);
             this.panel_RenderContext.Name = "panel_RenderContext";
@@ -237,7 +236,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem projectSiteToolStripMenuItem;
-        private System.Windows.Forms.Panel panel_RenderContext;
         private System.Windows.Forms.ToolStripMenuItem codeViewToolStripMenuItem;
+        private RenderPanel panel_RenderContext;
     }
 }
