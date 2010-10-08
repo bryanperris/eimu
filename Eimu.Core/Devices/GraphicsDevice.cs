@@ -46,15 +46,15 @@ namespace Eimu.Core.Devices
 
         public void ClearScreen()
         {
-            Array.Clear(this.m_Buffer, 0, this.m_Buffer.Length);
+            //Array.Clear(this.m_Buffer, 0, this.m_Buffer.Length);
             OnScreenClear();
         }
 
         public void SetPixel(int x, int y)
         {
-            bool on = (GetPixel(x, y) ^ true);
+            bool on = GetPixel(x, y) ^ true;
 
-            if (!on)
+            if (on)
                 SetCollision();
 
             m_Buffer[x * (y + 1)]  = on;

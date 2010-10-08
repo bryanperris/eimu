@@ -88,5 +88,15 @@ namespace Eimu
         {
             System.Diagnostics.Process.Start("http://code.google.com/p/eimu"); 
         }
+
+        private void RenderWindow_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+                case 'l': m_Machine.CurrentGraphicsDevice.ClearScreen(); break;
+                case 'k': m_Machine.CurrentProcessor.SetCollision(); break;
+                default: break;
+            }
+        }
     }
 }

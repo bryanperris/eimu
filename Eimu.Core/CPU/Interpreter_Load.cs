@@ -87,7 +87,7 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Ld_F_55)]
         void Load_F55(ChipInstruction inst)
         {
-            for (int i = 0; i < inst.X; i++)
+            for (int i = 0; i <= inst.X; i++)
             {
                 m_Memory[m_IReg + i] = m_VRegs[i];
             }
@@ -96,10 +96,24 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Ld_F_65)]
         void Load_F65(ChipInstruction inst)
         {
-            for (int i = 0; i < inst.X; i++)
+            for (int i = 0; i <= inst.X; i++)
             {
-                m_VRegs[i] = m_Memory[m_IReg + i];
+               m_VRegs[i] = m_Memory[m_IReg + i];
             }
+        }
+
+        [OpcodeTag(ChipOpcodes.Ld_F_75)]
+        void Load_F75(ChipInstruction inst)
+        {
+            for (int i = 0; i <= inst.X; i++)
+                m_ERegs[i] = m_VRegs[i];
+        }
+
+        [OpcodeTag(ChipOpcodes.Ld_F_85)]
+        void Load_F85(ChipInstruction inst)
+        {
+            for (int i = 0; i <= inst.X; i++)
+                m_VRegs[i] = m_ERegs[i];
         }
     }
 }

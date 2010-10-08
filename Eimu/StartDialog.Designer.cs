@@ -41,6 +41,9 @@
             this.comboBox_SelectedAudio = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.comboBox_SelectedGraphics = new System.Windows.Forms.ComboBox();
+            this.button_GraphicsConfig = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -61,17 +64,17 @@
             // 
             // textBox_RomPath
             // 
-            this.textBox_RomPath.Location = new System.Drawing.Point(7, 19);
+            this.textBox_RomPath.Location = new System.Drawing.Point(7, 17);
             this.textBox_RomPath.Name = "textBox_RomPath";
             this.textBox_RomPath.ReadOnly = true;
-            this.textBox_RomPath.Size = new System.Drawing.Size(208, 20);
+            this.textBox_RomPath.Size = new System.Drawing.Size(289, 20);
             this.textBox_RomPath.TabIndex = 1;
             // 
             // button_FileBrowse
             // 
-            this.button_FileBrowse.Location = new System.Drawing.Point(221, 16);
+            this.button_FileBrowse.Location = new System.Drawing.Point(7, 38);
             this.button_FileBrowse.Name = "button_FileBrowse";
-            this.button_FileBrowse.Size = new System.Drawing.Size(75, 23);
+            this.button_FileBrowse.Size = new System.Drawing.Size(79, 23);
             this.button_FileBrowse.TabIndex = 0;
             this.button_FileBrowse.Text = "Browse...";
             this.button_FileBrowse.UseVisualStyleBackColor = true;
@@ -113,6 +116,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Controls.Add(this.comboBox_SelectedInput);
             this.groupBox4.Location = new System.Drawing.Point(13, 83);
             this.groupBox4.Name = "groupBox4";
@@ -126,21 +130,23 @@
             this.comboBox_SelectedInput.FormattingEnabled = true;
             this.comboBox_SelectedInput.Location = new System.Drawing.Point(7, 19);
             this.comboBox_SelectedInput.Name = "comboBox_SelectedInput";
-            this.comboBox_SelectedInput.Size = new System.Drawing.Size(431, 21);
+            this.comboBox_SelectedInput.Size = new System.Drawing.Size(325, 21);
             this.comboBox_SelectedInput.TabIndex = 0;
             // 
             // button_RunProgram
             // 
-            this.button_RunProgram.Location = new System.Drawing.Point(354, 260);
+            this.button_RunProgram.Enabled = false;
+            this.button_RunProgram.Location = new System.Drawing.Point(374, 260);
             this.button_RunProgram.Name = "button_RunProgram";
-            this.button_RunProgram.Size = new System.Drawing.Size(103, 23);
+            this.button_RunProgram.Size = new System.Drawing.Size(83, 23);
             this.button_RunProgram.TabIndex = 7;
-            this.button_RunProgram.Text = "Start Program";
+            this.button_RunProgram.Text = "Run Program";
             this.button_RunProgram.UseVisualStyleBackColor = true;
             this.button_RunProgram.Click += new System.EventHandler(this.button_RunProgram_Click);
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.comboBox_SelectedAudio);
             this.groupBox3.Location = new System.Drawing.Point(13, 142);
             this.groupBox3.Name = "groupBox3";
@@ -154,11 +160,12 @@
             this.comboBox_SelectedAudio.FormattingEnabled = true;
             this.comboBox_SelectedAudio.Location = new System.Drawing.Point(7, 19);
             this.comboBox_SelectedAudio.Name = "comboBox_SelectedAudio";
-            this.comboBox_SelectedAudio.Size = new System.Drawing.Size(431, 21);
+            this.comboBox_SelectedAudio.Size = new System.Drawing.Size(325, 21);
             this.comboBox_SelectedAudio.TabIndex = 0;
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.button_GraphicsConfig);
             this.groupBox5.Controls.Add(this.comboBox_SelectedGraphics);
             this.groupBox5.Location = new System.Drawing.Point(13, 201);
             this.groupBox5.Name = "groupBox5";
@@ -170,10 +177,37 @@
             // comboBox_SelectedGraphics
             // 
             this.comboBox_SelectedGraphics.FormattingEnabled = true;
-            this.comboBox_SelectedGraphics.Location = new System.Drawing.Point(7, 19);
+            this.comboBox_SelectedGraphics.Location = new System.Drawing.Point(6, 19);
             this.comboBox_SelectedGraphics.Name = "comboBox_SelectedGraphics";
-            this.comboBox_SelectedGraphics.Size = new System.Drawing.Size(431, 21);
+            this.comboBox_SelectedGraphics.Size = new System.Drawing.Size(326, 21);
             this.comboBox_SelectedGraphics.TabIndex = 0;
+            // 
+            // button_GraphicsConfig
+            // 
+            this.button_GraphicsConfig.Location = new System.Drawing.Point(338, 12);
+            this.button_GraphicsConfig.Name = "button_GraphicsConfig";
+            this.button_GraphicsConfig.Size = new System.Drawing.Size(100, 32);
+            this.button_GraphicsConfig.TabIndex = 1;
+            this.button_GraphicsConfig.Text = "Config...";
+            this.button_GraphicsConfig.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(339, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(100, 32);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Config...";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(338, 12);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(100, 32);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Config...";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // StartDialog
             // 
@@ -215,5 +249,8 @@
         private System.Windows.Forms.ComboBox comboBox_SelectedAudio;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ComboBox comboBox_SelectedGraphics;
+        private System.Windows.Forms.Button button_GraphicsConfig;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
     }
 }

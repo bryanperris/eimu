@@ -64,7 +64,6 @@ namespace Eimu.Plugins.Legacy
 
         public override void SetPauseState(bool paused)
         {
-            throw new NotImplementedException();
         }
 
         #endregion

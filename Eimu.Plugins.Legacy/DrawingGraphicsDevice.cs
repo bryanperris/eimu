@@ -49,7 +49,6 @@ namespace Eimu
         public override void OnPixelSet(int x, int y, bool on)
         {
             m_Render.FillRectangle(on ? Brushes.White : Brushes.Black, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
-
             m_Context.Invalidate();
         }
 

@@ -66,10 +66,12 @@ namespace Eimu
             {
                 m_OpenFileDialog.FileName = Config.FileROMPath;
                 textBox_RomPath.Text = Config.FileROMPath;
-                comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
-                comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
-                comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
+                button_RunProgram.Enabled = true;
             }
+
+            comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
+            comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
+            comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
         }
 
         public void SetVM(VirtualMachine vm)
@@ -172,6 +174,7 @@ namespace Eimu
         {
             m_OpenFileDialog.ShowDialog();
             textBox_RomPath.Text = m_OpenFileDialog.FileName;
+            button_RunProgram.Enabled = true;
         }
     }
 }

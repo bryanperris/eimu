@@ -42,7 +42,7 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Call)]
         void Call(ChipInstruction inst)
         {
-            m_Stack.Push(m_ProgramCounter);
+            m_Stack.Push((ushort)m_ProgramCounter);
             m_ProgramCounter = inst.NNN;
         }
 

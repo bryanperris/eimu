@@ -205,6 +205,16 @@ namespace Eimu.Core.CPU
 		/// <summary>
 		/// Read registers V0 through Vx from memory starting at location I 
 		/// </summary>
-		Ld_F_65
+		Ld_F_65,
+
+        /// <summary>
+        /// Loads all V regsters to HP84 Flags
+        /// </summary>
+        Ld_F_75,
+
+        /// <summary>
+        /// Load all HP84 flags to V registers
+        /// </summary>
+        Ld_F_85
     }
 }

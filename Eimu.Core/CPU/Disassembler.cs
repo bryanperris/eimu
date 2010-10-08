@@ -66,6 +66,8 @@ namespace Eimu.Core.CPU
             s_Lookup.Add(0xF033, ChipOpcodes.Ld_F_33);
             s_Lookup.Add(0xF055, ChipOpcodes.Ld_F_55);
             s_Lookup.Add(0xF065, ChipOpcodes.Ld_F_65);
+            s_Lookup.Add(0xF075, ChipOpcodes.Ld_F_75);
+            s_Lookup.Add(0xF085, ChipOpcodes.Ld_F_85);
 		}
 
         public static ChipOpcodes DecodeInstruction(ChipInstruction instruction)

@@ -43,7 +43,13 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            m_IReg += m_VRegs[inst.X];
+            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= Memory.MEMORY_SIZE)
+            {
+                m_IReg = Memory.MEMORY_SIZE;
+                m_VRegs[0xF] = 1;
+            }
+            else
+                m_IReg += m_VRegs[inst.X];
         }
 
         [OpcodeTag(ChipOpcodes.Or)]
@@ -67,8 +73,8 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Sub)]
         void Sub(ChipInstruction inst)
         {
+            m_VRegs[0xF] = (byte)((m_VRegs[inst.X] >= m_VRegs[inst.Y]) ? 1 : 0);
             m_VRegs[inst.X] -= m_VRegs[inst.Y];
-            m_VRegs[0xF] = (byte)((m_VRegs[inst.X] > m_VRegs[inst.Y]) ? 1 : 0);
         }
 
         [OpcodeTag(ChipOpcodes.Shr)]
@@ -81,14 +87,14 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Subn)]
         void Subn(ChipInstruction inst)
         {
+            m_VRegs[0xF] = (byte)((m_VRegs[inst.Y] >= m_VRegs[inst.X]) ? 1 : 0);
             m_VRegs[inst.X] = (byte)(m_VRegs[inst.Y] - m_VRegs[inst.X]);
-            m_VRegs[0xF] = (byte)((m_VRegs[inst.Y] > m_VRegs[inst.X]) ? 1 : 0);
         }
 
         [OpcodeTag(ChipOpcodes.Shl)]
         void Shl(ChipInstruction inst)
         {
-            m_VRegs[0xF] = (byte)(((m_VRegs[inst.X] & 80) == 1) ? 1 : 0);
+            m_VRegs[0xF] = (byte)((m_VRegs[inst.X] & 0x80) >> 7);
             m_VRegs[inst.X] *= 2;
         }
 

@@ -42,12 +42,14 @@ namespace Eimu.Core.CPU
         private EventWaitHandle m_CPUWait;
         private EventWaitHandle m_KeyWait;
         protected byte m_LastKey = 0;
+        private bool m_StopCPU = true;
 
         public event EventHandler ProgramEnd;
 
         // Registers
         protected byte[] m_VRegs = new byte[16];
-        protected ushort m_ProgramCounter;
+        protected byte[] m_ERegs = new byte[8];
+        protected int m_ProgramCounter;
         protected ushort m_IReg;
         protected int m_DT;
         protected int m_ST;
@@ -63,17 +65,13 @@ namespace Eimu.Core.CPU
 
         public Processor()
         {
+            m_Stack = new Stack<ushort>(STACK_SIZE);
             m_CPUWait = new EventWaitHandle(true, EventResetMode.ManualReset);
             m_KeyWait = new EventWaitHandle(true, EventResetMode.ManualReset);
-
-            ClearRegisters();
-
             this.m_Worker = new BackgroundWorker();
             this.m_Worker.WorkerSupportsCancellation = true;
             this.m_Worker.DoWork += new DoWorkEventHandler(DoExecution);
             this.m_Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(m_Worker_RunWorkerCompleted);
-
-            m_Stack = new Stack<ushort>(STACK_SIZE);
         }
 
         void m_Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -84,8 +82,14 @@ namespace Eimu.Core.CPU
 
         protected void ClearRegisters()
         {
+            this.m_Stack.Clear();
             m_ProgramCounter = 0x200;
             m_IReg = 0;
+            Array.Clear(this.m_VRegs, 0, this.m_VRegs.Length);
+            Array.Clear(this.m_ERegs, 0, this.m_ERegs.Length);
+            m_ST = 0;
+            m_LastKey = 0;
+            m_DT = 0;
         }
 
         public void SetMemory(Memory memory)
@@ -120,8 +124,9 @@ namespace Eimu.Core.CPU
         private void DelayThread()
         {
             // The timer thread
+            // TODO: the timer goes fast as it can
 
-            while (m_DT > 0)
+            while (m_DT > 0 && !m_StopCPU)
             {
                 Interlocked.Decrement(ref m_DT);
             }
@@ -162,16 +167,21 @@ namespace Eimu.Core.CPU
 
         public virtual void Shutdown()
         {
+            m_StopCPU = true;
             this.m_Worker.CancelAsync();
+            ClearRegisters();
         }
 
         public virtual void Initialize()
         {
+            ClearRegisters();
+            m_StopCPU = false;
         }
 
         public void IncrementPC()
         {
-            m_ProgramCounter += 2;
+            if (!m_StopCPU)
+                Interlocked.Add(ref m_ProgramCounter, 2);
         }
 
         public void SetCollision()
@@ -185,7 +195,13 @@ namespace Eimu.Core.CPU
             set { this.m_VRegs = value;}
         }
 
-        public ushort PC
+        public byte[] ERegisters
+        {
+            get { return this.m_ERegs; }
+            set { this.m_ERegs = value; }
+        }
+
+        public int PC
         {
             get { return this.m_ProgramCounter; }
             set { this.m_ProgramCounter = value; }
@@ -216,20 +232,17 @@ namespace Eimu.Core.CPU
                 this.m_VRegs[0xF] = 0;
                 byte x = this.m_VRegs[inst.X];
                 byte y = this.m_VRegs[inst.Y];
-                byte pixelWidth = GraphicsDevice.SPRITE_WIDTH;
-                byte pixelHeight = inst.N;
-                byte pixel;
+                byte read = 0;
 
-                for (byte i = 0; i < pixelHeight; i++)
+                for (byte i = 0; i < inst.N; i++)
                 {
-                    pixel = this.m_Memory.GetValue(this.m_IReg + i);
+                    read = m_Memory.GetValue(this.m_IReg + i);
 
-                    for (byte j = 0; j < pixelWidth; j++)
+                    for (byte j = 0; j < GraphicsDevice.SPRITE_WIDTH; j++)
                     {
-                        if ((pixel & (0x80 >> j)) != 0)
-                        {
+                        // Keep writing pixels until we hit a 0 bit (width end)
+                        if ((read & (0x80 >> j)) != 0)
                             OnPixelSet(this, new PixelSetEventArgs(x + j, y + i));
-                        }
                     }
                 }
             }

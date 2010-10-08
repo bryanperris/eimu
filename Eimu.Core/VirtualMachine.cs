@@ -85,7 +85,7 @@ namespace Eimu.Core
             int read = -1;
 
             // Read source into RAM
-            for (int i = 0x200; i < MachineMemory.Size - 0x1FF; i++)
+            for (int i = 0x200; i < MachineMemory.Size; i++)
             {
                 if (-1 != (read = source.ReadByte()))
                 {
@@ -147,9 +147,6 @@ namespace Eimu.Core
 
         /// <summary>
         /// Stops the virtual machine
-        /// 
-        /// Exceptions:
-        ///   System.InvalidOperationException
         /// </summary>
         public void Stop()
         {
@@ -166,9 +163,6 @@ namespace Eimu.Core
 
         /// <summary>
         /// Sets the pause state of the virtual machine.
-        /// 
-        /// Exceptions:
-        ///   System.InvalidOperationException
         /// </summary>
         /// <param name="paused">The virtual machine is paused</param>
         public void SetPause(bool paused)
@@ -185,8 +179,6 @@ namespace Eimu.Core
                 else
                     m_State = RunState.Running;
             }
-            else
-                throw new InvalidOperationException();
         }
 
         /// <summary>
