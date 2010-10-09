@@ -30,7 +30,7 @@ namespace Eimu.Plugins.Legacy
 
         private void DoBeep()
         {
-            System.Console.Beep(250, m_Duration + 1);
+            System.Console.Beep(250, m_Duration + 100);
         }
 
         #region IPlugin Members

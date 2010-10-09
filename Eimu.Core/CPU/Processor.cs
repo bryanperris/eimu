@@ -110,7 +110,7 @@ namespace Eimu.Core.CPU
                 Step();
 
                 // Thread sleep
-                Thread.Sleep(1);
+                Thread.Sleep(2);
             }
         }
 

@@ -75,7 +75,7 @@ namespace Eimu.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Eimu 1.0 - Chip 8 Emulator (By Omegadox).
+        ///   Looks up a localized string similar to Eimu 1.0 - Chip 8 Emulator.
         /// </summary>
         internal static string WindowCaption {
             get {

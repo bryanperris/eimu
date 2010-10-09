@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartDialog));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_RomPath = new System.Windows.Forms.TextBox();
             this.button_FileBrowse = new System.Windows.Forms.Button();
@@ -35,17 +36,17 @@
             this.radioButton_CPUModeRecompiler = new System.Windows.Forms.RadioButton();
             this.radioButton_CPUModeInterpreter = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.comboBox_SelectedInput = new System.Windows.Forms.ComboBox();
             this.button_RunProgram = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.comboBox_SelectedAudio = new System.Windows.Forms.ComboBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.comboBox_SelectedGraphics = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.comboBox_SelectedAudio = new System.Windows.Forms.ComboBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.button5 = new System.Windows.Forms.Button();
+            this.comboBox_SelectedGraphics = new System.Windows.Forms.ComboBox();
             this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -129,6 +130,16 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Input Backend";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(278, 19);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(77, 22);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "About";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(361, 19);
@@ -170,44 +181,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Audio Backend";
             // 
-            // comboBox_SelectedAudio
-            // 
-            this.comboBox_SelectedAudio.FormattingEnabled = true;
-            this.comboBox_SelectedAudio.Location = new System.Drawing.Point(7, 19);
-            this.comboBox_SelectedAudio.Name = "comboBox_SelectedAudio";
-            this.comboBox_SelectedAudio.Size = new System.Drawing.Size(265, 21);
-            this.comboBox_SelectedAudio.TabIndex = 0;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.button5);
-            this.groupBox5.Controls.Add(this.comboBox_SelectedGraphics);
-            this.groupBox5.Controls.Add(this.button6);
-            this.groupBox5.Location = new System.Drawing.Point(13, 201);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(444, 53);
-            this.groupBox5.TabIndex = 5;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Graphics Backend";
-            // 
-            // comboBox_SelectedGraphics
-            // 
-            this.comboBox_SelectedGraphics.FormattingEnabled = true;
-            this.comboBox_SelectedGraphics.Location = new System.Drawing.Point(6, 19);
-            this.comboBox_SelectedGraphics.Name = "comboBox_SelectedGraphics";
-            this.comboBox_SelectedGraphics.Size = new System.Drawing.Size(266, 21);
-            this.comboBox_SelectedGraphics.TabIndex = 0;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(278, 19);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(77, 22);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "About";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(278, 19);
@@ -228,6 +201,26 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // comboBox_SelectedAudio
+            // 
+            this.comboBox_SelectedAudio.FormattingEnabled = true;
+            this.comboBox_SelectedAudio.Location = new System.Drawing.Point(7, 19);
+            this.comboBox_SelectedAudio.Name = "comboBox_SelectedAudio";
+            this.comboBox_SelectedAudio.Size = new System.Drawing.Size(265, 21);
+            this.comboBox_SelectedAudio.TabIndex = 0;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.button5);
+            this.groupBox5.Controls.Add(this.comboBox_SelectedGraphics);
+            this.groupBox5.Controls.Add(this.button6);
+            this.groupBox5.Location = new System.Drawing.Point(13, 201);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(444, 53);
+            this.groupBox5.TabIndex = 5;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Graphics Backend";
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(278, 19);
@@ -237,6 +230,14 @@
             this.button5.Text = "About";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // comboBox_SelectedGraphics
+            // 
+            this.comboBox_SelectedGraphics.FormattingEnabled = true;
+            this.comboBox_SelectedGraphics.Location = new System.Drawing.Point(6, 19);
+            this.comboBox_SelectedGraphics.Name = "comboBox_SelectedGraphics";
+            this.comboBox_SelectedGraphics.Size = new System.Drawing.Size(266, 21);
+            this.comboBox_SelectedGraphics.TabIndex = 0;
             // 
             // button6
             // 
@@ -260,6 +261,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "StartDialog";
             this.Text = "Eimu 1.0 - Chip 8 Emulator (By Omegadox)";
             this.groupBox1.ResumeLayout(false);
