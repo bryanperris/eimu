@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Eimu.Core.Devices
 {
-    public enum ChipKeys : byte
+    public enum ChipKeys : int
     {
+        None = -1,
         Zero = 0,
         One = 1,
         Two = 2,

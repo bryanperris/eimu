@@ -95,6 +95,10 @@ namespace Eimu.Core.CPU
             {
                 IncrementPC();
             }
+            else
+            {
+                //Console.WriteLine("Key checked for: " + m_VRegs[inst.X].ToString());
+            }
         }
 
         [OpcodeTag(ChipOpcodes.Sknp)]
@@ -103,6 +107,10 @@ namespace Eimu.Core.CPU
             if (m_VRegs[inst.X] != m_LastKey)
             {
                 IncrementPC();
+            }
+            else
+            {
+                //Console.WriteLine("Key not checked for: " + m_VRegs[inst.X].ToString());
             }
         }
     }

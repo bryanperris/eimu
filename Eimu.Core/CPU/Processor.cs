@@ -242,7 +242,16 @@ namespace Eimu.Core.CPU
                     {
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
+                        {
+                            // Wrapping
+                            if ((x + j) > GraphicsDevice.RESOLUTION_WIDTH)
+                                x -= GraphicsDevice.RESOLUTION_WIDTH;
+
+                            if ((y + i) > GraphicsDevice.RESOLUTION_HEIGHT)
+                                y -= GraphicsDevice.RESOLUTION_HEIGHT;
+
                             OnPixelSet(this, new PixelSetEventArgs(x + j, y + i));
+                        }
                     }
                 }
             }
@@ -256,8 +265,15 @@ namespace Eimu.Core.CPU
 
         public void SetKeyPress(ChipKeys key)
         {
-            m_LastKey = (byte)key;
-            m_KeyWait.Set();
+            if (key != ChipKeys.None)
+            {
+                m_LastKey = (byte)key;
+                m_KeyWait.Set();
+            }
+            else
+            {
+                m_LastKey = 17;
+            }
         }
 
         protected void WaitForKey()
