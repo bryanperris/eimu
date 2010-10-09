@@ -9,7 +9,7 @@ using Eimu.Plugins;
 
 namespace Eimu.Plugins.Legacy
 {
-    [PluginInfo("Legacy Audio Plugin", "1.0", "Omegadox", "Uses system beep")]
+    [PluginInfo("Sytem Beep Plugin (Legacy)", "1.0", "Omegadox", "Uses system beep to make noise")]
     public class BeepAudioDevice : AudioDevice, IPlugin
     {
         Thread m_Thread;
@@ -30,7 +30,7 @@ namespace Eimu.Plugins.Legacy
 
         private void DoBeep()
         {
-            System.Console.Beep(250, m_Duration);
+            System.Console.Beep(250, m_Duration + 1);
         }
 
         #region IPlugin Members

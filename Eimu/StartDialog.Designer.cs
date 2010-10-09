@@ -35,15 +35,18 @@
             this.radioButton_CPUModeRecompiler = new System.Windows.Forms.RadioButton();
             this.radioButton_CPUModeInterpreter = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.comboBox_SelectedInput = new System.Windows.Forms.ComboBox();
             this.button_RunProgram = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.comboBox_SelectedAudio = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.comboBox_SelectedGraphics = new System.Windows.Forms.ComboBox();
-            this.button_GraphicsConfig = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -116,6 +119,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.button3);
             this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Controls.Add(this.comboBox_SelectedInput);
             this.groupBox4.Location = new System.Drawing.Point(13, 83);
@@ -125,12 +129,22 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Input Backend";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(361, 19);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(77, 22);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Config...";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // comboBox_SelectedInput
             // 
             this.comboBox_SelectedInput.FormattingEnabled = true;
             this.comboBox_SelectedInput.Location = new System.Drawing.Point(7, 19);
             this.comboBox_SelectedInput.Name = "comboBox_SelectedInput";
-            this.comboBox_SelectedInput.Size = new System.Drawing.Size(325, 21);
+            this.comboBox_SelectedInput.Size = new System.Drawing.Size(265, 21);
             this.comboBox_SelectedInput.TabIndex = 0;
             // 
             // button_RunProgram
@@ -147,6 +161,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.button1);
+            this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.comboBox_SelectedAudio);
             this.groupBox3.Location = new System.Drawing.Point(13, 142);
             this.groupBox3.Name = "groupBox3";
@@ -160,13 +175,14 @@
             this.comboBox_SelectedAudio.FormattingEnabled = true;
             this.comboBox_SelectedAudio.Location = new System.Drawing.Point(7, 19);
             this.comboBox_SelectedAudio.Name = "comboBox_SelectedAudio";
-            this.comboBox_SelectedAudio.Size = new System.Drawing.Size(325, 21);
+            this.comboBox_SelectedAudio.Size = new System.Drawing.Size(265, 21);
             this.comboBox_SelectedAudio.TabIndex = 0;
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.button_GraphicsConfig);
+            this.groupBox5.Controls.Add(this.button5);
             this.groupBox5.Controls.Add(this.comboBox_SelectedGraphics);
+            this.groupBox5.Controls.Add(this.button6);
             this.groupBox5.Location = new System.Drawing.Point(13, 201);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(444, 53);
@@ -179,35 +195,58 @@
             this.comboBox_SelectedGraphics.FormattingEnabled = true;
             this.comboBox_SelectedGraphics.Location = new System.Drawing.Point(6, 19);
             this.comboBox_SelectedGraphics.Name = "comboBox_SelectedGraphics";
-            this.comboBox_SelectedGraphics.Size = new System.Drawing.Size(326, 21);
+            this.comboBox_SelectedGraphics.Size = new System.Drawing.Size(266, 21);
             this.comboBox_SelectedGraphics.TabIndex = 0;
             // 
-            // button_GraphicsConfig
+            // button3
             // 
-            this.button_GraphicsConfig.Location = new System.Drawing.Point(338, 12);
-            this.button_GraphicsConfig.Name = "button_GraphicsConfig";
-            this.button_GraphicsConfig.Size = new System.Drawing.Size(100, 32);
-            this.button_GraphicsConfig.TabIndex = 1;
-            this.button_GraphicsConfig.Text = "Config...";
-            this.button_GraphicsConfig.UseVisualStyleBackColor = true;
+            this.button3.Location = new System.Drawing.Point(278, 19);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(77, 22);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "About";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(339, 12);
+            this.button1.Location = new System.Drawing.Point(278, 19);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 32);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Config...";
+            this.button1.Size = new System.Drawing.Size(77, 22);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "About";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // button4
             // 
-            this.button2.Location = new System.Drawing.Point(338, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 32);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Config...";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button4.Location = new System.Drawing.Point(361, 19);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(77, 22);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "Config...";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(278, 19);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(77, 22);
+            this.button5.TabIndex = 7;
+            this.button5.Text = "About";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(361, 19);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(77, 22);
+            this.button6.TabIndex = 6;
+            this.button6.Text = "Config...";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // StartDialog
             // 
@@ -249,8 +288,11 @@
         private System.Windows.Forms.ComboBox comboBox_SelectedAudio;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ComboBox comboBox_SelectedGraphics;
-        private System.Windows.Forms.Button button_GraphicsConfig;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }

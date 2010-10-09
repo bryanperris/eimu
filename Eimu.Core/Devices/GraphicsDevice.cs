@@ -54,20 +54,25 @@ namespace Eimu.Core.Devices
         {
             bool on = GetPixel(x, y) ^ true;
 
-            if (on)
+            if (!on)
                 SetCollision();
 
-            m_Buffer[x * (y + 1)]  = on;
+            m_Buffer[GetBufferPosition(x,y)] = on;
 
             OnPixelSet(x, y, on);
 
-            // src ^ 1 = 1 : Fill White
-            // src ^ 1 = 0 : Make Black, Set Collision
+            // src 0 ^ 1 = 1 : Fill White
+            // src 1 ^ 1 = 0 : Make Black, Set Collision
         }
 
         public bool GetPixel(int x, int y)
         {
-            return m_Buffer[x * (y + 1)];
+            return m_Buffer[GetBufferPosition(x, y)];
+        }
+
+        public int GetBufferPosition(int x, int y)
+        {
+            return ((y * GraphicsDevice.RESOLUTION_WIDTH) + x);
         }
 
         protected void SetCollision()

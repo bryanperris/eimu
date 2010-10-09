@@ -51,6 +51,7 @@ namespace Eimu
 
         public void SaveConfig()
         {
+            UpdateSelectedIndices();
             Config.FileROMPath = m_OpenFileDialog.FileName;
             Config.SelectedAudioPlugin = comboBox_SelectedAudio.SelectedIndex;
             Config.SelectedGraphicsPlugin = comboBox_SelectedGraphics.SelectedIndex;
@@ -72,11 +73,18 @@ namespace Eimu
             comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
             comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
             comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
+
+            UpdateSelectedIndices();
         }
 
         public void SetVM(VirtualMachine vm)
         {
             this.m_VM = vm;
+        }
+
+        public void ShowAboutPlugin(PluginInfo info)
+        {
+            MessageBox.Show(info.Description, "About " + info.Name + " (" + info.Author + ")", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void GetPlugins()
@@ -89,6 +97,26 @@ namespace Eimu
             ListPlugins(PluginManager.AudioDeviceList, this.comboBox_SelectedAudio);
             ListPlugins(PluginManager.GraphicsDeviceList, this.comboBox_SelectedGraphics);
             ListPlugins(PluginManager.InputDeviceDeviceList, this.comboBox_SelectedInput);
+        }
+
+        private void ShowPluginConfig(Type type)
+        {
+            try
+            {
+                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                plugin.ShowConfigDialog();
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        private void UpdateSelectedIndices()
+        {
+            PluginManager.SetSelectedPlugins(comboBox_SelectedAudio.SelectedIndex,
+                                 comboBox_SelectedGraphics.SelectedIndex,
+                                 comboBox_SelectedInput.SelectedIndex);
         }
 
         private void ListPlugins(List<Type> deviceTypeList, ComboBox box)
@@ -155,9 +183,7 @@ namespace Eimu
             else
                 this.m_VM.CurrentProcessor = new Recompiler();
 
-            PluginManager.SetSelectedPlugins(comboBox_SelectedAudio.SelectedIndex,
-                                             comboBox_SelectedGraphics.SelectedIndex,
-                                             comboBox_SelectedInput.SelectedIndex);
+
 
             this.m_VM.CurrentAudioDevice = (AudioDevice)Activator.CreateInstance(PluginManager.SelectedAudioDevice);
             this.m_VM.CurrentGraphicsDevice = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
@@ -175,6 +201,36 @@ namespace Eimu
             m_OpenFileDialog.ShowDialog();
             textBox_RomPath.Text = m_OpenFileDialog.FileName;
             button_RunProgram.Enabled = true;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ShowAboutPlugin((PluginInfo)comboBox_SelectedInput.SelectedItem);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ShowAboutPlugin((PluginInfo)comboBox_SelectedAudio.SelectedItem);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ShowAboutPlugin((PluginInfo)comboBox_SelectedGraphics.SelectedItem);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ShowPluginConfig(PluginManager.SelectedInputDevice);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ShowPluginConfig(PluginManager.SelectedAudioDevice);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            ShowPluginConfig(PluginManager.SelectedGraphicsDevice);
         }
     }
 }

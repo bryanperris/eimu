@@ -45,6 +45,7 @@ namespace Eimu.Core.CPU
             byte rbyte2 = this.m_Memory.GetValue(m_ProgramCounter + 1);
             ChipInstruction inst = new ChipInstruction((ushort)((ushort)rbyte1 << 8 | rbyte2));
             ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
+
             //Console.WriteLine("Opcode: " + opcode.ToString());
             IncrementPC();
 

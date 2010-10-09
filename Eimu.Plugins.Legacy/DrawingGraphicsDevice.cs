@@ -30,7 +30,7 @@ using Eimu.Plugins;
 
 namespace Eimu
 {
-    [PluginInfo("Legacy Video", "1.0", "Omegadox", "Draws using a bitmap")]
+    [PluginInfo("GDI+ Graphics Plugin (Legacy)", "1.0", "Omegadox", "Renders using GDI+, but performence can be slow (use for accurate testing)")]
     public sealed class DrawingGraphicsDevice : GraphicsDevice, IPlugin
     {
         private Bitmap m_Bitmap;
