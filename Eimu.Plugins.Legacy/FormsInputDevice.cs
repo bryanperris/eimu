@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Eimu.Core.Devices;
 using Eimu.Plugins;
 
-namespace Eimu
+namespace Eimu.Plugins.Legacy
 {
     [PluginInfo("Simple Input Plugin", "1.0", "Omegadox", "Uses keys QWERTYASDFGHZXCVB for input")]
     public class FormsInputDevice : InputDevice, IPlugin
@@ -32,22 +32,20 @@ namespace Eimu
 
             switch (e.KeyCode)
             {
-                case Keys.Q: key = ChipKeys.Zero; break;
-                case Keys.W: key = ChipKeys.One; break;
-                case Keys.E: key = ChipKeys.Two; break;
-                case Keys.R: key = ChipKeys.Three; break;
-                case Keys.T: key = ChipKeys.Four; break;
-                case Keys.Y: key = ChipKeys.Five; break;
-                case Keys.A: key = ChipKeys.Six; break;
-                case Keys.S: key = ChipKeys.Seven; break;
-                case Keys.D: key = ChipKeys.Eight; break;
-                case Keys.G: key = ChipKeys.Nine; break;
-                case Keys.H: key = ChipKeys.Ten; break;
-                case Keys.F: key = ChipKeys.A; break;
-                case Keys.Z: key = ChipKeys.B; break;
-                case Keys.X: key = ChipKeys.C; break;
-                case Keys.C: key = ChipKeys.D; break;
-                case Keys.V: key = ChipKeys.E; break;
+                case Keys.Q: key = ChipKeys.One; break;
+                case Keys.W: key = ChipKeys.Two; break;
+                case Keys.E: key = ChipKeys.Three; break;
+                case Keys.R: key = ChipKeys.A; break;
+                case Keys.T: key = ChipKeys.D; break;
+                case Keys.A: key = ChipKeys.Four; break;
+                case Keys.S: key = ChipKeys.Five; break;
+                case Keys.D: key = ChipKeys.Six; break;
+                case Keys.G: key = ChipKeys.E; break;
+                case Keys.F: key = ChipKeys.B; break;
+                case Keys.Z: key = ChipKeys.Seven; break;
+                case Keys.X: key = ChipKeys.Eight; break;
+                case Keys.C: key = ChipKeys.Nine; break;
+                case Keys.V: key = ChipKeys.C; break;
                 case Keys.B: key = ChipKeys.F; break;
                 default: break;
             }

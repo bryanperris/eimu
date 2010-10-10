@@ -56,6 +56,7 @@ namespace Eimu
             Config.SelectedAudioPlugin = comboBox_SelectedAudio.SelectedIndex;
             Config.SelectedGraphicsPlugin = comboBox_SelectedGraphics.SelectedIndex;
             Config.SelectedInputPlugin = comboBox_SelectedInput.SelectedIndex;
+            Config.UseInterpreter = radioButton_CPUModeInterpreter.Checked;
             Config.SaveConfigFile();
         }
 
@@ -73,6 +74,11 @@ namespace Eimu
             comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
             comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
             comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
+
+            if (Config.UseInterpreter)
+                radioButton_CPUModeInterpreter.Checked = true;
+            else
+                radioButton_CPUModeRecompiler.Checked = true;
 
             UpdateSelectedIndices();
         }

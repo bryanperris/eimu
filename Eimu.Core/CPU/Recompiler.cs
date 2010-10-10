@@ -23,45 +23,30 @@ using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
 using Eimu.Core.Devices;
+using Eimu.Core.CPU.CodeUtils;
 
 namespace Eimu.Core.CPU
 {
     public sealed partial class Recompiler : Processor
     {
-        private ILGenerator m_Emitter;
-        string progName = "ChipProgram";
-        DynamicMethod program;
-        OpcodeCallTable m_Table;
-        
+        private CodeGenerator m_Analyzer;
 
         public Recompiler()
             : base()
         {
-  
-            //program = new DynamicMethod(progName, MethodAttributes.Private, CallingConventions.Standard, typeof(void), null, this.GetType(), false);
-            //m_Emitter = program.GetILGenerator();
+ 
         }
-        
-        //private void GenerateChipProgram()
-        //{
-        //    for (int i = 0; i < this.m_Memory.Length; i+=4)
-        //    {
-        //        ChipInstruction inst = new ChipInstruction((ushort)((mem[i] << 8) | mem[i+2]));
-        //        ChipOpcodes opcode = Disassembler.DecodeInstruction(inst);
 
-				
-        //    }
-        //}
+        public override void  Initialize()
+        {
+ 	        base.Initialize();
+        }
 
         public override void Step()
         {
-            throw new NotImplementedException();
+            m_Analyzer = new CodeGenerator(m_Memory);
+            m_Analyzer.GenerateProgram();
+            this.Shutdown();
         }
-		
-        [OpcodeTag(ChipOpcodes.Ret)]
-		private void Ret()
-		{
-			//m_Emitter.Emit(OpCodes.
-		}
     }
 }

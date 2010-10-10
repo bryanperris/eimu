@@ -24,6 +24,7 @@ namespace Eimu.Plugins.Legacy
         {
             m_Duration = duruation;
             m_Thread = new Thread(new ThreadStart(DoBeep));
+            m_Thread.Name = "Beep thread";
             m_Thread.IsBackground = false;
             m_Thread.Start();
         }

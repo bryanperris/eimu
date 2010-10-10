@@ -37,58 +37,6 @@ namespace Eimu
             m_Machine.Start();
         }
 
-        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!m_Paused)
-            {
-                m_Machine.SetPause(true);
-                m_Paused = true;
-                pauseToolStripMenuItem.Text = "Resume";
-            }
-            else
-            {
-                m_Machine.SetPause(false);
-                m_Paused = false;
-                pauseToolStripMenuItem.Text = "Pause";
-            }
-        }
-
-        private void audioConfigToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void graphicsConfigToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void inputConfigToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void enableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            AboutBox ab = new AboutBox();
-            ab.ShowDialog();
-        }
-
-        private void projectSiteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://code.google.com/p/eimu"); 
-        }
-
         private void RenderWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
             switch (e.KeyChar)
@@ -97,6 +45,64 @@ namespace Eimu
                 case 'k': m_Machine.CurrentProcessor.SetCollision(); break;
                 default: break;
             }
+        }
+
+        private void aboutToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            AboutBox ab = new AboutBox();
+            ab.ShowDialog();
+        }
+
+        private void projectSiteToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://code.google.com/p/eimu"); 
+        }
+
+        private void pauseToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (!m_Paused)
+            {
+                m_Machine.SetPause(true);
+                m_Paused = true;
+                pauseToolStripMenuItem1.Text = "Resume";
+            }
+            else
+            {
+                m_Machine.SetPause(false);
+                m_Paused = false;
+                pauseToolStripMenuItem1.Text = "Pause";
+            }
+        }
+
+        private void stopToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_Machine.Stop();
+            m_Machine.Start();
+        }
+
+        private void graphicsConfigToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ((IPlugin)m_Machine.CurrentGraphicsDevice).ShowConfigDialog();
+        }
+
+        private void audioConfigToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ((IPlugin)m_Machine.CurrentAudioDevice).ShowConfigDialog();
+        }
+
+        private void inputConfigToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ((IPlugin)m_Machine.CurrentInputDevice).ShowConfigDialog();
         }
     }
 }

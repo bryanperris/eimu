@@ -28,7 +28,7 @@ using Eimu.Core.Devices;
 using Eimu.Plugins;
 
 
-namespace Eimu
+namespace Eimu.Plugins.Legacy
 {
     [PluginInfo("GDI+ Graphics Plugin (Legacy)", "1.0", "Omegadox", "Renders using GDI+, but performence can be slow (use for accurate testing)")]
     public sealed class DrawingGraphicsDevice : GraphicsDevice, IPlugin
@@ -36,11 +36,21 @@ namespace Eimu
         private Bitmap m_Bitmap;
         private Graphics m_Render;
         private Control m_Context;
-        private int m_Scale = 5;
         private int m_ResX;
         private int m_ResY;
 
+        // Config
+        private int m_Scale = 5;
+        private SolidBrush m_BackBrush;
+        private SolidBrush m_Brush;
+
         public DrawingGraphicsDevice()
+        {
+            m_Brush = new SolidBrush(Color.White);
+            m_BackBrush = new SolidBrush(Color.Black);
+        }
+
+        private void SetResolution()
         {
             m_ResX = GraphicsDevice.RESOLUTION_WIDTH * m_Scale;
             m_ResY = GraphicsDevice.RESOLUTION_HEIGHT * m_Scale;
@@ -48,7 +58,7 @@ namespace Eimu
 
         public override void OnPixelSet(int x, int y, bool on)
         {
-            m_Render.FillRectangle(on ? Brushes.White : Brushes.Black, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
+            m_Render.FillRectangle(on ? m_Brush : m_BackBrush, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
             m_Context.Invalidate();
         }
 
@@ -56,23 +66,31 @@ namespace Eimu
         {
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.Bilinear;
-            g.Clear(Color.Black);
+            g.Clear(m_BackBrush.Color);
             g.DrawImage(m_Bitmap, 0, 0, m_Context.Size.Width, m_Context.Size.Height);
         }
 
         public override void OnScreenClear()
         {
-            m_Render.Clear(Color.Black);
+            m_Render.Clear(m_BackBrush.Color);
             m_Context.Invalidate();
         }
 
         public override void Initialize()
         {
+            SetResolution();
+
             m_Context = Control.FromHandle(PluginManager.RenderContext);
             m_Context.Paint += new PaintEventHandler(m_Context_Paint);
+            m_Context.Resize += new EventHandler(m_Context_Resize);
 
             m_Bitmap = new Bitmap(m_ResX, m_ResY);
             m_Render = Graphics.FromImage(m_Bitmap);
+        }
+
+        void m_Context_Resize(object sender, EventArgs e)
+        {
+            m_Context.Invalidate();
         }
 
         void m_Context_Paint(object sender, PaintEventArgs e)
@@ -88,11 +106,10 @@ namespace Eimu
         {
         }
 
-        #region IPlugin Members
-
         public void ShowConfigDialog()
         {
-            throw new NotImplementedException();
+            GraphicsConfigForm f = new GraphicsConfigForm(this);
+            f.ShowDialog();
         }
 
         public string[] GetOptionsList()
@@ -110,6 +127,16 @@ namespace Eimu
             throw new NotImplementedException();
         }
 
-        #endregion
+        public Color BackgroundColor
+        {
+            get { return this.m_BackBrush.Color; }
+            set { this.m_BackBrush.Color = value; }
+        }
+
+        public Color ForgroundColor
+        {
+            get { return this.m_Brush.Color; }
+            set { m_Brush.Color = value; }
+        }
     }
 }

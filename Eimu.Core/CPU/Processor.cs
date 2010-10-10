@@ -32,8 +32,7 @@ namespace Eimu.Core.CPU
     public abstract class Processor : IDevice
     {
         public const int STACK_SIZE = 12;
-        public const int DELAY_TIME_RATE = 60;
-        public const int SOUND_TIMER_RATE = 60;
+        public const int DELAY_TIMER_WAIT = 17;
 
         protected Memory m_Memory;
         protected bool m_Paused = false;
@@ -41,7 +40,7 @@ namespace Eimu.Core.CPU
         private BackgroundWorker m_Worker;
         private EventWaitHandle m_CPUWait;
         private EventWaitHandle m_KeyWait;
-        protected byte m_LastKey = 0;
+        protected byte m_LastKey = 17;
         private bool m_StopCPU = true;
 
         public event EventHandler ProgramEnd;
@@ -55,8 +54,7 @@ namespace Eimu.Core.CPU
         protected int m_ST;
 
         // CPU timers
-        private Thread m_DelayTimer;
-        private Thread m_SoundTimer;
+        private Timer m_DelayTimer;
         
         // Device Callbacks
         public event EventHandler OnScreenClear;
@@ -66,8 +64,8 @@ namespace Eimu.Core.CPU
         public Processor()
         {
             m_Stack = new Stack<ushort>(STACK_SIZE);
-            m_CPUWait = new EventWaitHandle(true, EventResetMode.ManualReset);
-            m_KeyWait = new EventWaitHandle(true, EventResetMode.ManualReset);
+            m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             this.m_Worker = new BackgroundWorker();
             this.m_Worker.WorkerSupportsCancellation = true;
             this.m_Worker.DoWork += new DoWorkEventHandler(DoExecution);
@@ -88,7 +86,7 @@ namespace Eimu.Core.CPU
             Array.Clear(this.m_VRegs, 0, this.m_VRegs.Length);
             Array.Clear(this.m_ERegs, 0, this.m_ERegs.Length);
             m_ST = 0;
-            m_LastKey = 0;
+            m_LastKey = 17;
             m_DT = 0;
         }
 
@@ -98,7 +96,9 @@ namespace Eimu.Core.CPU
         }
 
         private void DoExecution(object sender, DoWorkEventArgs e)
-        {
+        {   
+            Thread.CurrentThread.Name = "CPU Thread";
+
             while (this.m_ProgramCounter < this.m_Memory.Size)
             {
                 if (e.Cancel)
@@ -121,40 +121,31 @@ namespace Eimu.Core.CPU
             this.m_Worker.RunWorkerAsync();
         }
 
-        private void DelayThread()
+        private void DelayTimerCallback(object state)
         {
-            // The timer thread
-            // TODO: the timer goes fast as it can
-
-            while (m_DT > 0 && !m_StopCPU)
+            if (m_DT > 0 && !m_StopCPU)
             {
-                Interlocked.Decrement(ref m_DT);
+                if (!m_Paused)
+                    Interlocked.Decrement(ref m_DT);
             }
-            
-            m_CPUWait.Set();
-        }
-
-        private void SoundThread()
-        {
-            if (OnBeep != null)
-                OnBeep(this, new BeepEventArgs(m_ST));
-
-            m_ST = 0;
+            else
+            {
+                m_DelayTimer.Dispose();
+            }
         }
 
         public void SetDelayTimer(byte value)
         {
-            m_CPUWait.WaitOne();
             m_DT = value;
-            m_DelayTimer = new Thread(new ThreadStart(DelayThread));
-            m_DelayTimer.Start();
+            m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), null, 17, 1);
         }
 
         public void SetSoundTimer(byte value)
         {
-            m_ST = value;
-            m_SoundTimer = new Thread(new ThreadStart(SoundThread));
-            m_SoundTimer.Start();
+            m_ST = 0;
+
+            if (OnBeep != null)
+                OnBeep(this, new BeepEventArgs(value));
         }
 
         public virtual void SetPauseState(bool paused)
@@ -247,8 +238,14 @@ namespace Eimu.Core.CPU
                             if ((x + j) > GraphicsDevice.RESOLUTION_WIDTH)
                                 x -= GraphicsDevice.RESOLUTION_WIDTH;
 
+                            if ((x + j) < 0)
+                                x += GraphicsDevice.RESOLUTION_WIDTH;
+
                             if ((y + i) > GraphicsDevice.RESOLUTION_HEIGHT)
                                 y -= GraphicsDevice.RESOLUTION_HEIGHT;
+
+                            if ((y + i) < 0)
+                                y += GraphicsDevice.RESOLUTION_HEIGHT;
 
                             OnPixelSet(this, new PixelSetEventArgs(x + j, y + i));
                         }
