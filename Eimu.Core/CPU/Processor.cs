@@ -33,15 +33,18 @@ namespace Eimu.Core.CPU
     {
         public const int STACK_SIZE = 12;
         public const int DELAY_TIMER_WAIT = 17;
+        public const int PROGRAM_ENTRY_POINT = 0x200;
 
+        private Memory m_BackupMemory;
         protected Memory m_Memory;
         protected bool m_Paused = false;
         protected Stack<ushort> m_Stack;
-        private BackgroundWorker m_Worker;
         private EventWaitHandle m_CPUWait;
         private EventWaitHandle m_KeyWait;
+        private EventWaitHandle m_CPUEndWait;
+        private bool m_RequestCPUStop;
         protected byte m_LastKey = 17;
-        private bool m_StopCPU = true;
+        private Thread m_ThreadCPU;
 
         public event EventHandler ProgramEnd;
 
@@ -63,25 +66,12 @@ namespace Eimu.Core.CPU
 
         public Processor()
         {
-            m_Stack = new Stack<ushort>(STACK_SIZE);
-            m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
-            m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
-            this.m_Worker = new BackgroundWorker();
-            this.m_Worker.WorkerSupportsCancellation = true;
-            this.m_Worker.DoWork += new DoWorkEventHandler(DoExecution);
-            this.m_Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(m_Worker_RunWorkerCompleted);
-        }
 
-        void m_Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (ProgramEnd != null)
-                ProgramEnd(this, new EventArgs());
         }
 
         protected void ClearRegisters()
         {
-            this.m_Stack.Clear();
-            m_ProgramCounter = 0x200;
+            m_ProgramCounter = PROGRAM_ENTRY_POINT;
             m_IReg = 0;
             Array.Clear(this.m_VRegs, 0, this.m_VRegs.Length);
             Array.Clear(this.m_ERegs, 0, this.m_ERegs.Length);
@@ -92,52 +82,58 @@ namespace Eimu.Core.CPU
 
         public void SetMemory(Memory memory)
         {
-            this.m_Memory = memory;
+            this.m_BackupMemory = memory;
         }
 
-        private void DoExecution(object sender, DoWorkEventArgs e)
-        {   
+        private void DoExecution()
+        {
             Thread.CurrentThread.Name = "CPU Thread";
 
             while (this.m_ProgramCounter < this.m_Memory.Size)
             {
-                if (e.Cancel)
-                    return;
+                if (!m_RequestCPUStop)
+                {
+                    if (m_Paused)
+                    {
+                        m_CPUWait.WaitOne();
+                    }
 
-                if (m_Paused)
-                    m_CPUWait.WaitOne();
-
-                Step();
-
-                // Thread sleep
-                Thread.Sleep(2);
+                    Step();
+                }
+                else
+                {
+                    break;
+                }
+                 
+                Thread.Sleep(1);
             }
+
+            m_CPUEndWait.Set();
         }
 
         public abstract void Step();
 
         public void StartExecution()
         {
-            this.m_Worker.RunWorkerAsync();
+            m_ThreadCPU.Start();
         }
 
         private void DelayTimerCallback(object state)
         {
-            if (m_DT > 0 && !m_StopCPU)
+            if (m_DT > 0 && !m_RequestCPUStop)
             {
                 if (!m_Paused)
                     Interlocked.Decrement(ref m_DT);
-            }
-            else
-            {
-                m_DelayTimer.Dispose();
             }
         }
 
         public void SetDelayTimer(byte value)
         {
-            m_DT = value;
-            m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), null, 17, 1);
+            if (m_DT <= 0)
+            {
+                m_DT = value;
+                m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), this, 17, 1);
+            }
         }
 
         public void SetSoundTimer(byte value)
@@ -158,21 +154,52 @@ namespace Eimu.Core.CPU
 
         public virtual void Shutdown()
         {
-            m_StopCPU = true;
-            this.m_Worker.CancelAsync();
-            ClearRegisters();
+            m_CPUWait.Set();
+            m_KeyWait.Set();
+            m_RequestCPUStop = true;
+            m_CPUEndWait.WaitOne();
+            m_CPUEndWait.Reset();
+            if (m_DelayTimer != null)
+            {
+                m_DelayTimer.Dispose(m_CPUEndWait);
+                m_CPUEndWait.WaitOne();
+            }
         }
 
         public virtual void Initialize()
         {
+            m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_CPUEndWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+
+            ScreenClear();
+            this.m_Memory = new Memory();
+            CopyMemory(m_BackupMemory, m_Memory);
+
+            if (!m_BackupMemory.Equals(m_Memory))
+                throw new InvalidOperationException("Current memory is not the same as original state!");
+
+            m_Stack = new Stack<ushort>(STACK_SIZE);
             ClearRegisters();
-            m_StopCPU = false;
+
+            m_RequestCPUStop = false;
+            m_Paused = false;
+
+            m_ThreadCPU = new Thread(new ThreadStart(DoExecution));
+            m_ThreadCPU.IsBackground = true;
+        }
+
+        private void CopyMemory(Memory src, Memory dest)
+        {
+            for (int i = 0; i < src.Size; i++)
+            {
+                dest.SetValue(i, src.GetValue(i));
+            }
         }
 
         public void IncrementPC()
         {
-            if (!m_StopCPU)
-                Interlocked.Add(ref m_ProgramCounter, 2);
+            Interlocked.Add(ref m_ProgramCounter, 2);
         }
 
         public void SetCollision()
@@ -234,19 +261,6 @@ namespace Eimu.Core.CPU
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
                         {
-                            // Wrapping
-                            if ((x + j) > GraphicsDevice.RESOLUTION_WIDTH)
-                                x -= GraphicsDevice.RESOLUTION_WIDTH;
-
-                            if ((x + j) < 0)
-                                x += GraphicsDevice.RESOLUTION_WIDTH;
-
-                            if ((y + i) > GraphicsDevice.RESOLUTION_HEIGHT)
-                                y -= GraphicsDevice.RESOLUTION_HEIGHT;
-
-                            if ((y + i) < 0)
-                                y += GraphicsDevice.RESOLUTION_HEIGHT;
-
                             OnPixelSet(this, new PixelSetEventArgs(x + j, y + i));
                         }
                     }

@@ -80,12 +80,18 @@ namespace Eimu.Plugins.Legacy
         {
             SetResolution();
 
-            m_Context = Control.FromHandle(PluginManager.RenderContext);
-            m_Context.Paint += new PaintEventHandler(m_Context_Paint);
-            m_Context.Resize += new EventHandler(m_Context_Resize);
+            if (m_Context == null)
+            {
+                m_Context = Control.FromHandle(PluginManager.RenderContext);
+                m_Context.Paint += new PaintEventHandler(m_Context_Paint);
+                m_Context.Resize += new EventHandler(m_Context_Resize);
+            }
 
-            m_Bitmap = new Bitmap(m_ResX, m_ResY);
-            m_Render = Graphics.FromImage(m_Bitmap);
+            if (m_Bitmap == null)
+            {
+                m_Bitmap = new Bitmap(m_ResX, m_ResY);
+                m_Render = Graphics.FromImage(m_Bitmap);
+            }
         }
 
         void m_Context_Resize(object sender, EventArgs e)
@@ -100,6 +106,7 @@ namespace Eimu.Plugins.Legacy
 
         public override void Shutdown()
         {
+            this.ClearScreen();
         }
 
         public override void SetPauseState(bool paused)

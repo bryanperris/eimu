@@ -37,16 +37,6 @@ namespace Eimu
             m_Machine.Start();
         }
 
-        private void RenderWindow_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            switch (e.KeyChar)
-            {
-                case 'l': m_Machine.CurrentGraphicsDevice.ClearScreen(); break;
-                case 'k': m_Machine.CurrentProcessor.SetCollision(); break;
-                default: break;
-            }
-        }
-
         private void aboutToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             AboutBox ab = new AboutBox();
@@ -86,8 +76,7 @@ namespace Eimu
 
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_Machine.Stop();
-            m_Machine.Start();
+            m_Machine.Restart();
         }
 
         private void graphicsConfigToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -103,6 +92,21 @@ namespace Eimu
         private void inputConfigToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ((IPlugin)m_Machine.CurrentInputDevice).ShowConfigDialog();
+        }
+
+        private void RenderWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.C: m_Machine.CurrentGraphicsDevice.ClearScreen(); break;
+                    case Keys.S: m_Machine.CurrentProcessor.SetCollision(); break;
+                    case Keys.R: m_Machine.Restart(); break;
+                    case Keys.P: pauseToolStripMenuItem1_Click(this, new EventArgs()); break;
+                    default: break;
+                }
+            }
         }
     }
 }

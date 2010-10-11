@@ -68,11 +68,15 @@
             // 
             // textBox_RomPath
             // 
+            this.textBox_RomPath.AllowDrop = true;
+            this.textBox_RomPath.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBox_RomPath.Location = new System.Drawing.Point(7, 17);
             this.textBox_RomPath.Name = "textBox_RomPath";
             this.textBox_RomPath.ReadOnly = true;
             this.textBox_RomPath.Size = new System.Drawing.Size(289, 20);
             this.textBox_RomPath.TabIndex = 1;
+            this.textBox_RomPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox_RomPath_DragDrop);
+            this.textBox_RomPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_RomPath_DragEnter);
             // 
             // button_FileBrowse
             // 

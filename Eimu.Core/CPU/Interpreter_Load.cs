@@ -47,6 +47,9 @@ namespace Eimu.Core.CPU
         [OpcodeTag(ChipOpcodes.Ld_F_07)]
         void Load_F07(ChipInstruction inst)
         {
+            if (m_DT < 0)
+                m_DT = 0;
+
             this.m_VRegs[inst.X] = (byte)this.m_DT;
         }
 

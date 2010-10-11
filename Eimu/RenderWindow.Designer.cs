@@ -336,7 +336,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "RenderWindow";
             this.Text = "RenderWindow";
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RenderWindow_KeyPress);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RenderWindow_KeyDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

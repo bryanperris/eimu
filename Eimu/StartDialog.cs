@@ -238,5 +238,25 @@ namespace Eimu
         {
             ShowPluginConfig(PluginManager.SelectedGraphicsDevice);
         }
+
+        private void textBox_RomPath_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Length > 0)
+            {
+                m_OpenFileDialog.FileName = files[0];
+                textBox_RomPath.Text = files[0];
+            }
+
+        }
+
+        private void textBox_RomPath_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+        }
     }
 }

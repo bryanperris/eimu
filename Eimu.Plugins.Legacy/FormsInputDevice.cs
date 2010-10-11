@@ -47,6 +47,7 @@ namespace Eimu.Plugins.Legacy
                 case Keys.C: key = ChipKeys.Nine; break;
                 case Keys.V: key = ChipKeys.C; break;
                 case Keys.B: key = ChipKeys.F; break;
+                case Keys.Space: key = ChipKeys.Zero; break;
                 default: break;
             }
 

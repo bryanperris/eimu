@@ -24,20 +24,18 @@ using System.Reflection;
 
 namespace Eimu.Core.CPU
 {
-    public delegate void InstructionCall(ChipInstruction instruction);
-
-    public class OpcodeCallTable
+    public class OpLookupTable
     {
-        private Dictionary<ChipOpcodes, MethodInfo> m_MethodCallTable;
+        private Dictionary<ChipOpcodes, OpcodeHandler> m_MethodCallTable;
 
-        public OpcodeCallTable()
+        public OpLookupTable()
         {
-            m_MethodCallTable = new Dictionary<ChipOpcodes, MethodInfo>();
+            m_MethodCallTable = new Dictionary<ChipOpcodes, OpcodeHandler>();
         }
 
-        public void LoadMethods(Type type)
+        public void LoadMethods(Type type, object sender)
         {
-            MethodInfo[] infos = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+            MethodInfo[] infos = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
 
             foreach (MethodInfo info in infos)
             {
@@ -46,30 +44,21 @@ namespace Eimu.Core.CPU
                 if (attrs.Length > 0)
                 {
                     OpcodeTag tag = ((OpcodeTag)attrs[0]);
-                    this.m_MethodCallTable.Add(tag.Opcode, info);
+                    this.m_MethodCallTable.Add(tag.Opcode, (OpcodeHandler)Delegate.CreateDelegate(typeof(OpcodeHandler), sender, info));
                 }
             }
         }
 
-        public bool CallMethod(object sender, ChipOpcodes opcode, ChipInstruction instruction)
+        public void CallMethod(object sender, ChipOpcodes opcode, ChipInstruction instruction)
         {
-            MethodInfo call;
+            GetMethod(opcode).Invoke(instruction);
+        }
 
-            if (this.m_MethodCallTable.TryGetValue(opcode, out call))
-            {
-                try
-                {
-                    call.Invoke(sender, new object[] { instruction });
-                }
-                catch (TargetInvocationException)
-                {
-
-                }
-
-                return true;
-            }
-
-            return false;
+        public OpcodeHandler GetMethod(ChipOpcodes opcode)
+        {
+            OpcodeHandler handler;
+            this.m_MethodCallTable.TryGetValue(opcode, out handler);
+            return handler;
         }
     }
 }

@@ -46,18 +46,32 @@ namespace Eimu.Core.Devices
 
         public void ClearScreen()
         {
-            //Array.Clear(this.m_Buffer, 0, this.m_Buffer.Length);
+            Array.Clear(this.m_Buffer, 0, this.m_Buffer.Length);
             OnScreenClear();
         }
 
         public void SetPixel(int x, int y)
-        {
+        {            
+            // Wrapping
+            if (x >= GraphicsDevice.RESOLUTION_WIDTH)
+                x -= (GraphicsDevice.RESOLUTION_WIDTH - 1);
+
+            if (x < 0)
+                x += GraphicsDevice.RESOLUTION_WIDTH;
+
+            if (y >= GraphicsDevice.RESOLUTION_HEIGHT)
+                y -= (GraphicsDevice.RESOLUTION_HEIGHT - 1);
+
+            if (y < 0)
+                y += GraphicsDevice.RESOLUTION_HEIGHT;
+
             bool on = GetPixel(x, y) ^ true;
 
             if (!on)
                 SetCollision();
 
             m_Buffer[GetBufferPosition(x,y)] = on;
+
 
             OnPixelSet(x, y, on);
 

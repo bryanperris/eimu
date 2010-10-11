@@ -56,23 +56,12 @@ namespace Eimu.Core
 
         private RunState m_State;
 
-        /// <summary>
-        /// Creates an instance of a chip8 virtual machine.
-        /// </summary>
         public VirtualMachine()
         {
             MachineMemory = new Memory();
             LoadFont();
         }
 
-        /// <summary>
-        /// Loads a stream source into the virtual machine's memory.
-        /// 
-        /// Exceptions:
-        ///   System.IO.IOException
-        ///   System.ArgumentException
-        /// </summary>
-        /// <param name="source"></param>
         public void LoadROM(Stream source)
         {
             if (!source.CanRead)
@@ -109,12 +98,6 @@ namespace Eimu.Core
             }
         }
 
-        /// <summary>
-        /// Starts the virtual machine
-        /// 
-        /// Exceptions:
-        ///   System.NullReferenceException
-        /// </summary>
         public void Start()
         {
             if (CurrentAudioDevice == null)
@@ -132,22 +115,20 @@ namespace Eimu.Core
             if (MachineMemory == null)
                 throw new NullReferenceException();
 
-            LinkDeviceCallbacks();
+            CurrentProcessor.SetMemory(this.MachineMemory);
+
+            AttachDeviceCallbacks();
 
             ((IDevice)CurrentAudioDevice).Initialize();
             ((IDevice)CurrentGraphicsDevice).Initialize();
             ((IDevice)CurrentInputDevice).Initialize();
             ((IDevice)CurrentProcessor).Initialize();
 
-            CurrentProcessor.SetMemory(this.MachineMemory);
             CurrentProcessor.StartExecution();
 
             m_State = RunState.Running;
         }
 
-        /// <summary>
-        /// Stops the virtual machine
-        /// </summary>
         public void Stop()
         {
             if (m_State != RunState.Stopped)
@@ -158,13 +139,18 @@ namespace Eimu.Core
                 ((IDevice)CurrentInputDevice).Shutdown();
                 ((IDevice)CurrentAudioDevice).Shutdown();
                 ((IDevice)CurrentGraphicsDevice).Shutdown();
+
+                DetachDeviceCallbacks();
             }
         }
 
-        /// <summary>
-        /// Sets the pause state of the virtual machine.
-        /// </summary>
-        /// <param name="paused">The virtual machine is paused</param>
+        public void Restart()
+        {
+            Thread.Sleep(100);
+            Stop();
+            Start();
+        }
+
         public void SetPause(bool paused)
         {
             if (m_State == RunState.Running || m_State == RunState.Paused)
@@ -181,17 +167,11 @@ namespace Eimu.Core
             }
         }
 
-        /// <summary>
-        /// Machine state
-        /// </summary>
         public RunState MachineRunState
         {
             get { return this.m_State; }
         }
 
-        /// <summary>
-        /// Current Audio Context
-        /// </summary>
         public AudioDevice CurrentAudioDevice { get; set; }
 
         public GraphicsDevice CurrentGraphicsDevice { get; set; }
@@ -202,13 +182,22 @@ namespace Eimu.Core
 
         public Memory MachineMemory { get; set; }
 
-        private void LinkDeviceCallbacks()
+        private void AttachDeviceCallbacks()
         {
-            this.CurrentProcessor.OnBeep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            this.CurrentProcessor.OnPixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            this.CurrentProcessor.OnScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
-            this.CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
-            this.CurrentInputDevice.OnKeyPress += new KeyStateHandler(CurrentInputDevice_OnKeyPress);
+            CurrentProcessor.OnBeep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
+            CurrentProcessor.OnPixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
+            CurrentProcessor.OnScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
+            CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
+            CurrentInputDevice.OnKeyPress += new KeyStateHandler(CurrentInputDevice_OnKeyPress);
+        }
+
+        private void DetachDeviceCallbacks()
+        {
+            CurrentProcessor.OnBeep -= new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
+            CurrentProcessor.OnPixelSet -= new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
+            CurrentProcessor.OnScreenClear -= new EventHandler(CurrentProcessor_OnScreenClear);
+            CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
+            CurrentInputDevice.OnKeyPress -= new KeyStateHandler(CurrentInputDevice_OnKeyPress);
         }
 
         void CurrentInputDevice_OnKeyPress(object sender, ChipKeys key)

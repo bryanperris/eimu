@@ -51,6 +51,11 @@ namespace Eimu.Core
             get { return this.m_Memory.Length; }
         }
 
+        public override bool Equals(object obj)
+        {
+            return ((Memory)obj).m_Memory.SequenceEqual(this.m_Memory);
+        }
+
         #region IEnumerable Members
 
         public IEnumerator GetEnumerator()
