@@ -51,10 +51,11 @@ namespace Eimu.Plugins.OpenTK
         public override void Initialize()
         {
             m_ControlContext = (Control)Control.FromHandle(PluginManager.RenderContext);
-            m_WindowInfo = Utilities.CreateWindowsWindowInfo(PluginManager.RenderContext);
-            m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
             m_ControlContext.Resize += new EventHandler(m_ControlContext_Resize);
             m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
+
+            m_WindowInfo = Utilities.CreateWindowsWindowInfo(PluginManager.RenderContext);
+            m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
             m_GContext.MakeCurrent(m_WindowInfo);
             
             GL.Disable(EnableCap.AlphaTest);
@@ -80,6 +81,9 @@ namespace Eimu.Plugins.OpenTK
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
         {
+            GL.ClearColor(Color.Black);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
 
@@ -120,32 +124,11 @@ namespace Eimu.Plugins.OpenTK
 
         public override void OnPixelSet(int x, int y, bool on)
         {
-            //Point point;
-
-            //if (!m_Verticies.TryGetValue(x + y, point))
-            //{
-            //    point = new Point(x, y);
-            //    m_Verticies.Add(x + y, point);
-            //}
-
-
-            //GL.BindVertexArray(VaoHandle);                     //Make sure to call BindVertexArray() before BindBuffer()
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, VboHandle);
-             
-            //GL.BufferData(...);
-             
-            //GL.EnableClientState(...);
-            //GL.VertexPointer(...);
-            //GL.EnableVertexAttribArray(...);
-             
-            //GL.BindVertexArray(0);
             m_ControlContext.Invalidate();
         }
 
         public override void OnScreenClear()
         {
-            GL.ClearColor(Color.Black);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
             m_ControlContext.Invalidate();
         }
 
