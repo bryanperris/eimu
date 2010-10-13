@@ -1,6 +1,6 @@
 ﻿/*  
 Eimu - Chip-8 Emulator
-Copyright (C) 2010  http://code.google.com/p/eimu
+Copyright (C) 2010  Omegadox, http://code.google.com/p/eimu
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

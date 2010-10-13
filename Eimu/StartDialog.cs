@@ -25,11 +25,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+
 using Eimu.Core;
 using Eimu.Core.CPU;
 using Eimu.Core.Devices;
 using Eimu.Plugins;
-
 
 namespace Eimu
 {

@@ -46,8 +46,6 @@ namespace Eimu.Core.CPU
         protected byte m_LastKey = 17;
         private Thread m_ThreadCPU;
 
-        public event EventHandler ProgramEnd;
-
         // Registers
         protected byte[] m_VRegs = new byte[16];
         protected byte[] m_ERegs = new byte[8];

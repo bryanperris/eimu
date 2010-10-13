@@ -56,14 +56,15 @@ namespace Eimu.Core
             return ((Memory)obj).m_Memory.SequenceEqual(this.m_Memory);
         }
 
-        #region IEnumerable Members
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
         public IEnumerator GetEnumerator()
         {
             return new MemoryEnumerator(this.m_Memory);
         }
-
-        #endregion
 
         public byte this[int index]
         {

@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*  
+Eimu - Chip-8 Emulator
+Copyright (C) 2010  http://code.google.com/p/eimu
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +24,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
 using Eimu.Core;
 using Eimu.Plugins;
 
@@ -24,12 +43,6 @@ namespace Eimu
             PluginManager.WindowHandle = this.Handle;
             PluginManager.RenderContext = this.panel_RenderContext.Handle;
             this.Shown += new EventHandler(RenderWindow_Shown);
-            m_Machine.CurrentProcessor.ProgramEnd += new EventHandler(CurrentProcessor_ProgramEnd);
-        }
-
-        void CurrentProcessor_ProgramEnd(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Program has finished running!", "Eimu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         void RenderWindow_Shown(object sender, EventArgs e)
@@ -81,17 +94,35 @@ namespace Eimu
 
         private void graphicsConfigToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ((IPlugin)m_Machine.CurrentGraphicsDevice).ShowConfigDialog();
+            try
+            {
+                ((IPlugin)m_Machine.CurrentGraphicsDevice).ShowConfigDialog();
+            }
+            catch (System.Exception)
+            {
+            }
         }
 
         private void audioConfigToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ((IPlugin)m_Machine.CurrentAudioDevice).ShowConfigDialog();
+            try
+            {
+                ((IPlugin)m_Machine.CurrentAudioDevice).ShowConfigDialog();
+            }
+            catch (System.Exception)
+            {
+            }
         }
 
         private void inputConfigToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ((IPlugin)m_Machine.CurrentInputDevice).ShowConfigDialog();
+            try
+            {
+                ((IPlugin)m_Machine.CurrentInputDevice).ShowConfigDialog();
+            }
+            catch (System.Exception)
+            {
+            }
         }
 
         private void RenderWindow_KeyDown(object sender, KeyEventArgs e)
