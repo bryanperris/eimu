@@ -43,7 +43,11 @@ namespace Eimu.Plugins
             {
                 try
                 {
-                    LoadPluginsFromAssembly(Assembly.LoadFile(dll.FullName));
+                    Assembly ass = Assembly.LoadFile(dll.FullName);
+                    object[] attrs = ass.GetCustomAttributes(typeof(EimuPluginAssembly), false);
+
+                    if (attrs.Length > 0)
+                        LoadPluginsFromAssembly(ass);
                 }
                 catch (BadImageFormatException)
                 {
@@ -159,11 +163,12 @@ namespace Eimu.Plugins
             get { return s_InputDeviceList[InputPluginIndex]; }
         }
 
-
         public static int AudioPluginIndex { get; set; }
 
-        static int InputPluginIndex { get; set; }
+        public static int InputPluginIndex { get; set; }
 
-        static int GraphicsPluginIndex { get; set; }
+        public static int GraphicsPluginIndex { get; set; }
+
+        public static bool EnableDoubleBuffer { get; set; }
     }
 }

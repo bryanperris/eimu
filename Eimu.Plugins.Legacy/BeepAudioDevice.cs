@@ -38,7 +38,6 @@ namespace Eimu.Plugins.Legacy
 
         public void ShowConfigDialog()
         {
-            throw new NotImplementedException();
         }
 
         public string[] GetOptionsList()

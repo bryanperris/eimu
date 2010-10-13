@@ -104,6 +104,7 @@ namespace Eimu
                     case Keys.S: m_Machine.CurrentProcessor.SetCollision(); break;
                     case Keys.R: m_Machine.Restart(); break;
                     case Keys.P: pauseToolStripMenuItem1_Click(this, new EventArgs()); break;
+                    case Keys.Escape: this.Close(); break;
                     default: break;
                 }
             }

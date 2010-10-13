@@ -35,7 +35,7 @@ namespace Eimu.Core.Devices
 
         public GraphicsDevice()
         {
-            m_Buffer = new bool[RESOLUTION_WIDTH * RESOLUTION_HEIGHT];
+            m_Buffer = new bool[(RESOLUTION_WIDTH + 1) * (RESOLUTION_HEIGHT + 1)];
         }
 
         public event EventHandler OnPixelCollision;
@@ -51,16 +51,16 @@ namespace Eimu.Core.Devices
         }
 
         public void SetPixel(int x, int y)
-        {            
+        {
             // Wrapping
-            if (x >= GraphicsDevice.RESOLUTION_WIDTH)
-                x -= (GraphicsDevice.RESOLUTION_WIDTH - 1);
+            if (x > GraphicsDevice.RESOLUTION_WIDTH)
+                x -= GraphicsDevice.RESOLUTION_WIDTH;
 
             if (x < 0)
                 x += GraphicsDevice.RESOLUTION_WIDTH;
 
-            if (y >= GraphicsDevice.RESOLUTION_HEIGHT)
-                y -= (GraphicsDevice.RESOLUTION_HEIGHT - 1);
+            if (y > GraphicsDevice.RESOLUTION_HEIGHT)
+                y -= GraphicsDevice.RESOLUTION_HEIGHT;
 
             if (y < 0)
                 y += GraphicsDevice.RESOLUTION_HEIGHT;
@@ -95,7 +95,7 @@ namespace Eimu.Core.Devices
                 OnPixelCollision(this, new EventArgs());
         }
 
-        public bool[] InternalBuffer
+        protected bool[] InternalBuffer
         {
             get { return this.m_Buffer; }
         }

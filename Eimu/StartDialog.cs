@@ -66,6 +66,7 @@ namespace Eimu
 
             if (File.Exists(Config.FileROMPath))
             {
+                m_OpenFileDialog.InitialDirectory = Path.GetDirectoryName(Config.FileROMPath);
                 m_OpenFileDialog.FileName = Config.FileROMPath;
                 textBox_RomPath.Text = Config.FileROMPath;
                 button_RunProgram.Enabled = true;

@@ -46,6 +46,7 @@ namespace Eimu.Plugins.Legacy
 
         public DrawingGraphicsDevice()
         {
+            PluginManager.EnableDoubleBuffer = true;
             m_Brush = new SolidBrush(Color.White);
             m_BackBrush = new SolidBrush(Color.Black);
         }
