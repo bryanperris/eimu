@@ -8,7 +8,7 @@
     <ProjectGuid>{9550082A-773F-4D52-958E-04F6FA6EEAC2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Eimu.Plugins.OpenTK</RootNamespace>
+    <RootNamespace>Eimu.Plugins.OTK</RootNamespace>
     <AssemblyName>Eimu.Plugins.OpenTK</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,11 +52,6 @@
       <HintPath>.\OpenTK.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="OpenTK.Compatibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\OpenTK.Compatibility.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -85,7 +80,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)OpenTK.Compatibility.dll $(SolutionDir)..\bin\
-copy $(ProjectDir)OpenTK.dll $(SolutionDir)..\bin\</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)OpenTK.dll $(SolutionDir)..\bin\</PostBuildEvent>
   </PropertyGroup>
 </Project>

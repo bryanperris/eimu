@@ -21,19 +21,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Threading;
+using System.Windows.Forms;
 
 using Eimu.Core;
 using Eimu.Core.Devices;
 using Eimu.Plugins;
 
 using OpenTK;
-using System.Windows.Forms;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
-using System.Threading;
 
-
-namespace Eimu.Plugins.OpenTK
+namespace Eimu.Plugins.OTK
 {
     [PluginInfo("OpenGL Plugin", "1.0", "Omegadox", "Renders using OpenGL")]
     public sealed class PluginOGL : GraphicsDevice, IPlugin
@@ -51,42 +51,40 @@ namespace Eimu.Plugins.OpenTK
 
         public override void Initialize()
         {
-            m_ControlContext = (Control)Control.FromHandle(PluginManager.RenderContext);
-            m_ControlContext.Resize += new EventHandler(m_ControlContext_Resize);
+            m_ControlContext = Control.FromHandle(PluginManager.RenderContext);
             m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
-
             m_WindowInfo = Utilities.CreateWindowsWindowInfo(PluginManager.RenderContext);
             m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
+
             m_GContext.MakeCurrent(m_WindowInfo);
-            
+
+            if (!m_GContext.IsCurrent)
+                throw new InvalidOperationException();
+
+            m_GContext.LoadAll();
+
             GL.Disable(EnableCap.AlphaTest);
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Dither);
             GL.Disable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.DepthRange(-1, 100);
-
-            SetMatrix();
-        }
-
-        private void SetMatrix()
-        {
-            m_ScaleX = (float)m_ControlContext.Width / (float)GraphicsDevice.RESOLUTION_WIDTH;
-            m_ScaleY = (float)m_ControlContext.Height / (float)GraphicsDevice.RESOLUTION_HEIGHT;
- 
-            GL.Viewport(m_ControlContext.ClientRectangle);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-            Glu.Ortho2D(0.0, (double)m_ControlContext.Width, (double)m_ControlContext.Height, 0.0);
         }
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
         {
+            GL.Viewport(m_ControlContext.ClientRectangle);
+
+            m_ScaleX = (float)m_ControlContext.Width / (float)GraphicsDevice.RESOLUTION_WIDTH;
+            m_ScaleY = (float)m_ControlContext.Height / (float)GraphicsDevice.RESOLUTION_HEIGHT;
+
             GL.ClearColor(Color.Black);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.PushMatrix();
+            GL.LoadIdentity();
+            Matrix4 matrix = OpenTK.Matrix4.CreateOrthographicOffCenter(0, (float)m_ControlContext.Width, (float)m_ControlContext.Height, 0, -1, 100);
+            GL.LoadMatrix(ref matrix);
 
             GL.Begin(BeginMode.Quads);
 
@@ -114,13 +112,9 @@ namespace Eimu.Plugins.OpenTK
 
             GL.End();
 
-            GL.PopMatrix();
-            m_GContext.SwapBuffers();
-        }
+            GL.LoadIdentity();
 
-        void m_ControlContext_Resize(object sender, EventArgs e)
-        {
-            SetMatrix();
+            m_GContext.SwapBuffers();
         }
 
         protected override void OnPixelSet(int x, int y, bool on)
