@@ -61,12 +61,12 @@ namespace Eimu.NullDevices
         {
         }
 
-        public override void OnPixelSet(int x, int y, bool on)
+        protected override void OnPixelSet(int x, int y, bool on)
         {
 
         }
 
-        public override void OnScreenClear()
+        protected override void OnScreenClear()
         {
         }
     }

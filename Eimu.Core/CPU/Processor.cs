@@ -103,7 +103,7 @@ namespace Eimu.Core.CPU
                     break;
                 }
                  
-                Thread.Sleep(1);
+                Thread.Sleep(2);
             }
 
             m_CPUEndWait.Set();

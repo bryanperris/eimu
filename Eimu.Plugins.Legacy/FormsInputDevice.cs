@@ -27,7 +27,7 @@ using Eimu.Plugins;
 
 namespace Eimu.Plugins.Legacy
 {
-    [PluginInfo("Simple Input Plugin", "1.0", "Omegadox", "Uses keys QWERTYASDFGHZXCVB for input")]
+    [PluginInfo("Simple Input Plugin", "1.0", "Omegadox", "Uses keys QWE\nASD\nZXC\nRFV\nTGB for input")]
     public class FormsInputDevice : InputDevice, IPlugin
     {
         private Form m_Window;

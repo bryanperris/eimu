@@ -57,7 +57,7 @@ namespace Eimu.Plugins.Legacy
             m_ResY = GraphicsDevice.RESOLUTION_HEIGHT * m_Scale;
         }
 
-        public override void OnPixelSet(int x, int y, bool on)
+        protected override void OnPixelSet(int x, int y, bool on)
         {
             m_Render.FillRectangle(on ? m_Brush : m_BackBrush, new Rectangle(x * m_Scale, y * m_Scale, m_Scale, m_Scale));
             m_Context.Invalidate();
@@ -71,7 +71,7 @@ namespace Eimu.Plugins.Legacy
             g.DrawImage(m_Bitmap, 0, 0, m_Context.Size.Width, m_Context.Size.Height);
         }
 
-        public override void OnScreenClear()
+        protected override void OnScreenClear()
         {
             m_Render.Clear(m_BackBrush.Color);
             m_Context.Invalidate();

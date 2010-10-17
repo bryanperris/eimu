@@ -217,7 +217,7 @@ namespace Eimu.Core
 
         void CurrentProcessor_OnPixelSet(object sender, PixelSetEventArgs e)
         {
-            this.CurrentGraphicsDevice.SetPixel(e.X, e.Y);
+            CurrentGraphicsDevice.SetPixel(e.X, e.Y);
         }
 
         void CurrentProcessor_OnBeep(object sender, BeepEventArgs e)

@@ -62,6 +62,8 @@ namespace Eimu
 
         public void LoadConfig()
         {
+            Config.UseInterpreter = true;
+
             Config.LoadConfigFile();
 
             if (File.Exists(Config.FileROMPath))

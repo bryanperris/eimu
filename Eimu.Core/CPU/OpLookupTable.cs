@@ -51,7 +51,14 @@ namespace Eimu.Core.CPU
 
         public void CallMethod(object sender, ChipOpcodes opcode, ChipInstruction instruction)
         {
-            GetMethod(opcode).Invoke(instruction);
+            try
+            {
+                GetMethod(opcode).Invoke(instruction);
+            }
+            catch (NullReferenceException)
+            {
+
+            }
         }
 
         public OpcodeHandler GetMethod(ChipOpcodes opcode)
