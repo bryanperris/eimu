@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eimu.Plugins", "Eimu.Plugin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eimu.Plugins.Legacy", "Eimu.Plugins.Legacy\Eimu.Plugins.Legacy.csproj", "{B63E633C-32FF-4C7D-9C4F-D56D523C5708}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eimu.Plugins.OpenTK", "Eimu.Plugins.OpenTK\Eimu.Plugins.OpenTK.csproj", "{9550082A-773F-4D52-958E-04F6FA6EEAC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{B63E633C-32FF-4C7D-9C4F-D56D523C5708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B63E633C-32FF-4C7D-9C4F-D56D523C5708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B63E633C-32FF-4C7D-9C4F-D56D523C5708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9550082A-773F-4D52-958E-04F6FA6EEAC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9550082A-773F-4D52-958E-04F6FA6EEAC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9550082A-773F-4D52-958E-04F6FA6EEAC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9550082A-773F-4D52-958E-04F6FA6EEAC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

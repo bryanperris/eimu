@@ -42,6 +42,9 @@ namespace Eimu
         public StartDialog()
         {
             InitializeComponent();
+
+            colorDialog1.Color = Color.Black;
+            colorDialog2.Color = Color.White;
             m_OpenFileDialog = new OpenFileDialog();
             m_OpenFileDialog.Filter = "Chip8 Programs (*.ch8, *.c8)|*.ch8;*.c8|Super Chip8 Programs (*.sc)|*.sc;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
             GetPlugins();
@@ -198,6 +201,9 @@ namespace Eimu
             this.m_VM.CurrentGraphicsDevice = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
             this.m_VM.CurrentInputDevice = (InputDevice)Activator.CreateInstance(PluginManager.SelectedInputDevice);
 
+            this.m_VM.CurrentGraphicsDevice.BackgroundColor = colorDialog1.Color;
+            this.m_VM.CurrentGraphicsDevice.ForegroundColor = colorDialog2.Color;
+
             this.m_VM.LoadROM(m_RomFileSource);
 
             m_RomFileSource.Close();
@@ -260,6 +266,16 @@ namespace Eimu
             {
                 e.Effect = DragDropEffects.All;
             }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            colorDialog2.ShowDialog();
         }
     }
 }

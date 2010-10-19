@@ -37,6 +37,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -47,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chip16\Memory.cs" />
     <Compile Include="CPU\ChipOpcodes.cs" />
     <Compile Include="CPU\CodeUtils\CodeGenerator.cs" />
     <Compile Include="CPU\CodeUtils\CodeBlock.cs" />

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RenderWindow));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.machineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -332,9 +331,9 @@
             this.ClientSize = new System.Drawing.Size(554, 424);
             this.Controls.Add(this.panel_RenderContext);
             this.Controls.Add(this.menuStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "RenderWindow";
+            this.ShowIcon = false;
             this.Text = "RenderWindow";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RenderWindow_KeyDown);
             this.menuStrip1.ResumeLayout(false);

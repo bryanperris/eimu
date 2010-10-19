@@ -78,7 +78,7 @@ namespace Eimu.Plugins.OTK
             m_ScaleX = (float)m_ControlContext.Width / (float)GraphicsDevice.RESOLUTION_WIDTH;
             m_ScaleY = (float)m_ControlContext.Height / (float)GraphicsDevice.RESOLUTION_HEIGHT;
 
-            GL.ClearColor(Color.Black);
+            GL.ClearColor(BackgroundColor);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -96,11 +96,11 @@ namespace Eimu.Plugins.OTK
 
                     if (on)
                     {
-                        GL.Color4(Color.White);
+                        GL.Color4(ForegroundColor);
                     }
                     else
                     {
-                        GL.Color4(Color.Black);
+                        GL.Color4(BackgroundColor);
                     }
 
                     GL.Vertex2(x * m_ScaleX, y * m_ScaleY);

@@ -50,12 +50,6 @@
     <Compile Include="BeepAudioDevice.cs" />
     <Compile Include="DrawingGraphicsDevice.cs" />
     <Compile Include="FormsInputDevice.cs" />
-    <Compile Include="GraphicsConfigForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GraphicsConfigForm.Designer.cs">
-      <DependentUpon>GraphicsConfigForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,11 +63,6 @@
       <Name>Eimu.Plugins</Name>
       <Private>False</Private>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GraphicsConfigForm.resx">
-      <DependentUpon>GraphicsConfigForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

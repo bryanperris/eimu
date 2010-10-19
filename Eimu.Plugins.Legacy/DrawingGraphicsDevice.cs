@@ -38,17 +38,15 @@ namespace Eimu.Plugins.Legacy
         private Control m_Context;
         private int m_ResX;
         private int m_ResY;
-
-        // Config
-        private int m_Scale = 5;
-        private SolidBrush m_BackBrush;
         private SolidBrush m_Brush;
+        private SolidBrush m_BackBrush;
+        private int m_Scale = 5;
 
         public DrawingGraphicsDevice()
         {
             PluginManager.EnableDoubleBuffer = true;
-            m_Brush = new SolidBrush(Color.White);
-            m_BackBrush = new SolidBrush(Color.Black);
+            m_Brush = new SolidBrush(ForegroundColor);
+            m_BackBrush = new SolidBrush(BackgroundColor);
         }
 
         private void SetResolution()
@@ -116,8 +114,6 @@ namespace Eimu.Plugins.Legacy
 
         public void ShowConfigDialog()
         {
-            GraphicsConfigForm f = new GraphicsConfigForm(this);
-            f.ShowDialog();
         }
 
         public string[] GetOptionsList()
@@ -135,16 +131,30 @@ namespace Eimu.Plugins.Legacy
             throw new NotImplementedException();
         }
 
-        public Color BackgroundColor
+        public override Color ForegroundColor
         {
-            get { return this.m_BackBrush.Color; }
-            set { this.m_BackBrush.Color = value; }
+            get
+            {
+                return base.ForegroundColor;
+            }
+            set
+            {
+                base.ForegroundColor = value;
+                m_Brush.Color = value;
+            }
         }
 
-        public Color ForgroundColor
+        public override Color BackgroundColor
         {
-            get { return this.m_Brush.Color; }
-            set { m_Brush.Color = value; }
+            get
+            {
+                return base.BackgroundColor;
+            }
+            set
+            {
+                base.BackgroundColor = value;
+                m_BackBrush.Color = value;
+            }
         }
     }
 }

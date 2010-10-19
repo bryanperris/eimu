@@ -51,6 +51,7 @@
     <Compile Include="PluginInfo.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Eimu.Core\Eimu.Core.csproj">
