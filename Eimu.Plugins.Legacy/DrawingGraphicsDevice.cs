@@ -45,8 +45,8 @@ namespace Eimu.Plugins.Legacy
         public DrawingGraphicsDevice()
         {
             PluginManager.EnableDoubleBuffer = true;
-            m_Brush = new SolidBrush(ForegroundColor);
-            m_BackBrush = new SolidBrush(BackgroundColor);
+            m_Brush = new SolidBrush(Color.White);
+            m_BackBrush = new SolidBrush(Color.Black);
         }
 
         private void SetResolution()
@@ -131,30 +131,30 @@ namespace Eimu.Plugins.Legacy
             throw new NotImplementedException();
         }
 
-        public override Color ForegroundColor
-        {
-            get
-            {
-                return base.ForegroundColor;
-            }
-            set
-            {
-                base.ForegroundColor = value;
-                m_Brush.Color = value;
-            }
-        }
+        //public Color ForegroundColor
+        //{
+        //    get
+        //    {
+        //        return base.ForegroundColor;
+        //    }
+        //    set
+        //    {
+        //        base.ForegroundColor = value;
+        //        m_Brush.Color = value;
+        //    }
+        //}
 
-        public override Color BackgroundColor
-        {
-            get
-            {
-                return base.BackgroundColor;
-            }
-            set
-            {
-                base.BackgroundColor = value;
-                m_BackBrush.Color = value;
-            }
-        }
+        //public Color BackgroundColor
+        //{
+        //    get
+        //    {
+        //        return base.BackgroundColor;
+        //    }
+        //    set
+        //    {
+        //        base.BackgroundColor = value;
+        //        m_BackBrush.Color = value;
+        //    }
+        //}
     }
 }

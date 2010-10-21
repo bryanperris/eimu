@@ -27,12 +27,14 @@ using System.Windows.Forms;
 
 using Eimu.Core;
 using Eimu.Plugins;
+using Eimu.Debugging;
 
 namespace Eimu
 {
     public partial class RenderWindow : Form
     {
         VirtualMachine m_Machine;
+        DebuggerForm m_Debugger;
         bool m_Paused = false;
 
         public RenderWindow(VirtualMachine machine)
@@ -40,6 +42,7 @@ namespace Eimu
             InitializeComponent();
             this.Text = Eimu.Properties.Resources.WindowCaption;
             this.m_Machine = machine;
+            m_Debugger = new DebuggerForm(machine);
             PluginManager.WindowHandle = this.Handle;
             PluginManager.RenderContext = this.panel_RenderContext.Handle;
             this.Shown += new EventHandler(RenderWindow_Shown);
@@ -139,6 +142,11 @@ namespace Eimu
                     default: break;
                 }
             }
+        }
+
+        private void showDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_Debugger.Show();
         }
     }
 }

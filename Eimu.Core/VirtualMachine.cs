@@ -56,6 +56,9 @@ namespace Eimu.Core
 
         private RunState m_State;
 
+        public event EventHandler Started;
+        public event EventHandler Stopped;
+
         public VirtualMachine()
         {
             MachineMemory = new Memory();
@@ -223,6 +226,18 @@ namespace Eimu.Core
         void CurrentProcessor_OnBeep(object sender, BeepEventArgs e)
         {
             this.CurrentAudioDevice.Beep(e.Duration);
+        }
+
+        void OnMachineStart()
+        {
+            if (Started != null)
+                Started(this, new EventArgs());
+        }
+
+        void OnMachineStop()
+        {
+            if (Stopped != null)
+                Stopped(this, new EventArgs());
         }
     }
 }

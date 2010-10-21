@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 
 namespace Eimu.Core.Devices
 {
@@ -36,8 +35,6 @@ namespace Eimu.Core.Devices
 
         public GraphicsDevice()
         {
-            BackgroundColor = Color.Black;
-            ForegroundColor = Color.White;
             m_Buffer = new bool[(RESOLUTION_WIDTH + 1) * (RESOLUTION_HEIGHT + 1)];
         }
 
@@ -86,10 +83,6 @@ namespace Eimu.Core.Devices
         public abstract void Shutdown();
 
         public abstract void SetPauseState(bool paused);
-
-        public virtual Color BackgroundColor { get; set; }
-
-        public virtual Color ForegroundColor { get; set; }
 
         protected int GetBufferPosition(int x, int y)
         {

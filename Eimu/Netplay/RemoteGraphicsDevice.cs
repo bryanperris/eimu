@@ -10,7 +10,7 @@ namespace Eimu.Netplay
 {
     public class RemoteGraphicsDevice : GraphicsDevice
     {
-        bool isHost = false;
+        //bool isHost = false;
         GraphicsDevice m_RealLocalDevice;
         GraphicsDevice m_ProxyDevice;
         string m_Url = "127.0.0.1";

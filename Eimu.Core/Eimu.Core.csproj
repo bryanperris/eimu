@@ -37,13 +37,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -76,6 +69,12 @@
     <Compile Include="RunState.cs" />
     <Compile Include="VirtualMachine.cs" />
     <Compile Include="CPU\ChipInstruction.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Chip8\" />
+    <Folder Include="ChipBase\" />
+    <Folder Include="MegChip\" />
+    <Folder Include="SuperChip\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

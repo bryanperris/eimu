@@ -201,8 +201,8 @@ namespace Eimu
             this.m_VM.CurrentGraphicsDevice = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
             this.m_VM.CurrentInputDevice = (InputDevice)Activator.CreateInstance(PluginManager.SelectedInputDevice);
 
-            this.m_VM.CurrentGraphicsDevice.BackgroundColor = colorDialog1.Color;
-            this.m_VM.CurrentGraphicsDevice.ForegroundColor = colorDialog2.Color;
+            //this.m_VM.CurrentGraphicsDevice.BackgroundColor = colorDialog1.Color;
+            //this.m_VM.CurrentGraphicsDevice.ForegroundColor = colorDialog2.Color;
 
             this.m_VM.LoadROM(m_RomFileSource);
 

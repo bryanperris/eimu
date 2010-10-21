@@ -27,6 +27,12 @@ namespace Eimu.Core.CPU
 	public class ChipInstruction
 	{
 		ushort m_Instruction;
+
+        public ChipInstruction(byte byte1, byte byte2)
+            : this((ushort)((ushort)byte1 << 8 | byte2))
+        {
+
+        }
 		
 		public ChipInstruction (ushort instruction)
 		{

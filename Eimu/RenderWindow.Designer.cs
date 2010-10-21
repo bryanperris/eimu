@@ -75,7 +75,6 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.menuStrip1.Size = new System.Drawing.Size(554, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
@@ -130,6 +129,7 @@
             this.showDebuggerToolStripMenuItem.Name = "showDebuggerToolStripMenuItem";
             this.showDebuggerToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.showDebuggerToolStripMenuItem.Text = "Show Debugger";
+            this.showDebuggerToolStripMenuItem.Click += new System.EventHandler(this.showDebuggerToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
