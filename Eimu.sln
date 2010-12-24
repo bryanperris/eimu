@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eimu", "Eimu\Eimu.csproj", "{4DDDC38A-8D2E-4894-89F3-CAED77BCE12C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B63E633C-32FF-4C7D-9C4F-D56D523C5708} = {B63E633C-32FF-4C7D-9C4F-D56D523C5708}
