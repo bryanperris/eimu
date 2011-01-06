@@ -21,28 +21,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
 using Eimu.Core;
-using Eimu.Plugins;
-using Eimu.Debugging;
+using Eimu.Core.Plugin;
+using Eimu.Core.Systems.Chip8;
 
 namespace Eimu
 {
     public partial class RenderWindow : Form
     {
-        VirtualMachine m_Machine;
-        DebuggerForm m_Debugger;
+        C8Machine m_Machine;
         bool m_Paused = false;
 
-        public RenderWindow(VirtualMachine machine)
+        public RenderWindow(C8Machine machine)
         {
             InitializeComponent();
             this.Text = Eimu.Properties.Resources.WindowCaption;
             this.m_Machine = machine;
-            m_Debugger = new DebuggerForm(machine);
             PluginManager.WindowHandle = this.Handle;
             PluginManager.RenderContext = this.panel_RenderContext.Handle;
             this.Shown += new EventHandler(RenderWindow_Shown);
@@ -68,13 +64,13 @@ namespace Eimu
         {
             if (!m_Paused)
             {
-                m_Machine.SetPause(true);
+                m_Machine.Pause();
                 m_Paused = true;
                 pauseToolStripMenuItem1.Text = "Resume";
             }
             else
             {
-                m_Machine.SetPause(false);
+                m_Machine.Run();
                 m_Paused = false;
                 pauseToolStripMenuItem1.Text = "Pause";
             }
@@ -134,7 +130,7 @@ namespace Eimu
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.C: m_Machine.CurrentGraphicsDevice.ClearScreen(); break;
+                    case Keys.C: m_Machine.CurrentGraphicsDevice .ClearScreen(); break;
                     case Keys.S: m_Machine.CurrentProcessor.SetCollision(); break;
                     case Keys.R: m_Machine.Restart(); break;
                     case Keys.P: pauseToolStripMenuItem1_Click(this, new EventArgs()); break;
@@ -142,11 +138,6 @@ namespace Eimu
                     default: break;
                 }
             }
-        }
-
-        private void showDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            m_Debugger.Show();
         }
     }
 }

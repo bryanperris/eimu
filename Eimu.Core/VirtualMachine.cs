@@ -82,6 +82,8 @@ namespace Eimu.Core
                 {
                     m_Booted = false;
                     m_State = RunState.Stopped;
+                    Console.WriteLine("Booting failed!");
+                    return; // TODO: Implement emergency stop
                 }
                 else
                 {

@@ -25,11 +25,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-
-using Eimu.Core;
-using Eimu.Core.CPU;
-using Eimu.Core.Devices;
-using Eimu.Plugins;
+using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Plugin;
+using Eimu.Core.Systems.Chip8.Engines;
 
 namespace Eimu
 {
@@ -37,7 +35,7 @@ namespace Eimu
     {
         private OpenFileDialog m_OpenFileDialog;
         private FileStream m_RomFileSource;
-        private VirtualMachine m_VM;
+        private C8Machine m_VM;
 
         public StartDialog()
         {
@@ -89,7 +87,7 @@ namespace Eimu
             UpdateSelectedIndices();
         }
 
-        public void SetVM(VirtualMachine vm)
+        public void SetVM(C8Machine vm)
         {
             this.m_VM = vm;
         }
@@ -190,12 +188,7 @@ namespace Eimu
 
             SaveConfig();
 
-            if (radioButton_CPUModeInterpreter.Checked)
-                this.m_VM.CurrentProcessor = new Interpreter();
-            else
-                this.m_VM.CurrentProcessor = new Recompiler();
-
-
+            m_VM.SetCodeEngineType<Interpreter>();
 
             this.m_VM.CurrentAudioDevice = (AudioDevice)Activator.CreateInstance(PluginManager.SelectedAudioDevice);
             this.m_VM.CurrentGraphicsDevice = (GraphicsDevice)Activator.CreateInstance(PluginManager.SelectedGraphicsDevice);
@@ -204,9 +197,7 @@ namespace Eimu
             //this.m_VM.CurrentGraphicsDevice.BackgroundColor = colorDialog1.Color;
             //this.m_VM.CurrentGraphicsDevice.ForegroundColor = colorDialog2.Color;
 
-            this.m_VM.LoadROM(m_RomFileSource);
-
-            m_RomFileSource.Close();
+            m_VM.SetMediaSource(m_RomFileSource);
 
             Hide();
         }

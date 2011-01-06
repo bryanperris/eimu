@@ -18,16 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-
 using Eimu.Core;
-using Eimu.Core.Devices;
-using Eimu.Plugins;
-
+using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Plugin;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -47,28 +44,6 @@ namespace Eimu.Plugins.OTK
         public PluginOGL()
         {
             PluginManager.EnableDoubleBuffer = false;
-        }
-
-        public override void Initialize()
-        {
-            m_ControlContext = Control.FromHandle(PluginManager.RenderContext);
-            m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
-            m_WindowInfo = Utilities.CreateWindowsWindowInfo(PluginManager.RenderContext);
-            m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
-
-            m_GContext.MakeCurrent(m_WindowInfo);
-
-            if (!m_GContext.IsCurrent)
-                throw new InvalidOperationException();
-
-            m_GContext.LoadAll();
-
-            GL.Disable(EnableCap.AlphaTest);
-            GL.Disable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.Dither);
-            GL.Disable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
-            GL.DepthRange(-1, 100);
         }
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
@@ -127,12 +102,12 @@ namespace Eimu.Plugins.OTK
             m_ControlContext.Invalidate();
         }
 
-        public override void SetPauseState(bool paused)
+        protected override void OnPauseStateChange(bool paused)
         {
             
         }
 
-        public override void Shutdown()
+        protected override void OnShutdown()
         {
             m_GContext.Dispose();
         }
@@ -155,6 +130,28 @@ namespace Eimu.Plugins.OTK
         public void ShowConfigDialog()
         {
             throw new NotImplementedException();
+        }
+
+        protected override void OnInit()
+        {
+            m_ControlContext = Control.FromHandle(PluginManager.RenderContext);
+            m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
+            m_WindowInfo = Utilities.CreateWindowsWindowInfo(PluginManager.RenderContext);
+            m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
+
+            m_GContext.MakeCurrent(m_WindowInfo);
+
+            if (!m_GContext.IsCurrent)
+                throw new InvalidOperationException();
+
+            m_GContext.LoadAll();
+
+            GL.Disable(EnableCap.AlphaTest);
+            GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.Dither);
+            GL.Disable(EnableCap.CullFace);
+            GL.Enable(EnableCap.Blend);
+            GL.DepthRange(-1, 100);
         }
     }
 }

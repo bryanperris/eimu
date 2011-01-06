@@ -36,6 +36,7 @@ namespace Eimu.Core.Systems.Chip8
 
         public virtual void Init()
         {
+            m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;
             m_Stop = false;
             m_PC= 0;

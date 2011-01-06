@@ -37,10 +37,10 @@ namespace Eimu.Core.Systems.Chip8
         private Thread m_ThreadCPU;
         private Memory m_Memory;
 
-        public Processor(CodeEngine codeEngine)
+        public Processor(CodeEngine engine)
         {
-            this.m_CodeEngine = codeEngine;
-            this.m_Memory = codeEngine.CurrentMemory;
+            this.m_CodeEngine = engine;
+            this.m_Memory = m_CodeEngine.CurrentMemory;
             Initialize();
         }
 

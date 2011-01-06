@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
-using Eimu.Plugins;
-using Eimu.Core.Devices;
+using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Plugin;
 
 namespace Eimu.Devices
 {
@@ -45,15 +45,15 @@ namespace Eimu.Devices
             return "";
         }
 
-        public override void Initialize()
+        protected override void OnInit()
         {
         }
 
-        public override void Shutdown()
+        protected override void OnShutdown()
         {
         }
 
-        public override void SetPauseState(bool paused)
+        protected override void OnPauseStateChange(bool paused)
         {
         }
 

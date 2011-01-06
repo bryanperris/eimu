@@ -11,12 +11,28 @@ namespace Eimu.Core.Systems.Chip8
         public const int FONT_SIZE = 5;
         public const int MEMORY_SIZE = 4096;
         public const int CODE_OFFSET = 0x200;
-        public const string FONT_PATH = "./sys/c8fnt.bin";
         public const int PROGRAM_ENTRY_POINT = 0x200;
         public AudioDevice CurrentAudioDevice { get; set; }
         public GraphicsDevice CurrentGraphicsDevice { get; set; }
         public InputDevice CurrentInputDevice { get; set; }
-        public Processor CurrentProcessor { get; set; }
+        private Processor m_Processor;
+        private Stream m_FontSource;
+        private CodeEngine m_Engine;
+
+        public C8Machine()
+        {
+            SystemMemory = new Memory(MEMORY_SIZE);
+        }
+
+        public void SetFontResource(Stream source)
+        {
+            m_FontSource = source;
+        }
+
+        public void SetCodeEngineType<TCodeEngine>() where TCodeEngine : CodeEngine
+        {
+            m_Engine = (CodeEngine)Activator.CreateInstance(typeof(TCodeEngine), new object[] { SystemMemory });
+        }
 
         protected override bool Boot()
         {
@@ -31,15 +47,14 @@ namespace Eimu.Core.Systems.Chip8
             if (CurrentInputDevice == null)
                 throw new NullReferenceException();
 
-            if (CurrentProcessor == null)
-                throw new NullReferenceException();
+            m_Processor = new Processor(m_Engine);
 
             AttachDeviceCallbacks();
 
             CurrentAudioDevice.Initialize();
             CurrentGraphicsDevice.Initialize();
             CurrentInputDevice.Initialize();
-            CurrentProcessor.Initialize();
+            m_Processor.Initialize();
 
             if (!LoadFont())
                 return false;
@@ -47,34 +62,34 @@ namespace Eimu.Core.Systems.Chip8
             if (!LoadRom())
                 return false;
 
-            CurrentProcessor.Run();
+            m_Processor.Run();
 
             return true;
         }
 
         private void AttachDeviceCallbacks()
         {
-            CurrentProcessor.Beep -= new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            CurrentProcessor.PixelSet -= new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            CurrentProcessor.ScreenClear -= new EventHandler(CurrentProcessor_OnScreenClear);
+            m_Processor.Beep -= new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
+            m_Processor.PixelSet -= new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
+            m_Processor.ScreenClear -= new EventHandler(CurrentProcessor_OnScreenClear);
             CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
             CurrentInputDevice.OnKeyPress -= new KeyStateHandler(CurrentInputDevice_OnKeyPress);
 
-            CurrentProcessor.Beep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            CurrentProcessor.PixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            CurrentProcessor.ScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
+            m_Processor.Beep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
+            m_Processor.PixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
+            m_Processor.ScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
             CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
             CurrentInputDevice.OnKeyPress += new KeyStateHandler(CurrentInputDevice_OnKeyPress);
         }
 
         private void CurrentInputDevice_OnKeyPress(object sender, ChipKeys key)
         {
-            this.CurrentProcessor.SetKeyPress(key);
+            m_Processor.SetKeyPress(key);
         }
 
         private void CurrentGraphicsDevice_OnPixelCollision(object sender, EventArgs e)
         {
-            this.CurrentProcessor.SetCollision();
+            m_Processor.SetCollision();
         }
 
         private void CurrentProcessor_OnScreenClear(object sender, EventArgs e)
@@ -98,10 +113,12 @@ namespace Eimu.Core.Systems.Chip8
             {
                 case RunState.Stopped:
                     {
-                        CurrentProcessor.Shutdown();
+                        m_Processor.Shutdown();
                         CurrentInputDevice.Shutdown();
                         CurrentAudioDevice.Shutdown();
                         CurrentGraphicsDevice.Shutdown();
+                        MediaSource.Close();
+                        m_FontSource.Close();
                         break;
                     }
                 case RunState.Paused:
@@ -109,7 +126,7 @@ namespace Eimu.Core.Systems.Chip8
                         CurrentAudioDevice.SetPauseState(true);
                         CurrentGraphicsDevice.SetPauseState(true);
                         CurrentInputDevice.SetPauseState(true);
-                        CurrentProcessor.SetPauseState(true);
+                        m_Processor.SetPauseState(true);
                         break;
                     }
                 case RunState.Running:
@@ -117,7 +134,7 @@ namespace Eimu.Core.Systems.Chip8
                         CurrentAudioDevice.SetPauseState(false);
                         CurrentGraphicsDevice.SetPauseState(false);
                         CurrentInputDevice.SetPauseState(false);
-                        CurrentProcessor.SetPauseState(false);
+                        m_Processor.SetPauseState(false);
                         break;
                     }
 
@@ -129,28 +146,25 @@ namespace Eimu.Core.Systems.Chip8
         {
             try
             {
-                FileStream fontfile = new FileStream(FONT_PATH, FileMode.Open, FileAccess.Read, FileShare.Read);
-
                 int read;
                 int pos = 0;
+                m_FontSource.Position = 0;
 
-                while ((read = fontfile.ReadByte()) != -1)
+                while ((read = m_FontSource.ReadByte()) != -1)
                 {
                     this.SystemMemory[pos++] = (byte)read;
                 }
-
-                fontfile.Close();
 
                 return true;
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Font file is missing!");
+                Console.WriteLine("Font is missing!");
                 return false;
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine("can't access font file!");
+                Console.WriteLine("can't access font!");
                 return false;
             }
         }
@@ -162,7 +176,10 @@ namespace Eimu.Core.Systems.Chip8
                 return false;
 
             if (!this.MediaSource.CanRead)
+            {
+                Console.WriteLine("Source can't be read!");
                 return false;
+            }
 
             this.MediaSource.Position = 0;
             int read;
@@ -181,6 +198,11 @@ namespace Eimu.Core.Systems.Chip8
             }
 
             return true;
+        }
+
+        public Processor CurrentProcessor
+        {
+            get { return this.m_Processor; }
         }
     }
 }

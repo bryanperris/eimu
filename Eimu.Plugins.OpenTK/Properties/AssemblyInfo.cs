@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
-using Eimu.Plugins;
+using Eimu.Core.Plugin;
 
 [assembly: AssemblyTitle("Eimu.Plugins.OpenTK")]
 [assembly: AssemblyDescription("Plugins for Eimu using OpenTK")]

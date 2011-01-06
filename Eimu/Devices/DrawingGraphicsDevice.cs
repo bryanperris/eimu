@@ -20,8 +20,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using Eimu.Core.Devices;
-using Eimu.Plugins;
+using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Plugin;
 
 
 namespace Eimu.Devices
@@ -71,7 +71,7 @@ namespace Eimu.Devices
             m_Context.Invalidate();
         }
 
-        public override void Initialize()
+        protected override void OnInit()
         {
             SetResolution();
 
@@ -99,12 +99,12 @@ namespace Eimu.Devices
             DrawToBuffer(e.Graphics);
         }
 
-        public override void Shutdown()
+        protected override void OnShutdown()
         {
             this.ClearScreen();
         }
 
-        public override void SetPauseState(bool paused)
+        protected override void OnPauseStateChange(bool paused)
         {
         }
 

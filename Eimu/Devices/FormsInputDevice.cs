@@ -18,8 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Windows.Forms;
-using Eimu.Core.Devices;
-using Eimu.Plugins;
+using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Plugin;
 
 namespace Eimu.Devices
 {
@@ -28,7 +28,7 @@ namespace Eimu.Devices
     {
         private Form m_Window;
 
-        public override void Initialize()
+        protected override void OnInit()
         {
             m_Window = (Form)Form.FromHandle(PluginManager.WindowHandle);
             m_Window.KeyDown += new KeyEventHandler(m_Window_KeyDown);
@@ -68,15 +68,13 @@ namespace Eimu.Devices
             KeyPress(key);
         }
 
-        public override void Shutdown()
+        protected override void OnShutdown()
         {
         }
 
-        public override void SetPauseState(bool paused)
+        protected override void OnPauseStateChange(bool paused)
         {
         }
-
-        #region IPlugin Members
 
         public void ShowConfigDialog()
         {
@@ -97,7 +95,5 @@ namespace Eimu.Devices
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }

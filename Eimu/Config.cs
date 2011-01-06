@@ -28,6 +28,7 @@ namespace Eimu
 {
     public static class Config
     {
+        public const string FONT_PATH = "./sys/c8fnt.bin";
         public const string CONFIGPATH = "./config.xml";
         public static string FileROMPath { get; set; }
         public static int SelectedAudioPlugin { get; set; }

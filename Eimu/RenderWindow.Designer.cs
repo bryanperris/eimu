@@ -126,10 +126,10 @@
             // 
             // showDebuggerToolStripMenuItem
             // 
+            this.showDebuggerToolStripMenuItem.Enabled = false;
             this.showDebuggerToolStripMenuItem.Name = "showDebuggerToolStripMenuItem";
             this.showDebuggerToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.showDebuggerToolStripMenuItem.Text = "Show Debugger";
-            this.showDebuggerToolStripMenuItem.Click += new System.EventHandler(this.showDebuggerToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 

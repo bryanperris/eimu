@@ -33,9 +33,12 @@ namespace Eimu.Core.Systems.Chip8.Engines
         public override void Call(ChipInstruction inst)
         {
             OpcodeHandler handler;
-            if (this.m_MethodCallTable.TryGetValue(inst.Opcode, out handler))
+            if (m_MethodCallTable != null)
             {
-                handler.Invoke(inst);
+                if (this.m_MethodCallTable.TryGetValue(inst.Opcode, out handler))
+                {
+                    handler.Invoke(inst);
+                }
             }
         }
 

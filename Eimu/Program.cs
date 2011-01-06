@@ -20,8 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Eimu.Core;
-using Eimu.Plugins;
+using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Plugin;
+using System.IO;
 
 namespace Eimu
 {
@@ -40,17 +41,19 @@ namespace Eimu
 
             while (!closeApp)
             {
-                VirtualMachine vm = new VirtualMachine();
+                C8Machine vm = new C8Machine();
                 startscreen.SetVM(vm);
                 startscreen.ShowDialog();
 
                 if (!closeApp)
                 {
+                    FileStream font = new FileStream(Config.FONT_PATH, FileMode.Open, FileAccess.Read);
+                    vm.SetFontResource(font);
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();
+                    vm.Stop();
+                    font.Close();
                 }
-
-                vm.Stop();
             }
         }
 
