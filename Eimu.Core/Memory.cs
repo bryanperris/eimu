@@ -21,29 +21,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace Eimu.Core
 {
     public sealed class Memory : IEnumerable
     {
-        public const int MEMORY_SIZE = 4096;
-        public const int MEMORY_OFFSET = 0x200;
+
+        // TODO: Unmanaged memory mode
 
         private byte[] m_Memory;
 
-        public Memory()
+        public Memory(int size)
         {
-            this.m_Memory = new byte[MEMORY_SIZE];
+            this.m_Memory = new byte[size];
         }
 
-        public byte GetValue(int address)
+        public byte GetByte(int address)
         {
             return m_Memory[address];
         }
 
-        public void SetValue(int address, byte value)
+        public void SetByte(int address, byte value)
         {
             m_Memory[address] = value;
+        }
+
+        public void SetBytes(byte[] buffer, int offset, int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                m_Memory[i + offset] = buffer[i];
+            }
+        }
+
+        public void GetBytes(byte[] buffer, int offset, int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                buffer[i] = m_Memory[i + offset];
+            }
         }
 
         public int Size
@@ -70,12 +87,24 @@ namespace Eimu.Core
         {
             get
             {
+                if (index < 0 || index > (m_Memory.Length - 1))
+                    throw new IndexOutOfRangeException();
+
                 return m_Memory[index];
             }
             set
             {
+                if (index < 0 || index > (m_Memory.Length - 1))
+                    throw new IndexOutOfRangeException();
+
                 m_Memory[index] = value;
             }
         }
+
+        //public IntPtr AllocateUnmangedMemory()
+        //{
+        //    IntPtr p = Marshal.AllocHGlobal(m_Memory.Length);
+        //    Marshal.Copy(
+        //}
     }
 }

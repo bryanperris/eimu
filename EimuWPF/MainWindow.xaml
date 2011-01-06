@@ -1,0 +1,128 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="EimuWPF.MainWindow"
+        Title="Eimu" Height="362" Width="334">
+    <Grid>
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="0"/>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition Height="47.25"/>
+    	</Grid.RowDefinitions>
+    	<Expander Header="ROM Selection" HorizontalAlignment="Left" Margin="8,5,0,0" Grid.Row="1" Width="302" Foreground="Black" VerticalAlignment="Top" IsExpanded="True" BorderThickness="1,1,1,5">
+    		<Expander.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    			</LinearGradientBrush>
+    		</Expander.Background>
+    		<TextBox TextWrapping="Wrap" Text="TextBox" Height="26" Margin="6,0,6,5"/>
+    	</Expander>
+    	<Expander Header="Code Engine" HorizontalAlignment="Left" Margin="8,0.25,0,0" VerticalAlignment="Top" Grid.Row="2" Width="302" Foreground="Black" IsExpanded="True" BorderThickness="1,1,1,5">
+    		<Expander.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    			</LinearGradientBrush>
+    		</Expander.Background>
+    		<Grid Height="15.75" Background="White" Margin="5,0,6,6">
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition Width="137.088"/>
+    				<ColumnDefinition Width="150.912"/>
+    			</Grid.ColumnDefinitions>
+    			<RadioButton Content="Interpreter" Margin="8,0,56.568,1.79" d:LayoutOverrides="Width"/>
+    			<RadioButton Content="IL Recompiler" Margin="8,0,55.102,1.79" Grid.Column="1" d:LayoutOverrides="Width"/>
+    		</Grid>
+    	</Expander>
+    	<Expander Header="ROM Selection" HorizontalAlignment="Left" Margin="8,0,0,3.97" Grid.Row="3" Width="302" Foreground="Black" IsExpanded="True" BorderThickness="1,1,1,5">
+    		<Expander.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    			</LinearGradientBrush>
+    		</Expander.Background>
+    		<Grid Height="81" Margin="8,0,6,4" Background="White">
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition Width="0.684*"/>
+    				<ColumnDefinition Width="0.219*"/>
+    			</Grid.ColumnDefinitions>
+    			<Grid.RowDefinitions>
+    				<RowDefinition Height="Auto"/>
+    				<RowDefinition Height="Auto"/>
+    				<RowDefinition Height="Auto"/>
+    			</Grid.RowDefinitions>
+    			<ComboBox Height="27.492"/>
+    			<Button Content="Button" Grid.Column="1"/>
+    			<ComboBox Margin="0,0,0,-0.474" Grid.Row="1" Height="27.492"/>
+    			<Button Content="Button" Grid.Column="1" Margin="0,0,0,-0.474" Grid.Row="1"/>
+    			<ComboBox Margin="0,-1.002,0,-2" Grid.Row="2" Height="27.492"/>
+    			<Button Content="Button" Grid.Column="1" Margin="0,-1.002,0,-2" Grid.Row="2"/>
+    		</Grid>
+    	</Expander>
+    	<Expander Header="Colors" HorizontalAlignment="Left" Margin="8,0.03,0,0" VerticalAlignment="Top" Grid.Row="4" Width="302" Foreground="Black" IsExpanded="True" BorderThickness="1,1,1,5">
+    		<Expander.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    			</LinearGradientBrush>
+    		</Expander.Background>
+    		<Grid Height="15.75" Background="White" Margin="5,0,6,6">
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition Width="137.5"/>
+    				<ColumnDefinition Width="150.5"/>
+    			</Grid.ColumnDefinitions>
+    			<Rectangle Fill="Black" Stroke="Black" ToolTip="Set Background Color" Cursor="Hand"/>
+    			<Rectangle Fill="White" Stroke="Black" Grid.Column="1" Margin="0,0,-3,0" ToolTip="Set Forground Color" Cursor="Hand"/>
+    		</Grid>
+    	</Expander>
+    	<Expander Header="ROM Selection" HorizontalAlignment="Left" Margin="8,0,0,3.97" Grid.Row="3" Width="302" Foreground="Black" IsExpanded="True" BorderThickness="1,1,1,5">
+    		<Expander.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    			</LinearGradientBrush>
+    		</Expander.Background>
+    		<Grid Height="81" Margin="8,0,6,4" Background="White">
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition Width="0.684*"/>
+    				<ColumnDefinition Width="0.219*"/>
+    			</Grid.ColumnDefinitions>
+    			<Grid.RowDefinitions>
+    				<RowDefinition Height="Auto"/>
+    				<RowDefinition Height="Auto"/>
+    				<RowDefinition Height="Auto"/>
+    			</Grid.RowDefinitions>
+    			<ComboBox Height="27.492"/>
+    			<Button Content="Button" Grid.Column="1"/>
+    			<ComboBox Margin="0,0,0,-0.474" Grid.Row="1" Height="27.492"/>
+    			<Button Content="Button" Grid.Column="1" Margin="0,0,0,-0.474" Grid.Row="1"/>
+    			<ComboBox Margin="0,-1.002,0,-2" Grid.Row="2" Height="27.492"/>
+    			<Button Content="Button" Grid.Column="1" Margin="0,-1.002,0,-2" Grid.Row="2"/>
+    		</Grid>
+    	</Expander>
+    	<Expander Header="Misc" HorizontalAlignment="Left" Margin="8,-0.75,0,0" Grid.Row="5" Width="302" Foreground="Black" IsExpanded="True" BorderThickness="1">
+    		<Expander.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    				<GradientStop Color="#FF0084FF" Offset="1"/>
+    			</LinearGradientBrush>
+    		</Expander.Background>
+    		<Grid Height="25" Margin="8,0,6,4" Background="White">
+    			<Grid.RowDefinitions>
+    				<RowDefinition Height="Auto"/>
+    			</Grid.RowDefinitions>
+    			<CheckBox Content="NetPlay" HorizontalAlignment="Left" Margin="8,1.04,0,6.92" d:LayoutOverrides="Height"/>
+    		</Grid>
+    	</Expander>
+        
+    </Grid>
+</Window>

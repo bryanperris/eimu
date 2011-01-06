@@ -71,11 +71,6 @@
       <Name>Eimu.Core</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Eimu.Plugins\Eimu.Plugins.csproj">
-      <Project>{2E471D3A-9D62-4410-9F56-D92AD142107B}</Project>
-      <Name>Eimu.Plugins</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,7 @@
 ﻿/*  
 Eimu - Chip-8 Emulator
 Copyright (C) 2010  http://code.google.com/p/eimu
+Dedicated to Monarch.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,221 +24,98 @@ using System.Text;
 using System.IO;
 using System.Threading;
 
-using Eimu.Core.CPU;
-using Eimu.Core.Devices;
-
 namespace Eimu.Core
 {
-    /// <summary>
-    /// A Chip-8 virtual machine which provides managment of the system and inter-communication between devices and CPU.
-    /// </summary>
     [Serializable]
-    public sealed class VirtualMachine
+    public abstract class VirtualMachine
     {
-        public const int FONT_SIZE = 5;
-
-        public static readonly byte[] FONTROM = {
-         0xF0, 0x90, 0x90, 0x90, 0xF0,   //0
-	     0x20, 0x60, 0x20, 0x20, 0x70,   //1
-	     0xF0, 0x10, 0xF0, 0x80, 0xF0,   //2
-	     0xF0, 0x10, 0xF0, 0x10, 0xF0,   //3
-	     0x90, 0x90, 0xF0, 0x10, 0x10,   //4
-	     0xF0, 0x80, 0xF0, 0x10, 0xF0,   //5
-	     0xF0, 0x80, 0xF0, 0x90, 0xF0,   //6
-	     0xF0, 0x10, 0x20, 0x40, 0x40,   //7
-	     0xF0, 0x90, 0xF0, 0x90, 0xF0,   //8
-	     0xF0, 0x90, 0xF0, 0x10, 0xF0,   //9
-	     0xF0, 0x90, 0xF0, 0x90, 0x90,   //A
-	     0xE0, 0x90, 0xE0, 0x90, 0xE0,   //B
-	     0xF0, 0x80, 0x80, 0x80, 0xF0,   //C
-	     0xE0, 0x90, 0x90, 0x90, 0xE0,   //D
-	     0xF0, 0x80, 0xF0, 0x80, 0xF0,   //E
-	     0xF0, 0x80, 0xF0, 0x80, 0x80,}; //F
-
         private RunState m_State;
+        private Memory m_Memory;
+        private Stream m_MediaSource;
+        private bool m_Booted = false;
+        public event RunStateChangedEvent RunStateChanged;
 
-        public event EventHandler Started;
-        public event EventHandler Stopped;
+        
+        protected abstract bool Boot();
 
-        public VirtualMachine()
+        public void SetMediaSource(Stream source)
         {
-            MachineMemory = new Memory();
-            LoadFont();
+            this.m_MediaSource = source;
         }
 
-        public void LoadROM(Stream source)
+        protected Stream MediaSource
         {
-            if (!source.CanRead)
-                throw new IOException("source not readable!");
-
-            if (source.Length > MachineMemory.Size - 0x1FF)
-                //throw new ArgumentException("source is bigger than memory size!");
-
-            source.Position = 0;
-            int read = -1;
-
-            // Read source into RAM
-            for (int i = 0x200; i < MachineMemory.Size; i++)
-            {
-                if (-1 != (read = source.ReadByte()))
-                {
-                    MachineMemory[i] = (byte)read;
-                }
-                else
-                {
-                    MachineMemory[i] = 0;
-                }
-            }
+            get { return this.m_MediaSource;}
         }
 
-        private void LoadFont()
+        public void Run()
         {
-            for (int i = 0; i < 0x1FF; i++)
-            {
-                if (i < FONTROM.Length)
-                    this.MachineMemory[i] = FONTROM[i];
-                else
-                    this.MachineMemory[i] = 0;
-            }
+            SetRunState(RunState.Running);
         }
 
-        public void Start()
+        public void Pause()
         {
-            if (CurrentAudioDevice == null)
-                throw new NullReferenceException();
-
-            if (CurrentGraphicsDevice == null)
-                throw new NullReferenceException();
-
-            if (CurrentInputDevice == null)
-                throw new NullReferenceException();
-
-            if (CurrentProcessor == null)
-                throw new NullReferenceException();
-
-            if (MachineMemory == null)
-                throw new NullReferenceException();
-
-            CurrentProcessor.SetMemory(this.MachineMemory);
-
-            AttachDeviceCallbacks();
-
-            ((IDevice)CurrentAudioDevice).Initialize();
-            ((IDevice)CurrentGraphicsDevice).Initialize();
-            ((IDevice)CurrentInputDevice).Initialize();
-            ((IDevice)CurrentProcessor).Initialize();
-
-            CurrentProcessor.StartExecution();
-
-            m_State = RunState.Running;
+            SetRunState(RunState.Paused);
         }
 
         public void Stop()
         {
-            if (m_State != RunState.Stopped)
-            {
-                m_State = RunState.Stopped;
-
-                ((IDevice)CurrentProcessor).Shutdown();
-                ((IDevice)CurrentInputDevice).Shutdown();
-                ((IDevice)CurrentAudioDevice).Shutdown();
-                ((IDevice)CurrentGraphicsDevice).Shutdown();
-
-                DetachDeviceCallbacks();
-            }
+            SetRunState(RunState.Stopped);
         }
 
         public void Restart()
         {
-            Thread.Sleep(100);
             Stop();
-            Start();
+            Thread.Sleep(100);
+            Run();
         }
 
-        public void SetPause(bool paused)
+        private void SetRunState(RunState state)
         {
-            if (m_State == RunState.Running || m_State == RunState.Paused)
-            {
-                ((IDevice)CurrentProcessor).SetPauseState(paused);
-                ((IDevice)CurrentAudioDevice).SetPauseState(paused);
-                ((IDevice)CurrentGraphicsDevice).SetPauseState(paused);
-                ((IDevice)CurrentInputDevice).SetPauseState(paused);
+            m_State = state;
 
-                if (paused)
-                    m_State = RunState.Paused;
+            if (m_State == RunState.Running && !m_Booted)
+            {
+                bool successful = Boot();
+
+                if (!successful)
+                {
+                    m_Booted = false;
+                    m_State = RunState.Stopped;
+                }
                 else
-                    m_State = RunState.Running;
+                {
+                    m_Booted = true;
+                }
+            }
+
+            if (m_State == RunState.Stopped)
+            {
+                m_Booted = false;
+            }
+                
+
+            if (RunStateChanged != null)
+                RunStateChanged(this, m_State);
+
+            OnMachineState(m_State);
+        }
+
+        protected abstract void OnMachineState(RunState state);
+
+        public RunState CurrentRunState
+        {
+            get { return this.m_State;}
+        }
+
+        public Memory SystemMemory
+        {
+            get { return this.m_Memory;}
+            set
+            {
+                this.m_Memory = value;
             }
         }
 
-        public RunState MachineRunState
-        {
-            get { return this.m_State; }
-        }
-
-        public AudioDevice CurrentAudioDevice { get; set; }
-
-        public GraphicsDevice CurrentGraphicsDevice { get; set; }
-
-        public InputDevice CurrentInputDevice { get; set; }
-
-        public Processor CurrentProcessor { get; set; }
-
-        public Memory MachineMemory { get; set; }
-
-        private void AttachDeviceCallbacks()
-        {
-            CurrentProcessor.OnBeep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            CurrentProcessor.OnPixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            CurrentProcessor.OnScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
-            CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
-            CurrentInputDevice.OnKeyPress += new KeyStateHandler(CurrentInputDevice_OnKeyPress);
-        }
-
-        private void DetachDeviceCallbacks()
-        {
-            CurrentProcessor.OnBeep -= new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            CurrentProcessor.OnPixelSet -= new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            CurrentProcessor.OnScreenClear -= new EventHandler(CurrentProcessor_OnScreenClear);
-            CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
-            CurrentInputDevice.OnKeyPress -= new KeyStateHandler(CurrentInputDevice_OnKeyPress);
-        }
-
-        void CurrentInputDevice_OnKeyPress(object sender, ChipKeys key)
-        {
-            this.CurrentProcessor.SetKeyPress(key);
-        }
-
-        void CurrentGraphicsDevice_OnPixelCollision(object sender, EventArgs e)
-        {
-            this.CurrentProcessor.SetCollision();
-        }
-
-        void CurrentProcessor_OnScreenClear(object sender, EventArgs e)
-        {
-            this.CurrentGraphicsDevice.ClearScreen();
-        }
-
-        void CurrentProcessor_OnPixelSet(object sender, PixelSetEventArgs e)
-        {
-            CurrentGraphicsDevice.SetPixel(e.X, e.Y);
-        }
-
-        void CurrentProcessor_OnBeep(object sender, BeepEventArgs e)
-        {
-            this.CurrentAudioDevice.Beep(e.Duration);
-        }
-
-        void OnMachineStart()
-        {
-            if (Started != null)
-                Started(this, new EventArgs());
-        }
-
-        void OnMachineStop()
-        {
-            if (Stopped != null)
-                Stopped(this, new EventArgs());
-        }
     }
 }

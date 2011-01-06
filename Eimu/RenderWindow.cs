@@ -50,7 +50,7 @@ namespace Eimu
 
         void RenderWindow_Shown(object sender, EventArgs e)
         {
-            m_Machine.Start();
+            m_Machine.Run();
         }
 
         private void aboutToolStripMenuItem2_Click(object sender, EventArgs e)

@@ -45,40 +45,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chip16\Memory.cs" />
-    <Compile Include="CPU\ChipOpcodes.cs" />
-    <Compile Include="CPU\CodeUtils\CodeGenerator.cs" />
-    <Compile Include="CPU\CodeUtils\CodeBlock.cs" />
-    <Compile Include="CPU\Disassembler.cs" />
-    <Compile Include="CPU\Interpreter_Graphics.cs" />
-    <Compile Include="CPU\Interpreter_Jump.cs" />
-    <Compile Include="CPU\Interpreter_Load.cs" />
-    <Compile Include="CPU\Interpreter_Math.cs" />
-    <Compile Include="CPU\OpLookupTable.cs" />
-    <Compile Include="CPU\OpcodeHandler.cs" />
-    <Compile Include="CPU\OpcodeTag.cs" />
-    <Compile Include="CPU\Recompiler.cs" />
-    <Compile Include="Devices\BeepEventArgs.cs" />
-    <Compile Include="Devices\ChipKeys.cs" />
-    <Compile Include="Devices\IDevice.cs" />
-    <Compile Include="CPU\Processor.cs" />
-    <Compile Include="Devices\AudioDevice.cs" />
-    <Compile Include="Devices\InputDevice.cs" />
-    <Compile Include="CPU\Interpreter.cs" />
-    <Compile Include="Devices\GraphicsDevice.cs" />
-    <Compile Include="Devices\PixelSetEventArgs.cs" />
+    <Compile Include="Plugin\Configuration.cs" />
+    <Compile Include="Plugin\EimuPluginAssembly.cs" />
+    <Compile Include="Plugin\IPlugin.cs" />
+    <Compile Include="Plugin\PluginInfo.cs" />
+    <Compile Include="Plugin\PluginManager.cs" />
+    <Compile Include="Plugin\PropertyBase.cs" />
+    <Compile Include="RunStateChangedEvent.cs" />
+    <Compile Include="Systems\Chip16\C16Colors.cs" />
+    <Compile Include="Systems\Chip16\C16Machine.cs" />
+    <Compile Include="Systems\Chip8\C8Machine.cs" />
+    <Compile Include="Systems\Chip8\ChipOpcodes.cs" />
+    <Compile Include="Systems\Chip8\CodeEngine.cs" />
+    <Compile Include="Systems\Chip8\Disassembler.cs" />
+    <Compile Include="Systems\Chip8\Engines\Interpreter.cs" />
+    <Compile Include="Systems\Chip8\BeepEventArgs.cs" />
+    <Compile Include="Systems\Chip8\ChipKeys.cs" />
+    <Compile Include="Device.cs" />
+    <Compile Include="Systems\Chip8\Processor.cs" />
+    <Compile Include="Systems\Chip8\AudioDevice.cs" />
+    <Compile Include="Systems\Chip8\InputDevice.cs" />
+    <Compile Include="Systems\Chip8\GraphicsDevice.cs" />
+    <Compile Include="Systems\Chip8\KeyStateHandler.cs" />
+    <Compile Include="Systems\Chip8\PixelSetEventArgs.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="MemoryEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
-    <Compile Include="CPU\ChipInstruction.cs" />
+    <Compile Include="Systems\Chip8\ChipInstruction.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Chip8\" />
-    <Folder Include="ChipBase\" />
-    <Folder Include="MegChip\" />
-    <Folder Include="SuperChip\" />
+    <Folder Include="Systems\Chip8\Engines\JIT\" />
+    <Folder Include="Systems\MegaChip\" />
+    <Folder Include="Systems\SuperChip\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
