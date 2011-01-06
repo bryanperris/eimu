@@ -9,6 +9,7 @@ namespace Eimu.Core.Systems.Chip8.Engines
     public sealed class Interpreter : CodeEngine
     {
         private Dictionary<ChipOpcodes, OpcodeHandler> m_MethodCallTable;
+        private Profiler m_Profiler;
 
         public Interpreter(Memory memory)
             : base(memory)
@@ -18,6 +19,7 @@ namespace Eimu.Core.Systems.Chip8.Engines
         public override void Init()
         {
             base.Init();
+            m_Profiler = new Profiler();
             m_MethodCallTable = new Dictionary<ChipOpcodes, OpcodeHandler>();
             LoadMethods();
         }
@@ -28,10 +30,13 @@ namespace Eimu.Core.Systems.Chip8.Engines
             m_MethodCallTable.Clear();
             m_MethodCallTable = null;
             m_Rand = null;
+            m_Profiler.DumpStats();
         }
 
         public override void Call(ChipInstruction inst)
         {
+            m_Profiler.CountOpcode(inst.Opcode);
+
             OpcodeHandler handler;
             if (m_MethodCallTable != null)
             {

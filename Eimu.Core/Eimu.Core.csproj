@@ -72,6 +72,7 @@
     <Compile Include="MemoryEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
+    <Compile Include="Systems\Chip8\Profiler.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
     <Compile Include="Systems\Chip8\ChipInstruction.cs" />

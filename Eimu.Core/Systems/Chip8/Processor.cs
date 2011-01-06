@@ -70,8 +70,8 @@ namespace Eimu.Core.Systems.Chip8
             m_CPUWait.Set();
             m_KeyWait.Set();
             m_RequestCPUStop = true;
-            m_CPUEndWait.WaitOne();
-            m_CPUEndWait.Reset();
+            //m_CPUEndWait.WaitOne();
+            //m_CPUEndWait.Reset();
         }
 
         public override void Initialize()
@@ -119,6 +119,7 @@ namespace Eimu.Core.Systems.Chip8
         private void StartExecutionCycle()
         {
             Thread.CurrentThread.Name = "CPU Thread";
+            Thread.BeginThreadAffinity();
 
             while (m_CodeEngine.PC < m_Memory.Size)
             {
@@ -129,15 +130,22 @@ namespace Eimu.Core.Systems.Chip8
                         m_CPUWait.WaitOne();
                     }
 
+                    Thread.BeginCriticalRegion();
+                    
                     Step();
+
+                    Thread.EndCriticalRegion();
                 }
                 else
                 {
                     break;
                 }
 
+                
                 Thread.Sleep(2);
             }
+
+            Thread.EndThreadAffinity();
 
             m_CPUEndWait.Set();
         }
