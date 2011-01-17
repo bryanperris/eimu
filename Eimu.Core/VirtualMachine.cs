@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading;
@@ -27,13 +26,14 @@ using System.Threading;
 namespace Eimu.Core
 {
     [Serializable]
-    public abstract class VirtualMachine
+    public abstract class VirtualMachine : IDisposable
     {
         private RunState m_State;
         private Memory m_Memory;
         private Stream m_MediaSource;
         private bool m_Booted = false;
         public event RunStateChangedEvent RunStateChanged;
+        public event EventHandler MachineEnded;
 
         
         protected abstract bool Boot();
@@ -83,7 +83,8 @@ namespace Eimu.Core
                     m_Booted = false;
                     m_State = RunState.Stopped;
                     Console.WriteLine("Booting failed!");
-                    return; // TODO: Implement emergency stop
+                    Dispose();
+                    return;
                 }
                 else
                 {
@@ -119,5 +120,21 @@ namespace Eimu.Core
             }
         }
 
+        public void Dispose()
+        {
+            if (m_State == RunState.Paused || m_State == RunState.Running)
+            {
+               m_State = RunState.Stopped;
+               OnMachineState(RunState.Stopped);
+            }
+
+            m_Memory = null;
+            m_MediaSource = null;
+
+            if (MachineEnded != null)
+                MachineEnded(this, new EventArgs());
+
+            GC.SuppressFinalize(this);
+        }
     }
 }

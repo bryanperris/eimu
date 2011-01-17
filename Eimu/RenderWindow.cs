@@ -39,9 +39,15 @@ namespace Eimu
             InitializeComponent();
             this.Text = Eimu.Properties.Resources.WindowCaption;
             this.m_Machine = machine;
+            machine.MachineEnded += new EventHandler(machine_MachineEnded);
             PluginManager.WindowHandle = this.Handle;
             PluginManager.RenderContext = this.panel_RenderContext.Handle;
             this.Shown += new EventHandler(RenderWindow_Shown);
+        }
+
+        void machine_MachineEnded(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         void RenderWindow_Shown(object sender, EventArgs e)

@@ -56,6 +56,7 @@
     <Compile Include="Systems\Chip16\C16Machine.cs" />
     <Compile Include="Systems\Chip8\C8Machine.cs" />
     <Compile Include="Systems\Chip8\ChipOpcodes.cs" />
+    <Compile Include="Systems\Chip8\CodeCache.cs" />
     <Compile Include="Systems\Chip8\CodeEngine.cs" />
     <Compile Include="Systems\Chip8\Disassembler.cs" />
     <Compile Include="Systems\Chip8\Engines\Interpreter.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
     <Compile Include="Systems\Chip8\Profiler.cs" />
+    <Compile Include="Systems\Chip8\CodeBlock.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
     <Compile Include="Systems\Chip8\ChipInstruction.cs" />

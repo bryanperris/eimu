@@ -75,9 +75,16 @@ namespace Eimu
                 button_RunProgram.Enabled = true;
             }
 
-            comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
-            comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
-            comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
+            try
+            {
+                comboBox_SelectedAudio.SelectedIndex = Config.SelectedAudioPlugin;
+                comboBox_SelectedGraphics.SelectedIndex = Config.SelectedGraphicsPlugin;
+                comboBox_SelectedInput.SelectedIndex = Config.SelectedInputPlugin;
+            }
+            catch (System.Exception)
+            {
+
+            }
 
             if (Config.UseInterpreter)
                 radioButton_CPUModeInterpreter.Checked = true;

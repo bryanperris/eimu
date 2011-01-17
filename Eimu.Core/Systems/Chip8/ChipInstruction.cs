@@ -25,6 +25,7 @@ namespace Eimu.Core.Systems.Chip8
 	{
 		ushort m_Instruction;
         ChipOpcodes m_Opcode;
+        public int Address { get; set; }
 
         public ChipInstruction(ushort instruction, ChipOpcodes opcode)
         {

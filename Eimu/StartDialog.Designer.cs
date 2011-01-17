@@ -47,18 +47,13 @@
             this.button5 = new System.Windows.Forms.Button();
             this.comboBox_SelectedGraphics = new System.Windows.Forms.ComboBox();
             this.button6 = new System.Windows.Forms.Button();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
             this.colorDialog2 = new System.Windows.Forms.ColorDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -104,6 +99,7 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "CPU Emulation Mode";
+            this.groupBox2.Visible = false;
             // 
             // radioButton_CPUModeRecompiler
             // 
@@ -171,7 +167,7 @@
             // button_RunProgram
             // 
             this.button_RunProgram.Enabled = false;
-            this.button_RunProgram.Location = new System.Drawing.Point(374, 376);
+            this.button_RunProgram.Location = new System.Drawing.Point(177, 270);
             this.button_RunProgram.Name = "button_RunProgram";
             this.button_RunProgram.Size = new System.Drawing.Size(83, 23);
             this.button_RunProgram.TabIndex = 7;
@@ -259,54 +255,11 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.checkBox1);
-            this.groupBox6.Location = new System.Drawing.Point(13, 261);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(444, 52);
-            this.groupBox6.TabIndex = 8;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Netplay";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(7, 20);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(59, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Enable";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(13, 320);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(86, 23);
-            this.button7.TabIndex = 9;
-            this.button7.Text = "Back Color";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(106, 320);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(99, 23);
-            this.button8.TabIndex = 10;
-            this.button8.Text = "Fore Color";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
             // StartDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 411);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.groupBox6);
+            this.ClientSize = new System.Drawing.Size(467, 305);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button_RunProgram);
@@ -324,8 +277,6 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -351,11 +302,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
         private System.Windows.Forms.ColorDialog colorDialog2;
     }
 }

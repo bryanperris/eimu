@@ -33,14 +33,6 @@
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.pauseToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.showDebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.graphicsConfigToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.audioConfigToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.inputConfigToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.machineConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,14 +77,6 @@
             this.resetToolStripMenuItem,
             this.stopToolStripMenuItem1,
             this.pauseToolStripMenuItem1,
-            this.toolStripSeparator1,
-            this.showDebuggerToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.graphicsConfigToolStripMenuItem1,
-            this.audioConfigToolStripMenuItem1,
-            this.inputConfigToolStripMenuItem1,
-            this.machineConfigToolStripMenuItem,
-            this.toolStripSeparator4,
             this.exitToolStripMenuItem});
             this.machineToolStripMenuItem.Name = "machineToolStripMenuItem";
             this.machineToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
@@ -101,77 +85,28 @@
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem1
             // 
             this.stopToolStripMenuItem1.Name = "stopToolStripMenuItem1";
-            this.stopToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+            this.stopToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.stopToolStripMenuItem1.Text = "Stop";
             this.stopToolStripMenuItem1.Click += new System.EventHandler(this.stopToolStripMenuItem1_Click);
             // 
             // pauseToolStripMenuItem1
             // 
             this.pauseToolStripMenuItem1.Name = "pauseToolStripMenuItem1";
-            this.pauseToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+            this.pauseToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.pauseToolStripMenuItem1.Text = "Pause";
             this.pauseToolStripMenuItem1.Click += new System.EventHandler(this.pauseToolStripMenuItem1_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
-            // 
-            // showDebuggerToolStripMenuItem
-            // 
-            this.showDebuggerToolStripMenuItem.Enabled = false;
-            this.showDebuggerToolStripMenuItem.Name = "showDebuggerToolStripMenuItem";
-            this.showDebuggerToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.showDebuggerToolStripMenuItem.Text = "Show Debugger";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(156, 6);
-            // 
-            // graphicsConfigToolStripMenuItem1
-            // 
-            this.graphicsConfigToolStripMenuItem1.Name = "graphicsConfigToolStripMenuItem1";
-            this.graphicsConfigToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
-            this.graphicsConfigToolStripMenuItem1.Text = "Graphics Config";
-            this.graphicsConfigToolStripMenuItem1.Click += new System.EventHandler(this.graphicsConfigToolStripMenuItem1_Click);
-            // 
-            // audioConfigToolStripMenuItem1
-            // 
-            this.audioConfigToolStripMenuItem1.Name = "audioConfigToolStripMenuItem1";
-            this.audioConfigToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
-            this.audioConfigToolStripMenuItem1.Text = "Audio Config";
-            this.audioConfigToolStripMenuItem1.Click += new System.EventHandler(this.audioConfigToolStripMenuItem1_Click);
-            // 
-            // inputConfigToolStripMenuItem1
-            // 
-            this.inputConfigToolStripMenuItem1.Name = "inputConfigToolStripMenuItem1";
-            this.inputConfigToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
-            this.inputConfigToolStripMenuItem1.Text = "Input Config";
-            this.inputConfigToolStripMenuItem1.Click += new System.EventHandler(this.inputConfigToolStripMenuItem1_Click);
-            // 
-            // machineConfigToolStripMenuItem
-            // 
-            this.machineConfigToolStripMenuItem.Name = "machineConfigToolStripMenuItem";
-            this.machineConfigToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.machineConfigToolStripMenuItem.Text = "Machine Config";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(156, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -187,14 +122,14 @@
             // aboutToolStripMenuItem2
             // 
             this.aboutToolStripMenuItem2.Name = "aboutToolStripMenuItem2";
-            this.aboutToolStripMenuItem2.Size = new System.Drawing.Size(133, 22);
+            this.aboutToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem2.Text = "About";
             this.aboutToolStripMenuItem2.Click += new System.EventHandler(this.aboutToolStripMenuItem2_Click);
             // 
             // projectSiteToolStripMenuItem1
             // 
             this.projectSiteToolStripMenuItem1.Name = "projectSiteToolStripMenuItem1";
-            this.projectSiteToolStripMenuItem1.Size = new System.Drawing.Size(133, 22);
+            this.projectSiteToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.projectSiteToolStripMenuItem1.Text = "Project Site";
             this.projectSiteToolStripMenuItem1.Click += new System.EventHandler(this.projectSiteToolStripMenuItem1_Click);
             // 
@@ -367,14 +302,6 @@
         private System.Windows.Forms.ToolStripMenuItem machineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem pauseToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem showDebuggerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem graphicsConfigToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem audioConfigToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem inputConfigToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem machineConfigToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;

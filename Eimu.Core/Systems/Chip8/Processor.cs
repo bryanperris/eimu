@@ -36,6 +36,7 @@ namespace Eimu.Core.Systems.Chip8
         private bool m_RequestCPUStop;
         private Thread m_ThreadCPU;
         private Memory m_Memory;
+        private Profiler m_Profiler;
 
         public Processor(CodeEngine engine)
         {
@@ -51,12 +52,14 @@ namespace Eimu.Core.Systems.Chip8
             ushort data = Tools.MakeShort(a, b);
             ChipOpcodes opcode = Disassembler.DecodeInstruction(data);
             ChipInstruction inst = new ChipInstruction(data, opcode);
+            inst.Address = m_CodeEngine.PC;
             m_CodeEngine.IncrementPC();
             m_CodeEngine.Call(inst);
         }
 
-        public void Run()
+        public void Run(int entryAddress)
         {
+            m_CodeEngine.PC = entryAddress;
             m_ThreadCPU.Start();
         }
 
@@ -76,6 +79,7 @@ namespace Eimu.Core.Systems.Chip8
 
         public override void Initialize()
         {
+            m_Profiler = new Profiler();
             m_CodeEngine.Beep += new EventHandler<BeepEventArgs>(m_CodeEngine_OnBeep);
             m_CodeEngine.PixelSet += new EventHandler<PixelSetEventArgs>(m_CodeEngine_OnPixelSet);
             m_CodeEngine.ScreenClear += new EventHandler(m_CodeEngine_OnScreenClear);

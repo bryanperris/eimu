@@ -129,15 +129,10 @@
     <None Include="Resources\menubar.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="Resources\eimu.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Debugging\" />
-    <Folder Include="Netplay\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>md sys

@@ -62,7 +62,7 @@ namespace Eimu.Core.Systems.Chip8
             if (!LoadRom())
                 return false;
 
-            m_Processor.Run();
+            m_Processor.Run(CODE_OFFSET);
 
             return true;
         }
@@ -117,8 +117,13 @@ namespace Eimu.Core.Systems.Chip8
                         CurrentInputDevice.Shutdown();
                         CurrentAudioDevice.Shutdown();
                         CurrentGraphicsDevice.Shutdown();
-                        MediaSource.Close();
-                        m_FontSource.Close();
+
+                        if (MediaSource != null)
+                            MediaSource.Close();
+
+                        if (m_FontSource != null)
+                            m_FontSource.Close();
+
                         break;
                     }
                 case RunState.Paused:
