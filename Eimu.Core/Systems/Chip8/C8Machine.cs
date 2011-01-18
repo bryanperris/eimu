@@ -117,13 +117,6 @@ namespace Eimu.Core.Systems.Chip8
                         CurrentInputDevice.Shutdown();
                         CurrentAudioDevice.Shutdown();
                         CurrentGraphicsDevice.Shutdown();
-
-                        if (MediaSource != null)
-                            MediaSource.Close();
-
-                        if (m_FontSource != null)
-                            m_FontSource.Close();
-
                         break;
                     }
                 case RunState.Paused:
