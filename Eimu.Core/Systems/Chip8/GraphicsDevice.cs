@@ -63,10 +63,10 @@ namespace Eimu.Core.Systems.Chip8
 
             m_Buffer[GetBufferPosition(x, y)] = on;
 
-            if (on)
-            {
+            //if (on)
+            //{
                 OnPixelSet(x, y, on);
-            }
+            //}
 
             // src 0 ^ 1 = 1 : Fill White
             // src 1 ^ 1 = 0 : Make Black, Set Collision

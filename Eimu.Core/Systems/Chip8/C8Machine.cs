@@ -12,6 +12,8 @@ namespace Eimu.Core.Systems.Chip8
         public const int MEMORY_SIZE = 4096;
         public const int CODE_OFFSET = 0x200;
         public const int PROGRAM_ENTRY_POINT = 0x200;
+
+
         public AudioDevice CurrentAudioDevice { get; set; }
         public GraphicsDevice CurrentGraphicsDevice { get; set; }
         public InputDevice CurrentInputDevice { get; set; }

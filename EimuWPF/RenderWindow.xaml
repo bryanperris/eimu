@@ -1,0 +1,10 @@
+﻿<Window x:Class="EimuWPF.RenderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RenderWindow" Height="434" Width="592" xmlns:my="clr-namespace:EimuWPF">
+    <Grid>
+        <WindowsFormsHost>
+            <my:RenderPanel x:Name="renderPanel" />
+        </WindowsFormsHost>
+    </Grid>
+</Window>

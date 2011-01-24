@@ -55,6 +55,7 @@
     <Compile Include="Systems\Chip16\C16Colors.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
     <Compile Include="Systems\Chip8\C8Machine.cs" />
+    <Compile Include="Systems\Chip8\C8VMachine.cs" />
     <Compile Include="Systems\Chip8\ChipOpcodes.cs" />
     <Compile Include="Systems\Chip8\CodeCache.cs" />
     <Compile Include="Systems\Chip8\CodeEngine.cs" />
