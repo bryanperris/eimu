@@ -32,7 +32,7 @@ namespace Eimu
 
                 if (!closeApp)
                 {
-                    FileStream font = new FileStream(Config.FONT_PATH, FileMode.Open, FileAccess.Read);
+                    FileStream font = new FileStream(Config.CHIP8_FONT_PATH, FileMode.Open, FileAccess.Read);
                     vm.SetFontResource(font);
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();

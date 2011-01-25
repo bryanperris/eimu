@@ -23,18 +23,18 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Security.Cryptography;
+using Eimu.Core;
 
 namespace Eimu
 {
     public static class Config
     {
-        public const string FONT_PATH = "./sys/c8fnt.bin";
+        public const string CHIP8_FONT_PATH = "./sys/c8fnt.bin";
         public const string CONFIGPATH = "./config.xml";
-        public static string FileROMPath { get; set; }
-        public static int SelectedAudioPlugin { get; set; }
-        public static int SelectedGraphicsPlugin { get; set; }
-        public static int SelectedInputPlugin { get; set; }
-        public static bool UseInterpreter { get; set; }
+        public static string C8FileROMPath { get; set; }
+        public static bool UseC8Interpreter { get; set; }
+        public static RGBColor C8BackColor { get; set; }
+        public static RGBColor C8ForeColor { get; set; }
 
         static Config()
         {
@@ -46,7 +46,11 @@ namespace Eimu
             {
                 FileStream file = new FileStream(CONFIGPATH, FileMode.Open, FileAccess.Read, FileShare.Read);
                 XmlTextReader reader = new XmlTextReader(file);
-                
+
+
+                C8BackColor = new RGBColor(0, 0, 0);
+                C8ForeColor = new RGBColor(1, 1, 1);
+
                 while (reader.Read())
                 {
                     reader.MoveToContent();
@@ -55,23 +59,25 @@ namespace Eimu
                     {
                         if (reader.Name.Equals("filerompath"))
                         {
-                            FileROMPath = reader.GetAttribute("path");
+                            C8FileROMPath = reader.GetAttribute("path");
                         }
                         else if (reader.Name.Equals("useinterpreter"))
                         {
-                            UseInterpreter = reader.GetAttribute("enabled") == "True" ? true : false;
+                            UseC8Interpreter = reader.GetAttribute("enabled") == "True" ? true : false;
                         }
-                        else if (reader.Name.Equals("selectedgraphicsplugin"))
+                        else if (reader.Name.Equals("chip8backcolor"))
                         {
-                            SelectedGraphicsPlugin = int.Parse(reader.GetAttribute("index"));
+                            C8BackColor = new RGBColor(
+                                byte.Parse(reader.GetAttribute("r")),
+                                byte.Parse(reader.GetAttribute("g")),
+                                byte.Parse(reader.GetAttribute("b")));
                         }
-                        else if (reader.Name.Equals("selectedaudioplugin"))
+                        else if (reader.Name.Equals("chip8forecolor"))
                         {
-                            SelectedAudioPlugin = int.Parse(reader.GetAttribute("index"));
-                        }
-                        else if (reader.Name.Equals("selectedinputplugin"))
-                        {
-                            SelectedInputPlugin = int.Parse(reader.GetAttribute("index"));
+                            C8ForeColor = new RGBColor(
+                                byte.Parse(reader.GetAttribute("r")),
+                                byte.Parse(reader.GetAttribute("g")),
+                                byte.Parse(reader.GetAttribute("b")));
                         }
                         else
                         {
@@ -93,27 +99,26 @@ namespace Eimu
 
             writer.WriteRaw("\n");
             writer.WriteStartElement("filerompath");
-            writer.WriteAttributeString("path", FileROMPath);
+            writer.WriteAttributeString("path", C8FileROMPath);
             writer.WriteEndElement();
             writer.WriteRaw("\n");
 
             writer.WriteStartElement("useinterpreter");
-            writer.WriteAttributeString("enabled", UseInterpreter ? "True" : "False");
+            writer.WriteAttributeString("enabled", UseC8Interpreter ? "True" : "False");
             writer.WriteEndElement();
             writer.WriteRaw("\n");
 
-            writer.WriteStartElement("selectedgraphicsplugin");
-            writer.WriteAttributeString("index", SelectedGraphicsPlugin.ToString());
+            writer.WriteStartElement("chip8backcolor");
+            writer.WriteAttributeString("r", C8BackColor.R.ToString());
+            writer.WriteAttributeString("g", C8BackColor.G.ToString());
+            writer.WriteAttributeString("b", C8BackColor.B.ToString());
             writer.WriteEndElement();
             writer.WriteRaw("\n");
 
-            writer.WriteStartElement("selectedaudioplugin");
-            writer.WriteAttributeString("index", SelectedAudioPlugin.ToString());
-            writer.WriteEndElement();
-            writer.WriteRaw("\n");
-
-            writer.WriteStartElement("selectedinputplugin");
-            writer.WriteAttributeString("index", SelectedInputPlugin.ToString());
+            writer.WriteStartElement("chip8forecolor");
+            writer.WriteAttributeString("r", C8ForeColor.R.ToString());
+            writer.WriteAttributeString("g", C8ForeColor.G.ToString());
+            writer.WriteAttributeString("b", C8ForeColor.B.ToString());
             writer.WriteEndElement();
             writer.WriteRaw("\n");
 

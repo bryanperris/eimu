@@ -25,9 +25,9 @@ namespace Eimu.Core.Systems.Chip8
         public const int RESOLUTION_WIDTH = 64;
         public const int RESOLUTION_HEIGHT = 32;
         public const int SPRITE_WIDTH = 8;
-
+        private RGBColor m_BackColor;
+        private RGBColor m_ForeColor;
         private bool[] m_Buffer;
-
         public event EventHandler OnPixelCollision;
 
         public GraphicsDevice()
@@ -124,6 +124,18 @@ namespace Eimu.Core.Systems.Chip8
         public override void SetPauseState(bool paused)
         {
             OnPauseStateChange(paused);
+        }
+
+        public RGBColor BackgroundColor
+        {
+            get { return m_BackColor; }
+            set { m_BackColor = value; }
+        }
+
+        public RGBColor ForegroundColor
+        {
+            get { return m_ForeColor; }
+            set { m_ForeColor = value; }
         }
     }
 }

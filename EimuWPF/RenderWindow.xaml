@@ -4,8 +4,8 @@
         Title="Eimu" Height="412" Width="605" xmlns:my="clr-namespace:Eimu" Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" Icon="/Eimu;component/icon.ico">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="23*" />
-            <RowDefinition Height="372*" />
+            <RowDefinition Height="21.777" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <WindowsFormsHost Grid.Row="1" Margin="0,-0.058,0,0">
             <my:RenderPanel x:Name="renderPanel" />

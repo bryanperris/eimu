@@ -53,7 +53,7 @@ namespace Eimu.Devices
             m_ScaleX = (float)m_ControlContext.Width / (float)GraphicsDevice.RESOLUTION_WIDTH;
             m_ScaleY = (float)m_ControlContext.Height / (float)GraphicsDevice.RESOLUTION_HEIGHT;
 
-            GL.ClearColor(Color.Black);
+            GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -71,11 +71,11 @@ namespace Eimu.Devices
 
                     if (on)
                     {
-                        GL.Color4(Color.White);
+                        GL.Color4(Color.FromArgb(ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
                     }
                     else
                     {
-                        GL.Color4(Color.Black);
+                        GL.Color4(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
                     }
 
                     GL.Vertex2(x * m_ScaleX, y * m_ScaleY);

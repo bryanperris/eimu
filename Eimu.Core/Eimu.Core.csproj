@@ -51,6 +51,7 @@
     <Compile Include="Plugin\PluginInfo.cs" />
     <Compile Include="Plugin\PluginManager.cs" />
     <Compile Include="Plugin\PropertyBase.cs" />
+    <Compile Include="RGBColor.cs" />
     <Compile Include="RunStateChangedEvent.cs" />
     <Compile Include="Systems\Chip16\C16Colors.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
