@@ -15,9 +15,9 @@ using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 using Eimu.Core.Systems.Chip8.Engines;
 using WPFColorPickerLib;
-using EimuWPF.Devices;
+using Eimu.Devices;
 
-namespace EimuWPF
+namespace Eimu
 {
 	public partial class StartDialog : Window
 	{
@@ -151,10 +151,16 @@ namespace EimuWPF
 
         private void m_TextBox_ProgramPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+
+            if (File.Exists(m_TextBox_ProgramPath.Text))
+                m_OpenFileDialog.InitialDirectory = System.IO.Path.GetFullPath(m_TextBox_ProgramPath.Text);
+
             m_OpenFileDialog.ShowDialog();
             m_TextBox_ProgramPath.Text = m_OpenFileDialog.FileName;
             m_TextBox_ProgramPath.FontStyle = FontStyles.Normal;
             m_Button_RunEmulator.IsEnabled = true;
+            SaveConfig();
+
         }
 
         private void m_Button_C8AudioConfig_Click(object sender, RoutedEventArgs e)

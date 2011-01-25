@@ -24,7 +24,7 @@ using System.IO;
 using System.Xml;
 using System.Security.Cryptography;
 
-namespace EimuWPF
+namespace Eimu
 {
     public static class Config
     {

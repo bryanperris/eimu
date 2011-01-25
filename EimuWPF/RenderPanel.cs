@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using Eimu.Core.Plugin;
 
-namespace EimuWPF
+namespace Eimu
 {
     public class RenderPanel : Panel
     {

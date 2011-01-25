@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 
-namespace EimuWPF.Devices
+namespace Eimu.Devices
 {
     [PluginInfo("Default Input", "1.0", "Omegadox", "Uses keys QWE\nASD\nZXC\nRFV\nTGB for input")]
     public class FormsInputDevice : InputDevice, IPlugin

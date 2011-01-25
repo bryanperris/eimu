@@ -8,7 +8,7 @@ using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 using System.IO;
 
-namespace EimuWPF
+namespace Eimu
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -20,7 +20,7 @@ namespace EimuWPF
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //EimuWPF.App app = new EimuWPF.App();
+            //Eimu.App app = new Eimu.App();
             StartDialog startscreen = new StartDialog();
             startscreen.Closed += new EventHandler(startscreen_Closed);
 

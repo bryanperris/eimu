@@ -20,7 +20,7 @@ using System;
 using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 
-namespace EimuWPF.Devices
+namespace Eimu.Devices
 {
     [PluginInfo("Null Graphics", "1.0", "Omegadox", "skips video drawing, but still supports collision dectection")]
     public sealed class NullGraphicsDevice : GraphicsDevice, IPlugin

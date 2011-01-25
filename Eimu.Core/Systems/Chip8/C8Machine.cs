@@ -2,29 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.IO;
 
 namespace Eimu.Core.Systems.Chip8
 {
-    public sealed class C8Machine : VirtualMachine
+    public class C8Machine : VirtualMachine
     {
         public const int FONT_SIZE = 5;
         public const int MEMORY_SIZE = 4096;
         public const int CODE_OFFSET = 0x200;
         public const int PROGRAM_ENTRY_POINT = 0x200;
-
-
-        public AudioDevice CurrentAudioDevice { get; set; }
-        public GraphicsDevice CurrentGraphicsDevice { get; set; }
-        public InputDevice CurrentInputDevice { get; set; }
-        private Processor m_Processor;
+        private bool m_Paused = false;
+        private bool m_RequestCPUStop;
         private Stream m_FontSource;
-        private CodeEngine m_Engine;
+        private EventWaitHandle m_CPUWait;
+        private EventWaitHandle m_KeyWait;
+        private EventWaitHandle m_CPUEndWait;
+        private Thread m_ThreadCPU;
+        private AudioDevice m_AudioDevice;
+        private GraphicsDevice m_GraphicsDevice;
+        private InputDevice m_InputDevice;
+        private CodeEngine m_CodeEngine;
+        private Type m_EngineType;
 
-        public C8Machine()
+
+        // ----------------------------
+        // Machine Control
+        // ----------------------------
+
+        protected override void OnMachineState(RunState state)
         {
-            SystemMemory = new Memory(MEMORY_SIZE);
+
+            CurrentAudioDevice.SetPauseState((state == RunState.Paused));
+            CurrentGraphicsDevice.SetPauseState((state == RunState.Paused));
+            CurrentInputDevice.SetPauseState((state == RunState.Paused));
+            SetPauseState((state == RunState.Paused));
+
+            if (state == RunState.Stopped)
+            {
+                m_CodeEngine.Shutdown();
+                m_CPUWait.Set();
+                m_KeyWait.Set();
+                m_RequestCPUStop = true;
+                CurrentInputDevice.Shutdown();
+                CurrentAudioDevice.Shutdown();
+                CurrentGraphicsDevice.Shutdown();
+            }
+
         }
+
+
+        // ----------------------------
+        // Setters
+        // ----------------------------
 
         public void SetFontResource(Stream source)
         {
@@ -33,7 +64,90 @@ namespace Eimu.Core.Systems.Chip8
 
         public void SetCodeEngineType<TCodeEngine>() where TCodeEngine : CodeEngine
         {
-            m_Engine = (CodeEngine)Activator.CreateInstance(typeof(TCodeEngine), new object[] { SystemMemory });
+            m_EngineType = typeof(TCodeEngine);
+        }
+
+        public void SetCollision()
+        {
+            m_CodeEngine.VRegisters[0xF] = 1;
+        }
+
+        private void SetPauseState(bool paused)
+        {
+            this.m_Paused = paused;
+
+            if (!m_Paused)
+                m_CPUWait.Set();
+        }
+
+        private void SetKeyPress(ChipKeys key)
+        {
+            if (key != ChipKeys.None)
+            {
+                m_CodeEngine.LastKeyPressed = (byte)key;
+                m_KeyWait.Set();
+            }
+            else
+            {
+                m_CodeEngine.LastKeyPressed = 17;
+            }
+        }
+
+
+        // ----------------------------
+        // Program Control
+        // ----------------------------
+
+        public void Step()
+        {
+            byte a = SystemMemory.GetByte(m_CodeEngine.PC);
+            byte b = SystemMemory.GetByte(m_CodeEngine.PC + 1);
+            ushort data = Tools.MakeShort(a, b);
+            ChipOpcodes opcode = Disassembler.DecodeInstruction(data);
+            ChipInstruction inst = new ChipInstruction(data, opcode);
+            inst.Address = m_CodeEngine.PC;
+            m_CodeEngine.IncrementPC();
+            m_CodeEngine.Call(inst);
+        }
+
+        public void Run(int entryAddress)
+        {
+            m_CodeEngine.PC = entryAddress;
+            m_ThreadCPU.Start();
+        }
+
+        private void StartExecutionCycle()
+        {
+            Thread.CurrentThread.Name = "CPU Thread";
+            Thread.BeginThreadAffinity();
+
+            while (m_CodeEngine.PC < SystemMemory.Size)
+            {
+                if (!m_RequestCPUStop)
+                {
+                    if (m_Paused)
+                    {
+                        m_CPUWait.WaitOne();
+                    }
+
+                    Thread.BeginCriticalRegion();
+
+                    Step();
+
+                    Thread.EndCriticalRegion();
+                }
+                else
+                {
+                    break;
+                }
+
+
+                Thread.Sleep(2);
+            }
+
+            Thread.EndThreadAffinity();
+
+            m_CPUEndWait.Set();
         }
 
         protected override bool Boot()
@@ -49,14 +163,26 @@ namespace Eimu.Core.Systems.Chip8
             if (CurrentInputDevice == null)
                 throw new NullReferenceException();
 
-            m_Processor = new Processor(m_Engine);
+            m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_CPUEndWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_RequestCPUStop = false;
+            m_Paused = false;
+            m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
+            m_ThreadCPU.IsBackground = true;
+
+            SystemMemory = new Memory(MEMORY_SIZE);
+
+            m_CodeEngine = (CodeEngine)Activator.CreateInstance(m_EngineType, new object[] { SystemMemory });
+            m_CodeEngine.Init();
 
             AttachDeviceCallbacks();
 
             CurrentAudioDevice.Initialize();
             CurrentGraphicsDevice.Initialize();
             CurrentInputDevice.Initialize();
-            m_Processor.Initialize();
+
+            CurrentGraphicsDevice.ClearScreen();
 
             if (!LoadFont())
                 return false;
@@ -64,82 +190,9 @@ namespace Eimu.Core.Systems.Chip8
             if (!LoadRom())
                 return false;
 
-            m_Processor.Run(CODE_OFFSET);
+            Run(CODE_OFFSET);
 
             return true;
-        }
-
-        private void AttachDeviceCallbacks()
-        {
-            m_Processor.Beep -= new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            m_Processor.PixelSet -= new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            m_Processor.ScreenClear -= new EventHandler(CurrentProcessor_OnScreenClear);
-            CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
-            CurrentInputDevice.OnKeyPress -= new KeyStateHandler(CurrentInputDevice_OnKeyPress);
-
-            m_Processor.Beep += new EventHandler<BeepEventArgs>(CurrentProcessor_OnBeep);
-            m_Processor.PixelSet += new EventHandler<PixelSetEventArgs>(CurrentProcessor_OnPixelSet);
-            m_Processor.ScreenClear += new EventHandler(CurrentProcessor_OnScreenClear);
-            CurrentGraphicsDevice.OnPixelCollision += new EventHandler(CurrentGraphicsDevice_OnPixelCollision);
-            CurrentInputDevice.OnKeyPress += new KeyStateHandler(CurrentInputDevice_OnKeyPress);
-        }
-
-        private void CurrentInputDevice_OnKeyPress(object sender, ChipKeys key)
-        {
-            m_Processor.SetKeyPress(key);
-        }
-
-        private void CurrentGraphicsDevice_OnPixelCollision(object sender, EventArgs e)
-        {
-            m_Processor.SetCollision();
-        }
-
-        private void CurrentProcessor_OnScreenClear(object sender, EventArgs e)
-        {
-            this.CurrentGraphicsDevice.ClearScreen();
-        }
-
-        private void CurrentProcessor_OnPixelSet(object sender, PixelSetEventArgs e)
-        {
-            CurrentGraphicsDevice.SetPixel(e.X, e.Y);
-        }
-
-        void CurrentProcessor_OnBeep(object sender, BeepEventArgs e)
-        {
-            this.CurrentAudioDevice.Beep(e.Duration);
-        }
-
-        protected override void OnMachineState(RunState state)
-        {
-            switch (state)
-            {
-                case RunState.Stopped:
-                    {
-                        m_Processor.Shutdown();
-                        CurrentInputDevice.Shutdown();
-                        CurrentAudioDevice.Shutdown();
-                        CurrentGraphicsDevice.Shutdown();
-                        break;
-                    }
-                case RunState.Paused:
-                    {
-                        CurrentAudioDevice.SetPauseState(true);
-                        CurrentGraphicsDevice.SetPauseState(true);
-                        CurrentInputDevice.SetPauseState(true);
-                        m_Processor.SetPauseState(true);
-                        break;
-                    }
-                case RunState.Running:
-                    {
-                        CurrentAudioDevice.SetPauseState(false);
-                        CurrentGraphicsDevice.SetPauseState(false);
-                        CurrentInputDevice.SetPauseState(false);
-                        m_Processor.SetPauseState(false);
-                        break;
-                    }
-
-                default: break;
-            }
         }
 
         private bool LoadFont()
@@ -200,9 +253,80 @@ namespace Eimu.Core.Systems.Chip8
             return true;
         }
 
-        public Processor CurrentProcessor
+
+        // ----------------------------
+        // Machine Properties
+        // ----------------------------
+
+        public CodeEngine CodeEngineCore
         {
-            get { return this.m_Processor; }
+            get { return this.m_CodeEngine; }
+        }
+
+        public AudioDevice CurrentAudioDevice
+        {
+            get { return this.m_AudioDevice; }
+            set { this.m_AudioDevice = value; }
+        }
+
+        public InputDevice CurrentInputDevice
+        {
+            get { return this.m_InputDevice; }
+            set { this.m_InputDevice = value; }
+        }
+
+        public GraphicsDevice CurrentGraphicsDevice
+        {
+            get { return this.m_GraphicsDevice; }
+            set { this.m_GraphicsDevice = value; }
+        }
+
+
+        // ----------------------------
+        // Internal Calls
+        // ----------------------------
+
+        private void AttachDeviceCallbacks()
+        {
+            m_CodeEngine.Beep -= new EventHandler<BeepEventArgs>(OnBeep);
+            m_CodeEngine.Beep += new EventHandler<BeepEventArgs>(OnBeep);
+
+            m_CodeEngine.PixelSet -= new EventHandler<PixelSetEventArgs>(OnPixelSet);
+            m_CodeEngine.PixelSet += new EventHandler<PixelSetEventArgs>(OnPixelSet);
+
+            m_CodeEngine.ScreenClear -= new EventHandler(OnScreenClear);
+            m_CodeEngine.ScreenClear += new EventHandler(OnScreenClear);
+
+            CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(OnPixelCollision);
+            CurrentGraphicsDevice.OnPixelCollision += new EventHandler(OnPixelCollision);
+
+            CurrentInputDevice.OnKeyPress -= new KeyStateHandler(OnKeyPress);
+            CurrentInputDevice.OnKeyPress += new KeyStateHandler(OnKeyPress);
+        }
+
+        private void OnKeyPress(object sender, ChipKeys key)
+        {
+            SetKeyPress(key);
+        }
+
+        private void OnPixelCollision(object sender, EventArgs e)
+        {
+            SetCollision();
+        }
+
+        private void OnScreenClear(object sender, EventArgs e)
+        {
+            m_GraphicsDevice.ClearScreen();
+        }
+
+        private void OnPixelSet(object sender, PixelSetEventArgs e)
+        {
+            m_GraphicsDevice.SetPixel(e.X, e.Y);
+        }
+
+        private void OnBeep(object sender, BeepEventArgs e)
+        {
+            m_AudioDevice.Beep(e.Duration);
         }
     }
 }

@@ -97,7 +97,6 @@ namespace Eimu.Core
                 m_Booted = false;
             }
                 
-
             if (RunStateChanged != null)
                 RunStateChanged(this, m_State);
 

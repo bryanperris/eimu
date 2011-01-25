@@ -20,7 +20,7 @@ using System;
 using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 
-namespace EimuWPF.Devices
+namespace Eimu.Devices
 {
     [PluginInfo("Null Input", "1.0", "Omegadox", "skips input")]
     public sealed class NullInputDevice : InputDevice, IPlugin

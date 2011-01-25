@@ -55,7 +55,6 @@
     <Compile Include="Systems\Chip16\C16Colors.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
     <Compile Include="Systems\Chip8\C8Machine.cs" />
-    <Compile Include="Systems\Chip8\C8VMachine.cs" />
     <Compile Include="Systems\Chip8\ChipOpcodes.cs" />
     <Compile Include="Systems\Chip8\CodeCache.cs" />
     <Compile Include="Systems\Chip8\CodeEngine.cs" />
@@ -64,7 +63,6 @@
     <Compile Include="Systems\Chip8\BeepEventArgs.cs" />
     <Compile Include="Systems\Chip8\ChipKeys.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="Systems\Chip8\Processor.cs" />
     <Compile Include="Systems\Chip8\AudioDevice.cs" />
     <Compile Include="Systems\Chip8\InputDevice.cs" />
     <Compile Include="Systems\Chip8\GraphicsDevice.cs" />

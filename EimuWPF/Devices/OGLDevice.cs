@@ -30,7 +30,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
 
-namespace EimuWPF.Devices
+namespace Eimu.Devices
 {
     [PluginInfo("OpenGL Plugin", "1.0", "Omegadox", "Renders using OpenGL")]
     public sealed class OGLDevice : GraphicsDevice, IPlugin

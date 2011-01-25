@@ -20,7 +20,7 @@ using System;
 using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 
-namespace EimuWPF.Devices
+namespace Eimu.Devices
 {
     [PluginInfo("Null Audio", "1.0", "Omegadox", "Skips audio output")]
     public class NullAudioDevice : AudioDevice, IPlugin

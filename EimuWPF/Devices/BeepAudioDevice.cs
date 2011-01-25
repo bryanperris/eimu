@@ -21,7 +21,7 @@ using System.Threading;
 using Eimu.Core.Systems.Chip8;
 using Eimu.Core.Plugin;
 
-namespace EimuWPF.Devices
+namespace Eimu.Devices
 {
     [PluginInfo("Default Beep", "1.0", "Omegadox", "Uses system beep to make noise")]
     public class BeepAudioDevice : AudioDevice, IPlugin

@@ -54,24 +54,24 @@ namespace Eimu.Core.Plugin
         public static void LoadPluginsFromFile(string folderpath)
         {
             // DLL plugins
-            DirectoryInfo dir = new DirectoryInfo(folderpath);
-            FileInfo[] dlls = dir.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
+        //    DirectoryInfo dir = new DirectoryInfo(folderpath);
+        //    FileInfo[] dlls = dir.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
 
-            foreach (FileInfo dll in dlls)
-            {
-                try
-                {
-                    Assembly ass = Assembly.LoadFile(dll.FullName);
-                    object[] attrs = ass.GetCustomAttributes(typeof(EimuPluginAssembly), false);
+        //    foreach (FileInfo dll in dlls)
+        //    {
+        //        try
+        //        {
+        //            Assembly ass = Assembly.LoadFile(dll.FullName);
+        //            object[] attrs = ass.GetCustomAttributes(typeof(EimuPluginAssembly), false);
 
-                    if (attrs.Length > 0)
-                        LoadPluginsFromAssembly(ass);
-                }
-                catch (BadImageFormatException)
-                {
-                    continue;
-                }
-            }
+        //            if (attrs.Length > 0)
+        //                LoadPluginsFromAssembly(ass);
+        //        }
+        //        catch (BadImageFormatException)
+        //        {
+        //            continue;
+        //        }
+        //    }
         }
 
         public static void LoadPluginsFromAssembly(Assembly assembly)
