@@ -26,8 +26,8 @@ namespace Eimu.Core.Systems.Chip8
         public const int RESOLUTION_HEIGHT = 32;
         public const int RESOLUTION_SUPER_WIDTH = 128;
         public const int RESOLUTION_SUPER_HEIGHT = 64;
-        public const int RESOLUTION_ENHANCED_WIDTH =70;
-        public const int RESOLUTION_ENHANCED_HEIGHT = 40;
+        public const int RESOLUTION_ENHANCED_WIDTH =64;
+        public const int RESOLUTION_ENHANCED_HEIGHT = 64;
         public const int SPRITE_WIDTH = 8;
         private int m_ResX;
         private int m_ResY;
