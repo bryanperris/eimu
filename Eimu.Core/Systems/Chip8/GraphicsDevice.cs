@@ -31,8 +31,6 @@ namespace Eimu.Core.Systems.Chip8
         public const int SPRITE_WIDTH = 8;
         private int m_ResX;
         private int m_ResY;
-        private int m_XOffset;
-        private int m_YOffset;
         private RGBColor m_BackColor;
         private RGBColor m_ForeColor;
         private bool[] m_Buffer;
@@ -44,16 +42,11 @@ namespace Eimu.Core.Systems.Chip8
 
         private void CreateFakeBuffer()
         {
-
-           m_XOffset = 0;
-           m_YOffset = 0;
            m_ResX = RESOLUTION_WIDTH;
            m_ResY = RESOLUTION_HEIGHT;
 
             if (m_EnableEnhancedMode)
             {
-                m_XOffset = 15;
-                m_YOffset = 5;
                 m_ResX = RESOLUTION_ENHANCED_WIDTH;
                 m_ResY = RESOLUTION_ENHANCED_HEIGHT;
             }
@@ -64,8 +57,6 @@ namespace Eimu.Core.Systems.Chip8
                 m_ResY = RESOLUTION_SUPER_HEIGHT;
             }
 
-            m_ResX += m_XOffset;
-            m_ResY += m_YOffset;
             m_Buffer = new bool[(m_ResX + 1) * (m_ResY + 1)];
         }
 
@@ -77,23 +68,16 @@ namespace Eimu.Core.Systems.Chip8
 
         public virtual void SetPixel(int x, int y)
         {
-            if (!EnableEnhancedMode)
-            {
-                x &= 0x3F;
-                y &= 0x1F;
-            }
-
             if (!m_DisableWrapping)
             {
-
                 // Wrapping
-                if (x > m_ResX)
+                if (x > m_ResX-1)
                     x -= m_ResX;
 
                 if (x < 0)
                     x += m_ResX;
 
-                if (y > m_ResY)
+                if (y > m_ResY-1)
                     y -= m_ResY;
 
                 if (y < 0)
@@ -107,7 +91,7 @@ namespace Eimu.Core.Systems.Chip8
 
             m_Buffer[GetBufferPosition(x, y)] = on;
 
-            if (on && m_EnableAntiFlickerHack)
+            if (!on && m_EnableAntiFlickerHack)
                 return;
 
             OnPixelSet(x, y, on);
@@ -118,8 +102,6 @@ namespace Eimu.Core.Systems.Chip8
 
         public virtual bool GetPixel(int x, int y)
         {
-            x += m_XOffset;
-            y += m_YOffset;
             return m_Buffer[GetBufferPosition(x, y)];
         }
 

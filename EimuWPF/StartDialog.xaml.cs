@@ -58,10 +58,16 @@ namespace Eimu
 
 			if (File.Exists(Config.C8FileROMPath))
 			{
-				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Config.C8FileROMPath);
+                m_OpenFileDialog.InitialDirectory = System.IO.Path.GetFullPath(Config.C8FileROMPath);
 				m_OpenFileDialog.FileName = Config.C8FileROMPath;
 				m_TextBox_ProgramPath.Text = Config.C8FileROMPath;
 				m_Button_RunEmulator.IsEnabled = true;
+
+                if (File.Exists(m_TextBox_ProgramPath.Text))
+                {
+                    m_OpenFileDialog.InitialDirectory = 
+                    m_OpenFileDialog.FileName = m_TextBox_ProgramPath.Text;
+                }
 			}
 
 			//if (Config.UseInterpreter)

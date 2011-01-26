@@ -105,7 +105,6 @@ namespace Eimu.Core.Systems.Chip8
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
                         {
-                            // Mask prevent off-screen drawing
                             PixelSet(this, new PixelSetEventArgs((x + j), (y + i)));
                         }
                     }
