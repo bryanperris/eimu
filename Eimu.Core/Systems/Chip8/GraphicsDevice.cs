@@ -24,15 +24,49 @@ namespace Eimu.Core.Systems.Chip8
     {
         public const int RESOLUTION_WIDTH = 64;
         public const int RESOLUTION_HEIGHT = 32;
+        public const int RESOLUTION_SUPER_WIDTH = 128;
+        public const int RESOLUTION_SUPER_HEIGHT = 64;
+        public const int RESOLUTION_ENHANCED_WIDTH =70;
+        public const int RESOLUTION_ENHANCED_HEIGHT = 40;
         public const int SPRITE_WIDTH = 8;
+        private int m_ResX;
+        private int m_ResY;
+        private int m_XOffset;
+        private int m_YOffset;
         private RGBColor m_BackColor;
         private RGBColor m_ForeColor;
         private bool[] m_Buffer;
         public event EventHandler OnPixelCollision;
+        private bool m_DisableWrapping;
+        private bool m_EnableHighres;
+        private bool m_EnableAntiFlickerHack;
+        private bool m_EnableEnhancedMode;
 
-        public GraphicsDevice()
+        private void CreateFakeBuffer()
         {
-            m_Buffer = new bool[(RESOLUTION_WIDTH + 1) * (RESOLUTION_HEIGHT + 1)];
+
+           m_XOffset = 0;
+           m_YOffset = 0;
+           m_ResX = RESOLUTION_WIDTH;
+           m_ResY = RESOLUTION_HEIGHT;
+
+            if (m_EnableEnhancedMode)
+            {
+                m_XOffset = 15;
+                m_YOffset = 5;
+                m_ResX = RESOLUTION_ENHANCED_WIDTH;
+                m_ResY = RESOLUTION_ENHANCED_HEIGHT;
+            }
+
+            if (m_EnableHighres)
+            {
+                m_ResX = RESOLUTION_SUPER_WIDTH;
+                m_ResY = RESOLUTION_SUPER_HEIGHT;
+            }
+
+            m_ResX += m_XOffset;
+            m_ResY += m_YOffset;
+            m_Buffer = new bool[(m_ResX + 1) * (m_ResY + 1)];
         }
 
         public virtual void ClearScreen()
@@ -43,18 +77,28 @@ namespace Eimu.Core.Systems.Chip8
 
         public virtual void SetPixel(int x, int y)
         {
-            // Wrapping
-            if (x > GraphicsDevice.RESOLUTION_WIDTH)
-                x -= GraphicsDevice.RESOLUTION_WIDTH;
+            if (!EnableEnhancedMode)
+            {
+                x &= 0x3F;
+                y &= 0x1F;
+            }
 
-            if (x < 0)
-                x += GraphicsDevice.RESOLUTION_WIDTH;
+            if (!m_DisableWrapping)
+            {
 
-            if (y > GraphicsDevice.RESOLUTION_HEIGHT)
-                y -= GraphicsDevice.RESOLUTION_HEIGHT;
+                // Wrapping
+                if (x > m_ResX)
+                    x -= m_ResX;
 
-            if (y < 0)
-                y += GraphicsDevice.RESOLUTION_HEIGHT;
+                if (x < 0)
+                    x += m_ResX;
+
+                if (y > m_ResY)
+                    y -= m_ResY;
+
+                if (y < 0)
+                    y += m_ResY;
+            }
 
             bool on = GetPixel(x, y) ^ true;
 
@@ -63,10 +107,10 @@ namespace Eimu.Core.Systems.Chip8
 
             m_Buffer[GetBufferPosition(x, y)] = on;
 
-            //if (on)
-            //{
-                OnPixelSet(x, y, on);
-            //}
+            if (on && m_EnableAntiFlickerHack)
+                return;
+
+            OnPixelSet(x, y, on);
 
             // src 0 ^ 1 = 1 : Fill White
             // src 1 ^ 1 = 0 : Make Black, Set Collision
@@ -74,6 +118,8 @@ namespace Eimu.Core.Systems.Chip8
 
         public virtual bool GetPixel(int x, int y)
         {
+            x += m_XOffset;
+            y += m_YOffset;
             return m_Buffer[GetBufferPosition(x, y)];
         }
 
@@ -85,7 +131,7 @@ namespace Eimu.Core.Systems.Chip8
 
         protected int GetBufferPosition(int x, int y)
         {
-            int val = (y * GraphicsDevice.RESOLUTION_WIDTH) + x;
+            int val = (y * m_ResX) + x;
 
             if (val < m_Buffer.Length)
                 return (val);
@@ -113,6 +159,7 @@ namespace Eimu.Core.Systems.Chip8
 
         public override void Initialize()
         {
+            CreateFakeBuffer();
             OnInit();
         }
 
@@ -136,6 +183,48 @@ namespace Eimu.Core.Systems.Chip8
         {
             get { return m_ForeColor; }
             set { m_ForeColor = value; }
+        }
+
+        public bool DisableWrapping
+        {
+            get { return this.m_DisableWrapping; }
+            set { this.m_DisableWrapping = value; }
+        }
+
+        private void Reset()
+        {
+            Shutdown();
+            Initialize();
+        }
+
+        public bool EnableHires
+        {
+            get { return this.m_EnableHighres; }
+            set { this.m_EnableHighres = value;}
+        }
+
+        public bool EnableAntiFlickerHack
+        {
+            get { return this.m_EnableAntiFlickerHack; }
+            set { this.m_EnableAntiFlickerHack = value; }
+        }
+
+        public bool EnableEnhancedMode
+        {
+            get { return this.m_EnableEnhancedMode; }
+            set { this.m_EnableEnhancedMode = value; }
+        }
+
+        public int CurrentResolutionX
+        {
+            get { return this.m_ResX; }
+            set { this.m_ResX = value; }
+        }
+
+        public int CurrentResolutionY
+        {
+            get { return this.m_ResY; }
+            set { this.m_ResY = value; }
         }
     }
 }

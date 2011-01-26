@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Eimu.Core.Systems.Chip8;
-using Eimu.Core.Plugin;
 using System.Windows.Interop;
 
 namespace Eimu
@@ -22,7 +21,6 @@ namespace Eimu
     public partial class RenderWindow : Window
     {
         C8Machine m_Machine;
-        bool m_Paused = false;
         WindowInteropHelper m_WinHelper;
 
         public RenderWindow(C8Machine machine)
@@ -64,6 +62,7 @@ namespace Eimu
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            m_FormHost.Focus();
             m_WinHelper = new WindowInteropHelper(this);
             m_Machine.MachineEnded += new EventHandler(machine_MachineEnded);
             PluginManager.WindowHandle = m_WinHelper.Handle;
@@ -81,6 +80,39 @@ namespace Eimu
             {
                 m_Machine.Run();
             }
+        }
+
+        private void WindowsFormsHost_KeyDown(object sender, KeyEventArgs e)
+        {
+            ChipKeys key = ChipKeys.None;
+
+            switch (e.Key)
+            {
+                case Key.Q: key = ChipKeys.One; break;
+                case Key.W: key = ChipKeys.Two; break;
+                case Key.E: key = ChipKeys.Three; break;
+                case Key.R: key = ChipKeys.A; break;
+                case Key.T: key = ChipKeys.D; break;
+                case Key.A: key = ChipKeys.Four; break;
+                case Key.S: key = ChipKeys.Five; break;
+                case Key.D: key = ChipKeys.Six; break;
+                case Key.G: key = ChipKeys.E; break;
+                case Key.F: key = ChipKeys.B; break;
+                case Key.Z: key = ChipKeys.Seven; break;
+                case Key.X: key = ChipKeys.Eight; break;
+                case Key.C: key = ChipKeys.Nine; break;
+                case Key.V: key = ChipKeys.C; break;
+                case Key.B: key = ChipKeys.F; break;
+                case Key.Space: key = ChipKeys.Zero; break;
+                default: break;
+            }
+
+            m_Machine.SetKeyPress(key);
+        }
+
+        private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
+        {
+           m_Machine.SetKeyPress(ChipKeys.None);
         }
     }
 }

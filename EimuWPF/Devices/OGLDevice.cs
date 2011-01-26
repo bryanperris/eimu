@@ -24,7 +24,6 @@ using System.Threading;
 using System.Windows.Forms;
 using Eimu.Core;
 using Eimu.Core.Systems.Chip8;
-using Eimu.Core.Plugin;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -32,8 +31,7 @@ using OpenTK.Platform;
 
 namespace Eimu.Devices
 {
-    [PluginInfo("OpenGL Plugin", "1.0", "Omegadox", "Renders using OpenGL")]
-    public sealed class OGLDevice : GraphicsDevice, IPlugin
+    public sealed class OGLDevice : GraphicsDevice
     {
         private Control m_ControlContext;
         private GraphicsContext m_GContext;
@@ -50,8 +48,8 @@ namespace Eimu.Devices
         {
             GL.Viewport(m_ControlContext.ClientRectangle);
 
-            m_ScaleX = (float)m_ControlContext.Width / (float)GraphicsDevice.RESOLUTION_WIDTH;
-            m_ScaleY = (float)m_ControlContext.Height / (float)GraphicsDevice.RESOLUTION_HEIGHT;
+            m_ScaleX = (float)m_ControlContext.Width / (float)CurrentResolutionX;
+            m_ScaleY = (float)m_ControlContext.Height / (float)CurrentResolutionY;
 
             GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -63,9 +61,9 @@ namespace Eimu.Devices
 
             GL.Begin(BeginMode.Quads);
 
-            for (int y = 0; y < GraphicsDevice.RESOLUTION_HEIGHT; y++)
+            for (int y = 0; y < CurrentResolutionY; y++)
             {
-                for (int x = 0; x < GraphicsDevice.RESOLUTION_WIDTH; x++)
+                for (int x = 0; x < CurrentResolutionX; x++)
                 {
                     bool on = GetPixel(x, y);
 
@@ -110,26 +108,6 @@ namespace Eimu.Devices
         protected override void OnShutdown()
         {
             m_GContext.Dispose();
-        }
-
-        public string GetOption(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string[] GetOptionsList()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetOption(string name, string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ShowConfigDialog()
-        {
-            throw new NotImplementedException();
         }
 
         protected override void OnInit()

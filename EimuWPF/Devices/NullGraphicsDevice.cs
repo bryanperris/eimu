@@ -18,33 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using Eimu.Core.Systems.Chip8;
-using Eimu.Core.Plugin;
 
 namespace Eimu.Devices
 {
-    [PluginInfo("Null Graphics", "1.0", "Omegadox", "skips video drawing, but still supports collision dectection")]
-    public sealed class NullGraphicsDevice : GraphicsDevice, IPlugin
+    public sealed class NullGraphicsDevice : GraphicsDevice
     {
-        public void ShowConfigDialog()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string[] GetOptionsList()
-        {
-            return null;
-        }
-
-        public void SetOption(string name, string value)
-        {
-            return;
-        }
-
-        public string GetOption(string name)
-        {
-            return "";
-        }
-
         protected override void OnInit()
         {
         }

@@ -19,12 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Threading;
 using Eimu.Core.Systems.Chip8;
-using Eimu.Core.Plugin;
 
 namespace Eimu.Devices
 {
-    [PluginInfo("Default Beep", "1.0", "Omegadox", "Uses system beep to make noise")]
-    public class BeepAudioDevice : AudioDevice, IPlugin
+    public class BeepAudioDevice : AudioDevice
     {
         Thread m_Thread;
         private int m_Duration;
@@ -41,24 +39,6 @@ namespace Eimu.Devices
         private void DoBeep()
         {
             System.Console.Beep(260, m_Duration + 100);
-        }
-
-        public void ShowConfigDialog()
-        {
-        }
-
-        public string[] GetOptionsList()
-        {
-            return null;
-        }
-
-        public void SetOption(string name, string value)
-        {
-        }
-
-        public string GetOption(string name)
-        {
-            return "";
         }
 
         protected override void OnInit()

@@ -22,9 +22,7 @@ namespace Eimu.Core.Systems.Chip8
         private Thread m_ThreadCPU;
         private AudioDevice m_AudioDevice;
         private GraphicsDevice m_GraphicsDevice;
-        private InputDevice m_InputDevice;
         private CodeEngine m_CodeEngine;
-        private Type m_EngineType;
 
 
         // ----------------------------
@@ -33,10 +31,8 @@ namespace Eimu.Core.Systems.Chip8
 
         protected override void OnMachineState(RunState state)
         {
-
             CurrentAudioDevice.SetPauseState((state == RunState.Paused));
             CurrentGraphicsDevice.SetPauseState((state == RunState.Paused));
-            CurrentInputDevice.SetPauseState((state == RunState.Paused));
             SetPauseState((state == RunState.Paused));
 
             if (state == RunState.Stopped)
@@ -45,14 +41,17 @@ namespace Eimu.Core.Systems.Chip8
                 m_CPUWait.Set();
                 m_KeyWait.Set();
                 m_RequestCPUStop = true;
-                CurrentInputDevice.Shutdown();
                 CurrentAudioDevice.Shutdown();
                 CurrentGraphicsDevice.Shutdown();
             }
 
         }
 
-
+        public void InitCore<TCodeEngine>() where TCodeEngine : CodeEngine
+        {
+            SystemMemory = new Memory(MEMORY_SIZE);
+            m_CodeEngine = (CodeEngine)Activator.CreateInstance(typeof(TCodeEngine), new object[] { SystemMemory });
+        }
         // ----------------------------
         // Setters
         // ----------------------------
@@ -60,11 +59,6 @@ namespace Eimu.Core.Systems.Chip8
         public void SetFontResource(Stream source)
         {
             m_FontSource = source;
-        }
-
-        public void SetCodeEngineType<TCodeEngine>() where TCodeEngine : CodeEngine
-        {
-            m_EngineType = typeof(TCodeEngine);
         }
 
         public void SetCollision()
@@ -80,7 +74,7 @@ namespace Eimu.Core.Systems.Chip8
                 m_CPUWait.Set();
         }
 
-        private void SetKeyPress(ChipKeys key)
+        public void SetKeyPress(ChipKeys key)
         {
             if (key != ChipKeys.None)
             {
@@ -154,15 +148,8 @@ namespace Eimu.Core.Systems.Chip8
         {
             Console.WriteLine("Booting...");
 
-            if (CurrentAudioDevice == null)
-                throw new NullReferenceException();
-
-            if (CurrentGraphicsDevice == null)
-                throw new NullReferenceException();
-
-            if (CurrentInputDevice == null)
-                throw new NullReferenceException();
-
+            if (CurrentAudioDevice == null) throw new NullReferenceException();
+            if (CurrentGraphicsDevice == null) throw new NullReferenceException();
             m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_CPUEndWait = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -170,28 +157,14 @@ namespace Eimu.Core.Systems.Chip8
             m_Paused = false;
             m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
             m_ThreadCPU.IsBackground = true;
-
-            SystemMemory = new Memory(MEMORY_SIZE);
-
-            m_CodeEngine = (CodeEngine)Activator.CreateInstance(m_EngineType, new object[] { SystemMemory });
             m_CodeEngine.Init();
-
             AttachDeviceCallbacks();
-
             CurrentAudioDevice.Initialize();
             CurrentGraphicsDevice.Initialize();
-            CurrentInputDevice.Initialize();
-
             CurrentGraphicsDevice.ClearScreen();
-
-            if (!LoadFont())
-                return false;
-
-            if (!LoadRom())
-                return false;
-
+            if (!LoadFont()) return false;
+            if (!LoadRom()) return false;
             Run(CODE_OFFSET);
-
             return true;
         }
 
@@ -269,12 +242,6 @@ namespace Eimu.Core.Systems.Chip8
             set { this.m_AudioDevice = value; }
         }
 
-        public InputDevice CurrentInputDevice
-        {
-            get { return this.m_InputDevice; }
-            set { this.m_InputDevice = value; }
-        }
-
         public GraphicsDevice CurrentGraphicsDevice
         {
             get { return this.m_GraphicsDevice; }
@@ -299,14 +266,6 @@ namespace Eimu.Core.Systems.Chip8
 
             CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(OnPixelCollision);
             CurrentGraphicsDevice.OnPixelCollision += new EventHandler(OnPixelCollision);
-
-            CurrentInputDevice.OnKeyPress -= new KeyStateHandler(OnKeyPress);
-            CurrentInputDevice.OnKeyPress += new KeyStateHandler(OnKeyPress);
-        }
-
-        private void OnKeyPress(object sender, ChipKeys key)
-        {
-            SetKeyPress(key);
         }
 
         private void OnPixelCollision(object sender, EventArgs e)

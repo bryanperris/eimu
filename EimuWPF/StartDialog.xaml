@@ -19,19 +19,22 @@
 			<RowDefinition Height="79.04" />
 			<RowDefinition Height="0.845*"/>
 		</Grid.RowDefinitions>
-		<TabControl x:Name="m_TabControl_MachineSelector" Margin="8,8,8,0" Grid.Row="2" Height="190" VerticalAlignment="Top">
+		<TabControl x:Name="m_TabControl_MachineSelector" Margin="8,8,8,0" Grid.Row="2" Height="178" VerticalAlignment="Top">
 			<TabItem x:Name="m_TabItem_Chip8" Header="Chip 8">
-				<Grid Margin="8,4,5,4.144">
+				<Grid Margin="8,4,5,4.144" Height="136">
 					<CheckBox x:Name="m_CheckBox_C8PlayOnline" Content="Play Online" Margin="8,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115.42" />
 					<CheckBox x:Name="m_CheckBox_C8UseILRec" Content="Use IL Recompiler" Margin="8,27.96,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115.42" />
 					<Rectangle x:Name="m_Rectangle_C8SelectedBackgroundColor" Fill="Black" HorizontalAlignment="Right" Margin="0,17.386,8,0" Stroke="Black" Width="53" Height="46.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedBackgroundColor_MouseLeftButtonUp" d:LayoutOverrides="VerticalAlignment" />
 					<Rectangle x:Name="m_Rectangle_C8SelectedForegroundColor" Fill="White" Margin="0,0,25,0" Stroke="Black" Height="47.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedForegroundColor_MouseLeftButtonUp" HorizontalAlignment="Right" Width="55" d:LayoutOverrides="VerticalAlignment" />
 					<CheckBox x:Name="m_CheckBox_C8DisableGraphics" Content="Disable Graphics" HorizontalAlignment="Left" Margin="8,47.92,0,0" VerticalAlignment="Top"/>
 					<CheckBox x:Name="m_CheckBox_C8DisableSound" Content="Disable Sound" HorizontalAlignment="Left" Margin="8,67.88,0,0" VerticalAlignment="Top"/>
-					<CheckBox x:Name="m_CheckBox_C8DisableInput" Content="Disable Input" HorizontalAlignment="Left" Margin="8,87.84,0,0" VerticalAlignment="Top"/>
-					<CheckBox x:Name="m_CheckBox_C8Timers" Content="Disable Timers (debug)" HorizontalAlignment="Left" Margin="8,109.84,0,0" VerticalAlignment="Top"/>
-					<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" HorizontalAlignment="Left" Margin="8,129.8,0,0" VerticalAlignment="Top"/>
-				</Grid>
+                    <CheckBox x:Name="m_CheckBox_C8DisableCoreTimers" Content="Disable Core Timers (debug)" HorizontalAlignment="Left" Margin="8,90,0,0" VerticalAlignment="Top"/>
+					<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" HorizontalAlignment="Left" Margin="8,112,0,0" VerticalAlignment="Top"/>
+                    <CheckBox Content="Disable Wrapping" Height="16" HorizontalAlignment="Left" Margin="204,8,0,0" Name="m_CheckBox_C8DisableWrapping" VerticalAlignment="Top" Width="114" />
+                    <CheckBox Content="Force Hi-Res" Height="16" HorizontalAlignment="Left" Margin="204,28,0,0" Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
+                    <CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" Margin="204,48,0,0" Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
+                    <CheckBox Content="Enhanced Chip8" Height="16" HorizontalAlignment="Left" Margin="204,68,0,0" Name="m_CheckBox_C8EnhancedMode" VerticalAlignment="Top" Width="114" IsChecked="False" IsEnabled="True" />
+                </Grid>
 			</TabItem>
 			<TabItem x:Name="m_TabItem_SuperChip" Header="Super Chip">
 				<Grid Background="#FFE5E5E5"/>

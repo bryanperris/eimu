@@ -45,12 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Plugin\Configuration.cs" />
-    <Compile Include="Plugin\EimuPluginAssembly.cs" />
-    <Compile Include="Plugin\IPlugin.cs" />
-    <Compile Include="Plugin\PluginInfo.cs" />
-    <Compile Include="Plugin\PluginManager.cs" />
-    <Compile Include="Plugin\PropertyBase.cs" />
     <Compile Include="RGBColor.cs" />
     <Compile Include="RunStateChangedEvent.cs" />
     <Compile Include="Systems\Chip16\C16Colors.cs" />
@@ -65,7 +59,6 @@
     <Compile Include="Systems\Chip8\ChipKeys.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Systems\Chip8\AudioDevice.cs" />
-    <Compile Include="Systems\Chip8\InputDevice.cs" />
     <Compile Include="Systems\Chip8\GraphicsDevice.cs" />
     <Compile Include="Systems\Chip8\KeyStateHandler.cs" />
     <Compile Include="Systems\Chip8\PixelSetEventArgs.cs" />

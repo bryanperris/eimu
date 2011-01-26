@@ -27,6 +27,7 @@ namespace Eimu.Core.Systems.Chip8
         public event EventHandler<PixelSetEventArgs> PixelSet;
         public event EventHandler<BeepEventArgs> Beep;
         public event EventHandler KeyPressWait;
+        private bool m_DisableTimers;
 
 
         public CodeEngine(Memory memory)
@@ -105,7 +106,7 @@ namespace Eimu.Core.Systems.Chip8
                         if ((read & (0x80 >> j)) != 0)
                         {
                             // Mask prevent off-screen drawing
-                            PixelSet(this, new PixelSetEventArgs((x + j) & 0x3F, (y + i) & 0x1F));
+                            PixelSet(this, new PixelSetEventArgs((x + j), (y + i)));
                         }
                     }
                 }
@@ -135,6 +136,9 @@ namespace Eimu.Core.Systems.Chip8
 
         protected void OnSetDelayTimer(byte value)
         {
+            if (m_DisableTimers)
+                return;
+
             if (m_DT <= 0)
             {
                 m_DT = value;
@@ -144,6 +148,9 @@ namespace Eimu.Core.Systems.Chip8
 
         protected void OnSetSoundTimer(byte value)
         {
+            if (m_DisableTimers)
+                return;
+
             m_ST = 0;
 
             if (Beep != null)
@@ -166,6 +173,12 @@ namespace Eimu.Core.Systems.Chip8
         {
             get { return this.m_Paused; }
             set { this.m_Paused = value; }
+        }
+
+        public bool DisableTimers
+        {
+            get { return this.m_DisableTimers; }
+            set { m_DisableTimers = value; }
         }
     }
 }

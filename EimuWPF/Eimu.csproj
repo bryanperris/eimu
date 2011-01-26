@@ -90,11 +90,10 @@
     </Compile>
     <Compile Include="Config.cs" />
     <Compile Include="Devices\BeepAudioDevice.cs" />
-    <Compile Include="Devices\FormsInputDevice.cs" />
     <Compile Include="Devices\NullAudioDevice.cs" />
     <Compile Include="Devices\NullGraphicsDevice.cs" />
-    <Compile Include="Devices\NullInputDevice.cs" />
     <Compile Include="Devices\OGLDevice.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="RenderPanel.cs">
       <SubType>Component</SubType>
     </Compile>

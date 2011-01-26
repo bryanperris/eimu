@@ -17,38 +17,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Collections;
+using System.IO;
+using System.Reflection;
+using Eimu.Core.Systems.Chip8;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu
 {
-    public abstract class InputDevice : Device
+    public static class PluginManager
     {
-        public event KeyStateHandler OnKeyPress;
+        public static IntPtr WindowHandle { get; set; }
 
-        protected void KeyPress(ChipKeys key)
-        {
-            if (OnKeyPress != null)
-                OnKeyPress(this, key);
-        }
+        public static IntPtr RenderContext { get; set; }
 
-        protected abstract void OnInit();
-
-        protected abstract void OnShutdown();
-
-        protected abstract void OnPauseStateChange(bool paused);
-
-        public override void Initialize()
-        {
-            OnInit();
-        }
-
-        public override void Shutdown()
-        {
-            OnShutdown();
-        }
-
-        public override void SetPauseState(bool paused)
-        {
-            OnPauseStateChange(paused);
-        }
+        public static bool EnableDoubleBuffer { get; set; }
     }
 }

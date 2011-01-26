@@ -5,7 +5,6 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using Eimu.Core.Systems.Chip8;
-using Eimu.Core.Plugin;
 using System.IO;
 
 namespace Eimu
