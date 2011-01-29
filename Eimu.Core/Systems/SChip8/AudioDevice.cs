@@ -18,27 +18,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
-    public class PixelSetEventArgs : EventArgs
+    public abstract class AudioDevice : Device
     {
-        int m_X;
-        int m_Y;
+        public abstract void Beep();
 
-        public PixelSetEventArgs(int x, int y)
+        protected abstract void OnInit();
+
+        protected abstract void OnShutdown();
+
+        public abstract void LoopBegin();
+
+        public abstract void LoopEnd();
+
+        protected abstract void OnPauseStateChange(bool paused);
+
+        public override void Initialize()
         {
-            m_X = x;
-            m_Y = y;
+            OnInit();
         }
 
-        public int X
+        public override void Shutdown()
         {
-            get { return this.m_X; }
+            OnShutdown();
         }
 
-        public int Y
+        public override void SetPauseState(bool paused)
         {
-            get { return this.m_Y; }
+            OnPauseStateChange(paused);
         }
     }
 }

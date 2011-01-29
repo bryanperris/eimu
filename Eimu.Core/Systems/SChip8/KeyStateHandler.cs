@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
     public delegate void KeyStateHandler(object sender, ChipKeys key);
 }

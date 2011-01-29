@@ -18,17 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
-    public enum ChipOpcodes
-    {
-        Unknown = 0, // Uknown Opcode 
+	public enum ChipOpcodes
+	{
+		Unknown = 0, // Uknown Opcode 
 		Sys,         // Jump to a machine code routine at nnn.  Ignored opcode. 
-        Clr,         // Clear the display 
-        Ret,         // Return from a subroutine. PC is set to the top value in the stack and decrements the stack pointer. 
-        Jp_1,        // Jump to location nnn. PC is set to nnn 
-        Call,        // Call Subroutine at nnn.  Increments PC then pushes PC value on stack, then sets PC to nnn.
-        Se_3,        // Skip next instruction if register Vx == Kk, if equal, increments PC by 2
+		Clr,         // Clear the display 
+		Ret,         // Return from a subroutine. PC is set to the top value in the stack and decrements the stack pointer. 
+		Jp_1,        // Jump to location nnn. PC is set to nnn 
+		Call,        // Call Subroutine at nnn.  Increments PC then pushes PC value on stack, then sets PC to nnn.
+		Se_3,        // Skip next instruction if register Vx == Kk, if equal, increments PC by 2
 		Sne_4,       // Skip next instruction if register Vx != Kk, if not equal, increments PC by 2
 		Se_5,        // Skip next instruction if register Vx = Vy, if equal, increments PC by 2 
 		Ld_6,        // Load value Kk into register Vx
@@ -47,7 +47,7 @@ namespace Eimu.Core.Systems.Chip8
 		Jp_B,        // Jump to location nnn + V0, PC is set to (nnn + V0) 
 		Rnd,         // Random value of 255 than ANDed by Kk, results stored in Vx. 
 		Drw,         // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.  Sprites are XOR'd onto screen. If any pixels are erased
-		             // then VF is set to 1, else 0. Also sprites can wrap on the screen edges.
+					 // then VF is set to 1, else 0. Also sprites can wrap on the screen edges.
 		Skp,         // Skip next instruction if the key with the value of Vx is pressed, if true, then increment the PC by 2.
 		Sknp,        // Skip the next instruction if the key with the value of Vx is not pressed, if true, then increment the PC by 2. 
 		Ld_F_07,     // Set Vx = delay timer value 
@@ -59,7 +59,11 @@ namespace Eimu.Core.Systems.Chip8
 		Ld_F_33,     // Store BCD representation of Vx in memory locations I, I+1, I+2
 		Ld_F_55,     // Store registers V0 through Vx in memory starting at location I 
 		Ld_F_65,     // Read registers V0 through Vx from memory starting at location I 
-        Ld_F_75,     // Loads all V regsters to HP84 Flags
-        Ld_F_85      // Load all HP84 flags to V registers
-    }
+		Ld_F_75,     // Loads all V regsters to HP84 RPL Flags
+		Ld_F_85,     // Load all HP84 RPL flags to V registers
+		Ld_F_30,     // Points I to 10-byte sprite for the digit in VX (0..9)
+		exit,        // Exit from S-CHIP environment
+		extOff,      // Turn off extended mode
+		extOn,       // Turn on extended mode
+	}
 }

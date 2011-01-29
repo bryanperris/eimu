@@ -17,27 +17,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
-    public class BeepEventArgs : EventArgs
+    public enum ChipKeys : int
     {
-        int m_Duration;
-
-        public BeepEventArgs(int duration)
-        {
-            this.m_Duration = duration;
-        }
-
-        public int Duration
-        {
-            get
-            {
-                return this.m_Duration;
-            }
-        }
+        None = -1,
+        Zero = 0,
+        One = 1,
+        Two = 2,
+        Three = 3,
+        Four = 4,
+        Five = 5,
+        Six = 6,
+        Seven = 7,
+        Eight = 8,
+        Nine = 9,
+        Ten = 10,
+        A = 11,
+        B = 12,
+        C = 13,
+        D = 14,
+        E = 15,
+        F = 16
     }
 }

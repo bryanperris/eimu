@@ -23,7 +23,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 using System.Reflection;
-using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Systems.SChip8;
 
 namespace Eimu
 {

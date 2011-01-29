@@ -49,33 +49,33 @@
     <Compile Include="RunStateChangedEvent.cs" />
     <Compile Include="Systems\Chip16\C16Colors.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
-    <Compile Include="Systems\Chip8\C8Machine.cs" />
-    <Compile Include="Systems\Chip8\ChipOpcodes.cs" />
-    <Compile Include="Systems\Chip8\CodeCache.cs" />
-    <Compile Include="Systems\Chip8\CodeEngine.cs" />
-    <Compile Include="Systems\Chip8\Disassembler.cs" />
-    <Compile Include="Systems\Chip8\Engines\Interpreter.cs" />
-    <Compile Include="Systems\Chip8\BeepEventArgs.cs" />
-    <Compile Include="Systems\Chip8\ChipKeys.cs" />
+    <Compile Include="Systems\SChip8\SC8Machine.cs" />
+    <Compile Include="Systems\SChip8\ChipOpcodes.cs" />
+    <Compile Include="Systems\SChip8\CodeCache.cs" />
+    <Compile Include="Systems\SChip8\CodeEngine.cs" />
+    <Compile Include="Systems\SChip8\Disassembler.cs" />
+    <Compile Include="Systems\SChip8\Engines\Interpreter.cs" />
+    <Compile Include="Systems\SChip8\BeepEventArgs.cs" />
+    <Compile Include="Systems\SChip8\ChipKeys.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="Systems\Chip8\AudioDevice.cs" />
-    <Compile Include="Systems\Chip8\GraphicsDevice.cs" />
-    <Compile Include="Systems\Chip8\KeyStateHandler.cs" />
-    <Compile Include="Systems\Chip8\PixelSetEventArgs.cs" />
+    <Compile Include="Systems\SChip8\AudioDevice.cs" />
+    <Compile Include="Systems\SChip8\GraphicsDevice.cs" />
+    <Compile Include="Systems\SChip8\KeyStateHandler.cs" />
+    <Compile Include="Systems\SChip8\PixelSetEventArgs.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="MemoryEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
-    <Compile Include="Systems\Chip8\Profiler.cs" />
-    <Compile Include="Systems\Chip8\CodeBlock.cs" />
+    <Compile Include="Systems\SChip8\Profiler.cs" />
+    <Compile Include="Systems\SChip8\CodeBlock.cs" />
+    <Compile Include="Systems\SChip8\SuperModeChangedEventArgs.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
-    <Compile Include="Systems\Chip8\ChipInstruction.cs" />
+    <Compile Include="Systems\SChip8\ChipInstruction.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Systems\Chip8\Engines\JIT\" />
     <Folder Include="Systems\MegaChip\" />
-    <Folder Include="Systems\SuperChip\" />
+    <Folder Include="Systems\SChip8\Engines\JIT\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -18,27 +18,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
-    public enum ChipKeys : int
+    public class PixelSetEventArgs : EventArgs
     {
-        None = -1,
-        Zero = 0,
-        One = 1,
-        Two = 2,
-        Three = 3,
-        Four = 4,
-        Five = 5,
-        Six = 6,
-        Seven = 7,
-        Eight = 8,
-        Nine = 9,
-        Ten = 10,
-        A = 11,
-        B = 12,
-        C = 13,
-        D = 14,
-        E = 15,
-        F = 16
+        int m_X;
+        int m_Y;
+
+        public PixelSetEventArgs(int x, int y)
+        {
+            m_X = x;
+            m_Y = y;
+        }
+
+        public int X
+        {
+            get { return this.m_X; }
+        }
+
+        public int Y
+        {
+            get { return this.m_Y; }
+        }
     }
 }

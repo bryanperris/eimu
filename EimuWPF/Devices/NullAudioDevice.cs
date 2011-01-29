@@ -17,15 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
-using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Systems.SChip8;
 
 namespace Eimu.Devices
 {
     public class NullAudioDevice : AudioDevice
     {
-        public override void Beep(int duration)
+        public override void Beep()
         {
-            return;
         }
 
         protected override void OnInit()
@@ -38,6 +37,16 @@ namespace Eimu.Devices
 
         protected override void OnPauseStateChange(bool paused)
         {
+        }
+
+        public override void LoopBegin()
+        {
+            
+        }
+
+        public override void LoopEnd()
+        {
+            
         }
     }
 }

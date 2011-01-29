@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
     [Serializable]
     public abstract class CodeEngine
@@ -13,7 +13,7 @@ namespace Eimu.Core.Systems.Chip8
         protected Stack<ushort> m_Stack;
         protected byte m_LastKey;
         protected byte[] m_VRegs = new byte[16];
-        protected byte[] m_ERegs = new byte[8];
+        protected byte[] m_RPLFlags = new byte[8];
         protected int m_PC;
         protected ushort m_IReg;
         protected int m_DT;
@@ -25,9 +25,10 @@ namespace Eimu.Core.Systems.Chip8
         private EventWaitHandle m_TimerWait;
         public event EventHandler ScreenClear;
         public event EventHandler<PixelSetEventArgs> PixelSet;
-        public event EventHandler<BeepEventArgs> Beep;
+        public event EventHandler<SuperModeChangedEventArgs> SuperModeChange;
         public event EventHandler KeyPressWait;
         private bool m_DisableTimers;
+        private bool m_SuperMode;
 
 
         public CodeEngine(Memory memory)
@@ -43,7 +44,7 @@ namespace Eimu.Core.Systems.Chip8
             m_PC= 0;
             m_IReg = 0;
             Array.Clear(this.m_VRegs, 0, this.m_VRegs.Length);
-            Array.Clear(this.m_ERegs, 0, this.m_ERegs.Length);
+            Array.Clear(this.m_RPLFlags, 0, this.m_RPLFlags.Length);
             m_ST = 0;
             m_LastKey = 17;
             m_DT = 0;
@@ -87,8 +88,22 @@ namespace Eimu.Core.Systems.Chip8
             }
         }
 
+        protected void OnSuperModeChange(bool enabled)
+        {
+            m_SuperMode = enabled;
+
+            if (SuperModeChange != null)
+                SuperModeChange(this, new SuperModeChangedEventArgs(enabled));
+        }
+
         protected void OnPixelSet(ChipInstruction inst)
         {
+            if (m_SuperMode)
+            {
+                SuperPixelSet(inst);
+                return;
+            }
+
             if (PixelSet != null)
             {
                 m_VRegs[0xF] = 0;
@@ -101,6 +116,31 @@ namespace Eimu.Core.Systems.Chip8
                     read = m_Memory.GetByte(m_IReg + i);
 
                     for (byte j = 0; j < GraphicsDevice.SPRITE_WIDTH; j++)
+                    {
+                        // Keep writing pixels until we hit a 0 bit (width end)
+                        if ((read & (0x80 >> j)) != 0)
+                        {
+                            PixelSet(this, new PixelSetEventArgs((x + j), (y + i)));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SuperPixelSet(ChipInstruction inst)
+        {
+            if (PixelSet != null)
+            {
+                m_VRegs[0xF] = 0;
+                byte x = m_VRegs[inst.X];
+                byte y = m_VRegs[inst.Y];
+                byte read = 0;
+
+                for (byte i = 0; i < 32; i++)
+                {
+                    read = m_Memory.GetByte(m_IReg + i);
+
+                    for (byte j = 0; j < GraphicsDevice.SPRITE_SUPER_WIDTH; j++)
                     {
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
@@ -129,7 +169,9 @@ namespace Eimu.Core.Systems.Chip8
             if (m_DT > 0 && !m_Stop)
             {
                 if (!m_Paused)
-                    Interlocked.Decrement(ref m_DT);
+                {
+                    m_DT--;
+                }
             }
         }
 
@@ -138,11 +180,8 @@ namespace Eimu.Core.Systems.Chip8
             if (m_DisableTimers)
                 return;
 
-            if (m_DT <= 0)
-            {
-                m_DT = value;
-                m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), this, 17, 1);
-            }
+            m_DT = value;
+            //m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), this, 0, 10);
         }
 
         protected void OnSetSoundTimer(byte value)
@@ -150,10 +189,7 @@ namespace Eimu.Core.Systems.Chip8
             if (m_DisableTimers)
                 return;
 
-            m_ST = 0;
-
-            if (Beep != null)
-                Beep(this, new BeepEventArgs(value));
+            m_ST = value;
         }
 
         public byte LastKeyPressed
@@ -178,6 +214,18 @@ namespace Eimu.Core.Systems.Chip8
         {
             get { return this.m_DisableTimers; }
             set { m_DisableTimers = value; }
+        }
+
+        public int DelayTimer
+        {
+            get { return this.m_DT; }
+            set { this.m_DT = value; }
+        }
+
+        public int SoundTimer
+        {
+            get { return this.m_ST; }
+            set { this.m_ST = value; }
         }
     }
 }

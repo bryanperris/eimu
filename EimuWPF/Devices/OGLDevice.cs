@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Eimu.Core;
-using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Systems.SChip8;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -130,6 +130,11 @@ namespace Eimu.Devices
             GL.Disable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.DepthRange(-1, 100);
+        }
+
+        public override void Update()
+        {
+            m_ControlContext.Invalidate();
         }
     }
 }

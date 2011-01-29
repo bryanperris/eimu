@@ -17,32 +17,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
-    public abstract class AudioDevice : Device
+    public class BeepEventArgs : EventArgs
     {
-        public abstract void Beep(int duration);
+        int m_Duration;
 
-        protected abstract void OnInit();
-
-        protected abstract void OnShutdown();
-
-        protected abstract void OnPauseStateChange(bool paused);
-
-        public override void Initialize()
+        public BeepEventArgs(int duration)
         {
-            OnInit();
+            this.m_Duration = duration;
         }
 
-        public override void Shutdown()
+        public int Duration
         {
-            OnShutdown();
-        }
-
-        public override void SetPauseState(bool paused)
-        {
-            OnPauseStateChange(paused);
+            get
+            {
+                return this.m_Duration;
+            }
         }
     }
 }

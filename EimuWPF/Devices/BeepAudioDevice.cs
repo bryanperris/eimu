@@ -17,40 +17,52 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Threading;
-using Eimu.Core.Systems.Chip8;
+using System.Media;
+using Eimu.Core.Systems.SChip8;
 
 namespace Eimu.Devices
 {
     public class BeepAudioDevice : AudioDevice
     {
-        Thread m_Thread;
-        private int m_Duration;
+        SoundPlayer player;
 
-        public override void Beep(int duruation)
+        public override void Beep()
         {
-            m_Duration = duruation;
-            m_Thread = new Thread(new ThreadStart(DoBeep));
-            m_Thread.Name = "Beep thread";
-            m_Thread.IsBackground = false;
-            m_Thread.Start();
-        }
-
-        private void DoBeep()
-        {
-            System.Console.Beep(260, m_Duration + 100);
+            player.Play();
         }
 
         protected override void OnInit()
         {
+            player = new SoundPlayer(".\\sys\\c8beep.wav");
+            player.LoadAsync();
         }
 
         protected override void OnShutdown()
         {
+            player.Dispose();
         }
 
         protected override void OnPauseStateChange(bool paused)
         {
+            if (paused)
+            {
+                player.Stop();
+            }
+            else
+            {
+                player.PlayLooping();
+            }
+        }
+
+        public override void LoopBegin()
+        {
+            player.PlaySync();
+            player.PlayLooping();
+        }
+
+        public override void LoopEnd()
+        {
+            player.Stop();
         }
     }
 }

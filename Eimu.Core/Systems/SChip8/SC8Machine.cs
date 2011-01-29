@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading;
 using System.IO;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
-    public class C8Machine : VirtualMachine
+    public class SC8Machine : VirtualMachine
     {
         public const int FONT_SIZE = 5;
         public const int MEMORY_SIZE = 4096;
@@ -23,6 +23,7 @@ namespace Eimu.Core.Systems.Chip8
         private AudioDevice m_AudioDevice;
         private GraphicsDevice m_GraphicsDevice;
         private CodeEngine m_CodeEngine;
+        private bool m_SoundLooping;
 
 
         // ----------------------------
@@ -37,6 +38,11 @@ namespace Eimu.Core.Systems.Chip8
 
             if (state == RunState.Stopped)
             {
+                if (m_SoundLooping)
+                {
+                    m_SoundLooping = false;
+                    m_AudioDevice.LoopEnd();
+                }
                 m_CodeEngine.Shutdown();
                 m_CPUWait.Set();
                 m_KeyWait.Set();
@@ -92,16 +98,43 @@ namespace Eimu.Core.Systems.Chip8
         // Program Control
         // ----------------------------
 
-        public void Step()
+        public void Step(int cycles)
         {
-            byte a = SystemMemory.GetByte(m_CodeEngine.PC);
-            byte b = SystemMemory.GetByte(m_CodeEngine.PC + 1);
-            ushort data = Tools.MakeShort(a, b);
-            ChipOpcodes opcode = Disassembler.DecodeInstruction(data);
-            ChipInstruction inst = new ChipInstruction(data, opcode);
-            inst.Address = m_CodeEngine.PC;
-            m_CodeEngine.IncrementPC();
-            m_CodeEngine.Call(inst);
+            while (cycles > 0)
+            {
+                cycles--;
+                byte a = SystemMemory.GetByte(m_CodeEngine.PC);
+                byte b = SystemMemory.GetByte(m_CodeEngine.PC + 1);
+                ushort data = Tools.MakeShort(a, b);
+                ChipOpcodes opcode = Disassembler.DecodeInstruction(data);
+                ChipInstruction inst = new ChipInstruction(data, opcode);
+                inst.Address = m_CodeEngine.PC;
+                m_CodeEngine.IncrementPC();
+                m_CodeEngine.Call(inst);
+
+                if (m_CodeEngine.DelayTimer > 0) m_CodeEngine.DelayTimer--;
+
+                if (m_CodeEngine.SoundTimer > 0)
+                {
+                    m_CodeEngine.SoundTimer--;
+
+                    //if (!m_SoundLooping && m_CodeEngine.SoundTimer > 1)
+                    //{
+                    //    m_SoundLooping = true;
+                    //    m_AudioDevice.LoopBegin();
+                    //}
+                    //else
+                    {
+                        m_AudioDevice.Beep();
+                    }
+                }
+
+                if (m_CodeEngine.SoundTimer <= 0 && m_SoundLooping)
+                {
+                    m_SoundLooping = false;
+                    m_AudioDevice.LoopEnd();
+                }
+            }
         }
 
         public void Run(int entryAddress)
@@ -113,33 +146,18 @@ namespace Eimu.Core.Systems.Chip8
         private void StartExecutionCycle()
         {
             Thread.CurrentThread.Name = "CPU Thread";
-            Thread.BeginThreadAffinity();
 
-            while (m_CodeEngine.PC < SystemMemory.Size)
-            {
-                if (!m_RequestCPUStop)
-                {
+            while (m_CodeEngine.PC < SystemMemory.Size) {
+                if (!m_RequestCPUStop) {
                     if (m_Paused)
-                    {
                         m_CPUWait.WaitOne();
-                    }
 
-                    Thread.BeginCriticalRegion();
-
-                    Step();
-
-                    Thread.EndCriticalRegion();
-                }
-                else
-                {
-                    break;
-                }
-
-
-                Thread.Sleep(2);
+                    int speed = 1;
+                    int cycles = (((speed * 100) + 1) / 60);
+                    Step(cycles);
+                    Thread.Sleep(2);
+                }    
             }
-
-            Thread.EndThreadAffinity();
 
             m_CPUEndWait.Set();
         }
@@ -148,6 +166,7 @@ namespace Eimu.Core.Systems.Chip8
         {
             Console.WriteLine("Booting...");
 
+            m_SoundLooping = false;
             if (CurrentAudioDevice == null) throw new NullReferenceException();
             if (CurrentGraphicsDevice == null) throw new NullReferenceException();
             m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -253,11 +272,13 @@ namespace Eimu.Core.Systems.Chip8
         // Internal Calls
         // ----------------------------
 
+        private void SendBeep()
+        {
+            m_AudioDevice.Beep();
+        }
+
         private void AttachDeviceCallbacks()
         {
-            m_CodeEngine.Beep -= new EventHandler<BeepEventArgs>(OnBeep);
-            m_CodeEngine.Beep += new EventHandler<BeepEventArgs>(OnBeep);
-
             m_CodeEngine.PixelSet -= new EventHandler<PixelSetEventArgs>(OnPixelSet);
             m_CodeEngine.PixelSet += new EventHandler<PixelSetEventArgs>(OnPixelSet);
 
@@ -266,6 +287,14 @@ namespace Eimu.Core.Systems.Chip8
 
             CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(OnPixelCollision);
             CurrentGraphicsDevice.OnPixelCollision += new EventHandler(OnPixelCollision);
+
+            m_CodeEngine.SuperModeChange -= new EventHandler<SuperModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
+            m_CodeEngine.SuperModeChange += new EventHandler<SuperModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
+        }
+
+        private void m_CodeEngine_SuperModeChange(object sender, SuperModeChangedEventArgs e)
+        {
+            m_GraphicsDevice.SetSuperMode(e.Enabled);
         }
 
         private void OnPixelCollision(object sender, EventArgs e)
@@ -281,11 +310,6 @@ namespace Eimu.Core.Systems.Chip8
         private void OnPixelSet(object sender, PixelSetEventArgs e)
         {
             m_GraphicsDevice.SetPixel(e.X, e.Y);
-        }
-
-        private void OnBeep(object sender, BeepEventArgs e)
-        {
-            m_AudioDevice.Beep(e.Duration);
         }
     }
 }

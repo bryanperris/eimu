@@ -48,8 +48,8 @@ namespace Eimu
                 XmlTextReader reader = new XmlTextReader(file);
 
 
-                C8BackColor = new RGBColor(0, 0, 0);
-                C8ForeColor = new RGBColor(1, 1, 1);
+                C8BackColor = new RGBColor(0, 0, 64);
+                C8ForeColor = new RGBColor(202, 232, 255);
 
                 while (reader.Read())
                 {

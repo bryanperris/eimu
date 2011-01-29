@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Eimu.Core.Systems.Chip8
+namespace Eimu.Core.Systems.SChip8
 {
     public abstract class GraphicsDevice : Device
     {
@@ -29,6 +29,7 @@ namespace Eimu.Core.Systems.Chip8
         public const int RESOLUTION_ENHANCED_WIDTH =64;
         public const int RESOLUTION_ENHANCED_HEIGHT = 64;
         public const int SPRITE_WIDTH = 8;
+        public const int SPRITE_SUPER_WIDTH = 16;
         private int m_ResX;
         private int m_ResY;
         private RGBColor m_BackColor;
@@ -74,13 +75,13 @@ namespace Eimu.Core.Systems.Chip8
                 if (x > m_ResX-1)
                     x -= m_ResX;
 
-                if (x < 0)
+                if (x < -1)
                     x += m_ResX;
 
                 if (y > m_ResY-1)
                     y -= m_ResY;
 
-                if (y < 0)
+                if (y < -1)
                     y += m_ResY;
             }
 
@@ -105,9 +106,18 @@ namespace Eimu.Core.Systems.Chip8
             return m_Buffer[GetBufferPosition(x, y)];
         }
 
+        public void SetSuperMode(bool enabled)
+        {
+            m_EnableHighres = enabled;
+            Shutdown();
+            Initialize();
+        }
+
         protected abstract void OnInit();
 
         protected abstract void OnShutdown();
+
+        public abstract void Update();
 
         protected abstract void OnPauseStateChange(bool paused);
 
@@ -171,12 +181,6 @@ namespace Eimu.Core.Systems.Chip8
         {
             get { return this.m_DisableWrapping; }
             set { this.m_DisableWrapping = value; }
-        }
-
-        private void Reset()
-        {
-            Shutdown();
-            Initialize();
         }
 
         public bool EnableHires

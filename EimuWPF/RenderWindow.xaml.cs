@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Eimu.Core.Systems.Chip8;
+using Eimu.Core.Systems.SChip8;
 using System.Windows.Interop;
 
 namespace Eimu
@@ -20,10 +20,10 @@ namespace Eimu
     /// </summary>
     public partial class RenderWindow : Window
     {
-        C8Machine m_Machine;
+        SC8Machine m_Machine;
         WindowInteropHelper m_WinHelper;
 
-        public RenderWindow(C8Machine machine)
+        public RenderWindow(SC8Machine machine)
         {
             m_Machine = machine;
             InitializeComponent();

@@ -4,7 +4,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace Eimu.Core.Systems.Chip8.Engines
+namespace Eimu.Core.Systems.SChip8.Engines
 {
     [Serializable]
     public sealed class Interpreter : CodeEngine
@@ -119,9 +119,9 @@ namespace Eimu.Core.Systems.Chip8.Engines
         [OpcodeTag(ChipOpcodes.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= C8Machine.MEMORY_SIZE)
+            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= SC8Machine.MEMORY_SIZE)
             {
-                m_IReg = C8Machine.MEMORY_SIZE;
+                m_IReg = SC8Machine.MEMORY_SIZE;
                 m_VRegs[0xF] = 1;
             }
             else
@@ -330,7 +330,7 @@ namespace Eimu.Core.Systems.Chip8.Engines
         [OpcodeTag(ChipOpcodes.Ld_F_29)]
         void Load_F29(ChipInstruction inst)
         {
-            m_IReg = (ushort)(m_VRegs[inst.X] * C8Machine.FONT_SIZE);
+            m_IReg = (ushort)(m_VRegs[inst.X] * SC8Machine.FONT_SIZE);
         }
 
         [OpcodeTag(ChipOpcodes.Ld_F_33)]
@@ -360,18 +360,46 @@ namespace Eimu.Core.Systems.Chip8.Engines
             }
         }
 
+        // -----------------------------------------
+        // Super Chips
+        // -----------------------------------------
+
         [OpcodeTag(ChipOpcodes.Ld_F_75)]
         void Load_F75(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
-                m_ERegs[i] = m_VRegs[i];
+                m_RPLFlags[i] = m_VRegs[i];
         }
 
         [OpcodeTag(ChipOpcodes.Ld_F_85)]
         void Load_F85(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
-                m_VRegs[i] = m_ERegs[i];
+                m_VRegs[i] = m_RPLFlags[i];
+        }
+
+        [OpcodeTag(ChipOpcodes.extOn)]
+        void ExtOn(ChipInstruction inst)
+        {
+            OnSuperModeChange(true);
+        }
+
+        [OpcodeTag(ChipOpcodes.extOff)]
+        void ExtOff(ChipInstruction inst)
+        {
+            OnSuperModeChange(false);
+        }
+
+        [OpcodeTag(ChipOpcodes.exit)]
+        void Exit(ChipInstruction inst)
+        {
+            return;
+        }
+
+        [OpcodeTag(ChipOpcodes.Ld_F_30)]
+        void Load_F30(ChipInstruction inst)
+        {
+            m_IReg = m_VRegs[inst.X];
         }
 
         #endregion
