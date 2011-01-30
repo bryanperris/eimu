@@ -17,28 +17,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Globalization;
 
 namespace Eimu.Core.Systems.SChip8
 {
-    [Serializable]
+	[Serializable]
 	public class ChipInstruction
 	{
 		ushort m_Instruction;
-        ChipOpcodes m_Opcode;
-        public int Address { get; set; }
+		ChipOpCode m_Opcode;
+		public int Address { get; set; }
 
-        public ChipInstruction(ushort instruction, ChipOpcodes opcode)
-        {
-            this.m_Instruction = instruction;
-            this.m_Opcode = opcode;
-        }
+		public ChipInstruction(ushort instruction, ChipOpCode opCode)
+		{
+			this.m_Instruction = instruction;
+			this.m_Opcode = opCode;
+		}
 		
 		public ushort RawInstruction
 		{
 			get { return this.m_Instruction;}
 		}
 
-        public byte CodeNum
+		public byte OpCodeNumber
 		{
 			get { return (byte)((this.m_Instruction & 0xF000) >> 12);}
 		}
@@ -68,14 +69,14 @@ namespace Eimu.Core.Systems.SChip8
 			get { return (byte)(this.m_Instruction & 0x00FF);}
 		}
 
-        public ChipOpcodes Opcode
-        {
-            get { return this.m_Opcode; }
-        }
+		public ChipOpCode OpCode
+		{
+			get { return this.m_Opcode; }
+		}
 
-        public override string ToString()
-        {
-            return m_Instruction.ToString("x");
-        }
+		public override string ToString()
+		{
+			return m_Instruction.ToString("x", CultureInfo.CurrentCulture);
+		}
 	}
 }

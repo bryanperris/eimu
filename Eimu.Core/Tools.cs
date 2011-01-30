@@ -4,9 +4,9 @@ namespace Eimu.Core
 {
     public static class Tools
     {
-        public static ushort MakeShort(byte a, byte b)
+        public static ushort Create16(byte high, byte low)
         {
-            return (ushort)((ushort)a << 8 | b);
+            return (ushort)((ushort)high << 8 | low);
         }
     }
 }

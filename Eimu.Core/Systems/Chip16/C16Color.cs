@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Eimu.Core.Systems.Chip16
 {
-    public enum C16Colors : int
+    public enum C16Color : int
     {
         Transparent = 0x000000,
         Black = 0x000000,

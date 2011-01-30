@@ -33,8 +33,8 @@ namespace Eimu
         public const string CONFIGPATH = "./config.xml";
         public static string C8FileROMPath { get; set; }
         public static bool UseC8Interpreter { get; set; }
-        public static RGBColor C8BackColor { get; set; }
-        public static RGBColor C8ForeColor { get; set; }
+        public static RgbColor C8BackColor { get; set; }
+        public static RgbColor C8ForeColor { get; set; }
 
         static Config()
         {
@@ -48,8 +48,8 @@ namespace Eimu
                 XmlTextReader reader = new XmlTextReader(file);
 
 
-                C8BackColor = new RGBColor(0, 0, 64);
-                C8ForeColor = new RGBColor(202, 232, 255);
+                C8BackColor = new RgbColor(0, 0, 64);
+                C8ForeColor = new RgbColor(202, 232, 255);
 
                 while (reader.Read())
                 {
@@ -67,14 +67,14 @@ namespace Eimu
                         }
                         else if (reader.Name.Equals("chip8backcolor"))
                         {
-                            C8BackColor = new RGBColor(
+                            C8BackColor = new RgbColor(
                                 byte.Parse(reader.GetAttribute("r")),
                                 byte.Parse(reader.GetAttribute("g")),
                                 byte.Parse(reader.GetAttribute("b")));
                         }
                         else if (reader.Name.Equals("chip8forecolor"))
                         {
-                            C8ForeColor = new RGBColor(
+                            C8ForeColor = new RgbColor(
                                 byte.Parse(reader.GetAttribute("r")),
                                 byte.Parse(reader.GetAttribute("g")),
                                 byte.Parse(reader.GetAttribute("b")));
@@ -109,16 +109,16 @@ namespace Eimu
             writer.WriteRaw("\n");
 
             writer.WriteStartElement("chip8backcolor");
-            writer.WriteAttributeString("r", C8BackColor.R.ToString());
-            writer.WriteAttributeString("g", C8BackColor.G.ToString());
-            writer.WriteAttributeString("b", C8BackColor.B.ToString());
+            writer.WriteAttributeString("r", C8BackColor.Red.ToString());
+            writer.WriteAttributeString("g", C8BackColor.Green.ToString());
+            writer.WriteAttributeString("b", C8BackColor.Blue.ToString());
             writer.WriteEndElement();
             writer.WriteRaw("\n");
 
             writer.WriteStartElement("chip8forecolor");
-            writer.WriteAttributeString("r", C8ForeColor.R.ToString());
-            writer.WriteAttributeString("g", C8ForeColor.G.ToString());
-            writer.WriteAttributeString("b", C8ForeColor.B.ToString());
+            writer.WriteAttributeString("r", C8ForeColor.Red.ToString());
+            writer.WriteAttributeString("g", C8ForeColor.Green.ToString());
+            writer.WriteAttributeString("b", C8ForeColor.Blue.ToString());
             writer.WriteEndElement();
             writer.WriteRaw("\n");
 

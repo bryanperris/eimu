@@ -25,11 +25,9 @@ using System.Runtime.InteropServices;
 
 namespace Eimu.Core
 {
-    public sealed class Memory : IEnumerable
+    [Serializable]
+    public sealed class Memory
     {
-
-        // TODO: Unmanaged memory mode
-
         private byte[] m_Memory;
 
         public Memory(int size)
@@ -78,33 +76,10 @@ namespace Eimu.Core
             return base.GetHashCode();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return new MemoryEnumerator(this.m_Memory);
-        }
-
         public byte this[int index]
         {
-            get
-            {
-                if (index < 0 || index > (m_Memory.Length - 1))
-                    throw new IndexOutOfRangeException();
-
-                return m_Memory[index];
-            }
-            set
-            {
-                if (index < 0 || index > (m_Memory.Length - 1))
-                    throw new IndexOutOfRangeException();
-
-                m_Memory[index] = value;
-            }
+            get { return m_Memory[index]; }
+            set { m_Memory[index] = value; }
         }
-
-        //public IntPtr AllocateUnmangedMemory()
-        //{
-        //    IntPtr p = Marshal.AllocHGlobal(m_Memory.Length);
-        //    Marshal.Copy(
-        //}
     }
 }

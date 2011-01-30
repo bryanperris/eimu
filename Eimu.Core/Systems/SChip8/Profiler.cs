@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 
 namespace Eimu.Core.Systems.SChip8
 {
     public class Profiler
     {
-        private Dictionary<ChipOpcodes, int> m_Counts;
+        private Dictionary<ChipOpCode, int> m_Counts;
         private bool m_Stop;
 
         public Profiler()
         {
             m_Stop = false;
-            m_Counts = new Dictionary<ChipOpcodes, int>();
+            m_Counts = new Dictionary<ChipOpCode, int>();
         }
 
-        public void CountOpcode(ChipOpcodes code)
+        public void CountOpcode(ChipOpCode code)
         {
             if (m_Stop)
                 return;
@@ -36,7 +37,7 @@ namespace Eimu.Core.Systems.SChip8
         public void DumpStats()
         {
             m_Stop = true;
-            foreach (KeyValuePair<ChipOpcodes, int> val in m_Counts)
+            foreach (KeyValuePair<ChipOpCode, int> val in m_Counts)
             {
                 Console.WriteLine(val.Key.ToString() + " : " + val.Value.ToString());
             }

@@ -20,10 +20,10 @@ namespace Eimu
     /// </summary>
     public partial class RenderWindow : Window
     {
-        SC8Machine m_Machine;
+        SChipMachine m_Machine;
         WindowInteropHelper m_WinHelper;
 
-        public RenderWindow(SC8Machine machine)
+        public RenderWindow(SChipMachine machine)
         {
             m_Machine = machine;
             InitializeComponent();
@@ -64,7 +64,7 @@ namespace Eimu
         {
             m_FormHost.Focus();
             m_WinHelper = new WindowInteropHelper(this);
-            m_Machine.MachineEnded += new EventHandler(machine_MachineEnded);
+            m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
             PluginManager.WindowHandle = m_WinHelper.Handle;
             PluginManager.RenderContext = renderPanel.Handle;
             m_Machine.Run();
@@ -84,26 +84,26 @@ namespace Eimu
 
         private void WindowsFormsHost_KeyDown(object sender, KeyEventArgs e)
         {
-            ChipKeys key = ChipKeys.None;
+            ChipKey key = ChipKey.None;
 
             switch (e.Key)
             {
-                case Key.Q: key = ChipKeys.One; break;
-                case Key.W: key = ChipKeys.Two; break;
-                case Key.E: key = ChipKeys.Three; break;
-                case Key.R: key = ChipKeys.A; break;
-                case Key.T: key = ChipKeys.D; break;
-                case Key.A: key = ChipKeys.Four; break;
-                case Key.S: key = ChipKeys.Five; break;
-                case Key.D: key = ChipKeys.Six; break;
-                case Key.G: key = ChipKeys.E; break;
-                case Key.F: key = ChipKeys.B; break;
-                case Key.Z: key = ChipKeys.Seven; break;
-                case Key.X: key = ChipKeys.Eight; break;
-                case Key.C: key = ChipKeys.Nine; break;
-                case Key.V: key = ChipKeys.C; break;
-                case Key.B: key = ChipKeys.F; break;
-                case Key.Space: key = ChipKeys.Zero; break;
+                case Key.Q: key = ChipKey.One; break;
+                case Key.W: key = ChipKey.Two; break;
+                case Key.E: key = ChipKey.Three; break;
+                case Key.R: key = ChipKey.A; break;
+                case Key.T: key = ChipKey.D; break;
+                case Key.A: key = ChipKey.Four; break;
+                case Key.S: key = ChipKey.Five; break;
+                case Key.D: key = ChipKey.Six; break;
+                case Key.G: key = ChipKey.E; break;
+                case Key.F: key = ChipKey.B; break;
+                case Key.Z: key = ChipKey.Seven; break;
+                case Key.X: key = ChipKey.Eight; break;
+                case Key.C: key = ChipKey.Nine; break;
+                case Key.V: key = ChipKey.C; break;
+                case Key.B: key = ChipKey.F; break;
+                case Key.Space: key = ChipKey.Zero; break;
                 default: break;
             }
 
@@ -112,7 +112,7 @@ namespace Eimu
 
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
-           m_Machine.SetKeyPress(ChipKeys.None);
+           m_Machine.SetKeyPress(ChipKey.None);
         }
     }
 }

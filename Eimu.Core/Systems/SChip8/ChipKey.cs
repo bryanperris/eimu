@@ -20,7 +20,7 @@ using System;
 
 namespace Eimu.Core.Systems.SChip8
 {
-    public enum ChipKeys : int
+    public enum ChipKey : int
     {
         None = -1,
         Zero = 0,

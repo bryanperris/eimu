@@ -5,10 +5,9 @@ using System.Threading;
 namespace Eimu.Core.Systems.SChip8
 {
     [Serializable]
-    public abstract class CodeEngine
+    public abstract class CodeEngine : IDisposable
     {
-        public const int STACK_SIZE = 12;
-        public const int DELAY_TIMER_WAIT = 17;
+        public const int StackMaxSize = 12;
         protected Random m_Rand;
         protected Stack<ushort> m_Stack;
         protected byte m_LastKey;
@@ -30,14 +29,9 @@ namespace Eimu.Core.Systems.SChip8
         private bool m_DisableTimers;
         private bool m_SuperMode;
 
-
-        public CodeEngine(Memory memory)
+        public virtual void Init(Memory memory)
         {
             m_Memory = memory;
-        }
-
-        public virtual void Init()
-        {
             m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;
             m_Stop = false;
@@ -49,7 +43,7 @@ namespace Eimu.Core.Systems.SChip8
             m_LastKey = 17;
             m_DT = 0;
             m_Rand = new Random(System.Environment.TickCount);
-            m_Stack = new Stack<ushort>(STACK_SIZE);
+            m_Stack = new Stack<ushort>(StackMaxSize);
         }
 
         public virtual void Shutdown()
@@ -115,7 +109,7 @@ namespace Eimu.Core.Systems.SChip8
                 {
                     read = m_Memory.GetByte(m_IReg + i);
 
-                    for (byte j = 0; j < GraphicsDevice.SPRITE_WIDTH; j++)
+                    for (byte j = 0; j < GraphicsDevice.StandardSpriteSize; j++)
                     {
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
@@ -140,7 +134,7 @@ namespace Eimu.Core.Systems.SChip8
                 {
                     read = m_Memory.GetByte(m_IReg + i);
 
-                    for (byte j = 0; j < GraphicsDevice.SPRITE_SUPER_WIDTH; j++)
+                    for (byte j = 0; j < GraphicsDevice.SuperSpriteSize; j++)
                     {
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
@@ -227,5 +221,25 @@ namespace Eimu.Core.Systems.SChip8
             get { return this.m_ST; }
             set { this.m_ST = value; }
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+               
+            }
+
+            m_TimerWait.Close();
+        }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

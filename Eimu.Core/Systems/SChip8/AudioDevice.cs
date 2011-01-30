@@ -17,9 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace Eimu.Core.Systems.SChip8
 {
+    [ComVisible(true)]
     public abstract class AudioDevice : Device
     {
         public abstract void Beep();

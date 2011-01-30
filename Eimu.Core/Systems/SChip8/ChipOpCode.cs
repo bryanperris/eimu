@@ -20,7 +20,7 @@ using System;
 
 namespace Eimu.Core.Systems.SChip8
 {
-	public enum ChipOpcodes
+	public enum ChipOpCode
 	{
 		Unknown = 0, // Uknown Opcode 
 		Sys,         // Jump to a machine code routine at nnn.  Ignored opcode. 

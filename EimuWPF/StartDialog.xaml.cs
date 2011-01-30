@@ -22,7 +22,7 @@ namespace Eimu
 	{
 		private OpenFileDialog m_OpenFileDialog;
 		private FileStream m_RomFileSource;
-		private SC8Machine m_VM;
+		private SChipMachine m_VM;
 		private ColorDialog colorDialog;
 		private Color m_C8BackColor = Color.FromRgb(0, 0, 0);
 		private Color m_C8ForeColor = Color.FromRgb(1, 1, 1);
@@ -48,11 +48,11 @@ namespace Eimu
 
 			Config.LoadConfigFile();
 
-			Color c = Color.FromRgb(Config.C8BackColor.R, Config.C8BackColor.G, Config.C8BackColor.B);
+			Color c = Color.FromRgb(Config.C8BackColor.Red, Config.C8BackColor.Green, Config.C8BackColor.Blue);
 			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(c);
 			m_C8BackColor = c;
 
-			c = Color.FromRgb(Config.C8ForeColor.R, Config.C8ForeColor.G, Config.C8ForeColor.B);
+			c = Color.FromRgb(Config.C8ForeColor.Red, Config.C8ForeColor.Green, Config.C8ForeColor.Blue);
 			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(c);
 			m_C8ForeColor = c;
 
@@ -69,14 +69,9 @@ namespace Eimu
 					m_OpenFileDialog.FileName = m_TextBox_ProgramPath.Text;
 				}
 			}
-
-			//if (Config.UseInterpreter)
-			//    radioButton_CPUModeInterpreter.Checked = true;
-			//else
-			//    radioButton_CPUModeRecompiler.Checked = true;
 		}
 
-		public void SetVM(SC8Machine vm)
+		public void SetVM(SChipMachine vm)
 		{
 			this.m_VM = vm;
 		}
@@ -123,11 +118,10 @@ namespace Eimu
 			if (m_CheckBox_C8DisableSound.IsChecked == true) m_VM.CurrentAudioDevice = new NullAudioDevice();
 			else m_VM.CurrentAudioDevice = new NullAudioDevice();
 
-			m_VM.CurrentGraphicsDevice.BackgroundColor = new Core.RGBColor(m_C8BackColor.R, m_C8BackColor.G, m_C8BackColor.B);
-			m_VM.CurrentGraphicsDevice.ForegroundColor = new Core.RGBColor(m_C8ForeColor.R, m_C8ForeColor.G, m_C8ForeColor.B);
+			m_VM.CurrentGraphicsDevice.BackgroundColor = new Core.RgbColor(m_C8BackColor.R, m_C8BackColor.G, m_C8BackColor.B);
+			m_VM.CurrentGraphicsDevice.ForegroundColor = new Core.RgbColor(m_C8ForeColor.R, m_C8ForeColor.G, m_C8ForeColor.B);
 			m_VM.CurrentGraphicsDevice.DisableWrapping = (this.m_CheckBox_C8DisableWrapping.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
-			m_VM.CurrentGraphicsDevice.EnableEnhancedMode = (this.m_CheckBox_C8EnhancedMode.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);
 
@@ -142,7 +136,7 @@ namespace Eimu
 			c.A = 255;
 			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(c);
 			m_C8BackColor = c;
-			Config.C8BackColor = new Core.RGBColor(c.R, c.G, c.B);
+			Config.C8BackColor = new Core.RgbColor(c.R, c.G, c.B);
 			SaveConfig();
 		}
 
@@ -154,7 +148,7 @@ namespace Eimu
 			c.A = 255;
 			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(c);
 			m_C8ForeColor = c;
-			Config.C8ForeColor = new Core.RGBColor(c.R, c.G, c.B);
+			Config.C8ForeColor = new Core.RgbColor(c.R, c.G, c.B);
 			SaveConfig();
 		}
 	}

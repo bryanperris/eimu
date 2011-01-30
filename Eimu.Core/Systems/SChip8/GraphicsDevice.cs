@@ -17,45 +17,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace Eimu.Core.Systems.SChip8
 {
+    [ComVisible(true)]
     public abstract class GraphicsDevice : Device
     {
-        public const int RESOLUTION_WIDTH = 64;
-        public const int RESOLUTION_HEIGHT = 32;
-        public const int RESOLUTION_SUPER_WIDTH = 128;
-        public const int RESOLUTION_SUPER_HEIGHT = 64;
-        public const int RESOLUTION_ENHANCED_WIDTH =64;
-        public const int RESOLUTION_ENHANCED_HEIGHT = 64;
-        public const int SPRITE_WIDTH = 8;
-        public const int SPRITE_SUPER_WIDTH = 16;
+        public const int StandardResolutionX = 64;
+        public const int StandardResolutionY = 32;
+        public const int SuperResolutionX = 128;
+        public const int SuperResolutionY = 64;
+        public const int StandardSpriteSize = 8;
+        public const int SuperSpriteSize = 16;
         private int m_ResX;
         private int m_ResY;
-        private RGBColor m_BackColor;
-        private RGBColor m_ForeColor;
+        private RgbColor m_BackColor;
+        private RgbColor m_ForeColor;
         private bool[] m_Buffer;
         public event EventHandler OnPixelCollision;
         private bool m_DisableWrapping;
         private bool m_EnableHighres;
         private bool m_EnableAntiFlickerHack;
-        private bool m_EnableEnhancedMode;
 
         private void CreateFakeBuffer()
         {
-           m_ResX = RESOLUTION_WIDTH;
-           m_ResY = RESOLUTION_HEIGHT;
-
-            if (m_EnableEnhancedMode)
-            {
-                m_ResX = RESOLUTION_ENHANCED_WIDTH;
-                m_ResY = RESOLUTION_ENHANCED_HEIGHT;
-            }
+           m_ResX = StandardResolutionX;
+           m_ResY = StandardResolutionY;
 
             if (m_EnableHighres)
             {
-                m_ResX = RESOLUTION_SUPER_WIDTH;
-                m_ResY = RESOLUTION_SUPER_HEIGHT;
+                m_ResX = SuperResolutionX;
+                m_ResY = SuperResolutionY;
             }
 
             m_Buffer = new bool[(m_ResX + 1) * (m_ResY + 1)];
@@ -137,12 +130,9 @@ namespace Eimu.Core.Systems.SChip8
                 OnPixelCollision(this, new EventArgs());
         }
 
-        protected bool[] InternalBuffer
+        public bool[] GetRawBuffer()
         {
-            get
-            {
-                return this.m_Buffer;
-            }
+            return this.m_Buffer;
         }
 
         protected abstract void OnPixelSet(int x, int y, bool on);
@@ -165,13 +155,13 @@ namespace Eimu.Core.Systems.SChip8
             OnPauseStateChange(paused);
         }
 
-        public RGBColor BackgroundColor
+        public RgbColor BackgroundColor
         {
             get { return m_BackColor; }
             set { m_BackColor = value; }
         }
 
-        public RGBColor ForegroundColor
+        public RgbColor ForegroundColor
         {
             get { return m_ForeColor; }
             set { m_ForeColor = value; }
@@ -193,12 +183,6 @@ namespace Eimu.Core.Systems.SChip8
         {
             get { return this.m_EnableAntiFlickerHack; }
             set { this.m_EnableAntiFlickerHack = value; }
-        }
-
-        public bool EnableEnhancedMode
-        {
-            get { return this.m_EnableEnhancedMode; }
-            set { this.m_EnableEnhancedMode = value; }
         }
 
         public int CurrentResolutionX

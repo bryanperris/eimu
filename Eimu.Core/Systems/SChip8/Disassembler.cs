@@ -25,63 +25,63 @@ namespace Eimu.Core.Systems.SChip8
 {
 	public static class Disassembler
 	{
-		private static Dictionary<ushort, ChipOpcodes> s_Lookup;
+		private static Dictionary<ushort, ChipOpCode> s_Lookup;
 		
 		static Disassembler()
 		{
-			s_Lookup = new Dictionary<ushort, ChipOpcodes>();
+			s_Lookup = new Dictionary<ushort, ChipOpCode>();
 
-			s_Lookup.Add(0, ChipOpcodes.Sys);
-			s_Lookup.Add(0x00E0, ChipOpcodes.Clr);
-			s_Lookup.Add(0x00EE, ChipOpcodes.Ret);
-			s_Lookup.Add(0x1000, ChipOpcodes.Jp_1);
-			s_Lookup.Add(0x2000, ChipOpcodes.Call);
-			s_Lookup.Add(0x3000, ChipOpcodes.Se_3);
-			s_Lookup.Add(0x4000, ChipOpcodes.Sne_4);
-			s_Lookup.Add(0x5000, ChipOpcodes.Se_5);
-			s_Lookup.Add(0x6000, ChipOpcodes.Ld_6);
-			s_Lookup.Add(0x7000, ChipOpcodes.Add_7);
-			s_Lookup.Add(0x8000, ChipOpcodes.Ld_8);
-			s_Lookup.Add(0x8001, ChipOpcodes.Or);
-			s_Lookup.Add(0x8002, ChipOpcodes.And);
-			s_Lookup.Add(0x8003, ChipOpcodes.Xor);
-			s_Lookup.Add(0x8004, ChipOpcodes.Add_8);
-			s_Lookup.Add(0x8005, ChipOpcodes.Sub);
-			s_Lookup.Add(0x8006, ChipOpcodes.Shr);
-			s_Lookup.Add(0x8007, ChipOpcodes.Subn);
-			s_Lookup.Add(0x800E, ChipOpcodes.Shl);
-			s_Lookup.Add(0x9000, ChipOpcodes.Sne_9);
-			s_Lookup.Add(0xA000, ChipOpcodes.Ld_A);
-			s_Lookup.Add(0xB000, ChipOpcodes.Jp_B);
-			s_Lookup.Add(0xC000, ChipOpcodes.Rnd);
-			s_Lookup.Add(0xD000, ChipOpcodes.Drw);
-			s_Lookup.Add(0xE09E, ChipOpcodes.Skp);
-			s_Lookup.Add(0xE0A1, ChipOpcodes.Sknp);
-			s_Lookup.Add(0xF007, ChipOpcodes.Ld_F_07);
-			s_Lookup.Add(0xF00A, ChipOpcodes.Ld_F_0A);
-			s_Lookup.Add(0xF015, ChipOpcodes.Ld_DT);
-			s_Lookup.Add(0xF018, ChipOpcodes.Ld_ST);
-			s_Lookup.Add(0xF01E, ChipOpcodes.Add_F);
-			s_Lookup.Add(0xF029, ChipOpcodes.Ld_F_29);
-			s_Lookup.Add(0xF033, ChipOpcodes.Ld_F_33);
-			s_Lookup.Add(0xF055, ChipOpcodes.Ld_F_55);
-			s_Lookup.Add(0xF065, ChipOpcodes.Ld_F_65);
-			s_Lookup.Add(0xF075, ChipOpcodes.Ld_F_75);
-			s_Lookup.Add(0xF085, ChipOpcodes.Ld_F_85);
-            s_Lookup.Add(0xF030, ChipOpcodes.Ld_F_30);
-            s_Lookup.Add(0x00FD, ChipOpcodes.exit);
-            s_Lookup.Add(0x00FE, ChipOpcodes.extOff);
-            s_Lookup.Add(0x00FF, ChipOpcodes.extOn);
+			s_Lookup.Add(0, ChipOpCode.Sys);
+			s_Lookup.Add(0x00E0, ChipOpCode.Clr);
+			s_Lookup.Add(0x00EE, ChipOpCode.Ret);
+			s_Lookup.Add(0x1000, ChipOpCode.Jp_1);
+			s_Lookup.Add(0x2000, ChipOpCode.Call);
+			s_Lookup.Add(0x3000, ChipOpCode.Se_3);
+			s_Lookup.Add(0x4000, ChipOpCode.Sne_4);
+			s_Lookup.Add(0x5000, ChipOpCode.Se_5);
+			s_Lookup.Add(0x6000, ChipOpCode.Ld_6);
+			s_Lookup.Add(0x7000, ChipOpCode.Add_7);
+			s_Lookup.Add(0x8000, ChipOpCode.Ld_8);
+			s_Lookup.Add(0x8001, ChipOpCode.Or);
+			s_Lookup.Add(0x8002, ChipOpCode.And);
+			s_Lookup.Add(0x8003, ChipOpCode.Xor);
+			s_Lookup.Add(0x8004, ChipOpCode.Add_8);
+			s_Lookup.Add(0x8005, ChipOpCode.Sub);
+			s_Lookup.Add(0x8006, ChipOpCode.Shr);
+			s_Lookup.Add(0x8007, ChipOpCode.Subn);
+			s_Lookup.Add(0x800E, ChipOpCode.Shl);
+			s_Lookup.Add(0x9000, ChipOpCode.Sne_9);
+			s_Lookup.Add(0xA000, ChipOpCode.Ld_A);
+			s_Lookup.Add(0xB000, ChipOpCode.Jp_B);
+			s_Lookup.Add(0xC000, ChipOpCode.Rnd);
+			s_Lookup.Add(0xD000, ChipOpCode.Drw);
+			s_Lookup.Add(0xE09E, ChipOpCode.Skp);
+			s_Lookup.Add(0xE0A1, ChipOpCode.Sknp);
+			s_Lookup.Add(0xF007, ChipOpCode.Ld_F_07);
+			s_Lookup.Add(0xF00A, ChipOpCode.Ld_F_0A);
+			s_Lookup.Add(0xF015, ChipOpCode.Ld_DT);
+			s_Lookup.Add(0xF018, ChipOpCode.Ld_ST);
+			s_Lookup.Add(0xF01E, ChipOpCode.Add_F);
+			s_Lookup.Add(0xF029, ChipOpCode.Ld_F_29);
+			s_Lookup.Add(0xF033, ChipOpCode.Ld_F_33);
+			s_Lookup.Add(0xF055, ChipOpCode.Ld_F_55);
+			s_Lookup.Add(0xF065, ChipOpCode.Ld_F_65);
+			s_Lookup.Add(0xF075, ChipOpCode.Ld_F_75);
+			s_Lookup.Add(0xF085, ChipOpCode.Ld_F_85);
+            s_Lookup.Add(0xF030, ChipOpCode.Ld_F_30);
+            s_Lookup.Add(0x00FD, ChipOpCode.exit);
+            s_Lookup.Add(0x00FE, ChipOpCode.extOff);
+            s_Lookup.Add(0x00FF, ChipOpCode.extOn);
 		}
 
-		public static ChipOpcodes DecodeInstruction(ushort instruction)
+		public static ChipOpCode DecodeInstruction(ushort instruction)
 		{
-			ChipOpcodes opcode;
+			ChipOpCode opcode;
 
 			if (s_Lookup.TryGetValue((ushort)(instruction & GetOpcodeMask(instruction)), out opcode))
 				return opcode;
 			else
-				return ChipOpcodes.Unknown;
+				return ChipOpCode.Unknown;
 		}
 
 		public static ushort GetOpcodeMask(ushort instruction)

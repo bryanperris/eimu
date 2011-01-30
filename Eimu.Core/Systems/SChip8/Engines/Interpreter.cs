@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using System.Globalization;
 
 namespace Eimu.Core.Systems.SChip8.Engines
 {
     [Serializable]
     public sealed class Interpreter : CodeEngine
     {
-        private Dictionary<ChipOpcodes, OpcodeHandler> m_MethodCallTable;
+        private Dictionary<ChipOpCode, OpcodeHandler> m_MethodCallTable;
 
-        public Interpreter(Memory memory)
-            : base(memory)
+        public override void Init(Memory memory)
         {
-        }
-
-        public override void Init()
-        {
-            base.Init();
-            m_MethodCallTable = new Dictionary<ChipOpcodes, OpcodeHandler>();
+            base.Init(memory);
+            m_MethodCallTable = new Dictionary<ChipOpCode, OpcodeHandler>();
             LoadMethods();
         }
 
@@ -36,7 +32,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             OpcodeHandler handler;
             if (m_MethodCallTable != null)
             {
-                if (this.m_MethodCallTable.TryGetValue(inst.Opcode, out handler))
+                if (this.m_MethodCallTable.TryGetValue(inst.OpCode, out handler))
                 {
                     handler.Invoke(inst);
                 }
@@ -61,21 +57,21 @@ namespace Eimu.Core.Systems.SChip8.Engines
 
         public override string ToString()
         {
-            return "PC: " + m_PC.ToString();
+            return "PC: " + m_PC.ToString(CultureInfo.CurrentCulture);
         }
 
         internal delegate void OpcodeHandler(ChipInstruction instruction);
 
         internal class OpcodeTag : Attribute
         {
-            private ChipOpcodes m_Opcode;
+            private ChipOpCode m_Opcode;
 
-            public OpcodeTag(ChipOpcodes opcode)
+            public OpcodeTag(ChipOpCode opcode)
             {
                 this.m_Opcode = opcode;
             }
 
-            public ChipOpcodes Opcode
+            public ChipOpCode Opcode
             {
                 get { return this.m_Opcode; }
             }
@@ -86,13 +82,13 @@ namespace Eimu.Core.Systems.SChip8.Engines
         // ----------------------------------------
         // Graphics Opcodes
         // ----------------------------------------
-        [OpcodeTag(ChipOpcodes.Clr)]
+        [OpcodeTag(ChipOpCode.Clr)]
         private void Clr(ChipInstruction inst)
         {
             OnScreenClear();
         }
 
-        [OpcodeTag(ChipOpcodes.Drw)]
+        [OpcodeTag(ChipOpCode.Drw)]
         private void Drw(ChipInstruction inst)
         {
             OnPixelSet(inst);
@@ -102,13 +98,13 @@ namespace Eimu.Core.Systems.SChip8.Engines
         // -----------------------------------------
         // Math Opcodes
         // -----------------------------------------
-        [OpcodeTag(ChipOpcodes.Add_7)]
+        [OpcodeTag(ChipOpCode.Add_7)]
         void Add_7(ChipInstruction inst)
         {
             m_VRegs[inst.X] += inst.KK;
         }
 
-        [OpcodeTag(ChipOpcodes.Add_8)]
+        [OpcodeTag(ChipOpCode.Add_8)]
         void Add_8(ChipInstruction inst)
         {
             ushort val = (ushort)(m_VRegs[inst.X] + m_VRegs[inst.Y]);
@@ -116,65 +112,65 @@ namespace Eimu.Core.Systems.SChip8.Engines
             m_VRegs[inst.X] = (byte)(val & 0x00FF);
         }
 
-        [OpcodeTag(ChipOpcodes.Add_F)]
+        [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= SC8Machine.MEMORY_SIZE)
+            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= SChipMachine.MEMORY_SIZE)
             {
-                m_IReg = SC8Machine.MEMORY_SIZE;
+                m_IReg = SChipMachine.MEMORY_SIZE;
                 m_VRegs[0xF] = 1;
             }
             else
                 m_IReg += m_VRegs[inst.X];
         }
 
-        [OpcodeTag(ChipOpcodes.Or)]
+        [OpcodeTag(ChipOpCode.Or)]
         void Or(ChipInstruction inst)
         {
             m_VRegs[inst.X] |= m_VRegs[inst.Y];
         }
 
-        [OpcodeTag(ChipOpcodes.And)]
+        [OpcodeTag(ChipOpCode.And)]
         void And(ChipInstruction inst)
         {
             m_VRegs[inst.X] &= m_VRegs[inst.Y];
         }
 
-        [OpcodeTag(ChipOpcodes.Xor)]
+        [OpcodeTag(ChipOpCode.Xor)]
         void Xor(ChipInstruction inst)
         {
             m_VRegs[inst.X] ^= m_VRegs[inst.Y];
         }
 
-        [OpcodeTag(ChipOpcodes.Sub)]
+        [OpcodeTag(ChipOpCode.Sub)]
         void Sub(ChipInstruction inst)
         {
             m_VRegs[0xF] = (byte)((m_VRegs[inst.X] >= m_VRegs[inst.Y]) ? 1 : 0);
             m_VRegs[inst.X] -= m_VRegs[inst.Y];
         }
 
-        [OpcodeTag(ChipOpcodes.Shr)]
+        [OpcodeTag(ChipOpCode.Shr)]
         void Shr(ChipInstruction inst)
         {
             m_VRegs[0xF] = (byte)(((m_VRegs[inst.X] & 1) == 1) ? 1 : 0);
             m_VRegs[inst.X] /= 2;
         }
 
-        [OpcodeTag(ChipOpcodes.Subn)]
+        [OpcodeTag(ChipOpCode.Subn)]
         void Subn(ChipInstruction inst)
         {
             m_VRegs[0xF] = (byte)((m_VRegs[inst.Y] >= m_VRegs[inst.X]) ? 1 : 0);
             m_VRegs[inst.X] = (byte)(m_VRegs[inst.Y] - m_VRegs[inst.X]);
         }
 
-        [OpcodeTag(ChipOpcodes.Shl)]
+        [OpcodeTag(ChipOpCode.Shl)]
         void Shl(ChipInstruction inst)
         {
             m_VRegs[0xF] = (byte)((m_VRegs[inst.X] & 0x80) >> 7);
             m_VRegs[inst.X] *= 2;
         }
 
-        [OpcodeTag(ChipOpcodes.Rnd)]
+        [OpcodeTag(ChipOpCode.Rnd)]
         void Rnd(ChipInstruction inst)
         {
             m_VRegs[inst.X] = (byte)(m_Rand.Next(255) & inst.KK);
@@ -183,27 +179,27 @@ namespace Eimu.Core.Systems.SChip8.Engines
         // -----------------------------------------
         // Jump Opcodes
         // -----------------------------------------
-        [OpcodeTag(ChipOpcodes.Sys)]
+        [OpcodeTag(ChipOpCode.Sys)]
         void Sys(ChipInstruction inst)
         {
             // Ignored Opcode
             //Console.WriteLine("Sys call: " + inst.NNN.ToString("x"));
         }
 
-        [OpcodeTag(ChipOpcodes.Jp_1)]
+        [OpcodeTag(ChipOpCode.Jp_1)]
         void Jump_1(ChipInstruction inst)
         {
             m_PC = inst.NNN;
         }
 
-        [OpcodeTag(ChipOpcodes.Call)]
+        [OpcodeTag(ChipOpCode.Call)]
         void CallF(ChipInstruction inst)
         {
             m_Stack.Push((ushort)m_PC);
             m_PC = inst.NNN;
         }
 
-        [OpcodeTag(ChipOpcodes.Se_3)]
+        [OpcodeTag(ChipOpCode.Se_3)]
         void Se_3(ChipInstruction inst)
         {
             if (m_VRegs[inst.X] == inst.KK)
@@ -212,7 +208,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Sne_4)]
+        [OpcodeTag(ChipOpCode.Sne_4)]
         void Sne_4(ChipInstruction inst)
         {
             if (m_VRegs[inst.X] != inst.KK)
@@ -221,7 +217,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Se_5)]
+        [OpcodeTag(ChipOpCode.Se_5)]
         void Se_5(ChipInstruction inst)
         {
             if (m_VRegs[inst.X] == m_VRegs[inst.Y])
@@ -230,7 +226,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Sne_9)]
+        [OpcodeTag(ChipOpCode.Sne_9)]
         void Sne_9(ChipInstruction inst)
         {
             if (m_VRegs[inst.X] != m_VRegs[inst.Y])
@@ -239,13 +235,13 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Jp_B)]
+        [OpcodeTag(ChipOpCode.Jp_B)]
         void Jp_B(ChipInstruction inst)
         {
             m_PC = (ushort)(inst.NNN + m_VRegs[0]);
         }
 
-        [OpcodeTag(ChipOpcodes.Skp)]
+        [OpcodeTag(ChipOpCode.Skp)]
         void Skp(ChipInstruction inst)
         {
             if (m_VRegs[inst.X] == m_LastKey)
@@ -258,7 +254,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Sknp)]
+        [OpcodeTag(ChipOpCode.Sknp)]
         void Sknp(ChipInstruction inst)
         {
             if (m_VRegs[inst.X] != m_LastKey)
@@ -271,7 +267,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Ret)]
+        [OpcodeTag(ChipOpCode.Ret)]
         void Ret(ChipInstruction inst)
         {
             m_PC = m_Stack.Pop();
@@ -281,25 +277,25 @@ namespace Eimu.Core.Systems.SChip8.Engines
         // -----------------------------------------
         // Load Opcodes
         // -----------------------------------------
-        [OpcodeTag(ChipOpcodes.Ld_6)]
+        [OpcodeTag(ChipOpCode.Ld_6)]
         void Load_6(ChipInstruction inst)
         {
             this.m_VRegs[inst.X] = inst.KK;
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_8)]
+        [OpcodeTag(ChipOpCode.Ld_8)]
         void Load_8(ChipInstruction inst)
         {
             this.m_VRegs[inst.X] = this.m_VRegs[inst.Y];
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_A)]
+        [OpcodeTag(ChipOpCode.Ld_A)]
         void Load_A(ChipInstruction inst)
         {
             this.m_IReg = inst.NNN;
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_07)]
+        [OpcodeTag(ChipOpCode.Ld_F_07)]
         void Load_F07(ChipInstruction inst)
         {
             if (m_DT < 0)
@@ -308,32 +304,32 @@ namespace Eimu.Core.Systems.SChip8.Engines
             this.m_VRegs[inst.X] = (byte)this.m_DT;
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_0A)]
+        [OpcodeTag(ChipOpCode.Ld_F_0A)]
         void Load_F0A(ChipInstruction inst)
         {
             OnWaitForKey();
             m_VRegs[inst.X] = m_LastKey;
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_DT)]
+        [OpcodeTag(ChipOpCode.Ld_DT)]
         void Load_DT(ChipInstruction inst)
         {
             OnSetDelayTimer(m_VRegs[inst.X]);
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_ST)]
+        [OpcodeTag(ChipOpCode.Ld_ST)]
         void Load_ST(ChipInstruction inst)
         {
             OnSetSoundTimer(m_VRegs[inst.X]);
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_29)]
+        [OpcodeTag(ChipOpCode.Ld_F_29)]
         void Load_F29(ChipInstruction inst)
         {
-            m_IReg = (ushort)(m_VRegs[inst.X] * SC8Machine.FONT_SIZE);
+            m_IReg = (ushort)(m_VRegs[inst.X] * SChipMachine.FONT_SIZE);
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_33)]
+        [OpcodeTag(ChipOpCode.Ld_F_33)]
         void Load_F33(ChipInstruction inst)
         {
             byte val = m_VRegs[inst.X];
@@ -342,7 +338,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             m_Memory[m_IReg + 2] = (byte)((val % 100) % 10);
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_55)]
+        [OpcodeTag(ChipOpCode.Ld_F_55)]
         void Load_F55(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
@@ -351,7 +347,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             }
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_65)]
+        [OpcodeTag(ChipOpCode.Ld_F_65)]
         void Load_F65(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
@@ -364,39 +360,39 @@ namespace Eimu.Core.Systems.SChip8.Engines
         // Super Chips
         // -----------------------------------------
 
-        [OpcodeTag(ChipOpcodes.Ld_F_75)]
+        [OpcodeTag(ChipOpCode.Ld_F_75)]
         void Load_F75(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
                 m_RPLFlags[i] = m_VRegs[i];
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_85)]
+        [OpcodeTag(ChipOpCode.Ld_F_85)]
         void Load_F85(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
                 m_VRegs[i] = m_RPLFlags[i];
         }
 
-        [OpcodeTag(ChipOpcodes.extOn)]
+        [OpcodeTag(ChipOpCode.extOn)]
         void ExtOn(ChipInstruction inst)
         {
             OnSuperModeChange(true);
         }
 
-        [OpcodeTag(ChipOpcodes.extOff)]
+        [OpcodeTag(ChipOpCode.extOff)]
         void ExtOff(ChipInstruction inst)
         {
             OnSuperModeChange(false);
         }
 
-        [OpcodeTag(ChipOpcodes.exit)]
+        [OpcodeTag(ChipOpCode.exit)]
         void Exit(ChipInstruction inst)
         {
             return;
         }
 
-        [OpcodeTag(ChipOpcodes.Ld_F_30)]
+        [OpcodeTag(ChipOpCode.Ld_F_30)]
         void Load_F30(ChipInstruction inst)
         {
             m_IReg = m_VRegs[inst.X];

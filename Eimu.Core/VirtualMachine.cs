@@ -22,18 +22,20 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Eimu.Core
 {
     [Serializable]
-    public abstract class VirtualMachine : IDisposable
+    [ComVisible(true)]
+    public abstract class VirtualMachine
     {
         private RunState m_State;
         private Memory m_Memory;
         private Stream m_MediaSource;
         private bool m_Booted = false;
-        public event RunStateChangedEvent RunStateChanged;
-        public event EventHandler MachineEnded;
+        public event EventHandler<RunStateChangedArgs> RunStateChanged;
+        public event EventHandler MachineAborted;
 
         
         protected abstract bool Boot();
@@ -70,6 +72,12 @@ namespace Eimu.Core
             Run();
         }
 
+        private void Abort()
+        {
+            if (MachineAborted != null)
+                MachineAborted(this, new EventArgs());
+        }
+
         private void SetRunState(RunState state)
         {
             m_State = state;
@@ -83,7 +91,7 @@ namespace Eimu.Core
                     m_Booted = false;
                     m_State = RunState.Stopped;
                     Console.WriteLine("Booting failed!");
-                    Dispose();
+                    Abort();
                     return;
                 }
                 else
@@ -98,7 +106,7 @@ namespace Eimu.Core
             }
                 
             if (RunStateChanged != null)
-                RunStateChanged(this, m_State);
+                RunStateChanged(this, new RunStateChangedArgs(m_State));
 
             OnMachineState(m_State);
         }
@@ -112,28 +120,8 @@ namespace Eimu.Core
 
         public Memory SystemMemory
         {
-            get { return this.m_Memory;}
-            set
-            {
-                this.m_Memory = value;
-            }
-        }
-
-        public void Dispose()
-        {
-            if (m_State == RunState.Paused || m_State == RunState.Running)
-            {
-               m_State = RunState.Stopped;
-               OnMachineState(RunState.Stopped);
-            }
-
-            m_Memory = null;
-            m_MediaSource = null;
-
-            if (MachineEnded != null)
-                MachineEnded(this, new EventArgs());
-
-            GC.SuppressFinalize(this);
+            get { return this.m_Memory; }
+            set { this.m_Memory = value; }
         }
     }
 }

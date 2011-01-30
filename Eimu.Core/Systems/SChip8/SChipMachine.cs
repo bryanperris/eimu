@@ -1,17 +1,36 @@
-﻿using System;
+﻿/*  
+Eimu - Chip-8 Emulator
+Copyright (C) 2010  http://code.google.com/p/eimu
+Dedicated to Monarch.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Eimu.Core.Systems.SChip8
 {
-    public class SC8Machine : VirtualMachine
+    [ComVisible(true)]
+    public sealed class SChipMachine : VirtualMachine, IDisposable
     {
         public const int FONT_SIZE = 5;
         public const int MEMORY_SIZE = 4096;
-        public const int CODE_OFFSET = 0x200;
         public const int PROGRAM_ENTRY_POINT = 0x200;
         private bool m_Paused = false;
         private bool m_RequestCPUStop;
@@ -80,9 +99,9 @@ namespace Eimu.Core.Systems.SChip8
                 m_CPUWait.Set();
         }
 
-        public void SetKeyPress(ChipKeys key)
+        public void SetKeyPress(ChipKey key)
         {
-            if (key != ChipKeys.None)
+            if (key != ChipKey.None)
             {
                 m_CodeEngine.LastKeyPressed = (byte)key;
                 m_KeyWait.Set();
@@ -105,8 +124,8 @@ namespace Eimu.Core.Systems.SChip8
                 cycles--;
                 byte a = SystemMemory.GetByte(m_CodeEngine.PC);
                 byte b = SystemMemory.GetByte(m_CodeEngine.PC + 1);
-                ushort data = Tools.MakeShort(a, b);
-                ChipOpcodes opcode = Disassembler.DecodeInstruction(data);
+                ushort data = Tools.Create16(a, b);
+                ChipOpCode opcode = Disassembler.DecodeInstruction(data);
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
@@ -176,14 +195,14 @@ namespace Eimu.Core.Systems.SChip8
             m_Paused = false;
             m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
             m_ThreadCPU.IsBackground = true;
-            m_CodeEngine.Init();
+            m_CodeEngine.Init(this.SystemMemory);
             AttachDeviceCallbacks();
             CurrentAudioDevice.Initialize();
             CurrentGraphicsDevice.Initialize();
             CurrentGraphicsDevice.ClearScreen();
             if (!LoadFont()) return false;
             if (!LoadRom()) return false;
-            Run(CODE_OFFSET);
+            Run(PROGRAM_ENTRY_POINT);
             return true;
         }
 
@@ -228,7 +247,7 @@ namespace Eimu.Core.Systems.SChip8
 
             this.MediaSource.Position = 0;
             int read;
-            int pos = CODE_OFFSET;
+            int pos = PROGRAM_ENTRY_POINT;
 
             try
             {
@@ -311,5 +330,27 @@ namespace Eimu.Core.Systems.SChip8
         {
             m_GraphicsDevice.SetPixel(e.X, e.Y);
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                OnMachineState(RunState.Stopped);
+            }
+
+            m_CPUWait.Close();
+            m_CPUEndWait.Close();
+            m_KeyWait.Close();
+        }
+
+        #endregion
     }
 }

@@ -25,7 +25,7 @@ namespace Eimu
 
             while (!closeApp)
             {
-                SC8Machine vm = new SC8Machine();
+                SChipMachine vm = new SChipMachine();
                 startscreen.SetVM(vm);
                 startscreen.ShowDialog();
 
