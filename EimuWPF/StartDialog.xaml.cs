@@ -107,9 +107,7 @@ namespace Eimu
 
 			SaveConfig();
 
-			m_VM.InitCore<Interpreter>();
-
-			m_VM.CodeEngineCore.DisableTimers = (this.m_CheckBox_C8DisableCoreTimers.IsChecked == true);
+			//m_VM.CodeEngineCore.DisableTimers = (this.m_CheckBox_C8DisableCoreTimers.IsChecked == true);
 
 			// C8 Shit
 			if (m_CheckBox_C8DisableGraphics.IsChecked == true) m_VM.CurrentGraphicsDevice = new NullGraphicsDevice(); 

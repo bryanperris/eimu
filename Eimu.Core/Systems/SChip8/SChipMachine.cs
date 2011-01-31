@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
+using Eimu.Core.Systems.SChip8.Engines;
 
 namespace Eimu.Core.Systems.SChip8
 {
@@ -72,11 +73,6 @@ namespace Eimu.Core.Systems.SChip8
 
         }
 
-        public void InitCore<TCodeEngine>() where TCodeEngine : CodeEngine
-        {
-            SystemMemory = new Memory(MEMORY_SIZE);
-            m_CodeEngine = (CodeEngine)Activator.CreateInstance(typeof(TCodeEngine), new object[] { SystemMemory });
-        }
         // ----------------------------
         // Setters
         // ----------------------------
@@ -195,6 +191,8 @@ namespace Eimu.Core.Systems.SChip8
             m_Paused = false;
             m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
             m_ThreadCPU.IsBackground = true;
+            SystemMemory = new Memory(MEMORY_SIZE);
+            m_CodeEngine = new Interpreter();
             m_CodeEngine.Init(this.SystemMemory);
             AttachDeviceCallbacks();
             CurrentAudioDevice.Initialize();

@@ -68,10 +68,10 @@ namespace Eimu.Core.Systems.SChip8
 			s_Lookup.Add(0xF065, ChipOpCode.Ld_F_65);
 			s_Lookup.Add(0xF075, ChipOpCode.Ld_F_75);
 			s_Lookup.Add(0xF085, ChipOpCode.Ld_F_85);
-            s_Lookup.Add(0xF030, ChipOpCode.Ld_F_30);
-            s_Lookup.Add(0x00FD, ChipOpCode.exit);
-            s_Lookup.Add(0x00FE, ChipOpCode.extOff);
-            s_Lookup.Add(0x00FF, ChipOpCode.extOn);
+			s_Lookup.Add(0xF030, ChipOpCode.Ld_F_30);
+			s_Lookup.Add(0x00FD, ChipOpCode.exit);
+			s_Lookup.Add(0x00FE, ChipOpCode.extOff);
+			s_Lookup.Add(0x00FF, ChipOpCode.extOn);
 		}
 
 		public static ChipOpCode DecodeInstruction(ushort instruction)
@@ -94,7 +94,6 @@ namespace Eimu.Core.Systems.SChip8
 				case 0x0: if (instruction > 0) mask = 0xFFFF; break;
 				case 0xF:
 				case 0xE: mask = 0xF0FF; break;
-				case 0xD:
 				case 0x8: mask = 0xF00F; break;
 				default: mask = 0xF000; break;
 			}

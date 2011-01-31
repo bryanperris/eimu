@@ -29,6 +29,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
 
         public override void Call(ChipInstruction inst)
         {
+            Console.WriteLine("called: " + inst.OpCode.ToString());
             OpcodeHandler handler;
             if (m_MethodCallTable != null)
             {
