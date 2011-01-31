@@ -65,17 +65,8 @@ namespace Eimu.Core.Systems.SChip8
             if (!m_DisableWrapping)
             {
                 // Wrapping
-                if (x > m_ResX-1)
-                    x -= m_ResX;
-
-                if (x < -1)
-                    x += m_ResX;
-
-                if (y > m_ResY-1)
-                    y -= m_ResY;
-
-                if (y < -1)
-                    y += m_ResY;
+                x &= (m_ResX - 1);
+                y &= (m_ResY - 1);
             }
 
             bool on = GetPixel(x, y) ^ true;

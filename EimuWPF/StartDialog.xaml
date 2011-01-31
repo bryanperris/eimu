@@ -33,8 +33,8 @@
 					<CheckBox Content="Disable Wrapping" Height="16" HorizontalAlignment="Left" Margin="204,8,0,0" Name="m_CheckBox_C8DisableWrapping" VerticalAlignment="Top" Width="114" />
 					<CheckBox Content="Force Hi-Res" Height="16" HorizontalAlignment="Left" Margin="204,28,0,0" Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
 					<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" Margin="204,48,0,0" Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
-                    <CheckBox Content="Epic Speed" Height="16" HorizontalAlignment="Left" Margin="204,68,0,0" Name="checkBox1" VerticalAlignment="Top" Width="162" />
-                </Grid>
+					<CheckBox Content="Epic Speed" Height="16" HorizontalAlignment="Left" Margin="204,68,0,0" Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" Width="162" />
+				</Grid>
 			</TabItem>
 			<TabItem x:Name="m_TabItem_MegaChip" Header="Mega Chip"/>
 			<TabItem x:Name="m_TabItem_Chip16" Header="Chip 16"/>

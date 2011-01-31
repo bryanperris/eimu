@@ -44,6 +44,7 @@ namespace Eimu.Core.Systems.SChip8
         private GraphicsDevice m_GraphicsDevice;
         private CodeEngine m_CodeEngine;
         private bool m_SoundLooping;
+        private int m_ExtraCycles;
 
 
         // ----------------------------
@@ -67,6 +68,7 @@ namespace Eimu.Core.Systems.SChip8
                 m_CPUWait.Set();
                 m_KeyWait.Set();
                 m_RequestCPUStop = true;
+                m_CPUEndWait.WaitOne();
                 CurrentAudioDevice.Shutdown();
                 CurrentGraphicsDevice.Shutdown();
             }
@@ -144,11 +146,11 @@ namespace Eimu.Core.Systems.SChip8
                     }
                 }
 
-                if (m_CodeEngine.SoundTimer <= 0 && m_SoundLooping)
-                {
-                    m_SoundLooping = false;
-                    m_AudioDevice.LoopEnd();
-                }
+                //if (m_CodeEngine.SoundTimer <= 0 && m_SoundLooping)
+                //{
+                //    m_SoundLooping = false;
+                //    m_AudioDevice.LoopEnd();
+                //}
             }
         }
 
@@ -162,16 +164,22 @@ namespace Eimu.Core.Systems.SChip8
         {
             Thread.CurrentThread.Name = "CPU Thread";
 
-            while (m_CodeEngine.PC < SystemMemory.Size) {
-                if (!m_RequestCPUStop) {
+            while (m_CodeEngine.PC < SystemMemory.Size) 
+            {
+                if (!m_RequestCPUStop)
+                {
                     if (m_Paused)
                         m_CPUWait.WaitOne();
 
                     int speed = 1;
-                    int cycles = (((speed * 100) + 1) / 60);
+                    int cycles = (((speed * 100) + 1) / 60) * (m_ExtraCycles + 1);
                     Step(cycles);
                     Thread.Sleep(2);
-                }    
+                }
+                else
+                {
+                    break;
+                }
             }
 
             m_CPUEndWait.Set();
@@ -282,6 +290,12 @@ namespace Eimu.Core.Systems.SChip8
         {
             get { return this.m_GraphicsDevice; }
             set { this.m_GraphicsDevice = value; }
+        }
+
+        public int ExtraCycleSpeed
+        {
+            get { return m_ExtraCycles; }
+            set { m_ExtraCycles = value; }
         }
 
 

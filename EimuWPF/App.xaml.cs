@@ -19,7 +19,6 @@ namespace Eimu
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //Eimu.App app = new Eimu.App();
             StartDialog startscreen = new StartDialog();
             startscreen.Closed += new EventHandler(startscreen_Closed);
 

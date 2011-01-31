@@ -37,7 +37,10 @@ namespace Eimu.Core
 
         public byte GetByte(int address)
         {
-            return m_Memory[address];
+            if (address < m_Memory.Length)
+                return m_Memory[address];
+            else
+                return 0;
         }
 
         public void SetByte(int address, byte value)

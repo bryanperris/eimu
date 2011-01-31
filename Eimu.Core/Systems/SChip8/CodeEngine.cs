@@ -130,9 +130,23 @@ namespace Eimu.Core.Systems.SChip8
                 byte y = m_VRegs[inst.Y];
                 byte read = 0;
 
-                for (byte i = 0; i < 32; i++)
+                //Console.WriteLine("");
+                //Console.WriteLine("Sprite: " + inst.N.ToString() + "x" + GraphicsDevice.SuperSpriteSize.ToString());
+
+                for (byte i = 0; i < inst.N; i++)
                 {
                     read = m_Memory.GetByte(m_IReg + i);
+
+                    
+                    //Console.Write(((read >> 7) & 1).ToString());
+                    //Console.Write(((read >> 6) & 1).ToString());
+                    //Console.Write(((read >> 5) & 1).ToString());
+                    //Console.Write(((read >> 4) & 1).ToString());
+                    //Console.Write(((read >> 3) & 1).ToString());
+                    //Console.Write(((read >> 2) & 1).ToString());
+                    //Console.Write(((read >> 1) & 1).ToString());
+                    //Console.Write(((read >> 0) & 1).ToString());
+                    //Console.WriteLine("");
 
                     for (byte j = 0; j < GraphicsDevice.SuperSpriteSize; j++)
                     {

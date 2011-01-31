@@ -113,8 +113,9 @@ namespace Eimu
 			if (m_CheckBox_C8DisableGraphics.IsChecked == true) m_VM.CurrentGraphicsDevice = new NullGraphicsDevice(); 
 			else m_VM.CurrentGraphicsDevice = new OGLDevice();
 
-			if (m_CheckBox_C8DisableSound.IsChecked == true) m_VM.CurrentAudioDevice = new NullAudioDevice();
-			else m_VM.CurrentAudioDevice = new NullAudioDevice();
+			//if (m_CheckBox_C8DisableSound.IsChecked == true) m_VM.CurrentAudioDevice = new NullAudioDevice();
+			//else 
+				m_VM.CurrentAudioDevice = new NullAudioDevice();
 
 			m_VM.CurrentGraphicsDevice.BackgroundColor = new Core.RgbColor(m_C8BackColor.R, m_C8BackColor.G, m_C8BackColor.B);
 			m_VM.CurrentGraphicsDevice.ForegroundColor = new Core.RgbColor(m_C8ForeColor.R, m_C8ForeColor.G, m_C8ForeColor.B);
@@ -122,6 +123,7 @@ namespace Eimu
 			m_VM.CurrentGraphicsDevice.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);
+            m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
 
 			Hide();
 		}
