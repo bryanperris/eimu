@@ -43,8 +43,8 @@ namespace Eimu.Core.Systems.SChip8
         private AudioDevice m_AudioDevice;
         private GraphicsDevice m_GraphicsDevice;
         private CodeEngine m_CodeEngine;
-        private bool m_SoundLooping;
         private int m_ExtraCycles;
+        private bool m_SuperMode;
 
 
         // ----------------------------
@@ -59,11 +59,6 @@ namespace Eimu.Core.Systems.SChip8
 
             if (state == RunState.Stopped)
             {
-                if (m_SoundLooping)
-                {
-                    m_SoundLooping = false;
-                    m_AudioDevice.LoopEnd();
-                }
                 m_CodeEngine.Shutdown();
                 m_CPUWait.Set();
                 m_KeyWait.Set();
@@ -173,8 +168,11 @@ namespace Eimu.Core.Systems.SChip8
 
                     int speed = 1;
                     int cycles = (((speed * 100) + 1) / 60) * (m_ExtraCycles + 1);
+                    Thread.BeginCriticalRegion();
                     Step(cycles);
+                    Thread.EndCriticalRegion();
                     Thread.Sleep(2);
+                    
                 }
                 else
                 {
@@ -189,7 +187,6 @@ namespace Eimu.Core.Systems.SChip8
         {
             Console.WriteLine("Booting...");
 
-            m_SoundLooping = false;
             if (CurrentAudioDevice == null) throw new NullReferenceException();
             if (CurrentGraphicsDevice == null) throw new NullReferenceException();
             m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -296,6 +293,12 @@ namespace Eimu.Core.Systems.SChip8
         {
             get { return m_ExtraCycles; }
             set { m_ExtraCycles = value; }
+        }
+
+        public bool SuperMode
+        {
+            get { return m_SuperMode; }
+            set { m_SuperMode = value; }
         }
 
 

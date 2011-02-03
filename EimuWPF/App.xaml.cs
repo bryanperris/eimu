@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using Eimu.Core.Systems.SChip8;
+using Eimu.Configuration;
 using System.IO;
 
 namespace Eimu
@@ -30,7 +31,7 @@ namespace Eimu
 
                 if (!closeApp)
                 {
-                    FileStream font = new FileStream(Config.CHIP8_FONT_PATH, FileMode.Open, FileAccess.Read);
+                    FileStream font = new FileStream(SchipConfig.Chip8FontPath, FileMode.Open, FileAccess.Read);
                     vm.SetFontResource(font);
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();

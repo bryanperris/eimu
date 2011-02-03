@@ -8,17 +8,19 @@ namespace Eimu.Core.Systems.SChip8
     public abstract class CodeEngine : IDisposable
     {
         public const int StackMaxSize = 12;
-        protected Random m_Rand;
-        protected Stack<ushort> m_Stack;
-        protected byte m_LastKey;
-        protected byte[] m_VRegs = new byte[16];
-        protected byte[] m_RPLFlags = new byte[8];
-        protected int m_PC;
-        protected ushort m_IReg;
-        protected int m_DT;
-        protected int m_ST;
-        protected Timer m_DelayTimer;
-        protected Memory m_Memory;
+
+        public Random m_Rand;
+        public Stack<ushort> m_Stack;
+        public byte m_LastKey;
+        public byte[] m_VRegs = new byte[16];
+        public byte[] m_RPLFlags = new byte[8];
+        public int m_PC;
+        public ushort m_IReg;
+        public int m_DT;
+        public int m_ST;
+        public Timer m_DelayTimer;
+        public Memory m_Memory;
+
         private bool m_Paused;
         private bool m_Stop;
         private EventWaitHandle m_TimerWait;

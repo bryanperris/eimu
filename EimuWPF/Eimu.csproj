@@ -90,7 +90,8 @@
     <Compile Include="ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Config.cs" />
+    <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\SchipConfig.cs" />
     <Compile Include="Devices\BeepAudioDevice.cs" />
     <Compile Include="Devices\NullAudioDevice.cs" />
     <Compile Include="Devices\NullGraphicsDevice.cs" />

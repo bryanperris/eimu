@@ -15,6 +15,7 @@ using Eimu.Core.Systems.SChip8;
 using Eimu.Core.Systems.SChip8.Engines;
 using WPFColorPickerLib;
 using Eimu.Devices;
+using Eimu.Configuration;
 
 namespace Eimu
 {
@@ -24,8 +25,6 @@ namespace Eimu
 		private FileStream m_RomFileSource;
 		private SChipMachine m_VM;
 		private ColorDialog colorDialog;
-		private Color m_C8BackColor = Color.FromRgb(0, 0, 0);
-		private Color m_C8ForeColor = Color.FromRgb(1, 1, 1);
 
 		public StartDialog()
 		{
@@ -37,38 +36,58 @@ namespace Eimu
 
 		public void SaveConfig()
 		{
-			Config.C8FileROMPath = m_OpenFileDialog.FileName;
-			Config.UseC8Interpreter = true;
-			Config.SaveConfigFile();
+			#region SCHIP
+
+			SchipConfig.antiFlicker = m_CheckBox_C8AntiFlickerHack.IsChecked == true;
+			SchipConfig.disableTimers = m_CheckBox_C8DisableCoreTimers.IsChecked == true;
+			SchipConfig.disableGraphics = m_CheckBox_C8DisableGraphics.IsChecked == true;
+			SchipConfig.disableAudio = m_CheckBox_C8DisableSound.IsChecked == true;
+			SchipConfig.disableWrapping = m_CheckBox_C8DisableWrapping.IsChecked == true;
+			SchipConfig.enableCodeCache = m_CheckBox_C8EnableCodeCache.IsChecked == true;
+			SchipConfig.forceHires = m_CheckBox_C8EnableHighres.IsChecked == true;
+			SchipConfig.epicSpeed = m_CheckBox_C8EpicSpeed.IsChecked == true;
+			SchipConfig.enableNetplay = m_CheckBox_C8PlayOnline.IsChecked == true;
+			SchipConfig.useRecompiler = m_CheckBox_C8UseILRec.IsChecked == true;
+
+			#endregion
+
+			Config.SaveConfig();
 		}
 
 		public void LoadConfig()
 		{
-			Config.UseC8Interpreter = true;
+			Config.LoadConfig();
 
-			Config.LoadConfigFile();
-
-			Color c = Color.FromRgb(Config.C8BackColor.Red, Config.C8BackColor.Green, Config.C8BackColor.Blue);
-			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(c);
-			m_C8BackColor = c;
-
-			c = Color.FromRgb(Config.C8ForeColor.Red, Config.C8ForeColor.Green, Config.C8ForeColor.Blue);
-			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(c);
-			m_C8ForeColor = c;
-
-			if (File.Exists(Config.C8FileROMPath))
+			if (File.Exists(Config.romFilePath))
 			{
-				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetFullPath(Config.C8FileROMPath);
-				m_OpenFileDialog.FileName = Config.C8FileROMPath;
-				m_TextBox_ProgramPath.Text = Config.C8FileROMPath;
+				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetFullPath(Config.romFilePath);
+				m_OpenFileDialog.FileName = Config.romFilePath;
+				m_TextBox_ProgramPath.Text = Config.romFilePath;
 				m_Button_RunEmulator.IsEnabled = true;
 
 				if (File.Exists(m_TextBox_ProgramPath.Text))
 				{
-					m_OpenFileDialog.InitialDirectory = 
+					m_OpenFileDialog.InitialDirectory = Config.romFilePath;
 					m_OpenFileDialog.FileName = m_TextBox_ProgramPath.Text;
 				}
 			}
+
+			#region SCHIP
+			
+			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(Color.FromRgb(SchipConfig.backgroundColorR, SchipConfig.backgroundColorG, SchipConfig.backgroundColorB));
+			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(Color.FromRgb(SchipConfig.foregroundColorR, SchipConfig.foregroundColorG, SchipConfig.foregroundColorB));
+			m_CheckBox_C8AntiFlickerHack.IsChecked = SchipConfig.antiFlicker;
+			m_CheckBox_C8DisableCoreTimers.IsChecked = SchipConfig.disableTimers;
+			m_CheckBox_C8DisableGraphics.IsChecked = SchipConfig.disableGraphics;
+			m_CheckBox_C8DisableSound.IsChecked = SchipConfig.disableAudio;
+			m_CheckBox_C8DisableWrapping.IsChecked = SchipConfig.disableWrapping;
+			m_CheckBox_C8EnableCodeCache.IsChecked = SchipConfig.enableCodeCache;
+			m_CheckBox_C8EnableHighres.IsChecked = SchipConfig.forceHires;
+			m_CheckBox_C8EpicSpeed.IsChecked = SchipConfig.epicSpeed;
+			m_CheckBox_C8PlayOnline.IsChecked = SchipConfig.enableNetplay;
+			m_CheckBox_C8UseILRec.IsChecked = SchipConfig.useRecompiler;
+
+			#endregion
 		}
 
 		public void SetVM(SChipMachine vm)
@@ -87,9 +106,12 @@ namespace Eimu
 
 			m_OpenFileDialog.ShowDialog();
 			m_TextBox_ProgramPath.Text = m_OpenFileDialog.FileName;
-			m_TextBox_ProgramPath.FontStyle = FontStyles.Normal;
+			//m_TextBox_ProgramPath.FontStyle = FontStyles.Normal;
 			m_Button_RunEmulator.IsEnabled = true;
-			SaveConfig();
+
+			Config.romFilePath = m_OpenFileDialog.FileName;
+
+			Config.SaveConfig();
 
 		}
 
@@ -110,20 +132,22 @@ namespace Eimu
 			//m_VM.CodeEngineCore.DisableTimers = (this.m_CheckBox_C8DisableCoreTimers.IsChecked == true);
 
 			// C8 Shit
-			if (m_CheckBox_C8DisableGraphics.IsChecked == true) m_VM.CurrentGraphicsDevice = new NullGraphicsDevice(); 
-			else m_VM.CurrentGraphicsDevice = new OGLDevice();
+			if (m_CheckBox_C8DisableGraphics.IsChecked == true) 
+				m_VM.CurrentGraphicsDevice = new NullGraphicsDevice();
+			else 
+				m_VM.CurrentGraphicsDevice = new OGLDevice();
 
 			//if (m_CheckBox_C8DisableSound.IsChecked == true) m_VM.CurrentAudioDevice = new NullAudioDevice();
 			//else 
-				m_VM.CurrentAudioDevice = new NullAudioDevice();
+			m_VM.CurrentAudioDevice = new NullAudioDevice();
 
-			m_VM.CurrentGraphicsDevice.BackgroundColor = new Core.RgbColor(m_C8BackColor.R, m_C8BackColor.G, m_C8BackColor.B);
-			m_VM.CurrentGraphicsDevice.ForegroundColor = new Core.RgbColor(m_C8ForeColor.R, m_C8ForeColor.G, m_C8ForeColor.B);
+			m_VM.CurrentGraphicsDevice.BackgroundColor = SchipConfig.BackColor;
+			m_VM.CurrentGraphicsDevice.ForegroundColor = SchipConfig.ForeColor;
 			m_VM.CurrentGraphicsDevice.DisableWrapping = (this.m_CheckBox_C8DisableWrapping.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);
-            m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
+			m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
 
 			Hide();
 		}
@@ -135,9 +159,10 @@ namespace Eimu
 			Color c = colorDialog.SelectedColor;
 			c.A = 255;
 			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(c);
-			m_C8BackColor = c;
-			Config.C8BackColor = new Core.RgbColor(c.R, c.G, c.B);
-			SaveConfig();
+			SchipConfig.backgroundColorR = c.R;
+			SchipConfig.backgroundColorG = c.G;
+			SchipConfig.backgroundColorB = c.B;
+			Config.SaveConfig();
 		}
 
 		private void m_Rectangle_C8SelectedForegroundColor_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -147,9 +172,10 @@ namespace Eimu
 			Color c = colorDialog.SelectedColor;
 			c.A = 255;
 			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(c);
-			m_C8ForeColor = c;
-			Config.C8ForeColor = new Core.RgbColor(c.R, c.G, c.B);
-			SaveConfig();
+			SchipConfig.foregroundColorR = c.R;
+			SchipConfig.foregroundColorG = c.G;
+			SchipConfig.foregroundColorB = c.B;
+			Config.SaveConfig();
 		}
 	}
 }

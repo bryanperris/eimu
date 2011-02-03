@@ -323,6 +323,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
             OnSetSoundTimer(m_VRegs[inst.X]);
         }
 
+        // TODO: Fix for Super chip
         [OpcodeTag(ChipOpCode.Ld_F_29)]
         void Load_F29(ChipInstruction inst)
         {

@@ -12,7 +12,7 @@ using System;
 [assembly: AssemblyCopyright("Copyright © Eimu Project 2010")]
 [assembly: AssemblyTrademark("Eimu")]
 //[assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
+//[assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("aa59a693-2921-4e21-8e8c-da5b6c8767ab")]
