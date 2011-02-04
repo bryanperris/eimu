@@ -9,6 +9,7 @@ namespace Eimu.Configuration
     public static class SchipConfig
     {
         public const string Chip8FontPath = Config.systemDirectory + "c8fnt.bin";
+        public const string SChipFontPath = Config.systemDirectory + "scfnt.bin";
         public static bool useRecompiler = false;
         public static byte backgroundColorR;
         public static byte backgroundColorG = 0;

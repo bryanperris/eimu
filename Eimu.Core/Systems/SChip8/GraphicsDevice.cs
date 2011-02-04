@@ -50,7 +50,6 @@ namespace Eimu.Core.Systems.SChip8
                 m_ResX = SuperResolutionX;
                 m_ResY = SuperResolutionY;
             }
-
             m_Buffer = new bool[(m_ResX + 1) * (m_ResY + 1)];
         }
 
@@ -95,6 +94,70 @@ namespace Eimu.Core.Systems.SChip8
             m_EnableHighres = enabled;
             Shutdown();
             Initialize();
+        }
+
+        private void ScrollPixelsDown(int n)
+        {
+            bool[] arr = new bool[(m_ResX + 1) * (m_ResY + 1)];
+            int offset = (m_ResX * n);
+
+            Array.Copy(m_Buffer, arr, m_Buffer.Length);
+
+            Array.Clear(m_Buffer, 0, m_Buffer.Length);
+
+            Array.Copy(arr, 0,
+                m_Buffer, offset,
+                m_Buffer.Length - offset);
+        }
+
+        private void ScrollPixelsRight()
+        {
+            bool[] arr = new bool[(m_ResX + 1) * (m_ResY + 1)];
+
+            // Duplicate the buffer
+            Array.Copy(m_Buffer, arr, m_Buffer.Length);
+
+            // Clear the buffer
+            Array.Clear(m_Buffer, 0, m_Buffer.Length);
+
+            for (int y = 0; y < m_ResY; y++)
+            {
+                for (int x = 4; x < m_ResX; x++)
+                {
+                    m_Buffer[GetBufferPosition(x, y)] = arr[GetBufferPosition(x - 4, y)];
+                }
+            }
+        }
+
+        private void ScrollPixelsLeft()
+        {
+            bool[] arr = new bool[(m_ResX + 1) * (m_ResY + 1)];
+
+            // Duplicate the buffer
+            Array.Copy(m_Buffer, arr, m_Buffer.Length);
+
+            // Clear the buffer
+            Array.Clear(m_Buffer, 0, m_Buffer.Length);
+
+            for (int y = 0; y < m_ResY; y++)
+            {
+                for (int x = 0; x < m_ResX - 4; x++)
+                {
+                    m_Buffer[GetBufferPosition(x, y)] = arr[GetBufferPosition(x + 4, y)];
+                }
+            }
+        }
+
+        public virtual void ScrollPixels(int length, int dir)
+        {
+            switch (dir)
+            {
+                case 1: ScrollPixelsLeft(); break;
+                case 2: ScrollPixelsDown(length); break;
+                case 3: ScrollPixelsRight();  break;
+                default: break;
+            }
+            Update();
         }
 
         protected abstract void OnInit();

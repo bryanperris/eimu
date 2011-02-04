@@ -36,6 +36,7 @@ namespace Eimu.Core.Systems.SChip8
         private bool m_Paused = false;
         private bool m_RequestCPUStop;
         private Stream m_FontSource;
+        private Stream m_SFontSource;
         private EventWaitHandle m_CPUWait;
         private EventWaitHandle m_KeyWait;
         private EventWaitHandle m_CPUEndWait;
@@ -44,7 +45,6 @@ namespace Eimu.Core.Systems.SChip8
         private GraphicsDevice m_GraphicsDevice;
         private CodeEngine m_CodeEngine;
         private int m_ExtraCycles;
-        private bool m_SuperMode;
 
 
         // ----------------------------
@@ -74,9 +74,10 @@ namespace Eimu.Core.Systems.SChip8
         // Setters
         // ----------------------------
 
-        public void SetFontResource(Stream source)
+        public void SetFontResource(Stream ch8, Stream schip)
         {
-            m_FontSource = source;
+            m_FontSource = ch8;
+            m_SFontSource = schip;
         }
 
         public void SetCollision()
@@ -124,28 +125,14 @@ namespace Eimu.Core.Systems.SChip8
                 m_CodeEngine.IncrementPC();
                 m_CodeEngine.Call(inst);
 
-                if (m_CodeEngine.DelayTimer > 0) m_CodeEngine.DelayTimer--;
+                if (m_CodeEngine.DelayTimer > 0)
+                    m_CodeEngine.DelayTimer--;
 
                 if (m_CodeEngine.SoundTimer > 0)
                 {
                     m_CodeEngine.SoundTimer--;
-
-                    //if (!m_SoundLooping && m_CodeEngine.SoundTimer > 1)
-                    //{
-                    //    m_SoundLooping = true;
-                    //    m_AudioDevice.LoopBegin();
-                    //}
-                    //else
-                    {
-                        m_AudioDevice.Beep();
-                    }
+                    m_AudioDevice.Beep();
                 }
-
-                //if (m_CodeEngine.SoundTimer <= 0 && m_SoundLooping)
-                //{
-                //    m_SoundLooping = false;
-                //    m_AudioDevice.LoopEnd();
-                //}
             }
         }
 
@@ -216,8 +203,14 @@ namespace Eimu.Core.Systems.SChip8
                 int read;
                 int pos = 0;
                 m_FontSource.Position = 0;
+                m_SFontSource.Position = 0;
 
                 while ((read = m_FontSource.ReadByte()) != -1)
+                {
+                    this.SystemMemory[pos++] = (byte)read;
+                }
+
+                while ((read = m_SFontSource.ReadByte()) != -1)
                 {
                     this.SystemMemory[pos++] = (byte)read;
                 }
@@ -295,13 +288,6 @@ namespace Eimu.Core.Systems.SChip8
             set { m_ExtraCycles = value; }
         }
 
-        public bool SuperMode
-        {
-            get { return m_SuperMode; }
-            set { m_SuperMode = value; }
-        }
-
-
         // ----------------------------
         // Internal Calls
         // ----------------------------
@@ -324,6 +310,14 @@ namespace Eimu.Core.Systems.SChip8
 
             m_CodeEngine.SuperModeChange -= new EventHandler<SuperModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
             m_CodeEngine.SuperModeChange += new EventHandler<SuperModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
+
+            m_CodeEngine.PixelScroll -= new EventHandler<PixelScrollEventArgs>(OnPixelScroll);
+            m_CodeEngine.PixelScroll += new EventHandler<PixelScrollEventArgs>(OnPixelScroll);
+        }
+
+        private void OnPixelScroll(object sender, PixelScrollEventArgs e)
+        {
+            m_GraphicsDevice.ScrollPixels(e.Length, e.Direction);
         }
 
         private void m_CodeEngine_SuperModeChange(object sender, SuperModeChangedEventArgs e)

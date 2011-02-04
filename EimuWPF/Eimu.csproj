@@ -93,11 +93,11 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\SchipConfig.cs" />
     <Compile Include="Devices\BeepAudioDevice.cs" />
+    <Compile Include="Devices\IWinFormAttachment.cs" />
     <Compile Include="Devices\NullAudioDevice.cs" />
     <Compile Include="Devices\NullGraphicsDevice.cs" />
     <Compile Include="Devices\OALDevice.cs" />
     <Compile Include="Devices\OGLDevice.cs" />
-    <Compile Include="PluginManager.cs" />
     <Compile Include="RenderPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -181,7 +181,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>md sys
-copy  "..\Data\sys\c8fnt.bin" "./sys/"</PostBuildEvent>
+copy  "..\Data\sys\*" "./sys/"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

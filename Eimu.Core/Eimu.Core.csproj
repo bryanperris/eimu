@@ -55,6 +55,7 @@
     <Compile Include="RunStateChangedArgs.cs" />
     <Compile Include="Systems\Chip16\C16Color.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
+    <Compile Include="Systems\SChip8\PixelScrollEventArgs.cs" />
     <Compile Include="Systems\SChip8\SChipMachine.cs" />
     <Compile Include="Systems\SChip8\ChipOpCode.cs" />
     <Compile Include="Systems\SChip8\CodeEngine.cs" />

@@ -94,6 +94,24 @@ namespace Eimu.Core.Systems.SChip8.Engines
             OnPixelSet(inst);
         }
 
+        [OpcodeTag(ChipOpCode.scrollN)]
+        private void ScrollDown(ChipInstruction inst)
+        {
+            OnPixelScroll(2, inst.N);
+        }
+
+        [OpcodeTag(ChipOpCode.scrollL)]
+        private void ScrollLeft(ChipInstruction inst)
+        {
+            OnPixelScroll(1, 4);
+        }
+
+        [OpcodeTag(ChipOpCode.scrollR)]
+        private void ScrollRight(ChipInstruction inst)
+        {
+            OnPixelScroll(3, 4);
+        }
+
 
         // -----------------------------------------
         // Math Opcodes
@@ -323,11 +341,11 @@ namespace Eimu.Core.Systems.SChip8.Engines
             OnSetSoundTimer(m_VRegs[inst.X]);
         }
 
-        // TODO: Fix for Super chip
+        // TOOD: Broken for SCHIP
         [OpcodeTag(ChipOpCode.Ld_F_29)]
         void Load_F29(ChipInstruction inst)
         {
-            m_IReg = (ushort)(m_VRegs[inst.X] * SChipMachine.FONT_SIZE);
+            m_IReg = (ushort)(m_VRegs[inst.X] * 5);
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_33)]

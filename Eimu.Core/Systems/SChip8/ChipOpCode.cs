@@ -65,5 +65,8 @@ namespace Eimu.Core.Systems.SChip8
 		exit,        // Exit from S-CHIP environment
 		extOff,      // Turn off extended mode
 		extOn,       // Turn on extended mode
+		scrollN,     // Scroll display N lines down
+		scrollR,     // Scroll display 4 pixels right
+		scrollL,     // Scroll display 4 pixels left
 	}
 }

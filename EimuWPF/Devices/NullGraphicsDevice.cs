@@ -21,7 +21,7 @@ using Eimu.Core.Systems.SChip8;
 
 namespace Eimu.Devices
 {
-    public sealed class NullGraphicsDevice : GraphicsDevice
+    public sealed class NullGraphicsDevice : GraphicsDevice, IWinFormAttachment
     {
         protected override void OnInit()
         {
@@ -48,5 +48,28 @@ namespace Eimu.Devices
         {
             
         }
+
+        #region IWinFormAttachment Members
+
+        public void SetPanelHandle(IntPtr handle)
+        {
+        }
+
+        public void SetWindowHandle(IntPtr handle)
+        {
+        }
+
+        public bool UseDoubleBugger
+        {
+            get
+            {
+                return false;
+            }
+            set
+            {
+            }
+        }
+
+        #endregion
     }
 }

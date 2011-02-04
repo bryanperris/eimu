@@ -33,7 +33,6 @@ namespace Eimu
             base.SetStyle(ControlStyles.Opaque, true);
             base.SetStyle(ControlStyles.UserPaint, true);
             base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.DoubleBuffered = PluginManager.EnableDoubleBuffer;
             this.InitializeComponent();
         }
 
@@ -51,6 +50,12 @@ namespace Eimu
         {
             this.SuspendLayout();
             this.ResumeLayout(false);
+        }
+
+        public bool EnableDoubleBuffer
+        {
+            get { return this.DoubleBuffered; }
+            set { this.DoubleBuffered = value; }
         }
     }
 }

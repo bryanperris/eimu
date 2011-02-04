@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Eimu.Core.Systems.SChip8;
 using System.Windows.Interop;
+using Eimu.Devices;
 
 namespace Eimu
 {
@@ -65,8 +66,22 @@ namespace Eimu
             m_FormHost.Focus();
             m_WinHelper = new WindowInteropHelper(this);
             m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
-            PluginManager.WindowHandle = m_WinHelper.Handle;
-            PluginManager.RenderContext = renderPanel.Handle;
+
+            Type intf = m_Machine.CurrentGraphicsDevice.GetType().GetInterface(typeof(IWinFormAttachment).Name);
+
+            if (intf != null)
+            {
+                renderPanel.EnableDoubleBuffer = ((IWinFormAttachment)m_Machine.CurrentGraphicsDevice).UseDoubleBugger;
+                ((IWinFormAttachment)m_Machine.CurrentGraphicsDevice).SetPanelHandle(renderPanel.Handle);
+                ((IWinFormAttachment)m_Machine.CurrentGraphicsDevice).SetWindowHandle(m_WinHelper.Handle);
+            }
+            else
+            {
+                this.Close();
+                return;
+            }
+
+
             m_Machine.Run();
         }
 

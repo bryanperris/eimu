@@ -31,8 +31,9 @@ using OpenTK.Platform;
 
 namespace Eimu.Devices
 {
-    public sealed class OGLDevice : GraphicsDevice
+    public sealed class OGLDevice : GraphicsDevice, IWinFormAttachment
     {
+
         private Control m_ControlContext;
         private GraphicsContext m_GContext;
         private IWindowInfo m_WindowInfo;
@@ -41,7 +42,6 @@ namespace Eimu.Devices
 
         public OGLDevice()
         {
-            PluginManager.EnableDoubleBuffer = false;
         }
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
@@ -112,18 +112,6 @@ namespace Eimu.Devices
 
         protected override void OnInit()
         {
-            m_ControlContext = Control.FromHandle(PluginManager.RenderContext);
-            m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
-            m_WindowInfo = Utilities.CreateWindowsWindowInfo(PluginManager.RenderContext);
-            m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
-
-            m_GContext.MakeCurrent(m_WindowInfo);
-
-            if (!m_GContext.IsCurrent)
-                throw new InvalidOperationException();
-
-            m_GContext.LoadAll();
-
             GL.Disable(EnableCap.AlphaTest);
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Dither);
@@ -136,5 +124,40 @@ namespace Eimu.Devices
         {
             m_ControlContext.Invalidate();
         }
+
+        #region IWinFormAttachment Members
+
+        public void SetPanelHandle(IntPtr handle)
+        {
+            m_ControlContext = Control.FromHandle(handle);
+            m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
+            m_WindowInfo = Utilities.CreateWindowsWindowInfo(handle);
+            m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
+
+            m_GContext.MakeCurrent(m_WindowInfo);
+
+            if (!m_GContext.IsCurrent)
+                throw new InvalidOperationException();
+
+            m_GContext.LoadAll();
+        }
+
+        public void SetWindowHandle(IntPtr handle)
+        {
+        }
+
+        public bool UseDoubleBugger
+        {
+            get
+            {
+                return false;
+            }
+            set
+            {
+                
+            }
+        }
+
+        #endregion
     }
 }

@@ -20,6 +20,7 @@ namespace Eimu.Core.Systems.SChip8
         public int m_ST;
         public Timer m_DelayTimer;
         public Memory m_Memory;
+        public bool m_SMode;
 
         private bool m_Paused;
         private bool m_Stop;
@@ -27,9 +28,9 @@ namespace Eimu.Core.Systems.SChip8
         public event EventHandler ScreenClear;
         public event EventHandler<PixelSetEventArgs> PixelSet;
         public event EventHandler<SuperModeChangedEventArgs> SuperModeChange;
+        public event EventHandler<PixelScrollEventArgs> PixelScroll;
         public event EventHandler KeyPressWait;
         private bool m_DisableTimers;
-        private bool m_SuperMode;
 
         public virtual void Init(Memory memory)
         {
@@ -86,7 +87,7 @@ namespace Eimu.Core.Systems.SChip8
 
         protected void OnSuperModeChange(bool enabled)
         {
-            m_SuperMode = enabled;
+            m_SMode = enabled;
 
             if (SuperModeChange != null)
                 SuperModeChange(this, new SuperModeChangedEventArgs(enabled));
@@ -94,63 +95,19 @@ namespace Eimu.Core.Systems.SChip8
 
         protected void OnPixelSet(ChipInstruction inst)
         {
-            if (m_SuperMode)
-            {
-                SuperPixelSet(inst);
-                return;
-            }
-
             if (PixelSet != null)
             {
                 m_VRegs[0xF] = 0;
                 byte x = m_VRegs[inst.X];
                 byte y = m_VRegs[inst.Y];
                 byte read = 0;
+                int size = (m_SMode) ? GraphicsDevice.SuperSpriteSize : GraphicsDevice.StandardSpriteSize;
 
                 for (byte i = 0; i < inst.N; i++)
                 {
                     read = m_Memory.GetByte(m_IReg + i);
 
-                    for (byte j = 0; j < GraphicsDevice.StandardSpriteSize; j++)
-                    {
-                        // Keep writing pixels until we hit a 0 bit (width end)
-                        if ((read & (0x80 >> j)) != 0)
-                        {
-                            PixelSet(this, new PixelSetEventArgs((x + j), (y + i)));
-                        }
-                    }
-                }
-            }
-        }
-
-        private void SuperPixelSet(ChipInstruction inst)
-        {
-            if (PixelSet != null)
-            {
-                m_VRegs[0xF] = 0;
-                byte x = m_VRegs[inst.X];
-                byte y = m_VRegs[inst.Y];
-                byte read = 0;
-
-                //Console.WriteLine("");
-                //Console.WriteLine("Sprite: " + inst.N.ToString() + "x" + GraphicsDevice.SuperSpriteSize.ToString());
-
-                for (byte i = 0; i < inst.N; i++)
-                {
-                    read = m_Memory.GetByte(m_IReg + i);
-
-                    
-                    //Console.Write(((read >> 7) & 1).ToString());
-                    //Console.Write(((read >> 6) & 1).ToString());
-                    //Console.Write(((read >> 5) & 1).ToString());
-                    //Console.Write(((read >> 4) & 1).ToString());
-                    //Console.Write(((read >> 3) & 1).ToString());
-                    //Console.Write(((read >> 2) & 1).ToString());
-                    //Console.Write(((read >> 1) & 1).ToString());
-                    //Console.Write(((read >> 0) & 1).ToString());
-                    //Console.WriteLine("");
-
-                    for (byte j = 0; j < GraphicsDevice.SuperSpriteSize; j++)
+                    for (byte j = 0; j < size; j++)
                     {
                         // Keep writing pixels until we hit a 0 bit (width end)
                         if ((read & (0x80 >> j)) != 0)
@@ -172,6 +129,12 @@ namespace Eimu.Core.Systems.SChip8
         {
             if (KeyPressWait != null)
                 KeyPressWait(this, new EventArgs());
+        }
+
+        protected void OnPixelScroll(int dir, int length)
+        {
+            if (PixelScroll != null)
+                PixelScroll(this, new PixelScrollEventArgs(length, dir));
         }
 
         private void DelayTimerCallback(object state)

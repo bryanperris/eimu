@@ -32,11 +32,13 @@ namespace Eimu
                 if (!closeApp)
                 {
                     FileStream font = new FileStream(SchipConfig.Chip8FontPath, FileMode.Open, FileAccess.Read);
-                    vm.SetFontResource(font);
+                    FileStream sfont = new FileStream(SchipConfig.SChipFontPath, FileMode.Open, FileAccess.Read);
+                    vm.SetFontResource(font, sfont);
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();
                     vm.Stop();
                     font.Close();
+                    sfont.Close();
                 }
             }
         }
