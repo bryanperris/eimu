@@ -204,7 +204,7 @@ namespace Eimu.Core.Systems.SChip8
             OnShutdown();
         }
 
-        public override void SetPauseState(bool paused)
+        public override void SetPause(bool paused)
         {
             OnPauseStateChange(paused);
         }

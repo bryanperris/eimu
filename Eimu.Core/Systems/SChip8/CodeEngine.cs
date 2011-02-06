@@ -8,6 +8,7 @@ namespace Eimu.Core.Systems.SChip8
     public abstract class CodeEngine : IDisposable
     {
         public const int StackMaxSize = 12;
+        public const int TimerRate = 17;
 
         public Random m_Rand;
         public Stack<ushort> m_Stack;
@@ -19,6 +20,7 @@ namespace Eimu.Core.Systems.SChip8
         public int m_DT;
         public int m_ST;
         public Timer m_DelayTimer;
+        public Timer m_SoundTimer;
         public Memory m_Memory;
         public bool m_SMode;
 
@@ -117,6 +119,8 @@ namespace Eimu.Core.Systems.SChip8
                     }
                 }
             }
+
+            Thread.Sleep(2);
         }
 
         protected void OnScreenClear()
@@ -148,13 +152,24 @@ namespace Eimu.Core.Systems.SChip8
             }
         }
 
+        private void SoundTimerCallback(object state)
+        {
+            if (m_ST > 0 && !m_Stop)
+            {
+                if (!m_Paused)
+                {
+                    m_ST--;
+                }
+            }
+        }
+
         protected void OnSetDelayTimer(byte value)
         {
             if (m_DisableTimers)
                 return;
 
             m_DT = value;
-            //m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), this, 0, 10);
+            m_DelayTimer = new Timer(new TimerCallback(DelayTimerCallback), this, 0, TimerRate);
         }
 
         protected void OnSetSoundTimer(byte value)
@@ -163,6 +178,7 @@ namespace Eimu.Core.Systems.SChip8
                 return;
 
             m_ST = value;
+            m_SoundTimer = new Timer(new TimerCallback(SoundTimerCallback), this, 0, TimerRate);
         }
 
         public byte LastKeyPressed

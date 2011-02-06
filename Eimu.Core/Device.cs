@@ -24,6 +24,6 @@ namespace Eimu.Core
     {
         public abstract void Initialize();
         public abstract void Shutdown();
-        public abstract void SetPauseState(bool paused);
+        public abstract void SetPause(bool paused);
     }
 }

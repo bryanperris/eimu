@@ -7,6 +7,7 @@ using System.Windows;
 using Eimu.Core.Systems.SChip8;
 using Eimu.Configuration;
 using System.IO;
+using System.Threading;
 
 namespace Eimu
 {
@@ -19,6 +20,8 @@ namespace Eimu
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            Thread.CurrentThread.Name = "Main App";
+            //ThreadPool
             base.OnStartup(e);
             StartDialog startscreen = new StartDialog();
             startscreen.Closed += new EventHandler(startscreen_Closed);

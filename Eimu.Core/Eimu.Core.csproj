@@ -61,7 +61,6 @@
     <Compile Include="Systems\SChip8\CodeEngine.cs" />
     <Compile Include="Systems\SChip8\Disassembler.cs" />
     <Compile Include="Systems\SChip8\Engines\Interpreter.cs" />
-    <Compile Include="Systems\SChip8\BeepEventArgs.cs" />
     <Compile Include="Systems\SChip8\ChipKey.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Systems\SChip8\AudioDevice.cs" />

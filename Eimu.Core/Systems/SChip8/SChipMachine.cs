@@ -37,9 +37,9 @@ namespace Eimu.Core.Systems.SChip8
         private bool m_RequestCPUStop;
         private Stream m_FontSource;
         private Stream m_SFontSource;
-        private EventWaitHandle m_CPUWait;
+        private EventWaitHandle m_CPUPause;
         private EventWaitHandle m_KeyWait;
-        private EventWaitHandle m_CPUEndWait;
+        private EventWaitHandle m_CPUFinishWait;
         private Thread m_ThreadCPU;
         private AudioDevice m_AudioDevice;
         private GraphicsDevice m_GraphicsDevice;
@@ -53,17 +53,17 @@ namespace Eimu.Core.Systems.SChip8
 
         protected override void OnMachineState(RunState state)
         {
-            CurrentAudioDevice.SetPauseState((state == RunState.Paused));
-            CurrentGraphicsDevice.SetPauseState((state == RunState.Paused));
+            CurrentAudioDevice.SetPause((state == RunState.Paused));
+            CurrentGraphicsDevice.SetPause((state == RunState.Paused));
             SetPauseState((state == RunState.Paused));
 
             if (state == RunState.Stopped)
             {
                 m_CodeEngine.Shutdown();
-                m_CPUWait.Set();
+                m_CPUPause.Set();
                 m_KeyWait.Set();
                 m_RequestCPUStop = true;
-                m_CPUEndWait.WaitOne();
+                m_CPUFinishWait.WaitOne();
                 CurrentAudioDevice.Shutdown();
                 CurrentGraphicsDevice.Shutdown();
             }
@@ -90,7 +90,7 @@ namespace Eimu.Core.Systems.SChip8
             this.m_Paused = paused;
 
             if (!m_Paused)
-                m_CPUWait.Set();
+                m_CPUPause.Set();
         }
 
         public void SetKeyPress(ChipKey key)
@@ -124,15 +124,6 @@ namespace Eimu.Core.Systems.SChip8
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
                 m_CodeEngine.Call(inst);
-
-                if (m_CodeEngine.DelayTimer > 0)
-                    m_CodeEngine.DelayTimer--;
-
-                if (m_CodeEngine.SoundTimer > 0)
-                {
-                    m_CodeEngine.SoundTimer--;
-                    m_AudioDevice.Beep();
-                }
             }
         }
 
@@ -151,15 +142,10 @@ namespace Eimu.Core.Systems.SChip8
                 if (!m_RequestCPUStop)
                 {
                     if (m_Paused)
-                        m_CPUWait.WaitOne();
+                        m_CPUPause.WaitOne();
 
-                    int speed = 1;
-                    int cycles = (((speed * 100) + 1) / 60) * (m_ExtraCycles + 1);
-                    Thread.BeginCriticalRegion();
+                    int cycles = 17 + m_ExtraCycles;
                     Step(cycles);
-                    Thread.EndCriticalRegion();
-                    Thread.Sleep(2);
-                    
                 }
                 else
                 {
@@ -167,7 +153,7 @@ namespace Eimu.Core.Systems.SChip8
                 }
             }
 
-            m_CPUEndWait.Set();
+            m_CPUFinishWait.Set();
         }
 
         protected override bool Boot()
@@ -176,9 +162,9 @@ namespace Eimu.Core.Systems.SChip8
 
             if (CurrentAudioDevice == null) throw new NullReferenceException();
             if (CurrentGraphicsDevice == null) throw new NullReferenceException();
-            m_CPUWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
-            m_CPUEndWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_RequestCPUStop = false;
             m_Paused = false;
             m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
@@ -355,8 +341,8 @@ namespace Eimu.Core.Systems.SChip8
                 OnMachineState(RunState.Stopped);
             }
 
-            m_CPUWait.Close();
-            m_CPUEndWait.Close();
+            m_CPUPause.Close();
+            m_CPUFinishWait.Close();
             m_KeyWait.Close();
         }
 

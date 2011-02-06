@@ -98,6 +98,7 @@
     <Compile Include="Devices\NullGraphicsDevice.cs" />
     <Compile Include="Devices\OALDevice.cs" />
     <Compile Include="Devices\OGLDevice.cs" />
+    <Compile Include="ProgramInfo.cs" />
     <Compile Include="RenderPanel.cs">
       <SubType>Component</SubType>
     </Compile>
