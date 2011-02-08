@@ -105,6 +105,9 @@
     <Compile Include="RenderWindow.xaml.cs">
       <DependentUpon>RenderWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SC8DebuggerWindow.xaml.cs">
+      <DependentUpon>SC8DebuggerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StartDialog.xaml.cs">
       <DependentUpon>StartDialog.xaml</DependentUpon>
     </Compile>
@@ -158,6 +161,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="RenderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SC8DebuggerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

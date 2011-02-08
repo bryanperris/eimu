@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 
+// Some RPL Register Doc
+// Test Program: Schip Test.sc
+// RPL0 = Logo X Position
+// RPL1 = Logo Y Position
+// RPL2 = Number Position
+
 namespace Eimu.Core.Systems.SChip8
 {
     [Serializable]
@@ -44,6 +50,9 @@ namespace Eimu.Core.Systems.SChip8
             m_IReg = 0;
             Array.Clear(this.m_VRegs, 0, this.m_VRegs.Length);
             Array.Clear(this.m_RPLFlags, 0, this.m_RPLFlags.Length);
+            //m_RPLFlags[0] = 32;
+            //m_RPLFlags[1] = 16;
+            //m_RPLFlags[2] = 64;
             m_ST = 0;
             m_LastKey = 17;
             m_DT = 0;
@@ -103,24 +112,41 @@ namespace Eimu.Core.Systems.SChip8
                 byte x = m_VRegs[inst.X];
                 byte y = m_VRegs[inst.Y];
                 byte read = 0;
-                int size = (m_SMode) ? GraphicsDevice.SuperSpriteSize : GraphicsDevice.StandardSpriteSize;
 
-                for (byte i = 0; i < inst.N; i++)
+                if (inst.N > 0)
                 {
-                    read = m_Memory.GetByte(m_IReg + i);
-
-                    for (byte j = 0; j < size; j++)
+                    for (byte i = 0; i < inst.N; i++)
                     {
-                        // Keep writing pixels until we hit a 0 bit (width end)
-                        if ((read & (0x80 >> j)) != 0)
+                        read = m_Memory.GetByte(m_IReg + i);
+                        Tools.PrintBits(read);
+
+                        for (byte j = 0; j < 8; j++)
                         {
-                            PixelSet(this, new PixelSetEventArgs((x + j), (y + i)));
+                            if ((read & (0x80 >> j)) != 0)
+                            {
+                                PixelSet(this, new PixelSetEventArgs((x + j), (y + i)));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int k = 0; k < 0x10; k++)
+                    {
+                        ushort data = Tools.Create16(m_Memory.GetByte(m_IReg + (k << 1)), m_Memory.GetByte(m_IReg + (k << 1) + 1));
+
+                        for (int m = 0; m < 0x10; m++)
+                        {
+                            if ((data & (((int)0x8000) >> m)) != 0)
+                            {
+                                PixelSet(this, new PixelSetEventArgs((x + m), (y + k)));
+                            }
                         }
                     }
                 }
             }
 
-            Thread.Sleep(2);
+            Thread.Sleep(8);
         }
 
         protected void OnScreenClear()

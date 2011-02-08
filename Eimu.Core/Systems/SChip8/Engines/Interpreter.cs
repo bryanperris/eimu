@@ -289,7 +289,10 @@ namespace Eimu.Core.Systems.SChip8.Engines
         [OpcodeTag(ChipOpCode.Ret)]
         void Ret(ChipInstruction inst)
         {
-            m_PC = m_Stack.Pop();
+            if (m_Stack.Count > 0)
+                m_PC = m_Stack.Pop();
+            else
+                m_PC = 512;
         }
 
 
@@ -342,7 +345,6 @@ namespace Eimu.Core.Systems.SChip8.Engines
             OnSetSoundTimer(m_VRegs[inst.X]);
         }
 
-        // TOOD: Broken for SCHIP
         [OpcodeTag(ChipOpCode.Ld_F_29)]
         void Load_F29(ChipInstruction inst)
         {
@@ -415,7 +417,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
         [OpcodeTag(ChipOpCode.Ld_F_30)]
         void Load_F30(ChipInstruction inst)
         {
-            m_IReg = m_VRegs[inst.X];
+            m_IReg = (ushort)(80 + (m_VRegs[inst.X] * 10));
         }
 
         #endregion

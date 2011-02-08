@@ -45,6 +45,7 @@ namespace Eimu.Core.Systems.SChip8
         private GraphicsDevice m_GraphicsDevice;
         private CodeEngine m_CodeEngine;
         private int m_ExtraCycles;
+        private int m_CoreSpeed = 10;
 
 
         // ----------------------------
@@ -59,11 +60,11 @@ namespace Eimu.Core.Systems.SChip8
 
             if (state == RunState.Stopped)
             {
-                m_CodeEngine.Shutdown();
                 m_CPUPause.Set();
                 m_KeyWait.Set();
                 m_RequestCPUStop = true;
                 m_CPUFinishWait.WaitOne();
+                m_CodeEngine.Shutdown();
                 CurrentAudioDevice.Shutdown();
                 CurrentGraphicsDevice.Shutdown();
             }
@@ -144,8 +145,7 @@ namespace Eimu.Core.Systems.SChip8
                     if (m_Paused)
                         m_CPUPause.WaitOne();
 
-                    int cycles = 17 + m_ExtraCycles;
-                    Step(cycles);
+                    Step(m_CoreSpeed + m_ExtraCycles);
                 }
                 else
                 {
