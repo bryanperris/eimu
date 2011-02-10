@@ -31,7 +31,7 @@ namespace Eimu.Core.Systems.SChip8
 		{
 			s_Lookup = new Dictionary<ushort, ChipOpCode>();
 
-			s_Lookup.Add(0, ChipOpCode.Sys);
+			//s_Lookup.Add(0, ChipOpCode.Sys);
 			s_Lookup.Add(0x00E0, ChipOpCode.Clr);
 			s_Lookup.Add(0x00EE, ChipOpCode.Ret);
 			s_Lookup.Add(0x1000, ChipOpCode.Jp_1);

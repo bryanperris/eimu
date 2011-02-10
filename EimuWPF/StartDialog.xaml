@@ -23,18 +23,24 @@
 			<TabItem x:Name="m_TabItem_Chip8" Header="SChip8">
 				<Grid Margin="8,4,5,4.144" Height="136">
 					<CheckBox x:Name="m_CheckBox_C8PlayOnline" Content="Play Online" Margin="8,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115.42" />
-					<CheckBox x:Name="m_CheckBox_C8UseILRec" Content="Use IL Recompiler" Margin="8,27.96,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115.42" />
+					<CheckBox x:Name="m_CheckBox_C8UseILRec" Content="Use IL Recompiler" Margin="8,25,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115.42" />
 					<Rectangle x:Name="m_Rectangle_C8SelectedBackgroundColor" Fill="Black" HorizontalAlignment="Right" Margin="0,17.386,8,0" Stroke="Black" Width="53" Height="46.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedBackgroundColor_MouseLeftButtonUp" d:LayoutOverrides="VerticalAlignment" />
 					<Rectangle x:Name="m_Rectangle_C8SelectedForegroundColor" Fill="White" Margin="0,0,25,0" Stroke="Black" Height="47.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedForegroundColor_MouseLeftButtonUp" HorizontalAlignment="Right" Width="55" d:LayoutOverrides="VerticalAlignment" />
-					<CheckBox x:Name="m_CheckBox_C8DisableGraphics" Content="Disable Graphics" HorizontalAlignment="Left" Margin="8,47.92,0,0" VerticalAlignment="Top"/>
-					<CheckBox x:Name="m_CheckBox_C8DisableSound" Content="Disable Sound" HorizontalAlignment="Left" Margin="8,67.88,0,0" VerticalAlignment="Top"/>
-					<CheckBox x:Name="m_CheckBox_C8DisableCoreTimers" Content="Disable Core Timers (debug)" HorizontalAlignment="Left" Margin="8,90,0,0" VerticalAlignment="Top"/>
-					<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" HorizontalAlignment="Left" Margin="8,112,0,0" VerticalAlignment="Top"/>
-                    <CheckBox Content="Disable X Wrap" HorizontalAlignment="Left" Margin="204,8,0,112" Name="m_CheckBox_C8DisableWrappingX" Width="114" />
-					<CheckBox Content="Force Hi-Res" Height="16" HorizontalAlignment="Left" Margin="204,48,0,0" Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
-					<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" Margin="204,70,0,0" Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
-					<CheckBox Content="Epic Speed" Height="16" HorizontalAlignment="Left" Margin="204,90,0,0" Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" Width="162" />
-					<CheckBox Content="Disable Y Wrap (Blitz)" Height="16" HorizontalAlignment="Left" Margin="204,28,0,0" Name="m_CheckBox_C8DisableYWrap" VerticalAlignment="Top" Width="154" />
+					<CheckBox x:Name="m_CheckBox_C8DisableGraphics" Content="Disable Graphics" HorizontalAlignment="Left" Margin="8,42,0,0" VerticalAlignment="Top"/>
+					<CheckBox x:Name="m_CheckBox_C8DisableSound" Content="Disable Sound" HorizontalAlignment="Left" Margin="8,59,0,0" VerticalAlignment="Top"/>
+					<CheckBox x:Name="m_CheckBox_C8DisableCoreTimers" Content="Disable Core Timers (debug)" HorizontalAlignment="Left" Margin="8,76,0,0" VerticalAlignment="Top"/>
+					<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" HorizontalAlignment="Left" Margin="8,93,0,0" VerticalAlignment="Top"/>
+					<CheckBox Content="Disable X Wrap" HorizontalAlignment="Left" Margin="204,8,0,112" Name="m_CheckBox_C8DisableWrappingX" Width="114" />
+					<CheckBox Content="Force Hi-Res" Height="16" HorizontalAlignment="Left" Margin="204,42,0,0" Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
+					<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" Margin="204,60,0,0" Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
+					<CheckBox Content="Epic Speed" Height="16" HorizontalAlignment="Left" Margin="8,110,0,0" Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" Width="162" />
+					<CheckBox Content="Disable Y Wrap (Blitz)" Height="16" HorizontalAlignment="Left" Margin="204,25,0,0" Name="m_CheckBox_C8DisableYWrap" VerticalAlignment="Top" Width="154" />
+					<ComboBox Height="23" HorizontalAlignment="Left" Margin="204,81,0,0" Name="m_ComboBox_HLESelector" VerticalAlignment="Top" Width="162" SelectedIndex="0">
+						<ComboBoxItem Content="No HLE Mode" />
+						<ComboBoxItem Content="Cosmac VIP HLE" />
+						<ComboBoxItem Content="ETI660 HLE" />
+						<ComboBoxItem Content="Telmac 2000 HLE" />
+					</ComboBox>
 				</Grid>
 			</TabItem>
 			<TabItem x:Name="m_TabItem_MegaChip" Header="Mega Chip"/>

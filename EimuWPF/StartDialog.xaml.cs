@@ -49,6 +49,7 @@ namespace Eimu
 			SchipConfig.epicSpeed = m_CheckBox_C8EpicSpeed.IsChecked == true;
 			SchipConfig.enableNetplay = m_CheckBox_C8PlayOnline.IsChecked == true;
 			SchipConfig.useRecompiler = m_CheckBox_C8UseILRec.IsChecked == true;
+			SchipConfig.hleMode = m_ComboBox_HLESelector.SelectedIndex;
 
 			#endregion
 
@@ -88,6 +89,7 @@ namespace Eimu
 			m_CheckBox_C8EpicSpeed.IsChecked = SchipConfig.epicSpeed;
 			m_CheckBox_C8PlayOnline.IsChecked = SchipConfig.enableNetplay;
 			m_CheckBox_C8UseILRec.IsChecked = SchipConfig.useRecompiler;
+			m_ComboBox_HLESelector.SelectedIndex = (SchipConfig.hleMode > m_ComboBox_HLESelector.Items.Count) ? 0 : SchipConfig.hleMode;
 
 			#endregion
 		}
@@ -151,6 +153,8 @@ namespace Eimu
 			m_VM.CurrentGraphicsDevice.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);
 			m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
+
+			m_VM.HleMode = (HLEMode)m_ComboBox_HLESelector.SelectedIndex;
 
 			Hide();
 		}

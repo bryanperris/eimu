@@ -46,6 +46,7 @@ namespace Eimu.Core.Systems.SChip8
         private CodeEngine m_CodeEngine;
         private int m_ExtraCycles;
         private int m_CoreSpeed = 10;
+        private HLEMode m_HLMode;
 
 
         // ----------------------------
@@ -125,9 +126,16 @@ namespace Eimu.Core.Systems.SChip8
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
-                m_CodeEngine.Call(inst);
+
                 if (opcode == ChipOpCode.Unknown)
-                    Console.WriteLine("Unknown Op: " + inst.RawInstruction.ToString("x"));
+                {
+                    Console.Write("Syscall: " + inst.NNN.ToString("x"));
+                    SystemHLE.Call(m_HLMode, inst.NNN, m_CodeEngine);
+                }
+                else
+                {
+                    m_CodeEngine.Call(inst);
+                }
             }
         }
 
@@ -276,6 +284,12 @@ namespace Eimu.Core.Systems.SChip8
         {
             get { return m_ExtraCycles; }
             set { m_ExtraCycles = value; }
+        }
+
+        public HLEMode HleMode
+        {
+            get { return this.m_HLMode; }
+            set { this.m_HLMode = value; }
         }
 
         // ----------------------------

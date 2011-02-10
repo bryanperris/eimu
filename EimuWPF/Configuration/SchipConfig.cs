@@ -28,6 +28,7 @@ namespace Eimu.Configuration
         public static bool enableSuperMode = false;
         public static bool epicSpeed = false;
         public static bool antiFlicker = false;
+        public static int hleMode = 0;
 
         public static RgbColor BackColor
         {

@@ -1,0 +1,368 @@
+Function 061E: Clear RAM by 58 bytes
+{
+ 61E:   LDI 39
+ 0620:  PLO F
+ 0621:  LDI 00
+ 0623:  STR A
+ 0624:  INC A
+ 0625:  DEC F
+ 0626:  GLO F
+ 0627:  BNZ 21
+ 0629:  SEP 4
+}
+
+
+61E:  LDI 39
+0620:  PLO F       RF = 7F39 
+0621:  LDI 00
+0623:  STR A       M(68D)=0
+0624:  INC A       R[A]=068E
+0625:  DEC F       R[F]=7F38
+0626:  GLO F       D=38
+0627:  BNZ 21
+0621:  LDI 00
+0623:  STR A       M(68E)=0
+0624:  INC A       R[A]=068F
+0625:  DEC F       R[F]=7F37
+0626:  GLO F       D=37
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(68F)=0
+0624:  INC A       R[A]=0690
+0625:  DEC F       R[F]=7F36
+0626:  GLO F       D=36
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(690)=0
+0624:  INC A       R[A]=0691
+0625:  DEC F       R[F]=7F35
+0626:  GLO F       D=35
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(691)=0
+0624:  INC A       R[A]=0692
+0625:  DEC F       R[F]=7F34
+0626:  GLO F       D=34
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(692)=0
+0624:  INC A       R[A]=0693
+0625:  DEC F       R[F]=7F33
+0626:  GLO F       D=33
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(693)=0
+0624:  INC A       R[A]=0694
+0625:  DEC F       R[F]=7F32
+0626:  GLO F       D=32
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(694)=0
+0624:  INC A       R[A]=0695
+0625:  DEC F       R[F]=7F31
+0626:  GLO F       D=31
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(695)=0
+0624:  INC A       R[A]=0696
+0625:  DEC F       R[F]=7F30
+0626:  GLO F       D=30
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(696)=0
+0624:  INC A       R[A]=0697
+0625:  DEC F       R[F]=7F2F
+0626:  GLO F       D=2F
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(697)=0
+0624:  INC A       R[A]=0698
+0625:  DEC F       R[F]=7F2E
+0626:  GLO F       D=2E
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(698)=0
+0624:  INC A       R[A]=0699
+0625:  DEC F       R[F]=7F2D
+0626:  GLO F       D=2D
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(699)=0
+0624:  INC A       R[A]=069A
+0625:  DEC F       R[F]=7F2C
+0626:  GLO F       D=2C
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(69A)=0
+0624:  INC A       R[A]=069B
+0625:  DEC F       R[F]=7F2B
+0626:  GLO F       D=2B
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(69B)=0
+0624:  INC A       R[A]=069C
+0625:  DEC F       R[F]=7F2A
+0626:  GLO F       D=2A
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(69C)=0
+0624:  INC A       R[A]=069D
+0625:  DEC F       R[F]=7F29
+0626:  GLO F       D=29
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(69D)=0
+0624:  INC A       R[A]=069E
+0625:  DEC F       R[F]=7F28
+0626:  GLO F       D=28
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(69E)=0
+0624:  INC A       R[A]=069F
+0625:  DEC F       R[F]=7F27
+0626:  GLO F       D=27
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(69F)=0
+0624:  INC A       R[A]=06A0
+0625:  DEC F       R[F]=7F26
+0626:  GLO F       D=26
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A0)=0
+0624:  INC A       R[A]=06A1
+0625:  DEC F       R[F]=7F25
+0626:  GLO F       D=25
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A1)=0
+0624:  INC A       R[A]=06A2
+0625:  DEC F       R[F]=7F24
+0626:  GLO F       D=24
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A2)=0
+0624:  INC A       R[A]=06A3
+0625:  DEC F       R[F]=7F23
+0626:  GLO F       D=23
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A3)=0
+0624:  INC A       R[A]=06A4
+0625:  DEC F       R[F]=7F22
+0626:  GLO F       D=22
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A4)=0
+0624:  INC A       R[A]=06A5
+0625:  DEC F       R[F]=7F21
+0626:  GLO F       D=21
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A5)=0
+0624:  INC A       R[A]=06A6
+0625:  DEC F       R[F]=7F20
+0626:  GLO F       D=20
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A6)=0
+0624:  INC A       R[A]=06A7
+0625:  DEC F       R[F]=7F1F
+0626:  GLO F       D=1F
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A7)=0
+0624:  INC A       R[A]=06A8
+0625:  DEC F       R[F]=7F1E
+0626:  GLO F       D=1E
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A8)=0
+0624:  INC A       R[A]=06A9
+0625:  DEC F       R[F]=7F1D
+0626:  GLO F       D=1D
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6A9)=0
+0624:  INC A       R[A]=06AA
+0625:  DEC F       R[F]=7F1C
+0626:  GLO F       D=1C
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6AA)=0
+0624:  INC A       R[A]=06AB
+0625:  DEC F       R[F]=7F1B
+0626:  GLO F       D=1B
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6AB)=0
+0624:  INC A       R[A]=06AC
+0625:  DEC F       R[F]=7F1A
+0626:  GLO F       D=1A
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6AC)=0
+0624:  INC A       R[A]=06AD
+0625:  DEC F       R[F]=7F19
+0626:  GLO F       D=19
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6AD)=0
+0624:  INC A       R[A]=06AE
+0625:  DEC F       R[F]=7F18
+0626:  GLO F       D=18
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6AE)=0
+0624:  INC A       R[A]=06AF
+0625:  DEC F       R[F]=7F17
+0626:  GLO F       D=17
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6AF)=0
+0624:  INC A       R[A]=06B0
+0625:  DEC F       R[F]=7F16
+0626:  GLO F       D=16
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B0)=0
+0624:  INC A       R[A]=06B1
+0625:  DEC F       R[F]=7F15
+0626:  GLO F       D=15
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B1)=0
+0624:  INC A       R[A]=06B2
+0625:  DEC F       R[F]=7F14
+0626:  GLO F       D=14
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B2)=0
+0624:  INC A       R[A]=06B3
+0625:  DEC F       R[F]=7F13
+0626:  GLO F       D=13
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B3)=0
+0624:  INC A       R[A]=06B4
+0625:  DEC F       R[F]=7F12
+0626:  GLO F       D=12
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B4)=0
+0624:  INC A       R[A]=06B5
+0625:  DEC F       R[F]=7F11
+0626:  GLO F       D=11
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B5)=0
+0624:  INC A       R[A]=06B6
+0625:  DEC F       R[F]=7F10
+0626:  GLO F       D=10
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B6)=0
+0624:  INC A       R[A]=06B7
+0625:  DEC F       R[F]=7F0F
+0626:  GLO F       D=F
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B7)=0
+0624:  INC A       R[A]=06B8
+0625:  DEC F       R[F]=7F0E
+0626:  GLO F       D=E
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B8)=0
+0624:  INC A       R[A]=06B9
+0625:  DEC F       R[F]=7F0D
+0626:  GLO F       D=D
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6B9)=0
+0624:  INC A       R[A]=06BA
+0625:  DEC F       R[F]=7F0C
+0626:  GLO F       D=C
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6BA)=0
+0624:  INC A       R[A]=06BB
+0625:  DEC F       R[F]=7F0B
+0626:  GLO F       D=B
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6BB)=0
+0624:  INC A       R[A]=06BC
+0625:  DEC F       R[F]=7F0A
+0626:  GLO F       D=A
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6BC)=0
+0624:  INC A       R[A]=06BD
+0625:  DEC F       R[F]=7F09
+0626:  GLO F       D=9
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6BD)=0
+0624:  INC A       R[A]=06BE
+0625:  DEC F       R[F]=7F08
+0626:  GLO F       D=8
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6BE)=0
+0624:  INC A       R[A]=06BF
+0625:  DEC F       R[F]=7F07
+0626:  GLO F       D=7
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6BF)=0
+0624:  INC A       R[A]=06C0
+0625:  DEC F       R[F]=7F06
+0626:  GLO F       D=6
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6C0)=0
+0624:  INC A       R[A]=06C1
+0625:  DEC F       R[F]=7F05
+0626:  GLO F       D=5
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6C1)=0
+0624:  INC A       R[A]=06C2
+0625:  DEC F       R[F]=7F04
+0626:  GLO F       D=4
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6C2)=0
+0624:  INC A       R[A]=06C3
+0625:  DEC F       R[F]=7F03
+0626:  GLO F       D=3
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6C3)=0
+0624:  INC A       R[A]=06C4
+0625:  DEC F       R[F]=7F02
+0626:  GLO F       D=2
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6C4)=0
+0624:  INC A       R[A]=06C5
+0625:  DEC F       R[F]=7F01
+0626:  GLO F       D=1
+0627:  BNZ 21 
+0621:  LDI 00
+0623:  STR A       M(6C5)=0
+0624:  INC A       R[A]=06C6
+0625:  DEC F       R[F]=7F00
+0626:  GLO F       D=0
+0627:  BNZ 21 
+0629:  SEP 4
+ 
+0042:  BR 1B 
+001B:  GHI 6       D=7E
+001C:  PHI 7       R7 = 7EF8 
+001D:  SEX 2 
+001E:  GHI 4       D=0
+001F:  PHI C       RC = 006A 
+0020:  LDA 5       D=M(204)=A6
+0021:  PLO F       RF = 7FA6 
