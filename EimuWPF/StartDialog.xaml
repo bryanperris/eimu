@@ -30,10 +30,11 @@
 					<CheckBox x:Name="m_CheckBox_C8DisableSound" Content="Disable Sound" HorizontalAlignment="Left" Margin="8,67.88,0,0" VerticalAlignment="Top"/>
 					<CheckBox x:Name="m_CheckBox_C8DisableCoreTimers" Content="Disable Core Timers (debug)" HorizontalAlignment="Left" Margin="8,90,0,0" VerticalAlignment="Top"/>
 					<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" HorizontalAlignment="Left" Margin="8,112,0,0" VerticalAlignment="Top"/>
-					<CheckBox Content="Disable Wrapping" Height="16" HorizontalAlignment="Left" Margin="204,8,0,0" Name="m_CheckBox_C8DisableWrapping" VerticalAlignment="Top" Width="114" />
-					<CheckBox Content="Force Hi-Res" Height="16" HorizontalAlignment="Left" Margin="204,28,0,0" Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
-					<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" Margin="204,48,0,0" Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
-					<CheckBox Content="Epic Speed" Height="16" HorizontalAlignment="Left" Margin="204,68,0,0" Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" Width="162" />
+                    <CheckBox Content="Disable X Wrap" HorizontalAlignment="Left" Margin="204,8,0,112" Name="m_CheckBox_C8DisableWrappingX" Width="114" />
+					<CheckBox Content="Force Hi-Res" Height="16" HorizontalAlignment="Left" Margin="204,48,0,0" Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
+					<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" Margin="204,70,0,0" Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
+					<CheckBox Content="Epic Speed" Height="16" HorizontalAlignment="Left" Margin="204,90,0,0" Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" Width="162" />
+					<CheckBox Content="Disable Y Wrap (Blitz)" Height="16" HorizontalAlignment="Left" Margin="204,28,0,0" Name="m_CheckBox_C8DisableYWrap" VerticalAlignment="Top" Width="154" />
 				</Grid>
 			</TabItem>
 			<TabItem x:Name="m_TabItem_MegaChip" Header="Mega Chip"/>

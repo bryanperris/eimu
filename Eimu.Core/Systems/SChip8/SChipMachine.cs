@@ -67,6 +67,7 @@ namespace Eimu.Core.Systems.SChip8
                 m_CodeEngine.Shutdown();
                 CurrentAudioDevice.Shutdown();
                 CurrentGraphicsDevice.Shutdown();
+                Console.WriteLine("Stopped...");
             }
 
         }
@@ -125,6 +126,8 @@ namespace Eimu.Core.Systems.SChip8
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
                 m_CodeEngine.Call(inst);
+                if (opcode == ChipOpCode.Unknown)
+                    Console.WriteLine("Unknown Op: " + inst.RawInstruction.ToString("x"));
             }
         }
 
@@ -178,6 +181,7 @@ namespace Eimu.Core.Systems.SChip8
             CurrentGraphicsDevice.ClearScreen();
             if (!LoadFont()) return false;
             if (!LoadRom()) return false;
+            Console.WriteLine("Running...");
             Run(PROGRAM_ENTRY_POINT);
             return true;
         }

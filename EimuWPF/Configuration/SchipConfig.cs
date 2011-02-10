@@ -22,7 +22,8 @@ namespace Eimu.Configuration
         public static bool disableAudio = false;
         public static bool disableGraphics = false;
         public static bool enableNetplay = false;
-        public static bool disableWrapping = false;
+        public static bool disableWrappingX = false;
+        public static bool disableWrappingY = false;
         public static bool forceHires = false;
         public static bool enableSuperMode = false;
         public static bool epicSpeed = false;

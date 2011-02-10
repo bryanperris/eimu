@@ -118,7 +118,6 @@ namespace Eimu.Core.Systems.SChip8
                     for (byte i = 0; i < inst.N; i++)
                     {
                         read = m_Memory.GetByte(m_IReg + i);
-                        Tools.PrintBits(read);
 
                         for (byte j = 0; j < 8; j++)
                         {

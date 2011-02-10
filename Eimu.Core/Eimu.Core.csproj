@@ -72,6 +72,7 @@
     <Compile Include="RunState.cs" />
     <Compile Include="Systems\SChip8\Profiler.cs" />
     <Compile Include="Systems\SChip8\SuperModeChangedEventArgs.cs" />
+    <Compile Include="Systems\SChip8\SystemHLE.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
     <Compile Include="Systems\SChip8\ChipInstruction.cs" />

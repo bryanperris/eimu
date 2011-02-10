@@ -36,7 +36,8 @@ namespace Eimu.Core.Systems.SChip8
         private RgbColor m_ForeColor;
         private bool[] m_Buffer;
         public event EventHandler OnPixelCollision;
-        private bool m_DisableWrapping;
+        private bool m_DisableWrappingX;
+        private bool m_DisableWrappingY;
         private bool m_EnableHighres;
         private bool m_EnableAntiFlickerHack;
 
@@ -61,12 +62,11 @@ namespace Eimu.Core.Systems.SChip8
 
         public virtual void SetPixel(int x, int y)
         {
-            if (!m_DisableWrapping)
-            {
-                // Wrapping
+            if (!m_DisableWrappingX)
                 x &= (m_ResX - 1);
+
+            if (!m_DisableWrappingY)
                 y &= (m_ResY - 1);
-            }
 
             bool on = GetPixel(x, y) ^ true;
 
@@ -221,10 +221,16 @@ namespace Eimu.Core.Systems.SChip8
             set { m_ForeColor = value; }
         }
 
-        public bool DisableWrapping
+        public bool DisableWrappingX
         {
-            get { return this.m_DisableWrapping; }
-            set { this.m_DisableWrapping = value; }
+            get { return this.m_DisableWrappingX; }
+            set { this.m_DisableWrappingX = value; }
+        }
+
+        public bool DisableWrappingY
+        {
+            get { return this.m_DisableWrappingY; }
+            set { this.m_DisableWrappingY = value; }
         }
 
         public bool EnableHires

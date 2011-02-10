@@ -42,7 +42,8 @@ namespace Eimu
 			SchipConfig.disableTimers = m_CheckBox_C8DisableCoreTimers.IsChecked == true;
 			SchipConfig.disableGraphics = m_CheckBox_C8DisableGraphics.IsChecked == true;
 			SchipConfig.disableAudio = m_CheckBox_C8DisableSound.IsChecked == true;
-			SchipConfig.disableWrapping = m_CheckBox_C8DisableWrapping.IsChecked == true;
+			SchipConfig.disableWrappingX = m_CheckBox_C8DisableWrappingX.IsChecked == true;
+			SchipConfig.disableWrappingY = m_CheckBox_C8DisableYWrap.IsChecked == true;
 			SchipConfig.enableCodeCache = m_CheckBox_C8EnableCodeCache.IsChecked == true;
 			SchipConfig.forceHires = m_CheckBox_C8EnableHighres.IsChecked == true;
 			SchipConfig.epicSpeed = m_CheckBox_C8EpicSpeed.IsChecked == true;
@@ -60,7 +61,7 @@ namespace Eimu
 
 			if (File.Exists(Config.romFilePath))
 			{
-				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetFullPath(Config.romFilePath);
+				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Config.romFilePath);
 				m_OpenFileDialog.FileName = Config.romFilePath;
 				m_TextBox_ProgramPath.Text = Config.romFilePath;
 				m_Button_RunEmulator.IsEnabled = true;
@@ -80,7 +81,8 @@ namespace Eimu
 			m_CheckBox_C8DisableCoreTimers.IsChecked = SchipConfig.disableTimers;
 			m_CheckBox_C8DisableGraphics.IsChecked = SchipConfig.disableGraphics;
 			m_CheckBox_C8DisableSound.IsChecked = SchipConfig.disableAudio;
-			m_CheckBox_C8DisableWrapping.IsChecked = SchipConfig.disableWrapping;
+			m_CheckBox_C8DisableWrappingX.IsChecked = SchipConfig.disableWrappingX;
+			m_CheckBox_C8DisableYWrap.IsChecked = SchipConfig.disableWrappingY;
 			m_CheckBox_C8EnableCodeCache.IsChecked = SchipConfig.enableCodeCache;
 			m_CheckBox_C8EnableHighres.IsChecked = SchipConfig.forceHires;
 			m_CheckBox_C8EpicSpeed.IsChecked = SchipConfig.epicSpeed;
@@ -100,7 +102,7 @@ namespace Eimu
 
 			if (File.Exists(m_TextBox_ProgramPath.Text))
 			{
-				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetFullPath(m_TextBox_ProgramPath.Text);
+				m_OpenFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(m_TextBox_ProgramPath.Text);
 				m_OpenFileDialog.FileName = m_TextBox_ProgramPath.Text;
 			}
 
@@ -143,7 +145,8 @@ namespace Eimu
 
 			m_VM.CurrentGraphicsDevice.BackgroundColor = SchipConfig.BackColor;
 			m_VM.CurrentGraphicsDevice.ForegroundColor = SchipConfig.ForeColor;
-			m_VM.CurrentGraphicsDevice.DisableWrapping = (this.m_CheckBox_C8DisableWrapping.IsChecked == true);
+			m_VM.CurrentGraphicsDevice.DisableWrappingX = (this.m_CheckBox_C8DisableWrappingX.IsChecked == true);
+			m_VM.CurrentGraphicsDevice.DisableWrappingY = (this.m_CheckBox_C8DisableYWrap.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
 			m_VM.CurrentGraphicsDevice.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);

@@ -201,8 +201,7 @@ namespace Eimu.Core.Systems.SChip8.Engines
         [OpcodeTag(ChipOpCode.Sys)]
         void Sys(ChipInstruction inst)
         {
-            // Ignored Opcode
-            //Console.WriteLine("Sys call: " + inst.NNN.ToString("x"));
+            Console.WriteLine(this.m_IReg.ToString("x"));
         }
 
         [OpcodeTag(ChipOpCode.Jp_1)]
