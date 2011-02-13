@@ -1,0 +1,11 @@
+OPTION CHIP8
+ALIGN OFF
+
+; -------- VIP Syscall testing, CHIP8 Emulator and VIP HW should have matching c8 reg values at debugging time
+
+; Syscall 402 test :: Results: I = 101, PC = 206
+LD I, #5
+DW #0402
+
+LOOP:
+JP LOOP

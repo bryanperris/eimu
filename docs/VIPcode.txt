@@ -1,5 +1,5 @@
 R2 = Stack pointer
-R3 = CHIP subroutine pointer
+R3 = CHIP subroutine pointer (syscall pointer)
 R5 = CHIP PC
 R6 = VX pointer
 R7 = VY pointer

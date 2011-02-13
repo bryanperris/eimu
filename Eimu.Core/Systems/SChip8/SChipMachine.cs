@@ -129,12 +129,14 @@ namespace Eimu.Core.Systems.SChip8
 
                 if (opcode == ChipOpCode.Unknown)
                 {
-                    Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
-                    SystemHLE.Call(m_HLMode, inst.NNN, m_CodeEngine);
+                    if (data != 0)
+                    {
+                        SystemHLE.Call(m_HLMode, inst.NNN, m_CodeEngine);
+                        Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
+                    }
                 }
                 else
                 {
-                    //m_CodeEngine.IncrementPC();
                     m_CodeEngine.Call(inst);
                 }
             }
