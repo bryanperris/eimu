@@ -24,6 +24,7 @@ using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
 using Eimu.Core.Systems.SChip8.Engines;
+using Eimu.Core.Systems.SChip8.Dynarecs;
 
 namespace Eimu.Core.Systems.SChip8
 {
@@ -47,6 +48,7 @@ namespace Eimu.Core.Systems.SChip8
         private int m_ExtraCycles;
         private int m_CoreSpeed = 10;
         private HLEMode m_HLMode;
+        private C1802Dynarec m_CDPDynarec;
 
 
         // ----------------------------
@@ -131,7 +133,7 @@ namespace Eimu.Core.Systems.SChip8
                 {
                     if (data != 0)
                     {
-                        SystemHLE.Call(m_HLMode, inst.NNN, m_CodeEngine);
+                        m_CDPDynarec.Call(m_HLMode, inst.NNN);
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
                     }
                 }
@@ -186,6 +188,7 @@ namespace Eimu.Core.Systems.SChip8
             SystemMemory = new Memory(MEMORY_SIZE);
             m_CodeEngine = new Interpreter();
             m_CodeEngine.Init(this.SystemMemory);
+            m_CDPDynarec = new C1802Dynarec(this.m_CodeEngine);
             AttachDeviceCallbacks();
             CurrentAudioDevice.Initialize();
             CurrentGraphicsDevice.Initialize();

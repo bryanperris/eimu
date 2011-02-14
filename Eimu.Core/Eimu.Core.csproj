@@ -55,12 +55,14 @@
     <Compile Include="RunStateChangedArgs.cs" />
     <Compile Include="Systems\Chip16\C16Color.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
+    <Compile Include="Systems\SChip8\Dynarecs\CdpInstruction.cs" />
+    <Compile Include="Systems\SChip8\Dynarecs\C1802Dynarec.cs" />
     <Compile Include="Systems\SChip8\PixelScrollEventArgs.cs" />
     <Compile Include="Systems\SChip8\SChipMachine.cs" />
     <Compile Include="Systems\SChip8\ChipOpCode.cs" />
     <Compile Include="Systems\SChip8\CodeEngine.cs" />
     <Compile Include="Systems\SChip8\Disassembler.cs" />
-    <Compile Include="Systems\SChip8\Engines\Interpreter.cs" />
+    <Compile Include="Systems\SChip8\Interpreter.cs" />
     <Compile Include="Systems\SChip8\ChipKey.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Systems\SChip8\AudioDevice.cs" />
@@ -79,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Systems\MegaChip\" />
-    <Folder Include="Systems\SChip8\Engines\JIT\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="emiucorekey.pfx" />
