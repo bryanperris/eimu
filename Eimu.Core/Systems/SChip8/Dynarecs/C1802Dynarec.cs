@@ -8,11 +8,14 @@ using System.Reflection.Emit;
 
 namespace Eimu.Core.Systems.SChip8.Dynarecs
 {
+    public delegate void MachineCall(CodeEngine engine);
+
     public sealed class C1802Dynarec
     {
         private Dictionary<ushort, MachineCall> m_CallLookup = new Dictionary<ushort, MachineCall>();
         private CodeEngine m_CodeEngine;
         private ushort[] regs = new ushort[16];
+        private int m_LocalCount;
 
         public C1802Dynarec(CodeEngine engine)
         {
@@ -29,21 +32,21 @@ namespace Eimu.Core.Systems.SChip8.Dynarecs
                 m_CallLookup.Add(address, call);
             }
 
-            try
-            {
+            //try
+            //{
                 call(m_CodeEngine);
-            }
-            catch (System.Exception)
-            {
+            //}
+            //catch (System.Exception)
+            //{
 
-            }
+            //}
         }
 
         private MachineCall GenerateFunction(ushort address)
         {
             DynamicMethod function = new DynamicMethod("SysFunc_" + address.ToString(), typeof(void), new Type[] { typeof(CodeEngine) });
 
-            EmitCode(address, function.GetILGenerator());
+            EmitFunction(address, function.GetILGenerator());
 
             return (MachineCall)function.CreateDelegate(typeof(MachineCall));
         }
@@ -53,26 +56,13 @@ namespace Eimu.Core.Systems.SChip8.Dynarecs
             return new CdpInstruction(m_CodeEngine.CurrentMemory[address]);
         }
 
-        private ushort ReadReg(byte num)
+        private void EmitFunction(ushort address, ILGenerator gen)
         {
-            switch (num)
-            {
-                case 0: return regs[0];
-                case 1: return regs[1];
-                case 2: return (ushort)m_CodeEngine.m_Stack.Count;
-                default: return 0;
-            }
-        }
-
-        private void EmitCode(ushort address, ILGenerator gen)
-        {
-
             // First emit fake registers that all functions can use
-            gen.DeclareLocal(typeof(byte), false); // D local.0
-            gen.DeclareLocal(typeof(byte), false); // P local.1
-            gen.DeclareLocal(typeof(byte), false); // X local.2
-            gen.DeclareLocal(typeof(byte), false); // T local.3
-
+            EimtLocal(gen, typeof(byte), false); // D local.0
+            EimtLocal(gen, typeof(byte), false); // P local.1
+            EimtLocal(gen, typeof(byte), false); // X local.2
+            EimtLocal(gen, typeof(byte), false); // T local.3
 
 
             bool end = false;
@@ -88,6 +78,23 @@ namespace Eimu.Core.Systems.SChip8.Dynarecs
                     default: break;
                 }
             }
+
+            gen.Emit(OpCodes.Nop);
+            gen.Emit(OpCodes.Ret);
+
+            m_LocalCount = 0;
+        }
+
+        private void EimtLocal(ILGenerator gen, Type type, bool pinned)
+        {
+            m_LocalCount++;
+            gen.DeclareLocal(type, pinned);
+            gen.Emit(OpCodes.Nop);
+        }
+
+        private int ResolveLocalOffset(int offset)
+        {
+            return ((m_LocalCount - 1) + offset);
         }
 
 
@@ -95,28 +102,20 @@ namespace Eimu.Core.Systems.SChip8.Dynarecs
 
         private void Emit_LDA(ILGenerator gen, CdpInstruction inst)
         {
-            // Load Selected Reg Byte on stack
-            gen.Emit(OpCodes.Ldc_I4_S, inst.Low);
-
-            // Call the GetReg value
-            gen.EmitCall(OpCodes.Call, this.GetType().GetMethod("ReadReg"), new Type[] { typeof(byte) });
-
-            // NOP
-            gen.Emit(OpCodes.Nop);
-
-            // Convert value to int
-            gen.Emit(OpCodes.Conv_I4);
-
-            // Call Load Memory
-            gen.EmitCall(OpCodes.Call, m_CodeEngine.CurrentMemory.GetType().GetMethod("GetByte"), new Type[] { typeof(int) });
-
-            // NOP
-            gen.Emit(OpCodes.Nop);
-
-            // Push the retuend valued to D
-            gen.Emit(OpCodes.Stloc_0);
-
-            // NOP
+            EimtLocal(gen, typeof(ushort), false); // ushort address;
+            gen.Emit(OpCodes.Ldc_I4_0); // Push 0 on stack
+            gen.Emit(OpCodes.Stloc_S, ResolveLocalOffset(0)); // Pop 0 off stack and store in local 4 (address)
+            gen.Emit(OpCodes.Ldarg_1); // Push CodeEngine param into stack
+            gen.Emit(OpCodes.Ldc_I4_S, inst.Low); // Push selected reg on stack
+            gen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("ReadReg"));
+            gen.Emit(OpCodes.Stloc_S, ResolveLocalOffset(0)); // Store the read address to local 4 (address)
+            gen.Emit(OpCodes.Ldarg_1); // Push CodeEngine param into stack
+            gen.EmitCall(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("get_CurrentMemory"), null); // push CodeEngine.CurrentMemory
+            gen.Emit(OpCodes.Ldloc_1); // push address variable to stack;
+            gen.Emit(OpCodes.Callvirt, typeof(Memory).GetMethod("get_Item")); // push Memory[address]
+            gen.Emit(OpCodes.Stloc_3); // Store read byte in local 3 (D)
+            gen.Emit(OpCodes.Ldarg_1); // Push CodeEngine param into stack
+            gen.EmitCall(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("IncrementPC"), null); // Increment the PC
             gen.Emit(OpCodes.Nop);
         }
 

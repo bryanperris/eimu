@@ -14,7 +14,7 @@ namespace Eimu.Core.Systems.SChip8
         Telmac2000
     }
 
-    public delegate void MachineCall(CodeEngine engine);
+    
 
     public static class SystemHLE
     {

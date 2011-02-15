@@ -82,6 +82,18 @@ namespace Eimu.Core.Systems.SChip8
             get { return this.m_Memory; }
         }
 
+        public ushort ReadReg(byte num)
+        {
+            switch (num)
+            {
+                case 0: return 0;
+                case 1: return 0;
+                case 2: return (ushort)m_Stack.Count;
+                default: return 0;
+            }
+        }
+
+
         public int PC
         {
             get { return this.m_PC; }
