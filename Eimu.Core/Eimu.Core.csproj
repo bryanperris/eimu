@@ -53,10 +53,11 @@
   <ItemGroup>
     <Compile Include="RgbColor.cs" />
     <Compile Include="RunStateChangedArgs.cs" />
+    <Compile Include="Systems\CDP1802\DynarecTools.cs" />
     <Compile Include="Systems\Chip16\C16Color.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
-    <Compile Include="Systems\SChip8\Dynarecs\CdpInstruction.cs" />
-    <Compile Include="Systems\SChip8\Dynarecs\C1802Dynarec.cs" />
+    <Compile Include="Systems\CDP1802\CdpInstruction.cs" />
+    <Compile Include="Systems\CDP1802\C1802Dynarec.cs" />
     <Compile Include="Systems\SChip8\PixelScrollEventArgs.cs" />
     <Compile Include="Systems\SChip8\SChipMachine.cs" />
     <Compile Include="Systems\SChip8\ChipOpCode.cs" />

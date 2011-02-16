@@ -24,7 +24,7 @@ using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
 using Eimu.Core.Systems.SChip8.Engines;
-using Eimu.Core.Systems.SChip8.Dynarecs;
+using Eimu.Core.Systems.CDP1802;
 
 namespace Eimu.Core.Systems.SChip8
 {
@@ -133,7 +133,7 @@ namespace Eimu.Core.Systems.SChip8
                 {
                     if (data != 0)
                     {
-                        m_CDPDynarec.Call(m_HLMode, inst.NNN);
+                        m_CDPDynarec.Call(inst.NNN);
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
                     }
                 }
