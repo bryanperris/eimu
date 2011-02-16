@@ -50,16 +50,16 @@ namespace Eimu.Core.Systems.CDP1802
 
             function.DefineParameter(1, ParameterAttributes.In, "codeEngine");
 
-            //AssemblyName assn = new AssemblyName("TestAssembly");
-            //AssemblyBuilder ab = AppDomain.CurrentDomain.DefineDynamicAssembly(assn, AssemblyBuilderAccess.Save);
-            //ModuleBuilder mb = ab.DefineDynamicModule(assn.Name, assn.Name + ".dll");
-            //TypeBuilder tb = mb.DefineType("MyTestType");
-            //ConstructorBuilder cb = tb.DefineDefaultConstructor(MethodAttributes.Public);
-            //MethodBuilder mtb = tb.DefineMethod("SysFunc_" + address.ToString(),
-            //    MethodAttributes.Public, CallingConventions.Standard, typeof(void), new Type[] { typeof(CodeEngine) });
-            //EmitFunction(address, mtb.GetILGenerator());
-            //tb.CreateType();
-            //ab.Save(assn.Name + ".dll");
+            AssemblyName assn = new AssemblyName("TestAssembly");
+            AssemblyBuilder ab = AppDomain.CurrentDomain.DefineDynamicAssembly(assn, AssemblyBuilderAccess.Save);
+            ModuleBuilder mb = ab.DefineDynamicModule(assn.Name, assn.Name + ".dll");
+            TypeBuilder tb = mb.DefineType("MyTestType");
+            ConstructorBuilder cb = tb.DefineDefaultConstructor(MethodAttributes.Public);
+            MethodBuilder mtb = tb.DefineMethod("SysFunc_" + address.ToString(),
+                MethodAttributes.Public, CallingConventions.Standard, typeof(void), new Type[] { typeof(CodeEngine) });
+            EmitFunction(address, mtb.GetILGenerator());
+            tb.CreateType();
+            ab.Save(assn.Name + ".dll");
 
 
             return (MachineCall)function.CreateDelegate(typeof(MachineCall));
@@ -81,22 +81,17 @@ namespace Eimu.Core.Systems.CDP1802
             EmitLocal(gen, typeof(byte), false); // P local.1
             EmitLocal(gen, typeof(byte), false); // X local.2
             EmitLocal(gen, typeof(byte), false); // T local.3
-            EmitLocal(gen, typeof(CodeEngine), false); // CodeEngine
-
-            // Store reference of codeengine in local 4
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Stloc_S, 4);
 
             bool end = false;
 
             while (!end)
             {
-                m_LocalOffset = (m_LocalCount - 1);
+                m_LocalOffset = m_LocalCount;
                 CdpInstruction inst = GetInstruction(m_CurrentAddress++);
 
                 switch (inst.Hi)
                 {
-                    case 0x4: Emit_LDA(gen, inst); end = true; break;
+                    case 0x4: Emit_LDA(gen, inst); break;
                     case 0xD: end = true; break; // SEP
                     default: gen.Emit(OpCodes.Nop); break;
                 }
@@ -121,11 +116,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void Emit_LDA(ILGenerator gen, CdpInstruction inst)
         {
-            DynarecTools.EmitPushCodeEngine(gen);
-            //gen.Emit(OpCodes.Call, typeof(DynarecTools).GetMethod("Test"));
             EmitLocal(gen, typeof(ushort), false);             // Create $address variable
-            gen.Emit(OpCodes.Ldc_I4_0);                        // Push 0 value on the stack
-            gen.Emit(OpCodes.Stloc_S, GetResolveLocal(0));     // Pop and store value 0 in $address
             DynarecTools.EmitRRegisterRead(gen, inst.Low);     // Push selected R Registered value on stack
             gen.Emit(OpCodes.Stloc_S, GetResolveLocal(0));    // Store the read register value in $address
             DynarecTools.EmitReadMemory(gen, GetResolveLocal(0));  // Push read memory value on stack

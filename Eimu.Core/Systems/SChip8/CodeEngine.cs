@@ -29,6 +29,8 @@ namespace Eimu.Core.Systems.SChip8
         public Timer m_SoundTimer;
         public Memory m_Memory;
         public bool m_SMode;
+        public ushort m_RoutineAddress;
+        public ushort m_LastRand;
 
         private bool m_Paused;
         private bool m_Stop;
@@ -81,18 +83,6 @@ namespace Eimu.Core.Systems.SChip8
         {
             get { return this.m_Memory; }
         }
-
-        public ushort ReadReg(byte num)
-        {
-            switch (num)
-            {
-                case 0: return 0;
-                case 1: return 0;
-                case 2: return (ushort)m_Stack.Count;
-                default: return 0;
-            }
-        }
-
 
         public int PC
         {
@@ -263,6 +253,41 @@ namespace Eimu.Core.Systems.SChip8
 
             m_TimerWait.Close();
         }
+
+        #region Low Level CDP1802 Stuff
+
+        public ushort ReadFake1802Reg(byte num)
+        {
+            switch (num)
+            {
+                case 2: return (ushort)m_Stack.Count;
+                case 3: return m_RoutineAddress;
+                case 5: return (ushort)m_PC;
+                case 6: return 0; // TOOD: figure out VX selection
+                case 7: return 0; // TODO: figure out VY selection
+                case 8: return (ushort)m_ST; //??
+                case 9: return m_LastRand;
+                case 10: return m_IReg;
+                default: return 0x0;
+            }
+        }
+
+        public void WriteFake1802Reg(byte num, ushort value)
+        {
+            switch (num)
+            {
+                case 3: m_RoutineAddress = value; break;
+                case 5: m_PC = (int)value; break;
+                //case 6: return 0; // TOOD: figure out VX selection
+                //case 7: return 0; // TODO: figure out VY selection
+                case 8: m_ST = (int)value; break; //??
+                //case 9: return m_LastRand;
+                case 10: m_IReg = value; break;
+                default: break;
+            }
+        }
+
+        #endregion
 
         #region IDisposable Members
 

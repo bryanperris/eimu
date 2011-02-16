@@ -20,10 +20,10 @@ namespace Eimu.Core.Systems.CDP1802
     {
         public static void EmitReadMemory(ILGenerator gen, int localOffset)
         {
-            //EmitPushCodeEngine(gen);
-            //gen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("get_CurrentMemory")); // push CodeEngine.CurrentMemory
-            //gen.Emit(OpCodes.Ldloc_S, localOffset); // push address variable to stack;
-            //gen.Emit(OpCodes.Callvirt, typeof(Memory).GetMethod("get_Item")); // push Memory[address]
+            EmitPushCodeEngine(gen);
+            gen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("get_CurrentMemory")); // push CodeEngine.CurrentMemory
+            gen.Emit(OpCodes.Ldloc_S, localOffset); // push address variable to stack;
+            gen.Emit(OpCodes.Callvirt, typeof(Memory).GetMethod("get_Item")); // push Memory[address]
 
         }
 
@@ -44,8 +44,43 @@ namespace Eimu.Core.Systems.CDP1802
                 case 8: gen.Emit(OpCodes.Ldc_I4_8); break;
                 default: gen.Emit(OpCodes.Ldc_I4_S, selectedR); break;
             }
-              
-            gen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("ReadReg"));
+
+            gen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("ReadFake1802Reg"));
+        }
+
+        public static void EmitRRegisterWrite(ILGenerator gen, byte selectedR, ushort value)
+        {
+            EmitPushCodeEngine(gen);
+
+            switch (selectedR)
+            {
+                case 0: gen.Emit(OpCodes.Ldc_I4_0); break;
+                case 1: gen.Emit(OpCodes.Ldc_I4_1); break;
+                case 2: gen.Emit(OpCodes.Ldc_I4_2); break;
+                case 3: gen.Emit(OpCodes.Ldc_I4_3); break;
+                case 4: gen.Emit(OpCodes.Ldc_I4_4); break;
+                case 5: gen.Emit(OpCodes.Ldc_I4_5); break;
+                case 6: gen.Emit(OpCodes.Ldc_I4_6); break;
+                case 7: gen.Emit(OpCodes.Ldc_I4_7); break;
+                case 8: gen.Emit(OpCodes.Ldc_I4_8); break;
+                default: gen.Emit(OpCodes.Ldc_I4_S, selectedR); break;
+            }
+
+            switch (value)
+            {
+                case 0: gen.Emit(OpCodes.Ldc_I4_0); break;
+                case 1: gen.Emit(OpCodes.Ldc_I4_1); break;
+                case 2: gen.Emit(OpCodes.Ldc_I4_2); break;
+                case 3: gen.Emit(OpCodes.Ldc_I4_3); break;
+                case 4: gen.Emit(OpCodes.Ldc_I4_4); break;
+                case 5: gen.Emit(OpCodes.Ldc_I4_5); break;
+                case 6: gen.Emit(OpCodes.Ldc_I4_6); break;
+                case 7: gen.Emit(OpCodes.Ldc_I4_7); break;
+                case 8: gen.Emit(OpCodes.Ldc_I4_8); break;
+                default: gen.Emit(OpCodes.Ldc_I4_S, value); break;
+            }
+
+            gen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("WriteFake1802Reg"));
         }
 
         public static void EmitRegisterStore(ILGenerator gen, SelectedRegister reg)
@@ -74,7 +109,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         public static void EmitPushCodeEngine(ILGenerator gen)
         {
-            gen.Emit(OpCodes.Ldloc_S, 4); // Push CodeEngine param into stack
+            gen.Emit(OpCodes.Ldarg_0);
         }
 
         public static void EmitIncrementPC(ILGenerator gen)
@@ -84,17 +119,14 @@ namespace Eimu.Core.Systems.CDP1802
             gen.Emit(OpCodes.Nop);
         }
 
-        public static void Test(CodeEngine engine)
+        public static void EmitTestObject(ILGenerator gen)
         {
-            if (engine == null)
-            {
-                Console.WriteLine("null engine!");
+            gen.Emit(OpCodes.Call, typeof(DynarecTools).GetMethod("TestObject"));
+        }
 
-            }
-            else
-            {
-                Console.WriteLine(engine.ToString());
-            }
+        public static void TestObject(object engine)
+        {
+            Console.WriteLine(engine.ToString());
         }
     }
 }
