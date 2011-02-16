@@ -50,16 +50,16 @@ namespace Eimu.Core.Systems.CDP1802
 
             function.DefineParameter(1, ParameterAttributes.In, "codeEngine");
 
-            AssemblyName assn = new AssemblyName("TestAssembly");
-            AssemblyBuilder ab = AppDomain.CurrentDomain.DefineDynamicAssembly(assn, AssemblyBuilderAccess.Save);
-            ModuleBuilder mb = ab.DefineDynamicModule(assn.Name, assn.Name + ".dll");
-            TypeBuilder tb = mb.DefineType("MyTestType");
-            ConstructorBuilder cb = tb.DefineDefaultConstructor(MethodAttributes.Public);
-            MethodBuilder mtb = tb.DefineMethod("SysFunc_" + address.ToString(),
-                MethodAttributes.Public, CallingConventions.Standard, typeof(void), new Type[] { typeof(CodeEngine) });
-            EmitFunction(address, mtb.GetILGenerator());
-            tb.CreateType();
-            ab.Save(assn.Name + ".dll");
+            //AssemblyName assn = new AssemblyName("TestAssembly");
+            //AssemblyBuilder ab = AppDomain.CurrentDomain.DefineDynamicAssembly(assn, AssemblyBuilderAccess.Save);
+            //ModuleBuilder mb = ab.DefineDynamicModule(assn.Name, assn.Name + ".dll");
+            //TypeBuilder tb = mb.DefineType("MyTestType");
+            //ConstructorBuilder cb = tb.DefineDefaultConstructor(MethodAttributes.Public);
+            //MethodBuilder mtb = tb.DefineMethod("SysFunc_" + address.ToString(),
+            //    MethodAttributes.Public, CallingConventions.Standard, typeof(void), new Type[] { typeof(CodeEngine) });
+            //EmitFunction(address, mtb.GetILGenerator());
+            //tb.CreateType();
+            //ab.Save(assn.Name + ".dll");
 
 
             return (MachineCall)function.CreateDelegate(typeof(MachineCall));
