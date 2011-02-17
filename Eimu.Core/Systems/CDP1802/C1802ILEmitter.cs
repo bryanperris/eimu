@@ -96,7 +96,7 @@ namespace Eimu.Core.Systems.CDP1802
 
                 switch (inst.Hi)
                 {
-                    case 0x4: Emit_LDA(inst); end = true; break;
+                    case 0x4: Emit_LDA(inst); break;
                     case 0xD: end = true; break; // SEP
                     default: s_ILGen.Emit(OpCodes.Nop); break;
                 }
