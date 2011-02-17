@@ -133,7 +133,7 @@ namespace Eimu.Core.Systems.SChip8
                 {
                     if (data != 0)
                     {
-                        m_CDPDynarec.Call(inst.NNN);
+                        m_CDPDynarec.Call(inst.NNN, m_CodeEngine);
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
                     }
                 }
@@ -188,7 +188,7 @@ namespace Eimu.Core.Systems.SChip8
             SystemMemory = new Memory(MEMORY_SIZE);
             m_CodeEngine = new Interpreter();
             m_CodeEngine.Init(this.SystemMemory);
-            m_CDPDynarec = new C1802Dynarec(this.m_CodeEngine);
+            m_CDPDynarec = new C1802Dynarec();
             AttachDeviceCallbacks();
             CurrentAudioDevice.Initialize();
             CurrentGraphicsDevice.Initialize();
@@ -358,7 +358,7 @@ namespace Eimu.Core.Systems.SChip8
             GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {

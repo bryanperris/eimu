@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="RgbColor.cs" />
     <Compile Include="RunStateChangedArgs.cs" />
-    <Compile Include="Systems\CDP1802\DynarecTools.cs" />
+    <Compile Include="Systems\CDP1802\C1802ILEmitter.cs" />
     <Compile Include="Systems\Chip16\C16Color.cs" />
     <Compile Include="Systems\Chip16\C16Machine.cs" />
     <Compile Include="Systems\CDP1802\CdpInstruction.cs" />
