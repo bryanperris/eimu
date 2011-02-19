@@ -197,7 +197,7 @@ namespace Eimu.Core.Systems.CDP1802
                 try
                 {
                     C1802OpCodes opcode = (C1802OpCodes)inst.Hi;
-                    Console.WriteLine("1802 Opcode: " + opcode.ToString());
+                    Console.Write("1802 Opcode: " + opcode.ToString());
 
                     switch (opcode)
                     {
@@ -208,8 +208,14 @@ namespace Eimu.Core.Systems.CDP1802
                         case C1802OpCodes.Sub15: EmitSubOpcodes15(inst); break;
                         case C1802OpCodes.Sub0: EmitSubOpcodes0(inst); break;
                         case C1802OpCodes.Sub7: EmitSubOpcodes7(inst); break;
-                        default: EmitNop(); break;
+                        case C1802OpCodes.PLO: Emit_PLO(inst); break;
+                        case C1802OpCodes.INC: Emit_INC(inst); break;
+                        case C1802OpCodes.GHI: Emit_GHI(inst); break;
+                        case C1802OpCodes.PHI: Emit_PHI(inst); break;
+                        default: EmitNop(); Console.Write("  ...No Emit!"); break;
                     }
+
+                    Console.WriteLine("");
                 }
                 catch (ArgumentException)
                 {
@@ -225,12 +231,12 @@ namespace Eimu.Core.Systems.CDP1802
             try
             {
                 C1802OpCodesSub15 opcode = (C1802OpCodesSub15)inst.Low;
-                Console.WriteLine("1802 Opcode (Sub 15): " + opcode.ToString());
+                Console.Write("  " + opcode.ToString());
 
                 switch (opcode)
                 {
                     case C1802OpCodesSub15.ADD: Emit_ADD(inst); break;
-                    default: EmitNop(); break;
+                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
                 }
 
             }
@@ -245,13 +251,13 @@ namespace Eimu.Core.Systems.CDP1802
             try
             {
                 C1802OpCodesSub7 opcode = (C1802OpCodesSub7)inst.Low;
-                Console.WriteLine("1802 Opcode (Sub 7): " + opcode.ToString());
+                Console.Write("  " + opcode.ToString());
 
                 switch (opcode)
                 {
-                    default: EmitNop(); break;
+                    case C1802OpCodesSub7.ADCI: Emit_ADCI(inst); break;
+                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
                 }
-
             }
             catch (ArgumentException)
             {
@@ -264,13 +270,13 @@ namespace Eimu.Core.Systems.CDP1802
             try
             {
                 C1802OpCodesSub0 opcode = (C1802OpCodesSub0)inst.Low;
-                Console.WriteLine("1802 Opcode (Sub 0): " + opcode.ToString());
+                Console.Write("  " + opcode.ToString());
 
                 switch (opcode)
                 {
-                    default: EmitNop(); break;
+                    case C1802OpCodesSub0.IDL: EmitNop(); break; // Idle wait, we skip this
+                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
                 }
-
             }
             catch (ArgumentException)
             {
@@ -375,6 +381,16 @@ namespace Eimu.Core.Systems.CDP1802
             s_ILGen.Emit(OpCodes.Conv_U1);
         }
 
+        private static void EmitHighByte()
+        {
+            s_ILGen.Emit(OpCodes.Ldc_I4_S, (ushort)0xFF);
+            s_ILGen.Emit(OpCodes.Conv_I2);
+            s_ILGen.Emit(OpCodes.And);
+            EmitIntConstant(8);
+            s_ILGen.Emit(OpCodes.Shr_Un);
+            s_ILGen.Emit(OpCodes.Conv_U1);
+        }
+
         private static void EmitNop()
         {
             s_ILGen.Emit(OpCodes.Nop);
@@ -400,6 +416,11 @@ namespace Eimu.Core.Systems.CDP1802
         public static void TestObject(object engine)
         {
             Console.WriteLine(engine.ToString());
+        }
+
+        public static void DumpRegs()
+        {
+            // TODO
         }
 
         #endregion
@@ -490,6 +511,126 @@ namespace Eimu.Core.Systems.CDP1802
             // End path
             s_ILGen.MarkLabel(brEnd);
             EmitNop();
+        }
+
+        private static void Emit_PLO(CdpInstruction inst)
+        {
+            EmitLocal(typeof(ushort), false); // New reg value [0]
+
+            s_ILGen.Emit(OpCodes.Ldc_I4_S, 0xFF);
+            s_ILGen.Emit(OpCodes.Ldc_I4_S, 8);
+            s_ILGen.Emit(OpCodes.Shl);
+            EmitGeneralRegisterRead(inst.Low);
+            s_ILGen.Emit(OpCodes.And);
+
+            EmitRegisterRead(SelectedRegister.D);
+            s_ILGen.Emit(OpCodes.Conv_Ovf_U2);
+            s_ILGen.Emit(OpCodes.And);
+
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitPushCodeEngine();
+            EmitIntConstant(inst.Low);
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitGeneralRegisterWriteFunc();
+        }
+
+        private static void Emit_INC(CdpInstruction inst)
+        {
+            EmitLocal(typeof(ushort), false);
+            EmitGeneralRegisterRead(inst.Low);
+            EmitIntConstant(1);
+            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitPushCodeEngine();
+            EmitIntConstant(inst.Low);
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitGeneralRegisterWriteFunc();
+        }
+
+        private static void Emit_GHI(CdpInstruction inst)
+        {
+            EmitGeneralRegisterRead(inst.Low);
+            EmitHighByte();
+            EmitRegisterWrite(SelectedRegister.D);
+            EmitNop();
+        }
+
+        private static void Emit_ADCI(CdpInstruction inst)
+        {
+            /*
+             * Add the memory byte pointed to by the address register
+                pointed to by X (or the second byte of the instruction) plus
+                the value of the DF register to the accumulator. Put the
+                result in the accumulator, and put the carry out of the sum
+                back into DF. */
+
+            EmitLocal(typeof(ushort), false);  // address     [0]
+            EmitLocal(typeof(byte), false); // value          [1]
+            Label brOverflow = s_ILGen.DefineLabel();
+            Label brEnd = s_ILGen.DefineLabel();
+
+            // Load the memory address
+            EmitGeneralRegisterRead(inst.Low);
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+
+            // Load the memory value
+            EmitReadMemory(GetResolvedLocal(0));
+            s_ILGen.Emit(OpCodes.Conv_U2);
+
+            // Add DF Value to read byte
+            EmitRegisterRead(SelectedRegister.DF);
+            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
+
+            // Compare result > D
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(1));
+            EmitRegisterRead(SelectedRegister.D);
+            s_ILGen.Emit(OpCodes.Cgt);
+
+            // Branch path
+            s_ILGen.Emit(OpCodes.Brtrue, brOverflow);
+
+            // Not Greater Than
+            EmitNop();
+            EmitIntConstant(0);
+            EmitRegisterWrite(SelectedRegister.DF);
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(1));
+            EmitRegisterWrite(SelectedRegister.D);
+            s_ILGen.Emit(OpCodes.Br_S, brEnd);
+
+            //Else Greater Than
+            s_ILGen.MarkLabel(brOverflow);
+            EmitNop();
+            EmitIntConstant(1);
+            EmitRegisterWrite(SelectedRegister.DF);
+            EmitIntConstant(0);
+            EmitRegisterWrite(SelectedRegister.D);
+
+            // End
+            s_ILGen.MarkLabel(brEnd);
+            EmitNop();
+
+        }
+
+        private static void Emit_PHI(CdpInstruction inst)
+        {
+            EmitLocal(typeof(ushort), false); // New reg value [0]
+
+            s_ILGen.Emit(OpCodes.Ldc_I4_S, 0xFF);
+            EmitGeneralRegisterRead(inst.Low);
+            s_ILGen.Emit(OpCodes.And);
+
+            EmitRegisterRead(SelectedRegister.D);
+            s_ILGen.Emit(OpCodes.Conv_Ovf_U2);
+            s_ILGen.Emit(OpCodes.Ldc_I4_S, 8);
+            s_ILGen.Emit(OpCodes.Shl);
+            s_ILGen.Emit(OpCodes.And);
+
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitPushCodeEngine();
+            EmitIntConstant(inst.Low);
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitGeneralRegisterWriteFunc();
         }
 
         #endregion
