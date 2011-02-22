@@ -132,6 +132,7 @@ namespace Eimu.Core.Systems.CDP1802
         private static ushort s_LastAddress;
         private static ILGenerator s_ILGen;
         private static CodeEngine s_CodeEngine;
+        private static Dictionary<ushort, Label> s_Labels;
 
 
         public static DynamicMethod CreateSyscallMethod(ushort address, CodeEngine engine)
@@ -146,7 +147,7 @@ namespace Eimu.Core.Systems.CDP1802
 
             RunEmitter(function.GetILGenerator(), address);
 
-            //AssemblyName assn = new AssemblyName("TestAssembly");
+            //AssemblyName assn = new AssemblyName("TestAssembly_" + address.ToString("x"));
             //AssemblyBuilder ab = AppDomain.CurrentDomain.DefineDynamicAssembly(assn, AssemblyBuilderAccess.Save);
             //ModuleBuilder mb = ab.DefineDynamicModule(assn.Name, assn.Name + ".dll");
             //TypeBuilder tb = mb.DefineType("MyTestType");
@@ -193,6 +194,7 @@ namespace Eimu.Core.Systems.CDP1802
         private static void EmitOpcodes()
         {
             bool end = false;
+            s_Labels = new Dictionary<ushort, Label>();
 
             do
             {
@@ -205,20 +207,31 @@ namespace Eimu.Core.Systems.CDP1802
                     C1802OpCodes opcode = (C1802OpCodes)inst.Hi;
                     Console.Write("1802 Opcode: " + opcode.ToString());
 
+                    Label lb = s_ILGen.DefineLabel();
+                    s_ILGen.MarkLabel(lb);
+                    s_Labels.Add(s_LastAddress, lb);
+
                     switch (opcode)
                     {
                         case C1802OpCodes.GLO: Emit_GLO(inst); break;
                         case C1802OpCodes.SEX: Emit_SEX(inst); break;
                         case C1802OpCodes.STR: Emit_STR(inst); break;
-                        case C1802OpCodes.SEP: end = true; break;
+                        case C1802OpCodes.SEP:
+                            {
+                                Console.Write(" " + inst.Low.ToString("x") + " (" + ReadFake1802Reg(s_CodeEngine, inst.Low).ToString("x") + ")"); 
+                                end = true; 
+                                break;
+                            }
                         case C1802OpCodes.LDA: Emit_LDA(inst); break;
                         case C1802OpCodes.Sub15: EmitSubOpcodes15(inst); break;
                         case C1802OpCodes.Sub0: EmitSubOpcodes0(inst); break;
                         case C1802OpCodes.Sub7: EmitSubOpcodes7(inst); break;
+                        case C1802OpCodes.Sub3: EmitSubOpcodes3(inst); break;
                         case C1802OpCodes.PLO: Emit_PLO(inst); break;
                         case C1802OpCodes.INC: Emit_INC(inst); break;
                         case C1802OpCodes.GHI: Emit_GHI(inst); break;
                         case C1802OpCodes.PHI: Emit_PHI(inst); break;
+                        case C1802OpCodes.DEC: Emit_DEC(inst); break;
                         default: EmitNop(); Console.Write("  ...No Emit!"); break;
                     }
 
@@ -233,6 +246,8 @@ namespace Eimu.Core.Systems.CDP1802
                 }
             }
             while (!end);
+
+            s_Labels.Clear();
         }
 
         private static void EmitSubOpcodes15(CdpInstruction inst)
@@ -245,9 +260,30 @@ namespace Eimu.Core.Systems.CDP1802
                 switch (opcode)
                 {
                     case C1802OpCodesSub15.ADD: Emit_ADD(inst); break;
+                    case C1802OpCodesSub15.LDI: Emit_LDI(inst); break;
                     default: EmitNop(); Console.Write("  ...No Emit!"); break;
                 }
 
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+        }
+
+        private static void EmitSubOpcodes3(CdpInstruction inst)
+        {
+            try
+            {
+                C1802OpCodesSub3 opcode = (C1802OpCodesSub3)inst.Low;
+                Console.Write("  " + opcode.ToString());
+
+                switch (opcode)
+                {
+                    case C1802OpCodesSub3.BNZ: Emit_BNZ(inst); break;
+                    case C1802OpCodesSub3.BR: Emit_BR(inst); break;
+                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
+                }
             }
             catch (ArgumentException)
             {
@@ -276,21 +312,17 @@ namespace Eimu.Core.Systems.CDP1802
 
         private static void EmitSubOpcodes0(CdpInstruction inst)
         {
-            try
+            if (inst.Low == 0)
             {
-                C1802OpCodesSub0 opcode = (C1802OpCodesSub0)inst.Low;
-                Console.Write("  " + opcode.ToString());
+                Console.Write(" IDL");
+                EmitNop(); // Set Idle mode, we don't bother with it   
+            }
+            else
+            {
+                Console.Write("  LDN (" + inst.Low.ToString("x") + ")");
+                Emit_LDN(inst);
+            }
 
-                switch (opcode)
-                {
-                    case C1802OpCodesSub0.IDL: EmitNop(); break; // Idle wait, we skip this
-                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
-                }
-            }
-            catch (ArgumentException)
-            {
-                return;
-            }
         }
 
         public static ushort ReadFake1802Reg(CodeEngine engine, byte num)
@@ -313,15 +345,33 @@ namespace Eimu.Core.Systems.CDP1802
         {
             switch (num)
             {
+                // should use workable regs anywyas, let game fill in empty vars
                 case 3: s_CurrentAddress = value; break;
                 case 5: engine.m_PC = (int)value; break;
-                //case 6: return 0; // TOOD: figure out VX selection
+                //case 6: return 0; break; // TOOD: figure out VX selection
                 //case 7: return 0; // TODO: figure out VY selection
-                case 8: engine.m_ST = (int)value; break; //??
+                //case 8: engine.m_ST = (int)value; break; //??
                 //case 9: return m_LastRand;
                 case 10: engine.m_IReg = value; break;
-                default: break;
+                default: Console.WriteLine("Emitter: Unknown reg write! (" + num.ToString("x") + ")"); break;
             }
+        }
+
+        private static Label GetLabel(ushort address)
+        {
+            Label lb;
+            s_Labels.TryGetValue(address, out lb);
+            return lb;
+        }
+
+        private static byte GetNextOperand()
+        {
+            return s_CodeEngine.CurrentMemory[s_CurrentAddress++];
+        }
+
+        private static byte GetMemoryByte(ushort address)
+        {
+            return s_CodeEngine.CurrentMemory[address];
         }
 
         #region Common Emit Tools
@@ -537,7 +587,7 @@ namespace Eimu.Core.Systems.CDP1802
             EmitByteConstant(inst.Low);
             EmitUshortConstant(1);
             EmitGeneralRegisterRead(inst.Low);
-            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Add);
             EmitGeneralRegisterWriteFunc();
             EmitNop();
         }
@@ -588,7 +638,7 @@ namespace Eimu.Core.Systems.CDP1802
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
             EmitReadMemory(GetResolvedLocal(1));
             EmitRegisterRead(SelectedRegister.D);
-            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Add);
 
             // Store result
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
@@ -658,7 +708,7 @@ namespace Eimu.Core.Systems.CDP1802
             EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
             EmitByteConstant(1);
-            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Add);
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
             EmitCodeEngine();
             EmitByteConstant(inst.Low);
@@ -676,17 +726,16 @@ namespace Eimu.Core.Systems.CDP1802
 
         private static void Emit_ADCI(CdpInstruction inst)
         {
-            CdpInstruction ins = GetInstruction(s_CurrentAddress++);
             EmitLocal(typeof(ushort), false); // result       [0]
             Label brOverflow = s_ILGen.DefineLabel();
             Label brEnd = s_ILGen.DefineLabel();
 
             // Store result of operand + D + DF
-            EmitByteConstant(ins.Data);
+            EmitByteConstant(GetNextOperand());
             EmitRegisterRead(SelectedRegister.DF);
-            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Add);
             EmitRegisterRead(SelectedRegister.D);
-            s_ILGen.Emit(OpCodes.Add_Ovf_Un);
+            s_ILGen.Emit(OpCodes.Add);
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
 
             // Compare result > 255
@@ -730,7 +779,7 @@ namespace Eimu.Core.Systems.CDP1802
             s_ILGen.Emit(OpCodes.And);
 
             EmitRegisterRead(SelectedRegister.D);
-            s_ILGen.Emit(OpCodes.Conv_Ovf_U2);
+            s_ILGen.Emit(OpCodes.Conv_U2);
             s_ILGen.Emit(OpCodes.Ldc_I4_S, 8);
             s_ILGen.Emit(OpCodes.Shl);
             s_ILGen.Emit(OpCodes.Or);
@@ -740,6 +789,60 @@ namespace Eimu.Core.Systems.CDP1802
             EmitByteConstant(inst.Low);
             s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
             EmitGeneralRegisterWriteFunc();
+        }
+
+        private static void Emit_LDI(CdpInstruction inst)
+        {
+            EmitByteConstant(GetNextOperand());
+            EmitRegisterWrite(SelectedRegister.D);
+            EmitNop();
+        }
+
+        private static void Emit_BNZ(CdpInstruction inst)
+        {
+            ushort address = Tools.Create16(inst.Hi, GetMemoryByte(s_CurrentAddress++));
+            Label lb = GetLabel(address);
+
+            // Compare D to 0
+            EmitRegisterRead(SelectedRegister.D);
+            EmitByteConstant(0);
+            s_ILGen.Emit(OpCodes.Ceq);
+            EmitNop();
+
+            // Branch
+            s_ILGen.Emit(OpCodes.Brfalse, lb);
+
+            EmitNop();
+        }
+
+        private static void Emit_DEC(CdpInstruction inst)
+        {
+            EmitLocal(typeof(ushort), false);
+            EmitGeneralRegisterRead(inst.Low);
+            EmitByteConstant(1);
+            s_ILGen.Emit(OpCodes.Sub);
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitCodeEngine();
+            EmitByteConstant(inst.Low);
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitGeneralRegisterWriteFunc();
+        }
+
+        private static void Emit_LDN(CdpInstruction inst)
+        {
+            // Yeah baby!!!
+            EmitLocal(typeof(ushort), false);
+            EmitGeneralRegisterRead(inst.Low);
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitReadMemory(GetResolvedLocal(0));
+            EmitRegisterWrite(SelectedRegister.D);
+            EmitNop();
+        }
+
+        private static void Emit_BR(CdpInstruction inst)
+        {
+            // Lets just change the address to the another section of code and keep emitting
+            s_CurrentAddress = (ushort)((s_CurrentAddress & 0xFF00) | GetMemoryByte(s_CurrentAddress++));
         }
 
         #endregion
