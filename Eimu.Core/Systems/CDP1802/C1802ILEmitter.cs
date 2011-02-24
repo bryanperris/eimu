@@ -133,10 +133,13 @@ namespace Eimu.Core.Systems.CDP1802
         private static ILGenerator s_ILGen;
         private static CodeEngine s_CodeEngine;
         private static Dictionary<ushort, Label> s_Labels;
+        private static ushort[] s_Regs;
 
 
         public static DynamicMethod CreateSyscallMethod(ushort address, CodeEngine engine)
         {
+            s_Regs = new ushort[16];
+
             s_CodeEngine = engine;
 
             DynamicMethod function = new DynamicMethod(
@@ -216,12 +219,7 @@ namespace Eimu.Core.Systems.CDP1802
                         case C1802OpCodes.GLO: Emit_GLO(inst); break;
                         case C1802OpCodes.SEX: Emit_SEX(inst); break;
                         case C1802OpCodes.STR: Emit_STR(inst); break;
-                        case C1802OpCodes.SEP:
-                            {
-                                Console.Write(" " + inst.Low.ToString("x") + " (" + ReadFake1802Reg(s_CodeEngine, inst.Low).ToString("x") + ")"); 
-                                end = true; 
-                                break;
-                            }
+                        case C1802OpCodes.SEP: end = true; break;
                         case C1802OpCodes.LDA: Emit_LDA(inst); break;
                         case C1802OpCodes.Sub15: EmitSubOpcodes15(inst); break;
                         case C1802OpCodes.Sub0: EmitSubOpcodes0(inst); break;
@@ -329,15 +327,16 @@ namespace Eimu.Core.Systems.CDP1802
         {
             switch (num)
             {
-                case 2: return (ushort)engine.m_Stack.Count;
+                //case 2: return (ushort)engine.m_Stack.Count;
                 case 3: return s_CurrentAddress;
                 case 5: return (ushort)engine.m_PC;
-                case 6: return 0; // TOOD: figure out VX selection
-                case 7: return 0; // TODO: figure out VY selection
-                case 8: return (ushort)engine.m_ST; //??
+                //case 4: return 0; // VIP PC
+                //case 6: return 0; // TOOD: figure out VX selection
+                //case 7: return 0; // TODO: figure out VY selection
+                //case 8: return (ushort)engine.m_ST; //??
                 case 9: return engine.m_LastRand;
                 case 10: return engine.m_IReg;
-                default: return 0x0;
+                default: return s_Regs[num];
             }
         }
 
@@ -347,13 +346,18 @@ namespace Eimu.Core.Systems.CDP1802
             {
                 // should use workable regs anywyas, let game fill in empty vars
                 case 3: s_CurrentAddress = value; break;
+                case 4: s_Regs[4] = value; break;
                 case 5: engine.m_PC = (int)value; break;
-                //case 6: return 0; break; // TOOD: figure out VX selection
-                //case 7: return 0; // TODO: figure out VY selection
-                //case 8: engine.m_ST = (int)value; break; //??
-                //case 9: return m_LastRand;
+               // case 6: s_Regs[0] = value; break; // TOOD: figure out VX selection
+                //case 7: s_Regs[0] = value; break; // TODO: figure out VY selection
+                case 9: engine.m_LastRand = value; break;
                 case 10: engine.m_IReg = value; break;
-                default: Console.WriteLine("Emitter: Unknown reg write! (" + num.ToString("x") + ")"); break;
+
+                default:
+                    {
+                        s_Regs[num] = value; break;
+                        //Console.WriteLine("Emitter: Unknown reg write! (" + num.ToString("x") + ")"); break;
+                    }
             }
         }
 

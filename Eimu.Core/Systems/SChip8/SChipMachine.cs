@@ -133,8 +133,8 @@ namespace Eimu.Core.Systems.SChip8
                 {
                     if (data != 0)
                     {
-                        m_CDPDynarec.Call(inst.NNN, m_CodeEngine);
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
+                        m_CDPDynarec.Call(inst.NNN, m_CodeEngine);
                     }
                 }
                 else
