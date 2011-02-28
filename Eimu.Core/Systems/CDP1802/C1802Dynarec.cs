@@ -21,6 +21,13 @@ namespace Eimu.Core.Systems.CDP1802
 
         public void Call(ushort address, CodeEngine engine)
         {
+            //// Debugging: Skip certain syscalls
+            //switch (address)
+            //{
+            //    case 0x40e: return;
+            //    default: break;
+            //}
+
             DynamicMethod syscall;
 
             if (!m_CallLookup.TryGetValue(address, out syscall))
