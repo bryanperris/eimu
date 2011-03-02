@@ -1,0 +1,148 @@
+\hypertarget{namespace_eimu_1_1_core_1_1_systems_1_1_c_d_p1802}{
+\section{Eimu::Core::Systems::CDP1802 Namespace Reference}
+\label{namespace_eimu_1_1_core_1_1_systems_1_1_c_d_p1802}\index{Eimu::Core::Systems::CDP1802@{Eimu::Core::Systems::CDP1802}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_c_d_p1802_1_1_c1802_dynarec}{C1802Dynarec}
+\item 
+class {\bfseries C1802ILEmitter}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_c_d_p1802_1_1_cdp_instruction}{CdpInstruction}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries SelectedRegister} \{ \par
+{\bfseries None}, 
+{\bfseries D}, 
+{\bfseries P}, 
+{\bfseries X}, 
+\par
+{\bfseries T}, 
+{\bfseries DF}
+ \}
+\item 
+enum {\bfseries C1802OpCodes} \{ \par
+{\bfseries Sub0} =  0, 
+{\bfseries INC} =  1, 
+{\bfseries DEC} =  2, 
+{\bfseries Sub3} =  3, 
+\par
+{\bfseries LDA} =  4, 
+{\bfseries STR} =  5, 
+{\bfseries IRX} =  6, 
+{\bfseries Sub7} =  7, 
+\par
+{\bfseries GLO} =  8, 
+{\bfseries GHI} =  9, 
+{\bfseries PLO} =  10, 
+{\bfseries PHI} =  11, 
+\par
+{\bfseries Sub12} =  12, 
+{\bfseries SEP} =  13, 
+{\bfseries SEX} =  14, 
+{\bfseries Sub15} =  15
+ \}
+\item 
+enum {\bfseries C1802OpCodesSub0} \{ {\bfseries IDL} =  0, 
+{\bfseries IDN} =  1
+ \}
+\item 
+enum {\bfseries C1802OpCodesSub3} \{ \par
+{\bfseries BR} =  0, 
+{\bfseries BQ} =  1, 
+{\bfseries BZ} =  2, 
+{\bfseries BDF} =  3, 
+\par
+{\bfseries B1} =  4, 
+{\bfseries B2} =  5, 
+{\bfseries B3} =  6, 
+{\bfseries B4} =  7, 
+\par
+{\bfseries NBR} =  8, 
+{\bfseries BNQ} =  9, 
+{\bfseries BNZ} =  10, 
+{\bfseries BNF} =  11, 
+\par
+{\bfseries BN1} =  12, 
+{\bfseries BN2} =  13, 
+{\bfseries BN3} =  14, 
+{\bfseries BN4} =  15
+ \}
+\item 
+enum {\bfseries C1802OpCodesSub7} \{ \par
+{\bfseries RET} =  0, 
+{\bfseries DIS} =  1, 
+{\bfseries LDXA} =  2, 
+{\bfseries STXD} =  3, 
+\par
+{\bfseries ADC} =  4, 
+{\bfseries SDB} =  5, 
+{\bfseries SHRC} =  6, 
+{\bfseries SMB} =  7, 
+\par
+{\bfseries SAV} =  8, 
+{\bfseries MARK} =  9, 
+{\bfseries REQ} =  10, 
+{\bfseries SEQ} =  11, 
+\par
+{\bfseries ADCI} =  12, 
+{\bfseries SDBI} =  13, 
+{\bfseries SHLC} =  14, 
+{\bfseries SMBI} =  15
+ \}
+\item 
+enum {\bfseries C1802OpCodesSub12} \{ \par
+{\bfseries LBR} =  0, 
+{\bfseries LBQ} =  1, 
+{\bfseries LBZ} =  2, 
+{\bfseries LBDF} =  3, 
+\par
+{\bfseries NOP} =  4, 
+{\bfseries LSNQ} =  5, 
+{\bfseries LSNZ} =  6, 
+{\bfseries LSNF} =  7, 
+\par
+{\bfseries NLBR} =  8, 
+{\bfseries LBNQ} =  9, 
+{\bfseries LBNZ} =  10, 
+{\bfseries LBNF} =  11, 
+\par
+{\bfseries LSIE} =  12, 
+{\bfseries LSQ} =  13, 
+{\bfseries LSZ} =  14, 
+{\bfseries LSDF} =  15
+ \}
+\item 
+enum {\bfseries C1802OpCodesSub15} \{ \par
+{\bfseries LDX} =  0, 
+{\bfseries OR} =  1, 
+{\bfseries AND} =  2, 
+{\bfseries XOR} =  3, 
+\par
+{\bfseries ADD} =  4, 
+{\bfseries SD} =  5, 
+{\bfseries SHR} =  6, 
+{\bfseries SM} =  7, 
+\par
+{\bfseries LDI} =  8, 
+{\bfseries ORI} =  9, 
+{\bfseries ANI} =  10, 
+{\bfseries XRI} =  11, 
+\par
+{\bfseries ADI} =  12, 
+{\bfseries SDI} =  13, 
+{\bfseries SHL} =  14, 
+{\bfseries SMI} =  15
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{namespace_eimu_1_1_core_1_1_systems_1_1_c_d_p1802_a21304fc6fffc5c6b002c4e9c63e5e1bc}{
+delegate void {\bfseries MachineCall} (\hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine}{CodeEngine} engine)}
+\label{namespace_eimu_1_1_core_1_1_systems_1_1_c_d_p1802_a21304fc6fffc5c6b002c4e9c63e5e1bc}
+
+\end{DoxyCompactItemize}

@@ -1,0 +1,250 @@
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine}{
+\section{Eimu::Core::Systems::SChip8::CodeEngine Class Reference}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine}\index{Eimu::Core::Systems::SChip8::CodeEngine@{Eimu::Core::Systems::SChip8::CodeEngine}}
+}
+Inheritance diagram for Eimu::Core::Systems::SChip8::CodeEngine:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0fa6f3b3dbae608ce9548e3d6814d761}{
+virtual void {\bfseries Init} (\hyperlink{class_eimu_1_1_core_1_1_memory}{Memory} memory)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0fa6f3b3dbae608ce9548e3d6814d761}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0d86b4171ff88b5d110a4e451bab13ef}{
+virtual void {\bfseries Shutdown} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0d86b4171ff88b5d110a4e451bab13ef}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a16359dedfc938e52f5b7b05a522278cd}{
+abstract void {\bfseries Call} (\hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_chip_instruction}{ChipInstruction} inst)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a16359dedfc938e52f5b7b05a522278cd}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_abdc5e642701bc3db5581b0a73617064b}{
+void {\bfseries IncrementPC} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_abdc5e642701bc3db5581b0a73617064b}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a246efbd7361660b7899dbf7a1ebbdd8e}{
+void {\bfseries Dispose} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a246efbd7361660b7899dbf7a1ebbdd8e}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a43aa20bf8d3cc5cc3f7cf692894f9350}{
+const int {\bfseries StackMaxSize} = 12}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a43aa20bf8d3cc5cc3f7cf692894f9350}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0e61be6e36b637641281a1e6cdb65280}{
+const int {\bfseries TimerRate} = 17}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0e61be6e36b637641281a1e6cdb65280}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a41b49f1f91bb28d5d8c493b2f6760ffc}{
+Random {\bfseries m\_\-Rand}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a41b49f1f91bb28d5d8c493b2f6760ffc}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a01184d38a628682521410a10c0fa725f}{
+Stack$<$ ushort $>$ {\bfseries m\_\-Stack}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a01184d38a628682521410a10c0fa725f}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a1675f3b1738176e69478e6b990b7a53a}{
+byte {\bfseries m\_\-LastKey}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a1675f3b1738176e69478e6b990b7a53a}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac5f1f582c91e20fa9d278c04015d2c07}{
+byte\mbox{[}$\,$\mbox{]} {\bfseries m\_\-VRegs} = new byte\mbox{[}16\mbox{]}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac5f1f582c91e20fa9d278c04015d2c07}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a11028281cdfa35619423cc09791802d5}{
+byte\mbox{[}$\,$\mbox{]} {\bfseries m\_\-RPLFlags} = new byte\mbox{[}8\mbox{]}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a11028281cdfa35619423cc09791802d5}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a15aa97e3a556133530844770aa16ed99}{
+int {\bfseries m\_\-PC}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a15aa97e3a556133530844770aa16ed99}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0d1ace6d0288216c939839d9f3f8b546}{
+ushort {\bfseries m\_\-IReg}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a0d1ace6d0288216c939839d9f3f8b546}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a3331b89bec402b4d91561cc08faade19}{
+int {\bfseries m\_\-DT}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a3331b89bec402b4d91561cc08faade19}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ab5512f78fb83a5e33b580ac9a641731d}{
+int {\bfseries m\_\-ST}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ab5512f78fb83a5e33b580ac9a641731d}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_af1ba49e478cbf5cc0d6c2ce72c752b36}{
+Timer {\bfseries m\_\-DelayTimer}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_af1ba49e478cbf5cc0d6c2ce72c752b36}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac99837524cdde6a18119839eb99543f1}{
+Timer {\bfseries m\_\-SoundTimer}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac99837524cdde6a18119839eb99543f1}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a59f0bd289b5a1c260de0d3b6f6ee0397}{
+\hyperlink{class_eimu_1_1_core_1_1_memory}{Memory} {\bfseries m\_\-Memory}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a59f0bd289b5a1c260de0d3b6f6ee0397}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a1298831c8f89b8521fd4871b3795430f}{
+bool {\bfseries m\_\-SMode}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a1298831c8f89b8521fd4871b3795430f}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a7e9eff1df70f6f6e0fc374aeac55226d}{
+ushort {\bfseries m\_\-RoutineAddress}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a7e9eff1df70f6f6e0fc374aeac55226d}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a4f9b19faf4b176d9ddc01b38bccbf7eb}{
+ushort {\bfseries m\_\-LastRand}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a4f9b19faf4b176d9ddc01b38bccbf7eb}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac0d4312aa45d92e2cf011e001a662629}{
+void {\bfseries OnSuperModeChange} (bool enabled)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac0d4312aa45d92e2cf011e001a662629}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a19a7a9673e64dbc6c6437470bc25add6}{
+void {\bfseries OnPixelSet} (\hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_chip_instruction}{ChipInstruction} inst)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a19a7a9673e64dbc6c6437470bc25add6}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a48bc7b3728b740f9697800ffd22799f6}{
+void {\bfseries OnScreenClear} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a48bc7b3728b740f9697800ffd22799f6}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_adf6104d6d2ccb5de865a63d08459f510}{
+void {\bfseries OnWaitForKey} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_adf6104d6d2ccb5de865a63d08459f510}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_abc626c0154acfe82e446f770e87d7829}{
+void {\bfseries OnPixelScroll} (int dir, int length)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_abc626c0154acfe82e446f770e87d7829}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a38bb7282db520d3d0524a0fa045a9337}{
+void {\bfseries OnSetDelayTimer} (byte value)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a38bb7282db520d3d0524a0fa045a9337}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_afaa46ed5935185b00ce878be9ec7025d}{
+void {\bfseries OnSetSoundTimer} (byte value)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_afaa46ed5935185b00ce878be9ec7025d}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a265fa3260729020945d3f83599e8647a}{
+virtual void {\bfseries Dispose} (bool disposing)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a265fa3260729020945d3f83599e8647a}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_aecb5a328fa9457a6f20521029b982a81}{
+\hyperlink{class_eimu_1_1_core_1_1_memory}{Memory} {\bfseries CurrentMemory}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_aecb5a328fa9457a6f20521029b982a81}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac767977d3d7c096e0234f1d935ee3c86}{
+int {\bfseries PC}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ac767977d3d7c096e0234f1d935ee3c86}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a4af6c42c47930436781998a6f85d2243}{
+byte\mbox{[}$\,$\mbox{]} {\bfseries VRegisters}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a4af6c42c47930436781998a6f85d2243}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a5010b0215eb0bd2a9a3290e4296eb02e}{
+byte {\bfseries LastKeyPressed}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a5010b0215eb0bd2a9a3290e4296eb02e}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_aeaea5c28cef39b6da750e76b1e3394fb}{
+bool {\bfseries Stopped}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_aeaea5c28cef39b6da750e76b1e3394fb}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a9c595d3d738092887b1acffcda3ab3c6}{
+bool {\bfseries Paused}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a9c595d3d738092887b1acffcda3ab3c6}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_adf1c2d038cc8f5ba42598dc92b44ed73}{
+bool {\bfseries DisableTimers}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_adf1c2d038cc8f5ba42598dc92b44ed73}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a511cf5a4dd3fb70a33b878da173a997d}{
+int {\bfseries DelayTimer}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a511cf5a4dd3fb70a33b878da173a997d}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a38d78c19972ce2a7e64be0fd8c3bc054}{
+int {\bfseries SoundTimer}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a38d78c19972ce2a7e64be0fd8c3bc054}
+
+\end{DoxyCompactItemize}
+\subsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ace44c3d820a7f0e92a43290cbbc9cd69}{
+EventHandler {\bfseries ScreenClear}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_ace44c3d820a7f0e92a43290cbbc9cd69}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a1ae7ea551cbea35085eccf9b7112d2b3}{
+EventHandler$<$ \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_pixel_set_event_args}{PixelSetEventArgs} $>$ {\bfseries PixelSet}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a1ae7ea551cbea35085eccf9b7112d2b3}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a06b10f47543587d17b9f2659450d5c4d}{
+EventHandler$<$ \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_super_mode_changed_event_args}{SuperModeChangedEventArgs} $>$ {\bfseries SuperModeChange}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a06b10f47543587d17b9f2659450d5c4d}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a26fa3df91996419878e46873cc42fc60}{
+EventHandler$<$ \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_pixel_scroll_event_args}{PixelScrollEventArgs} $>$ {\bfseries PixelScroll}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a26fa3df91996419878e46873cc42fc60}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a4a8d12ed0a5883c92041b489129b075a}{
+EventHandler {\bfseries KeyPressWait}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine_a4a8d12ed0a5883c92041b489129b075a}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+C:/base/dev/hg/Eimu/Eimu.Core/Systems/SChip8/CodeEngine.cs\end{DoxyCompactItemize}
