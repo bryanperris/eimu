@@ -7,8 +7,8 @@ namespace Eimu.Core
 {
     public interface IDebugger
     {
-        void StartDebugging(object currentMachine);
-        void Report(object state);
+        void StartDebugging(VirtualMachine currentMachine);
+        void Report();
         void StopDebugging();
     }
 }

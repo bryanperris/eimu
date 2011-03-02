@@ -40,12 +40,12 @@
             </TabItem>
         </TabControl>
         <ToolBar Height="26" HorizontalAlignment="Left" x:Name="toolBar1" VerticalAlignment="Top" Width="489" >
-        	<Button x:Name="m_TbButton_Run" Content="Run"/>
-        	<Button x:Name="m_TbButton_Pause" Content="Pause"/>
+        	<Button x:Name="m_TbButton_Run" Content="Run" Click="m_TbButton_Run_Click" />
+        	<Button x:Name="m_TbButton_Pause" Content="Pause" Click="m_TbButton_Pause_Click" />
         	<Button x:Name="m_TbButton_Stop" Content="Stop"/>
         	<Separator/>
-        	<Button x:Name="m_TbButton_Step" Content="Step"/>
-        	<Button x:Name="m_TbButton_Skip" Content="Skip"/>
+        	<Button x:Name="m_TbButton_Step" Content="Step" Click="m_TbButton_Step_Click" />
+        	<Button x:Name="m_TbButton_Skip" Content="Skip" Click="m_TbButton_Skip_Click" />
         </ToolBar>
     </Grid>
 </Window>

@@ -18,11 +18,12 @@
         			<GradientStop Color="White" Offset="1"/>
         		</LinearGradientBrush>
         	</Menu.Background>
-            <MenuItem Header="Machine" >
+            <MenuItem Header="Machine">
             	<MenuItem x:Name="m_MenuItem_Pause" Header="Pause" IsCheckable="True" Click="m_MenuItem_Pause_Click" />
             	<MenuItem x:Name="m_MenuItem_Reset" Header="Reset" Click="m_MenuItem_Reset_Click" />
             	<MenuItem x:Name="m_MenuItem_Stop" Header="Stop" Click="m_MenuItem_Stop_Click" />
-            	<MenuItem x:Name="m_MenuItem_Quit" Header="Quit" Margin="0,0,2.097,0" Click="m_MenuItem_Quit_Click" />
+            	<MenuItem x:Name="m_MenuItem_Debugger" Header="Show Debugger" Click="m_MenuItem_Debugger_Click" />
+                <MenuItem x:Name="m_MenuItem_Quit" Header="Quit" Click="m_MenuItem_Quit_Click" Margin="0,0,2.097,0" />
             </MenuItem>
             <MenuItem Header="Help" >
             	<MenuItem x:Name="m_MenuItem_About" Header="About" Click="m_MenuItem_About_Click" />

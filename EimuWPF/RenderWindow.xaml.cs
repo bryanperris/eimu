@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Eimu.Core.Systems.SChip8;
 using System.Windows.Interop;
 using Eimu.Devices;
+using Eimu.Debugger;
 
 namespace Eimu
 {
@@ -23,10 +24,13 @@ namespace Eimu
     {
         SChipMachine m_Machine;
         WindowInteropHelper m_WinHelper;
+        SC8DebuggerWindow m_Debugger;
 
         public RenderWindow(SChipMachine machine)
         {
             m_Machine = machine;
+            m_Debugger = new SC8DebuggerWindow();
+            m_Machine.AttachDebugger(m_Debugger);
             InitializeComponent();
         }
 
@@ -128,6 +132,11 @@ namespace Eimu
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
            m_Machine.SetKeyPress(ChipKey.None);
+        }
+
+        private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)
+        {
+            m_Debugger.Show();
         }
     }
 }

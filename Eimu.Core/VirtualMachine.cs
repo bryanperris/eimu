@@ -36,6 +36,7 @@ namespace Eimu.Core
         private bool m_Booted = false;
         public event EventHandler<RunStateChangedArgs> RunStateChanged;
         public event EventHandler MachineAborted;
+        private IDebugger m_Debugger;
 
         
         protected abstract bool Boot();
@@ -43,6 +44,11 @@ namespace Eimu.Core
         public void SetMediaSource(Stream source)
         {
             this.m_MediaSource = source;
+        }
+
+        public void AttachDebugger(IDebugger debugger)
+        {
+            m_Debugger = debugger;
         }
 
         protected Stream MediaSource
@@ -82,6 +88,12 @@ namespace Eimu.Core
         {
             m_State = state;
 
+            if (state == RunState.Paused)
+            {
+                if (m_Debugger != null)
+                    m_Debugger.Report();
+            }
+
             if (m_State == RunState.Running && !m_Booted)
             {
                 bool successful = Boot();
@@ -97,12 +109,17 @@ namespace Eimu.Core
                 else
                 {
                     m_Booted = true;
+
+                    if (m_Debugger != null)
+                        m_Debugger.StartDebugging(this);
                 }
             }
 
             if (m_State == RunState.Stopped)
             {
                 m_Booted = false;
+                if (m_Debugger != null)
+                    m_Debugger.StopDebugging();
             }
                 
             if (RunStateChanged != null)
