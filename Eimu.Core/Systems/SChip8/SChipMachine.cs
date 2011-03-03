@@ -48,6 +48,7 @@ namespace Eimu.Core.Systems.SChip8
         private int m_ExtraCycles;
         private int m_CoreSpeed = 10;
         private HLEMode m_HLMode;
+        private bool m_Use1802Dynarec;
         private C1802Dynarec m_CDPDynarec;
 
 
@@ -134,7 +135,11 @@ namespace Eimu.Core.Systems.SChip8
                     if (data != 0)
                     {
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
-                        m_CDPDynarec.Call(inst.NNN, m_CodeEngine);
+
+                        if (m_Use1802Dynarec)
+                            m_CDPDynarec.Call(inst.NNN, m_CodeEngine);
+                        else
+                            Console.WriteLine("Syscall Emitter Disabled!");
                     }
                 }
                 else
@@ -296,6 +301,12 @@ namespace Eimu.Core.Systems.SChip8
         {
             get { return this.m_HLMode; }
             set { this.m_HLMode = value; }
+        }
+
+        public bool Enable1802Dyanrec
+        {
+            get { return this.m_Use1802Dynarec; }
+            set { this.m_Use1802Dynarec = value; }
         }
 
         // ----------------------------

@@ -11,6 +11,7 @@ namespace Eimu.Configuration
         public const string Chip8FontPath = Config.systemDirectory + "c8fnt.bin";
         public const string SChipFontPath = Config.systemDirectory + "scfnt.bin";
         public static bool useRecompiler = false;
+        public static bool use1802Recompiler = false;
         public static byte backgroundColorR;
         public static byte backgroundColorG = 0;
         public static byte backgroundColorB = 0;

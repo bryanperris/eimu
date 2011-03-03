@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Eimu.Core
 {
@@ -19,6 +20,7 @@ namespace Eimu.Core
             Console.Write(((value >> 3) & 0x1).ToString());
             Console.Write(((value >> 2) & 0x1).ToString());
             Console.Write(((value >> 1) & 0x1).ToString());
+            Console.Write((value        & 0x1).ToString());
         }
     }
 }

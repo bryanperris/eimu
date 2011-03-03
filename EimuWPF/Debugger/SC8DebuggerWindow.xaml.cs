@@ -101,7 +101,6 @@ namespace Eimu.Debugger
         {
             m_Machine.Pause();
             m_Machine.CodeEngineCore.IncrementPC();
-            m_Machine.Step(1);
             UpdateDebugInfo();
         }
     }
