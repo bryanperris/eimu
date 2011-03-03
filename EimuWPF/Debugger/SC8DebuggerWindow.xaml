@@ -12,7 +12,7 @@
             <TabItem Header="Memory" Margin="-2,-2,0,-1" HorizontalAlignment="Left" Width="58.4">
             	<Grid Margin="0,-1,4,1">
             		<ListBox x:Name="m_ListBox_Memory" Margin="8,8,0,8" HorizontalAlignment="Left" Width="146"/>
-            		<ScrollBar x:Name="m_ScrollBar_MemScroller" HorizontalAlignment="Right" Margin="0,8,139,8" d:LayoutOverrides="Width"/>
+            		<ScrollBar x:Name="m_ScrollBar_MemScroller" Scroll="m_ScrollBar_MemScroller_Scroll" HorizontalAlignment="Right" Margin="0,8,139,8" d:LayoutOverrides="Width"/>
             		<CheckBox x:Name="m_CheckBox_MemHexView" Content="Hex View" HorizontalAlignment="Right" Margin="0,8,60,0" VerticalAlignment="Top" RenderTransformOrigin="-1.263,-0.125" Width="74.999"/>
             		<Button x:Name="m_Button_MemGotoI" Content="I" HorizontalAlignment="Right" Margin="0,28.92,54,0" VerticalAlignment="Top" Width="16"/>
             		<Button x:Name="m_Button_MemGotoPC" Content="PC" HorizontalAlignment="Right" Margin="0,28.92,22,0" VerticalAlignment="Top" Width="28"/>

@@ -29,8 +29,6 @@ namespace Eimu
         public RenderWindow(SChipMachine machine)
         {
             m_Machine = machine;
-            m_Debugger = new SC8DebuggerWindow();
-            m_Machine.AttachDebugger(m_Debugger);
             InitializeComponent();
         }
 
@@ -86,6 +84,8 @@ namespace Eimu
             }
 
 
+            m_Debugger = new SC8DebuggerWindow();
+            m_Machine.AttachDebugger(m_Debugger);
             m_Machine.Run();
         }
 

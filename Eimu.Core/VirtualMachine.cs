@@ -111,7 +111,10 @@ namespace Eimu.Core
                     m_Booted = true;
 
                     if (m_Debugger != null)
+                    {
                         m_Debugger.StartDebugging(this);
+                        m_Debugger.Report();
+                    }
                 }
             }
 

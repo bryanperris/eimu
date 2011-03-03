@@ -31,8 +31,8 @@ namespace Eimu.Debugger
         private void UpdateDebugInfo()
         {
             CodeEngine en = m_Machine.CodeEngineCore;
-
             ListRegisters();
+            UpdateMemory();
         }
 
         private void ListRegisters()
@@ -59,13 +59,40 @@ namespace Eimu.Debugger
             m_ListBox_Regs.Items.Add("VF: " + en.m_VRegs[15].ToString("x"));
         }
 
+        private void ListCode()
+        {
+
+        }
+
+        private void UpdateMemory()
+        {
+            m_ListBox_Memory.Items.Clear();
+
+            int addr = (int)m_ScrollBar_MemScroller.Value;
+            int num = (int)m_ListBox_Memory.ActualHeight / (int)16;
+            for (int i = 0; i < num; i++)
+            {
+                if (addr > 0 && addr < m_Machine.SystemMemory.Size)
+                {
+                    m_ListBox_Memory.Items.Add(addr.ToString("x") + ": " + m_Machine.SystemMemory[addr].ToString("x"));
+                    addr++;
+                }
+                else
+                {
+                    m_ListBox_Memory.Items.Add("---");
+                }
+            }
+        }
+
 
         #region IDebugger Members
 
         public void StartDebugging(VirtualMachine currentMachine)
         {
             m_Machine = (SChipMachine)currentMachine;
-            UpdateDebugInfo();
+            m_ScrollBar_MemScroller.Minimum = 0;
+            m_ScrollBar_MemScroller.Maximum = m_Machine.SystemMemory.Size;
+            m_ScrollBar_MemScroller.Value = m_Machine.SystemMemory.Size / 2;
         }
 
         public void Report()
@@ -102,6 +129,11 @@ namespace Eimu.Debugger
             m_Machine.Pause();
             m_Machine.CodeEngineCore.IncrementPC();
             UpdateDebugInfo();
+        }
+
+        private void m_ScrollBar_MemScroller_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+            UpdateMemory();
         }
     }
 }
