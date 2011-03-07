@@ -6,12 +6,6 @@
 	mc:Ignorable="d"
 	x:Class="Eimu.CommonControls.MemoryViewer"
 	x:Name="UserControl" Width="174.834" Height="234.5">
-	<UserControl.Background>
-		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-			<GradientStop Color="#FF5E5252" Offset="1"/>
-			<GradientStop Color="White"/>
-		</LinearGradientBrush>
-	</UserControl.Background>
 
 	<Grid x:Name="LayoutRoot">
 		<ScrollBar x:Name="m_ScrollBar_MemScroll" Width="18" HorizontalAlignment="Right" ValueChanged="m_ScrollBar_MemScroll_ValueChanged" />
