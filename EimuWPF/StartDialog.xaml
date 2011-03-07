@@ -17,7 +17,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="38.958"/>
 			<RowDefinition Height="79.042" />
-			<RowDefinition/>
+			<RowDefinition Height="304"/>
 		</Grid.RowDefinitions>
 		<TabControl x:Name="m_TabControl_MachineSelector" Margin="8,8,8,0" Grid.Row="2" Height="289.856" VerticalAlignment="Top">
 			<TabItem x:Name="m_TabItem_Chip8" Header="SChip8">
@@ -43,7 +43,7 @@
 					</GroupBox>
 					<Rectangle x:Name="m_Rectangle_C8SelectedBackgroundColor" Fill="Black" HorizontalAlignment="Right" Margin="0,17.386,8,0" Stroke="Black" Width="53" Height="46.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedBackgroundColor_MouseLeftButtonUp" d:LayoutOverrides="VerticalAlignment" />
 					<Rectangle x:Name="m_Rectangle_C8SelectedForegroundColor" Fill="White" Margin="0,0,25,0" Stroke="Black" Height="47.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedForegroundColor_MouseLeftButtonUp" HorizontalAlignment="Right" Width="55" d:LayoutOverrides="VerticalAlignment" />
-					<GroupBox Header="Graphics Settings" Margin="236.057,7,87.943,80.04">
+					<GroupBox Header="Graphics Settings" Margin="236.057,7,80,80.04">
 						<Grid>
 							<CheckBox Content="Disable Y Wrap (Blitz)" Height="17" HorizontalAlignment="Left" Margin="0,79.266,0,0" x:Name="m_CheckBox_C8DisableYWrap" VerticalAlignment="Top" Width="154" />
 							<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" x:Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
@@ -62,7 +62,6 @@
 			</TabItem>
 			<TabItem x:Name="m_TabItem_MegaChip" Header="Mega Chip"/>
 			<TabItem x:Name="m_TabItem_Chip16" Header="Chip 16"/>
-			<Grid Background="#FFE5E5E5" Height="176.08" Width="93.333"/>
 		</TabControl>
 		<TextBox x:Name="m_TextBox_ProgramPath" Margin="8,8,0,8" TextWrapping="Wrap" Text="&lt;Click here to browse a file&gt;" VerticalAlignment="Top" HorizontalAlignment="Left" Width="442" FontStyle="Italic" MouseDoubleClick="m_TextBox_ProgramPath_MouseDoubleClick" IsReadOnly="True" Height="21.96" />
 		<Button x:Name="m_Button_RunEmulator" Content="Run" HorizontalAlignment="Right" Margin="0,8,8,0" Width="75" VerticalAlignment="Top" IsEnabled="False" Click="m_Button_RunEmulator_Click" />

@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Eimu.Core.Systems.SChip8;
 using Eimu.Core;
+using System.Windows.Threading;
+using System.Globalization;
 
 
 namespace Eimu.Debugger
@@ -26,12 +28,78 @@ namespace Eimu.Debugger
         public SC8DebuggerWindow()
         {
             InitializeComponent();
+            m_TextBox_MemSelectedAddress.Text = "0000";
+            m_TextBox_MemSelectedAddress.TextChanged += new TextChangedEventHandler(m_TextBox_MemSelectedAddress_TextChanged);
+            m_Button_MemGotoI.Click += new RoutedEventHandler(m_Button_MemGotoI_Click);
+            m_Button_MemGotoPC.Click += new RoutedEventHandler(m_Button_MemGotoPC_Click);
+            m_TextBox_MemSelectedAddress.MouseWheel += new MouseWheelEventHandler(m_TextBox_MemSelectedAddress_MouseWheel);
+        }
+
+        void m_TextBox_MemSelectedAddress_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            try
+            {
+                ushort addr = ushort.Parse(((TextBox)sender).Text, NumberStyles.HexNumber);
+
+                if (e.Delta > 0)
+                {
+                    addr++;
+                }
+                else
+                {
+                    addr--;
+                }
+
+                m_TextBox_MemSelectedAddress.Text = addr.ToString("X4");
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        void m_Button_MemGotoPC_Click(object sender, RoutedEventArgs e)
+        {
+            m_TextBox_MemSelectedAddress.Text = m_Machine.CodeEngineCore.PC.ToString("X4");
+        }
+
+        void m_Button_MemGotoI_Click(object sender, RoutedEventArgs e)
+        {
+            m_TextBox_MemSelectedAddress.Text = m_Machine.CodeEngineCore.m_IReg.ToString("X4");
+        }
+
+        void m_TextBox_MemSelectedAddress_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string val = m_TextBox_MemSelectedAddress.Text;
+            Color normal = Color.FromRgb(255, 255, 255);
+            Color bad = Color.FromRgb(255, 100, 100);
+
+            try
+            {
+                ushort address = ushort.Parse(val, System.Globalization.NumberStyles.HexNumber);
+
+                if (!memoryViewer1.GotoAddress(address))
+                {
+                    m_TextBox_MemSelectedAddress.Background = new SolidColorBrush(bad);
+                }
+                else
+                {
+                    m_TextBox_MemSelectedAddress.Background = new SolidColorBrush(normal);
+                }
+            }
+            catch (FormatException)
+            {
+                m_TextBox_MemSelectedAddress.Background = new SolidColorBrush(bad);
+            }
+            catch (OverflowException)
+            {
+                m_TextBox_MemSelectedAddress.Background = new SolidColorBrush(bad);
+            }
         }
 
         private void UpdateDebugInfo()
         {
-            CodeEngine en = m_Machine.CodeEngineCore;
-            ListRegisters();
+            m_ListBox_Regs.Dispatcher.Invoke(DispatcherPriority.Render, new Action(ListRegisters));
             UpdateMemory();
         }
 
@@ -66,22 +134,7 @@ namespace Eimu.Debugger
 
         private void UpdateMemory()
         {
-            m_ListBox_Memory.Items.Clear();
-
-            int addr = (int)m_ScrollBar_MemScroller.Value;
-            int num = (int)m_ListBox_Memory.ActualHeight / (int)16;
-            for (int i = 0; i < num; i++)
-            {
-                if (addr > 0 && addr < m_Machine.SystemMemory.Size)
-                {
-                    m_ListBox_Memory.Items.Add(addr.ToString("x") + ": " + m_Machine.SystemMemory[addr].ToString("x"));
-                    addr++;
-                }
-                else
-                {
-                    m_ListBox_Memory.Items.Add("---");
-                }
-            }
+            memoryViewer1.UpdateFields();
         }
 
 
@@ -90,9 +143,8 @@ namespace Eimu.Debugger
         public void StartDebugging(VirtualMachine currentMachine)
         {
             m_Machine = (SChipMachine)currentMachine;
-            m_ScrollBar_MemScroller.Minimum = 0;
-            m_ScrollBar_MemScroller.Maximum = m_Machine.SystemMemory.Size;
-            m_ScrollBar_MemScroller.Value = m_Machine.SystemMemory.Size / 2;
+            memoryViewer1.SetMemory(m_Machine.SystemMemory);
+            UpdateDebugInfo();
         }
 
         public void Report()
@@ -129,11 +181,6 @@ namespace Eimu.Debugger
             m_Machine.Pause();
             m_Machine.CodeEngineCore.IncrementPC();
             UpdateDebugInfo();
-        }
-
-        private void m_ScrollBar_MemScroller_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-        {
-            UpdateMemory();
         }
     }
 }

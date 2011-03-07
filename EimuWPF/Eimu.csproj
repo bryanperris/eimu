@@ -90,6 +90,12 @@
     <Compile Include="ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CommonControls\MemoryField.xaml.cs">
+      <DependentUpon>MemoryField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommonControls\MemoryViewer.xaml.cs">
+      <DependentUpon>MemoryViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\SchipConfig.cs" />
     <Compile Include="Devices\BeepAudioDevice.cs" />
@@ -160,6 +166,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="CommonControls\MemoryField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CommonControls\MemoryViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="RenderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -186,6 +200,7 @@
   <ItemGroup>
     <Resource Include="Images\ColorSwatchSquare2.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>md sys
