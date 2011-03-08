@@ -11,23 +11,36 @@
             </TabItem>
             <TabItem Header="Memory" Margin="-2,-2,0,-1" HorizontalAlignment="Left" Width="58.4">
             	<Grid Margin="0,-1,4,1">
-            		<Button x:Name="m_Button_MemGotoI" Content="I" HorizontalAlignment="Left" Margin="117,33.836,0,0" VerticalAlignment="Top" Width="16"/>
-            		<Button x:Name="m_Button_MemGotoPC" Content="PC" Margin="137,33.836,149,0" VerticalAlignment="Top"/>
+            		<Button x:Name="m_Button_MemGotoI" Content="I" HorizontalAlignment="Right" Margin="0,7.876,93,0" VerticalAlignment="Top" Width="16"/>
+            		<Button x:Name="m_Button_MemGotoPC" Content="PC" Margin="0,7.876,61,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="28"/>
             		<TextBox x:Name="m_TextBox_MemSelectedAddress" HorizontalAlignment="Left" Margin="117,7.876,0,0" TextWrapping="Wrap" Text="address" VerticalAlignment="Top" Width="84" RenderTransformOrigin="0.417,0.461"/>
                     <my:MemoryViewer Height="221.04" HorizontalAlignment="Left" Margin="8,8,0,0" x:Name="memoryViewer1" VerticalAlignment="Top" Width="105" Background="White" d:LayoutOverrides="HorizontalAlignment" />
                 </Grid>
             </TabItem>
             <TabItem Header="Sprites">
             	<Grid Margin="0,0.02,3,4.02">
-            		<TextBox x:Name="m_TextBox_SprCurrentAddress" HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="address" VerticalAlignment="Top" Width="101.877"/>
-            		<Button x:Name="m_Buttion_SprGotoI" Content="I" Margin="113.877,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20"/>
-            		<GroupBox Header="Sprite Size" HorizontalAlignment="Left" Margin="176.88,0,0,0" Width="130.12" Height="38.96" VerticalAlignment="Top">
+            		<TextBox x:Name="m_TextBox_SprCurrentAddress" HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="address" VerticalAlignment="Top" Width="75.877"/>
+            		<Button x:Name="m_Buttion_SprGotoI" Content="I" Margin="87.877,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20"/>
+            		<GroupBox Header="Sprite Size" HorizontalAlignment="Left" Margin="203.88,10,0,8" Width="103.12">
             			<Grid Margin="0,0.02,-4,-5.02">
-            				<RadioButton x:Name="m_RadioButton_SprSize5" Content="5" HorizontalAlignment="Left" Width="53.21" Margin="3.7,0,0,5.04" VerticalAlignment="Bottom"/>
-            				<RadioButton x:Name="m_RadioButton_SprSize16" Content="16" VerticalAlignment="Top" Margin="60.91,0,8,0"/>
+            				<Slider x:Name="m_Slider_SprExtSize" Margin="-37.125,54.891,0,18.117" RenderTransformOrigin="0.125,-0.826" Maximum="16" Value="6" IsEnabled="False" Orientation="Vertical" HorizontalAlignment="Left" Width="25.178" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
+            					<Slider.RenderTransform>
+            						<TransformGroup>
+            							<ScaleTransform/>
+            							<SkewTransform/>
+            							<RotateTransform Angle="0.265"/>
+            							<TranslateTransform X="44.851" Y="13.168"/>
+            						</TransformGroup>
+            					</Slider.RenderTransform>
+            				</Slider>
+            				<RadioButton x:Name="m_RadioButton_SprSize5" Content="5x8" Margin="8,8,8,0" VerticalAlignment="Top" IsChecked="True"/>
+            				<RadioButton x:Name="m_RadioButton_SprSize16" Content="16x16" Margin="8,27.96,10.12,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
+            				<RadioButton x:Name="m_RadioButton_SprSizeCustom" Content="Yx8" Margin="8,47.92,10.12,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
+            				<Label x:Name="m_Label_SprCusSize" Content="6" Margin="47.006,0,8,58.04" VerticalAlignment="Bottom"/>
             			</Grid>
             		</GroupBox>
-            		<Canvas Margin="8,42.96,11.003,8"/>
+            		<Canvas x:Name="m_Canvas_SprSurface" Margin="8,33.96,115.12,8" Background="Black"/>
+            		<Button x:Name="m_Button_SprRender" Content="Draw" Margin="111.877,8,142.12,0" VerticalAlignment="Top" IsEnabled="False"/>
             	</Grid>
             </TabItem>
             <TabItem Header="Timers">

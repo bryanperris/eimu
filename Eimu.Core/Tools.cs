@@ -10,17 +10,18 @@ namespace Eimu.Core
             return (ushort)((ushort)high << 8 | low);
         }
 
-        public static void PrintBits(byte value)
+        public static string PrintBits(byte value)
         {
-            Console.WriteLine();
-            Console.Write(((value >> 7) & 0x1).ToString());
-            Console.Write(((value >> 6) & 0x1).ToString());
-            Console.Write(((value >> 5) & 0x1).ToString());
-            Console.Write(((value >> 4) & 0x1).ToString());
-            Console.Write(((value >> 3) & 0x1).ToString());
-            Console.Write(((value >> 2) & 0x1).ToString());
-            Console.Write(((value >> 1) & 0x1).ToString());
-            Console.Write((value        & 0x1).ToString());
+            string a = "";
+            a += ((value >> 7) & 0x1).ToString();
+            a += ((value >> 6) & 0x1).ToString();
+            a += ((value >> 5) & 0x1).ToString();
+            a += ((value >> 4) & 0x1).ToString();
+            a += ((value >> 3) & 0x1).ToString();
+            a += ((value >> 2) & 0x1).ToString();
+            a += ((value >> 1) & 0x1).ToString();
+            a += (value        & 0x1).ToString();
+            return a;
         }
     }
 }
