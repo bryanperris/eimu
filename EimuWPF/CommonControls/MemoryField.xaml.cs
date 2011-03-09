@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace Eimu.CommonControls
 {
@@ -40,19 +41,19 @@ namespace Eimu.CommonControls
 
         public ushort Address
         {
-            get { return ushort.Parse(this.m_MemoryAddress.Text); }
+            get { return ushort.Parse(this.m_MemoryAddress.Text, NumberStyles.HexNumber); }
             set { this.m_MemoryAddress.Text = value.ToString("X4"); }
         }
 
         public byte ValueA
         {
-            get { return byte.Parse(this.m_MemoryValueA.Text); }
+            get { return byte.Parse(this.m_MemoryValueA.Text, NumberStyles.HexNumber); }
             set { this.m_MemoryValueA.Text = value.ToString("X2"); }
         }
 
         public byte ValueB
         {
-            get { return byte.Parse(this.m_MemoryValueB.Text); }
+            get { return byte.Parse(this.m_MemoryValueB.Text, NumberStyles.HexNumber); }
             set { this.m_MemoryValueB.Text = value.ToString("X2"); }
         }
     }

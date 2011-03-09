@@ -15,6 +15,7 @@
             		<Button x:Name="m_Button_MemGotoPC" Content="PC" Margin="0,7.876,61,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="28"/>
             		<TextBox x:Name="m_TextBox_MemSelectedAddress" HorizontalAlignment="Left" Margin="117,7.876,0,0" TextWrapping="Wrap" Text="address" VerticalAlignment="Top" Width="84" RenderTransformOrigin="0.417,0.461"/>
                     <my:MemoryViewer Height="221.04" HorizontalAlignment="Left" Margin="8,8,0,0" x:Name="memoryViewer1" VerticalAlignment="Top" Width="105" Background="White" d:LayoutOverrides="HorizontalAlignment" />
+                    <Button x:Name="m_Button_MemDumpSection" Content="Dump Section" Margin="117,33.836,93,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Sprites">
@@ -23,7 +24,7 @@
             		<Button x:Name="m_Buttion_SprGotoI" Content="I" Margin="87.877,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20"/>
             		<GroupBox Header="Sprite Size" HorizontalAlignment="Left" Margin="203.88,10,0,8" Width="103.12">
             			<Grid Margin="0,0.02,-4,-5.02">
-            				<Slider x:Name="m_Slider_SprExtSize" Margin="-37.125,54.891,0,18.117" RenderTransformOrigin="0.125,-0.826" Maximum="16" Value="6" IsEnabled="False" Orientation="Vertical" HorizontalAlignment="Left" Width="25.178" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
+            				<Slider x:Name="m_Slider_SprExtSize" Margin="-37.125,54.891,0,18.117" RenderTransformOrigin="0.125,-0.826" Maximum="16" Value="5" IsEnabled="False" Orientation="Vertical" HorizontalAlignment="Left" Width="25.178" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
             					<Slider.RenderTransform>
             						<TransformGroup>
             							<ScaleTransform/>
@@ -47,6 +48,31 @@
             	<Grid Height="238.04" Margin="0,0,0,-1">
             		<Label x:Name="m_Label_DelayTimer" Content="Delay Timer:" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="77.377"/>
             		<Label x:Name="m_Label_SoundTimer" Content="Sound Timer" HorizontalAlignment="Left" Margin="8,37.96,0,0" VerticalAlignment="Top"/>
+            	</Grid>
+            </TabItem>
+            <TabItem Header="Font">
+            	<Grid Background="#FFE5E5E5">
+            		<Grid.ColumnDefinitions>
+            			<ColumnDefinition/>
+            		</Grid.ColumnDefinitions>
+            		<Canvas x:Name="m_Canvas_FontBox1" Margin="8,15,0,0" HorizontalAlignment="Left" Width="50" Background="Black" Height="50" VerticalAlignment="Top"/>
+            		<Canvas x:Name="m_Canvas_FontBox2" Margin="8,69,0,118.04" HorizontalAlignment="Left" Width="50" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox3" Margin="62,69,0,118.04" Background="Black" HorizontalAlignment="Left" Width="50"/>
+            		<Canvas x:Name="m_Canvas_FontBox4" Margin="116,69,152,118.04" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox5" Margin="0,69,98,118.04" HorizontalAlignment="Right" Width="50" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox6" Margin="0,69,44,118.04" HorizontalAlignment="Right" Width="50" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox7" Margin="8,0,0,64.04" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom" Width="50" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox8" Margin="62,0,0,64.04" Height="50" VerticalAlignment="Bottom" Background="Black" HorizontalAlignment="Left" Width="50"/>
+            		<Canvas x:Name="m_Canvas_FontBox9" Margin="116,0,152,64.04" Height="50" VerticalAlignment="Bottom" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox10" Margin="0,0,98,64.04" HorizontalAlignment="Right" Height="50" VerticalAlignment="Bottom" Width="50" Background="Black"/>
+            		<Canvas x:Name="m_Canvas_FontBox11" Margin="0,0,44,64.04" HorizontalAlignment="Right" Width="50" Background="Black" Height="50" VerticalAlignment="Bottom"/>
+            		<Canvas x:Name="m_Canvas_FontBox12" Margin="8,0,0,10.04" HorizontalAlignment="Left" Width="50" Background="Black" Height="50" VerticalAlignment="Bottom"/>
+            		<Canvas x:Name="m_Canvas_FontBox13" Margin="62,0,0,10.04" Background="Black" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="50"/>
+            		<Canvas x:Name="m_Canvas_FontBox14" Margin="116,0,152,10.04" Background="Black" Height="50" VerticalAlignment="Bottom"/>
+            		<Canvas x:Name="m_Canvas_FontBox15" Margin="0,0,98,10.04" HorizontalAlignment="Right" Width="50" Background="Black" Height="50" VerticalAlignment="Bottom"/>
+            		<Canvas x:Name="m_Canvas_FontBox16" Margin="0,0,44,10.04" HorizontalAlignment="Right" Width="50" Background="Black" Height="50" VerticalAlignment="Bottom"/>
+            		<Button x:Name="m_Button_FontDraw" Content="Draw" Margin="0,8,8,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+            		<CheckBox x:Name="m_CheckBox_FontAutoRefresh" Content="Auto Refresh" Margin="0,33.96,8,0" VerticalAlignment="Top" RenderTransformOrigin="0.047,-0.058" HorizontalAlignment="Right"/>
             	</Grid>
             </TabItem>
         </TabControl>

@@ -58,6 +58,9 @@ namespace Eimu.CommonControls
 
 		public void UpdateFields()
 		{
+			if (m_Fields == null)
+				return;
+
 			int offset = (int)m_ScrollBar_MemScroll.Value;
 
 			for (int i = 0; i < m_Fields.Count; i++)
@@ -112,6 +115,24 @@ namespace Eimu.CommonControls
 				m_ScrollBar_MemScroll.Value = (double)address;
 				UpdateFields();
 				return true;
+			}
+		}
+
+		public int FieldCount
+		{
+			get { return this.m_Fields.Count; }
+		}
+
+		public ushort CurrentAddress
+		{
+			get
+			{
+				if (m_Fields.Count > 0)
+				{
+					return m_Fields[0].Address;
+				}
+				else
+					return 0;
 			}
 		}
 	}
