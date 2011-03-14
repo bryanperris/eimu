@@ -413,5 +413,16 @@ namespace Eimu.Debugger
             m_Machine.CodeEngineCore.IncrementPC();
             UpdateDebugInfo();
         }
+
+        private void m_Button_MemRandFill_Click(object sender, RoutedEventArgs e)
+        {
+            Random rnd = new Random(System.Environment.TickCount);
+
+            for (int i = 0; i < m_Machine.SystemMemory.Size; i++)
+            {
+                m_Machine.SystemMemory[i] = (byte)rnd.Next(0, 255);
+            }
+        }
+
     }
 }

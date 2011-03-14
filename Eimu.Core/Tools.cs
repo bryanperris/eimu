@@ -10,6 +10,12 @@ namespace Eimu.Core
             return (ushort)((ushort)high << 8 | low);
         }
 
+        public static byte CreateByte(bool[] values)
+        {
+            byte b = 0;
+            return b;
+        }
+
         public static string PrintBits(byte value)
         {
             string a = "";

@@ -16,6 +16,7 @@
             		<TextBox x:Name="m_TextBox_MemSelectedAddress" HorizontalAlignment="Left" Margin="117,7.876,0,0" TextWrapping="Wrap" Text="address" VerticalAlignment="Top" Width="84" RenderTransformOrigin="0.417,0.461"/>
                     <my:MemoryViewer Height="221.04" HorizontalAlignment="Left" Margin="8,8,0,0" x:Name="memoryViewer1" VerticalAlignment="Top" Width="105" Background="White" d:LayoutOverrides="HorizontalAlignment" />
                     <Button x:Name="m_Button_MemDumpSection" Content="Dump Section" Margin="117,33.836,93,0" VerticalAlignment="Top"/>
+                    <Button Content="Random Fill" Height="23" HorizontalAlignment="Left" Margin="117,62,0,0" Name="m_Button_MemRandFill" VerticalAlignment="Top" Width="104" Click="m_Button_MemRandFill_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="Sprites">

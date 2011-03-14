@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 namespace Eimu.Core
 {
     [Serializable]
-    public sealed class Memory
+    public class Memory
     {
         private byte[] m_Memory;
 
@@ -35,7 +35,7 @@ namespace Eimu.Core
             this.m_Memory = new byte[size];
         }
 
-        public byte GetByte(int address)
+        public virtual byte GetByte(int address)
         {
             if (address < m_Memory.Length)
                 return m_Memory[address];
@@ -43,12 +43,12 @@ namespace Eimu.Core
                 return 0;
         }
 
-        public void SetByte(int address, byte value)
+        public virtual void SetByte(int address, byte value)
         {
             m_Memory[address] = value;
         }
 
-        public void SetBytes(byte[] buffer, int offset, int size)
+        public virtual void SetBytes(byte[] buffer, int offset, int size)
         {
             for (int i = 0; i < size; i++)
             {
@@ -56,7 +56,7 @@ namespace Eimu.Core
             }
         }
 
-        public void GetBytes(byte[] buffer, int offset, int size)
+        public virtual void GetBytes(byte[] buffer, int offset, int size)
         {
             for (int i = 0; i < size; i++)
             {
@@ -64,7 +64,7 @@ namespace Eimu.Core
             }
         }
 
-        public int Size
+        public virtual int Size
         {
             get { return this.m_Memory.Length; }
         }
@@ -79,10 +79,13 @@ namespace Eimu.Core
             return base.GetHashCode();
         }
 
-        public byte this[int index]
+        public virtual byte this[int index]
         {
             get { return m_Memory[index]; }
-            set { m_Memory[index] = value; }
+            set 
+            {
+              m_Memory[index] = value;
+            }
         }
     }
 }

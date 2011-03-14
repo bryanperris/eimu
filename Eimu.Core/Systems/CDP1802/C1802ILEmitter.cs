@@ -198,6 +198,7 @@ namespace Eimu.Core.Systems.CDP1802
         {
             bool end = false;
             s_Labels = new Dictionary<ushort, Label>();
+            ushort funcAddr = s_CurrentAddress;
 
             do
             {
@@ -235,7 +236,8 @@ namespace Eimu.Core.Systems.CDP1802
 
                     Console.WriteLine("");
 
-                    //EmitDumpRegsCall();
+                    //if (funcAddr == 0x3f3)
+                    //    EmitDumpRegsCall();
                 }
                 catch (ArgumentException)
                 {
@@ -336,6 +338,7 @@ namespace Eimu.Core.Systems.CDP1802
                 //case 8: return (ushort)engine.m_ST; //??
                 case 9: return engine.m_LastRand;
                 case 10: return engine.m_IReg;
+                case 11: return 0x7F00; // Return the defualt display pointer (Video RAM DMA pointer
                 default: return s_Regs[num];
             }
         }
@@ -378,6 +381,41 @@ namespace Eimu.Core.Systems.CDP1802
             return s_CodeEngine.CurrentMemory[address];
         }
 
+        public static void MemoryWrite(ushort address, byte value)
+        {
+            if (address >= 0x7F00)
+            {
+                // DMA into video memory
+            }
+            else if (address >= 0 && address < s_CodeEngine.CurrentMemory.Size)
+            {
+                s_CodeEngine.CurrentMemory[address] = value;
+            }
+            else
+            {
+                Console.WriteLine("1802 Dynarec: Invalid Memory Write Access " + address.ToString("x"));
+            }
+        }
+
+        public static byte MemoryRead(ushort address)
+        {
+            if (address >= 0x7F00)
+            {
+                // DMA into video memory
+
+                return 0;
+            }
+            else if (address >= 0 && address < s_CodeEngine.CurrentMemory.Size)
+            {
+                return s_CodeEngine.CurrentMemory[address];
+            }
+            else
+            {
+                Console.WriteLine("1802 Dynarec: Invalid Memory Read Access " + address.ToString("x"));
+                return 0;
+            }
+        }
+
         #region Common Emit Tools
 
         private static void EmitLocal(Type type, bool pinned)
@@ -391,21 +429,14 @@ namespace Eimu.Core.Systems.CDP1802
             return (s_LocalOffset + offset);
         }
 
-        private static void EmitReadMemory(int localOffset)
+        private static void EmitReadMemory()
         {
-            EmitCodeEngine();
-            s_ILGen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("get_CurrentMemory")); // push CodeEngine.CurrentMemory
-            s_ILGen.Emit(OpCodes.Ldloc_S, localOffset); // push address variable to stack;
-            s_ILGen.Emit(OpCodes.Callvirt, typeof(Memory).GetMethod("get_Item")); // push Memory[address]
+            s_ILGen.Emit(OpCodes.Call, typeof(C1802ILEmitter).GetMethod("MemoryRead"));
         }
 
-        private static void EmitWriteMemory(int localOffset_Address, int localOffset_Value)
+        private static void EmitWriteMemory()
         {
-            EmitCodeEngine();
-            s_ILGen.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("get_CurrentMemory")); // push CodeEngine.CurrentMemory
-            s_ILGen.Emit(OpCodes.Ldloc_S, localOffset_Address); // push address variable to stack;
-            s_ILGen.Emit(OpCodes.Ldloc_S, localOffset_Value); // push value variable to stack;
-            s_ILGen.Emit(OpCodes.Callvirt, typeof(Memory).GetMethod("set_Item")); // push Memory[address]
+            s_ILGen.Emit(OpCodes.Call, typeof(C1802ILEmitter).GetMethod("MemoryWrite"));
         }
 
         private static void EmitUshortConstant(ushort value)
@@ -582,10 +613,8 @@ namespace Eimu.Core.Systems.CDP1802
 
         private static void Emit_LDA(CdpInstruction inst)
         {
-            EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
-            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
-            EmitReadMemory(GetResolvedLocal(0));
+            EmitReadMemory();
             EmitRegisterWrite(SelectedRegister.D);
             EmitCodeEngine();
             EmitByteConstant(inst.Low);
@@ -604,7 +633,9 @@ namespace Eimu.Core.Systems.CDP1802
             EmitRegisterRead(SelectedRegister.D);
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
-            EmitWriteMemory(GetResolvedLocal(0), GetResolvedLocal(1));
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(1));
+            EmitWriteMemory();
             EmitNop();
         }
 
@@ -627,7 +658,6 @@ namespace Eimu.Core.Systems.CDP1802
         private static void Emit_ADD(CdpInstruction inst)
         {
             EmitLocal(typeof(ushort), false);  // result  [0]
-            EmitLocal(typeof(ushort), false);  // addr    [1]
             Label brOverflow = s_ILGen.DefineLabel();
             Label brEnd = s_ILGen.DefineLabel();
 
@@ -639,8 +669,7 @@ namespace Eimu.Core.Systems.CDP1802
 
             // Add (Memory Byte + D)
             EmitGeneralRegisterReadFunc();
-            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
-            EmitReadMemory(GetResolvedLocal(1));
+            EmitReadMemory();
             EmitRegisterRead(SelectedRegister.D);
             s_ILGen.Emit(OpCodes.Add);
 
@@ -835,10 +864,8 @@ namespace Eimu.Core.Systems.CDP1802
         private static void Emit_LDN(CdpInstruction inst)
         {
             // Yeah baby!!!
-            EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
-            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
-            EmitReadMemory(GetResolvedLocal(0));
+            EmitReadMemory();
             EmitRegisterWrite(SelectedRegister.D);
             EmitNop();
         }
