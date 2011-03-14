@@ -11,8 +11,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
-using Eimu.Core.Systems.SChip8;
-using Eimu.Core.Systems.SChip8.Engines;
+using Eimu.Core.Systems.Chip8X;
+using Eimu.Core.Systems.Chip8X.Engines;
 using WPFColorPickerLib;
 using Eimu.Devices;
 using Eimu.Configuration;
@@ -23,7 +23,7 @@ namespace Eimu
 	{
 		private OpenFileDialog m_OpenFileDialog;
 		private FileStream m_RomFileSource;
-		private SChipMachine m_VM;
+		private Chip8XMachine m_VM;
 		private ColorDialog colorDialog;
 
 		public StartDialog()
@@ -96,7 +96,7 @@ namespace Eimu
 			#endregion
 		}
 
-		public void SetVM(SChipMachine vm)
+		public void SetVM(Chip8XMachine vm)
 		{
 			this.m_VM = vm;
 		}
@@ -157,7 +157,7 @@ namespace Eimu
 			m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
 			m_VM.Enable1802Dyanrec = SchipConfig.use1802Recompiler;
 
-			m_VM.HleMode = (HLEMode)m_ComboBox_HLESelector.SelectedIndex;
+			m_VM.HleMode = (C1802Mode)m_ComboBox_HLESelector.SelectedIndex;
 
 			Hide();
 		}

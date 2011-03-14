@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Eimu.Core.Systems.SChip8
+namespace Eimu.Core.Systems.Chip8X
 {
-    public sealed class SuperModeChangedEventArgs : EventArgs
+    public sealed class ChipModeChangedEventArgs : EventArgs
     {
         private bool m_Enabled;
 
-        public SuperModeChangedEventArgs(bool enabled)
+        public ChipModeChangedEventArgs(bool enabled)
         {
             m_Enabled = enabled;
         }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection.Emit;
-using Eimu.Core.Systems.SChip8;
+using Eimu.Core.Systems.Chip8X;
 using System.Reflection;
 
-namespace Eimu.Core.Systems.CDP1802
+namespace Eimu.Core.Systems.RCA1802
 {
     public enum SelectedRegister
     {

@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
-using Eimu.Core.Systems.SChip8;
+using Eimu.Core.Systems.Chip8X;
 
 namespace Eimu.Devices
 {

@@ -6,7 +6,7 @@ using System.IO;
 using System.Globalization;
 using System.Threading;
 
-namespace Eimu.Core.Systems.SChip8.Engines
+namespace Eimu.Core.Systems.Chip8X.Engines
 {
     [Serializable]
     public sealed class Interpreter : CodeEngine
@@ -134,9 +134,9 @@ namespace Eimu.Core.Systems.SChip8.Engines
         [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= SChipMachine.MEMORY_SIZE)
+            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= Chip8XMachine.MEMORY_SIZE)
             {
-                m_IReg = SChipMachine.MEMORY_SIZE;
+                m_IReg = Chip8XMachine.MEMORY_SIZE;
                 m_VRegs[0xF] = 1;
             }
             else

@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Runtime.InteropServices;
 
-namespace Eimu.Core.Systems.SChip8
+namespace Eimu.Core.Systems.Chip8X
 {
     [ComVisible(true)]
-    public abstract class GraphicsDevice : Device
+    public abstract class Renderer : Device
     {
         public const int StandardResolutionX = 64;
         public const int StandardResolutionY = 32;

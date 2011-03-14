@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace Eimu.Core.Systems.SChip8
+namespace Eimu.Core.Systems.Chip8X
 {
     public class Profiler
     {

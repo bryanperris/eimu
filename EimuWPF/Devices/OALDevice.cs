@@ -3,7 +3,7 @@
 //using System.Linq;
 //using System.Text;
 //using Eimu.Core;
-//using Eimu.Core.Systems.SChip8
+//using Eimu.Core.Systems.Chip8X
 //using OpenTK;
 //using OpenTK.Audio.OpenAL;
 //using OpenTK.Audio;

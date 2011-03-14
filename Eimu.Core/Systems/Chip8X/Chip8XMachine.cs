@@ -23,13 +23,13 @@ using System.Text;
 using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
-using Eimu.Core.Systems.SChip8.Engines;
-using Eimu.Core.Systems.CDP1802;
+using Eimu.Core.Systems.Chip8X.Engines;
+using Eimu.Core.Systems.RCA1802;
 
-namespace Eimu.Core.Systems.SChip8
+namespace Eimu.Core.Systems.Chip8X
 {
     [ComVisible(true)]
-    public sealed class SChipMachine : VirtualMachine, IDisposable
+    public sealed class Chip8XMachine : VirtualMachine, IDisposable
     {
         public const int FONT_SIZE = 5;
         public const int MEMORY_SIZE = 4096;
@@ -43,11 +43,11 @@ namespace Eimu.Core.Systems.SChip8
         private EventWaitHandle m_CPUFinishWait;
         private Thread m_ThreadCPU;
         private AudioDevice m_AudioDevice;
-        private GraphicsDevice m_GraphicsDevice;
+        private Renderer m_GraphicsDevice;
         private CodeEngine m_CodeEngine;
         private int m_ExtraCycles;
         private int m_CoreSpeed = 10;
-        private HLEMode m_HLMode;
+        private C1802Mode m_HLMode;
         private bool m_Use1802Dynarec;
         private C1802Dynarec m_CDPDynarec;
 
@@ -99,9 +99,9 @@ namespace Eimu.Core.Systems.SChip8
                 m_CPUPause.Set();
         }
 
-        public void SetKeyPress(ChipKey key)
+        public void SetKeyPress(HexKey key)
         {
-            if (key != ChipKey.None)
+            if (key != HexKey.None)
             {
                 m_CodeEngine.LastKeyPressed = (byte)key;
                 m_KeyWait.Set();
@@ -285,7 +285,7 @@ namespace Eimu.Core.Systems.SChip8
             set { this.m_AudioDevice = value; }
         }
 
-        public GraphicsDevice CurrentGraphicsDevice
+        public Renderer CurrentGraphicsDevice
         {
             get { return this.m_GraphicsDevice; }
             set { this.m_GraphicsDevice = value; }
@@ -297,7 +297,7 @@ namespace Eimu.Core.Systems.SChip8
             set { m_ExtraCycles = value; }
         }
 
-        public HLEMode HleMode
+        public C1802Mode HleMode
         {
             get { return this.m_HLMode; }
             set { this.m_HLMode = value; }
@@ -329,8 +329,8 @@ namespace Eimu.Core.Systems.SChip8
             CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(OnPixelCollision);
             CurrentGraphicsDevice.OnPixelCollision += new EventHandler(OnPixelCollision);
 
-            m_CodeEngine.SuperModeChange -= new EventHandler<SuperModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
-            m_CodeEngine.SuperModeChange += new EventHandler<SuperModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
+            m_CodeEngine.SuperModeChange -= new EventHandler<ChipModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
+            m_CodeEngine.SuperModeChange += new EventHandler<ChipModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
 
             m_CodeEngine.PixelScroll -= new EventHandler<PixelScrollEventArgs>(OnPixelScroll);
             m_CodeEngine.PixelScroll += new EventHandler<PixelScrollEventArgs>(OnPixelScroll);
@@ -341,7 +341,7 @@ namespace Eimu.Core.Systems.SChip8
             m_GraphicsDevice.ScrollPixels(e.Length, e.Direction);
         }
 
-        private void m_CodeEngine_SuperModeChange(object sender, SuperModeChangedEventArgs e)
+        private void m_CodeEngine_SuperModeChange(object sender, ChipModeChangedEventArgs e)
         {
             m_GraphicsDevice.SetSuperMode(e.Enabled);
         }

@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
-using Eimu.Core.Systems.SChip8;
+using Eimu.Core.Systems.Chip8X;
 using Eimu.Core;
 using System.Windows.Threading;
 using System.Globalization;
@@ -25,7 +25,7 @@ namespace Eimu.Debugger
     /// </summary>
     public partial class SC8DebuggerWindow : Window, IDebugger
     {
-        SChipMachine m_Machine;
+        Chip8XMachine m_Machine;
         Timer m_Timer_FontRefresh;
         EventWaitHandle m_EventWaitHandle_TimeFontRefresh;
 
@@ -373,7 +373,7 @@ namespace Eimu.Debugger
 
         public void StartDebugging(VirtualMachine currentMachine)
         {
-            m_Machine = (SChipMachine)currentMachine;
+            m_Machine = (Chip8XMachine)currentMachine;
             memoryViewer1.SetMemory(m_Machine.SystemMemory);
             UpdateDebugInfo();
         }

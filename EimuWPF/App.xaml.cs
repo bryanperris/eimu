@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
-using Eimu.Core.Systems.SChip8;
+using Eimu.Core.Systems.Chip8X;
 using Eimu.Configuration;
 using System.IO;
 using System.Threading;
@@ -28,7 +28,7 @@ namespace Eimu
 
             while (!closeApp)
             {
-                SChipMachine vm = new SChipMachine();
+                Chip8XMachine vm = new Chip8XMachine();
                 startscreen.SetVM(vm);
                 startscreen.ShowDialog();
 

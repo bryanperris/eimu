@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Globalization;
 
-namespace Eimu.Core.Systems.SChip8
+namespace Eimu.Core.Systems.Chip8X
 {
 	[Serializable]
 	public class ChipInstruction

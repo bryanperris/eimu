@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Eimu.Core.Systems.Chip16
 {
-    public sealed class C16Machine
+    public sealed class Chip16Machine
     {
         public const int MemoryMaxSize = 0xFFFF;
         public const int StackMaxSize = 32;
@@ -13,7 +13,7 @@ namespace Eimu.Core.Systems.Chip16
         public const int MemoryMapStackOffset = 0xFDF0;
         public const int MemoryMapIOOffset = 0xFFF0;
 
-        private C16Machine()
+        private Chip16Machine()
         {
 
         }

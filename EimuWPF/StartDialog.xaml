@@ -60,7 +60,6 @@
 					</GroupBox>
 				</Grid>
 			</TabItem>
-			<TabItem x:Name="m_TabItem_MegaChip" Header="Mega Chip"/>
 			<TabItem x:Name="m_TabItem_Chip16" Header="Chip 16"/>
 		</TabControl>
 		<TextBox x:Name="m_TextBox_ProgramPath" Margin="8,8,0,8" TextWrapping="Wrap" Text="&lt;Click here to browse a file&gt;" VerticalAlignment="Top" HorizontalAlignment="Left" Width="442" FontStyle="Italic" MouseDoubleClick="m_TextBox_ProgramPath_MouseDoubleClick" IsReadOnly="True" Height="21.96" />

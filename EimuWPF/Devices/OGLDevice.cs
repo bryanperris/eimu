@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Eimu.Core;
-using Eimu.Core.Systems.SChip8;
+using Eimu.Core.Systems.Chip8X;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -31,7 +31,7 @@ using OpenTK.Platform;
 
 namespace Eimu.Devices
 {
-    public sealed class OGLDevice : GraphicsDevice, IWinFormAttachment
+    public sealed class OGLDevice : Renderer, IWinFormAttachment
     {
 
         private Control m_ControlContext;

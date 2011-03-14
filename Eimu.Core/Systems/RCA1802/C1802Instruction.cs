@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Eimu.Core.Systems.CDP1802
+namespace Eimu.Core.Systems.RCA1802
 {
     public sealed class CdpInstruction
     {

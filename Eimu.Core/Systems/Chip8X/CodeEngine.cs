@@ -8,7 +8,7 @@ using System.Threading;
 // RPL1 = Logo Y Position
 // RPL2 = Number Position
 
-namespace Eimu.Core.Systems.SChip8
+namespace Eimu.Core.Systems.Chip8X
 {
     [Serializable]
     public abstract class CodeEngine : IDisposable
@@ -37,7 +37,7 @@ namespace Eimu.Core.Systems.SChip8
         private EventWaitHandle m_TimerWait;
         public event EventHandler ScreenClear;
         public event EventHandler<PixelSetEventArgs> PixelSet;
-        public event EventHandler<SuperModeChangedEventArgs> SuperModeChange;
+        public event EventHandler<ChipModeChangedEventArgs> SuperModeChange;
         public event EventHandler<PixelScrollEventArgs> PixelScroll;
         public event EventHandler KeyPressWait;
         private bool m_DisableTimers;
@@ -103,7 +103,7 @@ namespace Eimu.Core.Systems.SChip8
             m_SMode = enabled;
 
             if (SuperModeChange != null)
-                SuperModeChange(this, new SuperModeChangedEventArgs(enabled));
+                SuperModeChange(this, new ChipModeChangedEventArgs(enabled));
         }
 
         protected void OnPixelSet(ChipInstruction inst)

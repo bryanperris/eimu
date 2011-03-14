@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Eimu.Core.Systems.SChip8;
+using Eimu.Core.Systems.Chip8X;
 using System.Windows.Interop;
 using Eimu.Devices;
 using Eimu.Debugger;
@@ -22,11 +22,11 @@ namespace Eimu
     /// </summary>
     public partial class RenderWindow : Window
     {
-        SChipMachine m_Machine;
+        Chip8XMachine m_Machine;
         WindowInteropHelper m_WinHelper;
         SC8DebuggerWindow m_Debugger;
 
-        public RenderWindow(SChipMachine machine)
+        public RenderWindow(Chip8XMachine machine)
         {
             m_Machine = machine;
             InitializeComponent();
@@ -103,26 +103,26 @@ namespace Eimu
 
         private void WindowsFormsHost_KeyDown(object sender, KeyEventArgs e)
         {
-            ChipKey key = ChipKey.None;
+            HexKey key = HexKey.None;
 
             switch (e.Key)
             {
-                case Key.Q: key = ChipKey.One; break;
-                case Key.W: key = ChipKey.Two; break;
-                case Key.E: key = ChipKey.Three; break;
-                case Key.R: key = ChipKey.A; break;
-                case Key.T: key = ChipKey.D; break;
-                case Key.A: key = ChipKey.Four; break;
-                case Key.S: key = ChipKey.Five; break;
-                case Key.D: key = ChipKey.Six; break;
-                case Key.G: key = ChipKey.E; break;
-                case Key.F: key = ChipKey.B; break;
-                case Key.Z: key = ChipKey.Seven; break;
-                case Key.X: key = ChipKey.Eight; break;
-                case Key.C: key = ChipKey.Nine; break;
-                case Key.V: key = ChipKey.C; break;
-                case Key.B: key = ChipKey.F; break;
-                case Key.Space: key = ChipKey.Zero; break;
+                case Key.Q: key = HexKey.One; break;
+                case Key.W: key = HexKey.Two; break;
+                case Key.E: key = HexKey.Three; break;
+                case Key.R: key = HexKey.A; break;
+                case Key.T: key = HexKey.D; break;
+                case Key.A: key = HexKey.Four; break;
+                case Key.S: key = HexKey.Five; break;
+                case Key.D: key = HexKey.Six; break;
+                case Key.G: key = HexKey.E; break;
+                case Key.F: key = HexKey.B; break;
+                case Key.Z: key = HexKey.Seven; break;
+                case Key.X: key = HexKey.Eight; break;
+                case Key.C: key = HexKey.Nine; break;
+                case Key.V: key = HexKey.C; break;
+                case Key.B: key = HexKey.F; break;
+                case Key.Space: key = HexKey.Zero; break;
                 default: break;
             }
 
@@ -131,7 +131,7 @@ namespace Eimu
 
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
-           m_Machine.SetKeyPress(ChipKey.None);
+           m_Machine.SetKeyPress(HexKey.None);
         }
 
         private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)
