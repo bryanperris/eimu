@@ -381,15 +381,15 @@ namespace Eimu.Core.Systems.RCA1802
             return s_CodeEngine.CurrentMemory[address];
         }
 
-        public static void MemoryWrite(ushort address, byte value)
+        public static void MemoryWrite(CodeEngine engine, ushort address, byte value)
         {
-            if (address >= 0x7F00)
+            if (address >= 0x7F00) // DMA into video memory
             {
-                // DMA into video memory
+                engine.m_VideoInterface.PokePixels(address - 0x7F00, value);
             }
             else if (address >= 0 && address < s_CodeEngine.CurrentMemory.Size)
             {
-                s_CodeEngine.CurrentMemory[address] = value;
+                engine.CurrentMemory[address] = value;
             }
             else
             {
@@ -397,17 +397,15 @@ namespace Eimu.Core.Systems.RCA1802
             }
         }
 
-        public static byte MemoryRead(ushort address)
+        public static byte MemoryRead(CodeEngine engine, ushort address)
         {
-            if (address >= 0x7F00)
+            if (address >= 0x7F00) // DMA into video memory
             {
-                // DMA into video memory
-
-                return 0;
+                return engine.m_VideoInterface.PeekPixels(address - 0x7F00);
             }
             else if (address >= 0 && address < s_CodeEngine.CurrentMemory.Size)
             {
-                return s_CodeEngine.CurrentMemory[address];
+                return engine.CurrentMemory[address];
             }
             else
             {
@@ -429,13 +427,18 @@ namespace Eimu.Core.Systems.RCA1802
             return (s_LocalOffset + offset);
         }
 
-        private static void EmitReadMemory()
+        private static void EmitReadMemory(int localOffset)
         {
+            EmitCodeEngine();
+            s_ILGen.Emit(OpCodes.Ldloc_S, localOffset);
             s_ILGen.Emit(OpCodes.Call, typeof(C1802ILEmitter).GetMethod("MemoryRead"));
         }
 
-        private static void EmitWriteMemory()
+        private static void EmitWriteMemory(int localOffset_Address, int localOffset_Value)
         {
+            EmitCodeEngine();
+            s_ILGen.Emit(OpCodes.Ldloc_S, localOffset_Address); // push address variable to stack;
+            s_ILGen.Emit(OpCodes.Ldloc_S, localOffset_Value); // push value variable to stack;
             s_ILGen.Emit(OpCodes.Call, typeof(C1802ILEmitter).GetMethod("MemoryWrite"));
         }
 
@@ -613,8 +616,10 @@ namespace Eimu.Core.Systems.RCA1802
 
         private static void Emit_LDA(CdpInstruction inst)
         {
+            EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
-            EmitReadMemory();
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitReadMemory(GetResolvedLocal(0));
             EmitRegisterWrite(SelectedRegister.D);
             EmitCodeEngine();
             EmitByteConstant(inst.Low);
@@ -633,9 +638,7 @@ namespace Eimu.Core.Systems.RCA1802
             EmitRegisterRead(SelectedRegister.D);
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
             s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
-            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
-            s_ILGen.Emit(OpCodes.Ldloc_S, GetResolvedLocal(1));
-            EmitWriteMemory();
+            EmitWriteMemory(GetResolvedLocal(0), GetResolvedLocal(1));
             EmitNop();
         }
 
@@ -658,6 +661,7 @@ namespace Eimu.Core.Systems.RCA1802
         private static void Emit_ADD(CdpInstruction inst)
         {
             EmitLocal(typeof(ushort), false);  // result  [0]
+            EmitLocal(typeof(ushort), false);  // addr    [1]
             Label brOverflow = s_ILGen.DefineLabel();
             Label brEnd = s_ILGen.DefineLabel();
 
@@ -669,7 +673,8 @@ namespace Eimu.Core.Systems.RCA1802
 
             // Add (Memory Byte + D)
             EmitGeneralRegisterReadFunc();
-            EmitReadMemory();
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
+            EmitReadMemory(GetResolvedLocal(1));
             EmitRegisterRead(SelectedRegister.D);
             s_ILGen.Emit(OpCodes.Add);
 
@@ -864,8 +869,10 @@ namespace Eimu.Core.Systems.RCA1802
         private static void Emit_LDN(CdpInstruction inst)
         {
             // Yeah baby!!!
+            EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
-            EmitReadMemory();
+            s_ILGen.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitReadMemory(GetResolvedLocal(0));
             EmitRegisterWrite(SelectedRegister.D);
             EmitNop();
         }

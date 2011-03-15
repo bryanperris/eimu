@@ -149,10 +149,10 @@ namespace Eimu
 
 			m_VM.CurrentRenderBackend.BackgroundColor = SchipConfig.BackColor;
 			m_VM.CurrentRenderBackend.ForegroundColor = SchipConfig.ForeColor;
-			//m_VM.VideoInterface.DisableWrappingX = (this.m_CheckBox_C8DisableWrappingX.IsChecked == true);
-			//m_VM.VideoInterface.DisableWrappingY = (this.m_CheckBox_C8DisableYWrap.IsChecked == true);
-			////m_VM.VideoInterface.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
-			//m_VM.VideoInterface.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
+			m_VM.VideoInterface.DisableWrappingX = (this.m_CheckBox_C8DisableWrappingX.IsChecked == true);
+			m_VM.VideoInterface.DisableWrappingY = (this.m_CheckBox_C8DisableYWrap.IsChecked == true);
+			if (m_CheckBox_C8EnableHighres.IsChecked == true) m_VM.VideoInterface.Initialize(ChipMode.SuperChip);
+			m_VM.VideoInterface.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);
 			m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
 			m_VM.Enable1802Dyanrec = SchipConfig.use1802Recompiler;

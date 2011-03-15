@@ -147,6 +147,32 @@ namespace Eimu.Core.Systems.Chip8X
                 return 0;
         }
 
+        public byte PeekPixels(int offset)
+        {
+            byte pixelRow = 0;
+
+            for (int i = 0; i < 8; i++)
+            {
+                if (m_Buffer[offset++])
+                    pixelRow |= 1;
+
+                pixelRow <<= 1;
+            }
+
+
+            return pixelRow;
+        }
+
+        public void PokePixels(int offset, byte value)
+        {
+            for (int i = 7; i >= 0; i--)
+            {
+                m_Buffer[offset++] = (((value >> i) & 0x1) == 1 ? true : false);
+            }
+
+            OnRefresh();
+        }
+
         public bool[] Pixels
         {
             get { return this.m_Buffer; }
