@@ -37,8 +37,7 @@ namespace Eimu.Devices
         private Control m_ControlContext;
         private GraphicsContext m_GContext;
         private IWindowInfo m_WindowInfo;
-        private float m_ScaleX = 10;
-        private float m_ScaleY = 5;
+        private VideoFrameUpdate m_Frame;
 
         public OGLDevice()
         {
@@ -46,10 +45,13 @@ namespace Eimu.Devices
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
         {
+            if (m_Frame == null)
+                return;
+
             GL.Viewport(m_ControlContext.ClientRectangle);
 
-            m_ScaleX = (float)m_ControlContext.Width / (float)CurrentResolutionX;
-            m_ScaleY = (float)m_ControlContext.Height / (float)CurrentResolutionY;
+            float m_ScaleX = (float)m_ControlContext.Width / (float)m_Frame.FrameWidth;
+            float m_ScaleY = (float)m_ControlContext.Height / (float)m_Frame.FrameHeight;
 
             GL.ClearColor(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -61,11 +63,11 @@ namespace Eimu.Devices
 
             GL.Begin(BeginMode.Quads);
 
-            for (int y = 0; y < CurrentResolutionY; y++)
+            for (int y = 0; y < m_Frame.FrameHeight; y++)
             {
-                for (int x = 0; x < CurrentResolutionX; x++)
+                for (int x = 0; x < m_Frame.FrameWidth; x++)
                 {
-                    bool on = GetPixel(x, y);
+                    bool on = m_Frame.FrameData[m_Frame.GetBufferPosition(x, y)];
 
                     if (on)
                     {
@@ -88,41 +90,6 @@ namespace Eimu.Devices
             GL.LoadIdentity();
 
             m_GContext.SwapBuffers();
-        }
-
-        protected override void OnPixelSet(int x, int y, bool on)
-        {
-            m_ControlContext.Invalidate();
-        }
-
-        protected override void OnScreenClear()
-        {
-            m_ControlContext.Invalidate();
-        }
-
-        protected override void OnPauseStateChange(bool paused)
-        {
-
-        }
-
-        protected override void OnShutdown()
-        {
-            m_GContext.Dispose();
-        }
-
-        protected override void OnInit()
-        {
-            GL.Disable(EnableCap.AlphaTest);
-            GL.Disable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.Dither);
-            GL.Disable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
-            GL.DepthRange(-1, 100);
-        }
-
-        public override void Update()
-        {
-            m_ControlContext.Invalidate();
         }
 
         #region IWinFormAttachment Members
@@ -159,5 +126,34 @@ namespace Eimu.Devices
         }
 
         #endregion
+
+        public override void Update(VideoFrameUpdate update)
+        {
+            m_Frame = update;
+            m_ControlContext.Invalidate();
+        }
+
+        public override void Initialize()
+        {
+            GL.Disable(EnableCap.AlphaTest);
+            GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.Dither);
+            GL.Disable(EnableCap.CullFace);
+            GL.Enable(EnableCap.Blend);
+            GL.DepthRange(-1, 100);
+            GL.ClearColor(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            m_GContext.SwapBuffers();
+        }
+
+        public override void Shutdown()
+        {
+            m_GContext.Dispose();
+        }
+
+        public override void SetPause(bool paused)
+        {
+            
+        }
     }
 }

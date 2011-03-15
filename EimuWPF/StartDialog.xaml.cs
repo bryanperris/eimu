@@ -139,25 +139,25 @@ namespace Eimu
 
 			// C8 Shit
 			if (m_CheckBox_C8DisableGraphics.IsChecked == true) 
-				m_VM.CurrentGraphicsDevice = new NullGraphicsDevice();
+				m_VM.CurrentRenderBackend = new NullGraphicsDevice();
 			else 
-				m_VM.CurrentGraphicsDevice = new OGLDevice();
+				m_VM.CurrentRenderBackend = new OGLDevice();
 
 			//if (m_CheckBox_C8DisableSound.IsChecked == true) m_VM.CurrentAudioDevice = new NullAudioDevice();
 			//else 
 			m_VM.CurrentAudioDevice = new NullAudioDevice();
 
-			m_VM.CurrentGraphicsDevice.BackgroundColor = SchipConfig.BackColor;
-			m_VM.CurrentGraphicsDevice.ForegroundColor = SchipConfig.ForeColor;
-			m_VM.CurrentGraphicsDevice.DisableWrappingX = (this.m_CheckBox_C8DisableWrappingX.IsChecked == true);
-			m_VM.CurrentGraphicsDevice.DisableWrappingY = (this.m_CheckBox_C8DisableYWrap.IsChecked == true);
-			m_VM.CurrentGraphicsDevice.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
-			m_VM.CurrentGraphicsDevice.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
+			m_VM.CurrentRenderBackend.BackgroundColor = SchipConfig.BackColor;
+			m_VM.CurrentRenderBackend.ForegroundColor = SchipConfig.ForeColor;
+			//m_VM.VideoInterface.DisableWrappingX = (this.m_CheckBox_C8DisableWrappingX.IsChecked == true);
+			//m_VM.VideoInterface.DisableWrappingY = (this.m_CheckBox_C8DisableYWrap.IsChecked == true);
+			////m_VM.VideoInterface.EnableHires = (this.m_CheckBox_C8EnableHighres.IsChecked == true);
+			//m_VM.VideoInterface.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
 			m_VM.SetMediaSource(m_RomFileSource);
 			m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
 			m_VM.Enable1802Dyanrec = SchipConfig.use1802Recompiler;
 
-			m_VM.HleMode = (C1802Mode)m_ComboBox_HLESelector.SelectedIndex;
+			m_VM.MachineMode = (C1802Mode)m_ComboBox_HLESelector.SelectedIndex;
 
 			Hide();
 		}

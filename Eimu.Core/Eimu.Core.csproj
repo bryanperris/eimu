@@ -54,14 +54,14 @@
   <ItemGroup>
     <Compile Include="RgbColor.cs" />
     <Compile Include="RunStateChangedArgs.cs" />
-    <Compile Include="Systems\Chip8X\ChipModes.cs" />
+    <Compile Include="Systems\Chip8X\ChipMode.cs" />
+    <Compile Include="Systems\Chip8X\VideoFrameUpdate.cs" />
     <Compile Include="Systems\RCA1802\C1802ILEmitter.cs" />
     <Compile Include="Systems\Chip16\C16Color.cs" />
     <Compile Include="Systems\Chip16\Chip16Machine.cs" />
     <Compile Include="Systems\RCA1802\C1802Instruction.cs" />
     <Compile Include="Systems\RCA1802\C1802Dynarec.cs" />
     <Compile Include="IDebugger.cs" />
-    <Compile Include="Systems\Chip8X\PixelScrollEventArgs.cs" />
     <Compile Include="Systems\Chip8X\Chip8XMachine.cs" />
     <Compile Include="Systems\Chip8X\ChipOpCode.cs" />
     <Compile Include="Systems\Chip8X\CodeEngine.cs" />
@@ -71,7 +71,6 @@
     <Compile Include="Device.cs" />
     <Compile Include="Systems\Chip8X\AudioDevice.cs" />
     <Compile Include="Systems\Chip8X\Renderer.cs" />
-    <Compile Include="Systems\Chip8X\PixelSetEventArgs.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />

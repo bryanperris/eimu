@@ -23,31 +23,7 @@ namespace Eimu.Devices
 {
     public sealed class NullGraphicsDevice : Renderer, IWinFormAttachment
     {
-        protected override void OnInit()
-        {
-        }
 
-        protected override void OnShutdown()
-        {
-        }
-
-        protected override void OnPauseStateChange(bool paused)
-        {
-        }
-
-        protected override void OnPixelSet(int x, int y, bool on)
-        {
-
-        }
-
-        protected override void OnScreenClear()
-        {
-        }
-
-        public override void Update()
-        {
-            
-        }
 
         #region IWinFormAttachment Members
 
@@ -71,5 +47,25 @@ namespace Eimu.Devices
         }
 
         #endregion
+
+        public override void Update(VideoFrameUpdate update)
+        {
+            
+        }
+
+        public override void Initialize()
+        {
+            
+        }
+
+        public override void Shutdown()
+        {
+            
+        }
+
+        public override void SetPause(bool paused)
+        {
+            
+        }
     }
 }

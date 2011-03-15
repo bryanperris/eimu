@@ -13,14 +13,13 @@ namespace Eimu.Core.Systems.Chip8X.Engines
     {
         private Dictionary<ChipOpCode, OpcodeHandler> m_MethodCallTable;
 
-        public override void Init(Memory memory)
+        public override void OnInit()
         {
-            base.Init(memory);
             m_MethodCallTable = new Dictionary<ChipOpCode, OpcodeHandler>();
             LoadMethods();
         }
 
-        public override void Shutdown()
+        public override void OnShutdown()
         {
             base.Shutdown();
             m_MethodCallTable.Clear();
@@ -398,13 +397,13 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.extOn)]
         void ExtOn(ChipInstruction inst)
         {
-            OnSuperModeChange(true);
+            m_VideoInterface.Initialize(ChipMode.SuperChip);
         }
 
         [OpcodeTag(ChipOpCode.extOff)]
         void ExtOff(ChipInstruction inst)
         {
-            OnSuperModeChange(false);
+            m_VideoInterface.Initialize(ChipMode.Chip8);
         }
 
         [OpcodeTag(ChipOpCode.exit)]

@@ -36,7 +36,8 @@ namespace Eimu
                 {
                     FileStream font = new FileStream(SchipConfig.Chip8FontPath, FileMode.Open, FileAccess.Read);
                     FileStream sfont = new FileStream(SchipConfig.SChipFontPath, FileMode.Open, FileAccess.Read);
-                    vm.SetFontResource(font, sfont);
+                    vm.Chip8FontSource = font;
+                    vm.SuperChipFontSource = sfont;
                     RenderWindow renderWindow = new RenderWindow(vm);
                     renderWindow.ShowDialog();
                     vm.Stop();

@@ -1,5 +1,5 @@
 ﻿/*  
-Eimu - Chip-8 Emulator
+Eimu - Chip-8X Emulator
 Copyright (C) 2010  http://code.google.com/p/eimu
 Dedicated to Monarch.
 
@@ -36,6 +36,9 @@ namespace Eimu.Core.Systems.Chip8X
         public const int PROGRAM_ENTRY_POINT = 0x200;
         private bool m_Paused = false;
         private bool m_RequestCPUStop;
+        private bool m_Use1802Dynarec;
+        private int m_ExtraCycles;
+        private int m_CoreSpeed = 10;
         private Stream m_FontSource;
         private Stream m_SFontSource;
         private EventWaitHandle m_CPUPause;
@@ -43,24 +46,22 @@ namespace Eimu.Core.Systems.Chip8X
         private EventWaitHandle m_CPUFinishWait;
         private Thread m_ThreadCPU;
         private AudioDevice m_AudioDevice;
-        private Renderer m_GraphicsDevice;
+        private Renderer m_Renderer;
         private CodeEngine m_CodeEngine;
-        private int m_ExtraCycles;
-        private int m_CoreSpeed = 10;
         private C1802Mode m_HLMode;
-        private bool m_Use1802Dynarec;
         private C1802Dynarec m_CDPDynarec;
+        private VideoInterface m_VideoInterface;
 
-
-        // ----------------------------
-        // Machine Control
-        // ----------------------------
+        public Chip8XMachine()
+        {
+            m_VideoInterface = new VideoInterface();
+        }
 
         protected override void OnMachineState(RunState state)
         {
             CurrentAudioDevice.SetPause((state == RunState.Paused));
-            CurrentGraphicsDevice.SetPause((state == RunState.Paused));
-            SetPauseState((state == RunState.Paused));
+            CurrentRenderBackend.SetPause((state == RunState.Paused));
+            IsPaused = (state == RunState.Paused);
 
             if (state == RunState.Stopped)
             {
@@ -70,36 +71,13 @@ namespace Eimu.Core.Systems.Chip8X
                 m_CPUFinishWait.WaitOne();
                 m_CodeEngine.Shutdown();
                 CurrentAudioDevice.Shutdown();
-                CurrentGraphicsDevice.Shutdown();
+                CurrentRenderBackend.Shutdown();
                 Console.WriteLine("Stopped...");
             }
 
         }
 
-        // ----------------------------
-        // Setters
-        // ----------------------------
-
-        public void SetFontResource(Stream ch8, Stream schip)
-        {
-            m_FontSource = ch8;
-            m_SFontSource = schip;
-        }
-
-        public void SetCollision()
-        {
-            m_CodeEngine.VRegisters[0xF] = 1;
-        }
-
-        private void SetPauseState(bool paused)
-        {
-            this.m_Paused = paused;
-
-            if (!m_Paused)
-                m_CPUPause.Set();
-        }
-
-        public void SetKeyPress(HexKey key)
+        public void KeyPress(HexKey key)
         {
             if (key != HexKey.None)
             {
@@ -112,10 +90,7 @@ namespace Eimu.Core.Systems.Chip8X
             }
         }
 
-
-        // ----------------------------
-        // Program Control
-        // ----------------------------
+        #region Execution Control
 
         public void Step(int cycles)
         {
@@ -182,7 +157,7 @@ namespace Eimu.Core.Systems.Chip8X
             Console.WriteLine("Booting...");
 
             if (CurrentAudioDevice == null) throw new NullReferenceException();
-            if (CurrentGraphicsDevice == null) throw new NullReferenceException();
+            if (CurrentRenderBackend == null) throw new NullReferenceException();
             m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -192,12 +167,12 @@ namespace Eimu.Core.Systems.Chip8X
             m_ThreadCPU.IsBackground = true;
             SystemMemory = new Memory(MEMORY_SIZE);
             m_CodeEngine = new Interpreter();
-            m_CodeEngine.Init(this.SystemMemory);
+            m_CodeEngine.Init(this);
             m_CDPDynarec = new C1802Dynarec();
             AttachDeviceCallbacks();
             CurrentAudioDevice.Initialize();
-            CurrentGraphicsDevice.Initialize();
-            CurrentGraphicsDevice.ClearScreen();
+            CurrentRenderBackend.Initialize();
+            m_VideoInterface.Initialize(ChipMode.Chip8);
             if (!LoadFont()) return false;
             if (!LoadRom()) return false;
             Console.WriteLine("Running...");
@@ -269,12 +244,11 @@ namespace Eimu.Core.Systems.Chip8X
             return true;
         }
 
+        #endregion
 
-        // ----------------------------
-        // Machine Properties
-        // ----------------------------
+        #region Properties
 
-        public CodeEngine CodeEngineCore
+        public CodeEngine ProcessorCore
         {
             get { return this.m_CodeEngine; }
         }
@@ -285,10 +259,10 @@ namespace Eimu.Core.Systems.Chip8X
             set { this.m_AudioDevice = value; }
         }
 
-        public Renderer CurrentGraphicsDevice
+        public Renderer CurrentRenderBackend
         {
-            get { return this.m_GraphicsDevice; }
-            set { this.m_GraphicsDevice = value; }
+            get { return this.m_Renderer; }
+            set { this.m_Renderer = value; }
         }
 
         public int ExtraCycleSpeed
@@ -297,7 +271,7 @@ namespace Eimu.Core.Systems.Chip8X
             set { m_ExtraCycles = value; }
         }
 
-        public C1802Mode HleMode
+        public C1802Mode MachineMode
         {
             get { return this.m_HLMode; }
             set { this.m_HLMode = value; }
@@ -309,9 +283,38 @@ namespace Eimu.Core.Systems.Chip8X
             set { this.m_Use1802Dynarec = value; }
         }
 
-        // ----------------------------
-        // Internal Calls
-        // ----------------------------
+        public Stream Chip8FontSource
+        {
+            get { return m_FontSource; }
+            set { m_FontSource = value; }
+        }
+
+        public Stream SuperChipFontSource
+        {
+            get { return m_SFontSource; }
+            set { m_SFontSource = value; }
+        }
+
+        public bool IsPaused
+        {
+            get { return this.m_Paused; }
+            set
+            {
+                this.m_Paused = value;
+
+                if (!m_Paused)
+                    m_CPUPause.Set();
+            }
+        }
+
+        public VideoInterface VideoInterface
+        {
+            get { return m_VideoInterface; }
+        }
+
+        #endregion
+
+        #region Private
 
         private void SendBeep()
         {
@@ -320,46 +323,16 @@ namespace Eimu.Core.Systems.Chip8X
 
         private void AttachDeviceCallbacks()
         {
-            m_CodeEngine.PixelSet -= new EventHandler<PixelSetEventArgs>(OnPixelSet);
-            m_CodeEngine.PixelSet += new EventHandler<PixelSetEventArgs>(OnPixelSet);
-
-            m_CodeEngine.ScreenClear -= new EventHandler(OnScreenClear);
-            m_CodeEngine.ScreenClear += new EventHandler(OnScreenClear);
-
-            CurrentGraphicsDevice.OnPixelCollision -= new EventHandler(OnPixelCollision);
-            CurrentGraphicsDevice.OnPixelCollision += new EventHandler(OnPixelCollision);
-
-            m_CodeEngine.SuperModeChange -= new EventHandler<ChipModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
-            m_CodeEngine.SuperModeChange += new EventHandler<ChipModeChangedEventArgs>(m_CodeEngine_SuperModeChange);
-
-            m_CodeEngine.PixelScroll -= new EventHandler<PixelScrollEventArgs>(OnPixelScroll);
-            m_CodeEngine.PixelScroll += new EventHandler<PixelScrollEventArgs>(OnPixelScroll);
+            m_VideoInterface.VideoRefresh -= new EventHandler<VideoFrameUpdate>(m_VideoInterface_VideoRefresh);
+            m_VideoInterface.VideoRefresh += new EventHandler<VideoFrameUpdate>(m_VideoInterface_VideoRefresh);
         }
 
-        private void OnPixelScroll(object sender, PixelScrollEventArgs e)
+        void m_VideoInterface_VideoRefresh(object sender, VideoFrameUpdate e)
         {
-            m_GraphicsDevice.ScrollPixels(e.Length, e.Direction);
+            m_Renderer.Update(e);
         }
 
-        private void m_CodeEngine_SuperModeChange(object sender, ChipModeChangedEventArgs e)
-        {
-            m_GraphicsDevice.SetSuperMode(e.Enabled);
-        }
-
-        private void OnPixelCollision(object sender, EventArgs e)
-        {
-            SetCollision();
-        }
-
-        private void OnScreenClear(object sender, EventArgs e)
-        {
-            m_GraphicsDevice.ClearScreen();
-        }
-
-        private void OnPixelSet(object sender, PixelSetEventArgs e)
-        {
-            m_GraphicsDevice.SetPixel(e.X, e.Y);
-        }
+        #endregion
 
         #region IDisposable Members
 

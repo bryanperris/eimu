@@ -69,13 +69,13 @@ namespace Eimu
             m_WinHelper = new WindowInteropHelper(this);
             m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
 
-            Type intf = m_Machine.CurrentGraphicsDevice.GetType().GetInterface(typeof(IWinFormAttachment).Name);
+            Type intf = m_Machine.CurrentRenderBackend.GetType().GetInterface(typeof(IWinFormAttachment).Name);
 
             if (intf != null)
             {
-                renderPanel.EnableDoubleBuffer = ((IWinFormAttachment)m_Machine.CurrentGraphicsDevice).UseDoubleBugger;
-                ((IWinFormAttachment)m_Machine.CurrentGraphicsDevice).SetPanelHandle(renderPanel.Handle);
-                ((IWinFormAttachment)m_Machine.CurrentGraphicsDevice).SetWindowHandle(m_WinHelper.Handle);
+                renderPanel.EnableDoubleBuffer = ((IWinFormAttachment)m_Machine.CurrentRenderBackend).UseDoubleBugger;
+                ((IWinFormAttachment)m_Machine.CurrentRenderBackend).SetPanelHandle(renderPanel.Handle);
+                ((IWinFormAttachment)m_Machine.CurrentRenderBackend).SetWindowHandle(m_WinHelper.Handle);
             }
             else
             {
@@ -126,12 +126,12 @@ namespace Eimu
                 default: break;
             }
 
-            m_Machine.SetKeyPress(key);
+            m_Machine.KeyPress(key);
         }
 
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
-           m_Machine.SetKeyPress(HexKey.None);
+            m_Machine.KeyPress(HexKey.None);
         }
 
         private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)

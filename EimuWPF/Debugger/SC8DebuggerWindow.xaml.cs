@@ -131,7 +131,7 @@ namespace Eimu.Debugger
 
         void m_Buttion_SprGotoI_Click(object sender, RoutedEventArgs e)
         {
-            m_TextBox_SprCurrentAddress.Text = m_Machine.CodeEngineCore.m_IReg.ToString("X4");
+            m_TextBox_SprCurrentAddress.Text = m_Machine.ProcessorCore.m_IReg.ToString("X4");
         }
 
         void m_TextBox_SprCurrentAddress_TextChanged(object sender, TextChangedEventArgs e)
@@ -192,12 +192,12 @@ namespace Eimu.Debugger
 
         void m_Button_MemGotoPC_Click(object sender, RoutedEventArgs e)
         {
-            m_TextBox_MemSelectedAddress.Text = m_Machine.CodeEngineCore.PC.ToString("X4");
+            m_TextBox_MemSelectedAddress.Text = m_Machine.ProcessorCore.PC.ToString("X4");
         }
 
         void m_Button_MemGotoI_Click(object sender, RoutedEventArgs e)
         {
-            m_TextBox_MemSelectedAddress.Text = m_Machine.CodeEngineCore.m_IReg.ToString("X4");
+            m_TextBox_MemSelectedAddress.Text = m_Machine.ProcessorCore.m_IReg.ToString("X4");
         }
 
         void m_TextBox_MemSelectedAddress_TextChanged(object sender, TextChangedEventArgs e)
@@ -328,7 +328,7 @@ namespace Eimu.Debugger
 
         private void ListRegisters()
         {
-            CodeEngine en = m_Machine.CodeEngineCore;
+            CodeEngine en = m_Machine.ProcessorCore;
             m_ListBox_Regs.Items.Clear();
             m_ListBox_Regs.Items.Add("PC: " + en.m_PC.ToString("x"));
             m_ListBox_Regs.Items.Add("I: " + en.m_IReg.ToString("x"));
@@ -410,7 +410,7 @@ namespace Eimu.Debugger
         private void m_TbButton_Skip_Click(object sender, RoutedEventArgs e)
         {
             m_Machine.Pause();
-            m_Machine.CodeEngineCore.IncrementPC();
+            m_Machine.ProcessorCore.IncrementPC();
             UpdateDebugInfo();
         }
 
