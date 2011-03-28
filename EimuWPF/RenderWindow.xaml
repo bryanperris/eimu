@@ -1,0 +1,34 @@
+﻿<Window x:Class="Eimu.RenderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Eimu" Height="412" Width="605" xmlns:my="clr-namespace:Eimu" Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" Icon="/Eimu;component/icon.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="21.777" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <WindowsFormsHost Grid.Row="1" Margin="0,-0.058,0,0" KeyDown="WindowsFormsHost_KeyDown" KeyUp="WindowsFormsHost_KeyUp" Name="m_FormHost">
+            <my:RenderPanel x:Name="renderPanel" />
+        </WindowsFormsHost>
+        <Menu Height="23" Name="menu1" VerticalAlignment="Top">
+        	<Menu.Background>
+        		<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+        			<GradientStop Color="White" Offset="0.211"/>
+        			<GradientStop Color="#FFDCD9D9" Offset="0.8"/>
+        			<GradientStop Color="White" Offset="1"/>
+        		</LinearGradientBrush>
+        	</Menu.Background>
+            <MenuItem Header="Machine">
+            	<MenuItem x:Name="m_MenuItem_Pause" Header="Pause" IsCheckable="True" Click="m_MenuItem_Pause_Click" />
+            	<MenuItem x:Name="m_MenuItem_Reset" Header="Reset" Click="m_MenuItem_Reset_Click" />
+            	<MenuItem x:Name="m_MenuItem_Stop" Header="Stop" Click="m_MenuItem_Stop_Click" />
+            	<MenuItem x:Name="m_MenuItem_Debugger" Header="Show Debugger" Click="m_MenuItem_Debugger_Click" />
+                <MenuItem x:Name="m_MenuItem_Quit" Header="Quit" Click="m_MenuItem_Quit_Click" Margin="0,0,2.097,0" />
+            </MenuItem>
+            <MenuItem Header="Help" >
+            	<MenuItem x:Name="m_MenuItem_About" Header="About" Click="m_MenuItem_About_Click" />
+            	<MenuItem x:Name="m_MenuItem_ProjectSite" Header="Project Site" Click="m_MenuItem_ProjectSite_Click" />
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>

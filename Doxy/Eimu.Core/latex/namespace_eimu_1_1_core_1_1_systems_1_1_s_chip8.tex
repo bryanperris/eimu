@@ -1,0 +1,135 @@
+\hypertarget{namespace_eimu_1_1_core_1_1_systems_1_1_s_chip8}{
+\section{Eimu::Core::Systems::SChip8 Namespace Reference}
+\label{namespace_eimu_1_1_core_1_1_systems_1_1_s_chip8}\index{Eimu::Core::Systems::SChip8@{Eimu::Core::Systems::SChip8}}
+}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \hyperlink{namespace_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_engines}{Engines}
+\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_audio_device}{AudioDevice}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_chip_instruction}{ChipInstruction}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine}{CodeEngine}
+\item 
+class {\bfseries Disassembler}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_graphics_device}{GraphicsDevice}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_pixel_scroll_event_args}{PixelScrollEventArgs}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_pixel_set_event_args}{PixelSetEventArgs}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_profiler}{Profiler}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine}{SChipMachine}
+\item 
+class \hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_super_mode_changed_event_args}{SuperModeChangedEventArgs}
+\item 
+class {\bfseries SystemHLE}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries ChipKey} \{ \par
+{\bfseries None} =  -\/1, 
+{\bfseries Zero} =  0, 
+{\bfseries One} =  1, 
+{\bfseries Two} =  2, 
+\par
+{\bfseries Three} =  3, 
+{\bfseries Four} =  4, 
+{\bfseries Five} =  5, 
+{\bfseries Six} =  6, 
+\par
+{\bfseries Seven} =  7, 
+{\bfseries Eight} =  8, 
+{\bfseries Nine} =  9, 
+{\bfseries Ten} =  10, 
+\par
+{\bfseries A} =  11, 
+{\bfseries B} =  12, 
+{\bfseries C} =  13, 
+{\bfseries D} =  14, 
+\par
+{\bfseries E} =  15, 
+{\bfseries F} =  16
+ \}
+\item 
+enum {\bfseries ChipOpCode} \{ \par
+{\bfseries Unknown} =  0, 
+{\bfseries Sys}, 
+{\bfseries Clr}, 
+{\bfseries Ret}, 
+\par
+{\bfseries Jp\_\-1}, 
+{\bfseries Call}, 
+{\bfseries Se\_\-3}, 
+{\bfseries Sne\_\-4}, 
+\par
+{\bfseries Se\_\-5}, 
+{\bfseries Ld\_\-6}, 
+{\bfseries Add\_\-7}, 
+{\bfseries Ld\_\-8}, 
+\par
+{\bfseries Or}, 
+{\bfseries And}, 
+{\bfseries Xor}, 
+{\bfseries Add\_\-8}, 
+\par
+{\bfseries Sub}, 
+{\bfseries Shr}, 
+{\bfseries Subn}, 
+{\bfseries Shl}, 
+\par
+{\bfseries Sne\_\-9}, 
+{\bfseries Ld\_\-A}, 
+{\bfseries Jp\_\-B}, 
+{\bfseries Rnd}, 
+\par
+{\bfseries Drw}, 
+{\bfseries Skp}, 
+{\bfseries Sknp}, 
+{\bfseries Ld\_\-F\_\-07}, 
+\par
+{\bfseries Ld\_\-F\_\-0A}, 
+{\bfseries Ld\_\-DT}, 
+{\bfseries Ld\_\-ST}, 
+{\bfseries Add\_\-F}, 
+\par
+{\bfseries Ld\_\-F\_\-29}, 
+{\bfseries Ld\_\-F\_\-33}, 
+{\bfseries Ld\_\-F\_\-55}, 
+{\bfseries Ld\_\-F\_\-65}, 
+\par
+{\bfseries Ld\_\-F\_\-75}, 
+{\bfseries Ld\_\-F\_\-85}, 
+{\bfseries Ld\_\-F\_\-30}, 
+{\bfseries exit}, 
+\par
+{\bfseries extOff}, 
+{\bfseries extOn}, 
+{\bfseries scrollN}, 
+{\bfseries scrollR}, 
+\par
+{\bfseries scrollL}
+ \}
+\item 
+enum {\bfseries HLEMode} \{ {\bfseries None} =  0, 
+{\bfseries VIP}, 
+{\bfseries ETI660}, 
+{\bfseries Telmac2000}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{namespace_eimu_1_1_core_1_1_systems_1_1_s_chip8_ad88b9f415a8fa8f42c4d2104a292206c}{
+delegate void {\bfseries KeyStateHandler} (object sender, ChipKey key)}
+\label{namespace_eimu_1_1_core_1_1_systems_1_1_s_chip8_ad88b9f415a8fa8f42c4d2104a292206c}
+
+\end{DoxyCompactItemize}

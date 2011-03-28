@@ -1,0 +1,1692 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="10.0" Name="Eimu Cop">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">$(FxCopDir)\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/bin/Eimu.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityTransparencyRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="10.0">
+  <Namespaces>
+   <Namespace Name="Eimu.Core">
+    <Messages>
+     <Message Id="Eimu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+      <Issue Name="Namespace">
+       <Item>Eimu</Item>
+       <Item>Eimu.Core</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Eimu.Core.Systems.Chip16">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-30 20:42:58Z">
+      <Issue>
+       <Item>Eimu.Core.Systems.Chip16</Item>
+      </Issue>
+     </Message>
+     <Message Id="Eimu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+      <Issue Name="Namespace">
+       <Item>Eimu</Item>
+       <Item>Eimu.Core.Systems.Chip16</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Eimu.Core.Systems.SChip8">
+    <Messages>
+     <Message Id="Eimu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+      <Issue Name="Namespace">
+       <Item>Eimu</Item>
+       <Item>Eimu.Core.Systems.SChip8</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Eimu.Core.Systems.SChip8.Engines">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-30 20:42:58Z">
+      <Issue>
+       <Item>Eimu.Core.Systems.SChip8.Engines</Item>
+      </Issue>
+     </Message>
+     <Message Id="Eimu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+      <Issue Name="Namespace">
+       <Item>Eimu</Item>
+       <Item>Eimu.Core.Systems.SChip8.Engines</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/bin/Eimu.Core.dll">
+    <Modules>
+     <Module Name="eimu.core.dll">
+      <Messages>
+       <Message Id="Eimu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+        <Issue Name="Assembly">
+         <Item>Eimu</Item>
+         <Item>'Eimu.Core.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Eimu.Core">
+        <Types>
+         <Type Name="RgbColor">
+          <Messages>
+           <Message Id="Rgb" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 21:10:53Z">
+            <Issue Name="Type">
+             <Item>Rgb</Item>
+             <Item>'RgbColor'</Item>
+            </Issue>
+            <Notes>
+             <User Name="Bryan">
+              <Note Id="0" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Eimu.Core.Systems.SChip8">
+        <Types>
+         <Type Name="AudioDevice">
+          <Messages>
+           <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Created="2011-01-30 23:24:45Z">
+            <Issue>
+             <Item>'AudioDevice'</Item>
+             <Item>'Device'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ChipInstruction">
+          <Members>
+           <Member Name="#N">
+            <Messages>
+             <Message Id="N" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipInstruction.N'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#NNN">
+            <Messages>
+             <Message Id="NNN" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 20:42:58Z">
+              <Issue Name="Member">
+               <Item>NNN</Item>
+               <Item>'ChipInstruction.NNN'</Item>
+               <Item>Nnn</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipInstruction.X'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipInstruction.Y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ChipKey">
+          <Members>
+           <Member Name="#A">
+            <Messages>
+             <Message Id="A" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:15:38Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipKey.A'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#B">
+            <Messages>
+             <Message Id="B" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:15:38Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipKey.B'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#C">
+            <Messages>
+             <Message Id="C" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:15:38Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipKey.C'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#D">
+            <Messages>
+             <Message Id="D" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:15:38Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipKey.D'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#E">
+            <Messages>
+             <Message Id="E" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:15:38Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipKey.E'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#F">
+            <Messages>
+             <Message Id="F" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:15:38Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'ChipKey.F'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ChipOpCode">
+          <Members>
+           <Member Name="#Add_7">
+            <Messages>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Add_7'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Add_8">
+            <Messages>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Add_8'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Add_F">
+            <Messages>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Add_F'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Drw">
+            <Messages>
+             <Message Id="Drw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Drw</Item>
+               <Item>'ChipOpCode.Drw'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#exit">
+            <Messages>
+             <Message Id="exit" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>exit</Item>
+               <Item>'ChipOpCode.exit'</Item>
+               <Item>Exit</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#extOff">
+            <Messages>
+             <Message Id="ext" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>ext</Item>
+               <Item>'ChipOpCode.extOff'</Item>
+               <Item>Ext</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#extOn">
+            <Messages>
+             <Message Id="ext" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>ext</Item>
+               <Item>'ChipOpCode.extOn'</Item>
+               <Item>Ext</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Jp_1">
+            <Messages>
+             <Message Id="Jp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Jp</Item>
+               <Item>'ChipOpCode.Jp_1'</Item>
+               <Item>JP</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Jp_1'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Jp_B">
+            <Messages>
+             <Message Id="Jp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Jp</Item>
+               <Item>'ChipOpCode.Jp_B'</Item>
+               <Item>JP</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Jp_B'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_6">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_6'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_6'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_8">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_8'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_8'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_A">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_A'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_A'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_DT">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_DT'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_DT'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_07">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_07'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_07'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_0A">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_0A'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_0A'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_29">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_29'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_29'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_30">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_30'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_30'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_33">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_33'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_33'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_55">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_55'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_55'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_65">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_65'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_65'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_75">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_75'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_75'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_F_85">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_F_85'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_F_85'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ld_ST">
+            <Messages>
+             <Message Id="Ld" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Ld</Item>
+               <Item>'ChipOpCode.Ld_ST'</Item>
+               <Item>LD</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Ld_ST'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Rnd">
+            <Messages>
+             <Message Id="Rnd" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Rnd</Item>
+               <Item>'ChipOpCode.Rnd'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Se_3">
+            <Messages>
+             <Message Id="Se" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Se</Item>
+               <Item>'ChipOpCode.Se_3'</Item>
+               <Item>SE</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Se_3'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Se_5">
+            <Messages>
+             <Message Id="Se" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Se</Item>
+               <Item>'ChipOpCode.Se_5'</Item>
+               <Item>SE</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Se_5'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Shl">
+            <Messages>
+             <Message Id="Shl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Shl</Item>
+               <Item>'ChipOpCode.Shl'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Shr">
+            <Messages>
+             <Message Id="Shr" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Shr</Item>
+               <Item>'ChipOpCode.Shr'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sknp">
+            <Messages>
+             <Message Id="Sknp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Sknp</Item>
+               <Item>'ChipOpCode.Sknp'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Skp">
+            <Messages>
+             <Message Id="Skp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Skp</Item>
+               <Item>'ChipOpCode.Skp'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sne_4">
+            <Messages>
+             <Message Id="Sne" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Sne</Item>
+               <Item>'ChipOpCode.Sne_4'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Sne_4'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sne_9">
+            <Messages>
+             <Message Id="Sne" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Sne</Item>
+               <Item>'ChipOpCode.Sne_9'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>'ChipOpCode.Sne_9'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Subn">
+            <Messages>
+             <Message Id="Subn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-01-30 22:18:05Z">
+              <Issue Name="Member">
+               <Item>Subn</Item>
+               <Item>'ChipOpCode.Subn'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CodeEngine">
+          <Members>
+           <Member Name="#Call(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message Id="Call" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2011-01-30 20:42:58Z">
+              <Issue Name="Member">
+               <Item>'CodeEngine.Call(ChipInstruction)'</Item>
+               <Item>Call</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DelayTimerCallback(System.Object)">
+            <Messages>
+             <Message Id="state" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'state'</Item>
+               <Item>'CodeEngine.DelayTimerCallback(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_DelayTimer">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_DelayTimer'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkAllNonSerializableFields" Category="Microsoft.Usage" CheckId="CA2235" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_DelayTimer'</Item>
+               <Item>'CodeEngine'</Item>
+               <Item>'Timer'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_DT">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_DT'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_IReg">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_IReg'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_LastKey">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_LastKey'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_Memory">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_Memory'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_PC">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_PC'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_Rand">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_Rand'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_RPLFlags">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_RPLFlags'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Flags" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberNoAlternate">
+               <Item>Flags</Item>
+               <Item>'CodeEngine.m_RPLFlags'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_ST">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_ST'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_Stack">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_Stack'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_TimerWait">
+            <Messages>
+             <Message TypeName="MarkAllNonSerializableFields" Category="Microsoft.Usage" CheckId="CA2235" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_TimerWait'</Item>
+               <Item>'CodeEngine'</Item>
+               <Item>'EventWaitHandle'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_VRegs">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.m_VRegs'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Regs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="Member">
+               <Item>Regs</Item>
+               <Item>'CodeEngine.m_VRegs'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnScreenClear()">
+            <Messages>
+             <Message Id="OnScreen" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>OnScreen</Item>
+               <Item>'CodeEngine.OnScreenClear()'</Item>
+               <Item>Onscreen</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#VRegisters">
+            <Messages>
+             <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'CodeEngine.VRegisters'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Disassembler">
+          <Messages>
+           <Message Id="Disassembler" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+            <Issue Name="Type">
+             <Item>Disassembler</Item>
+             <Item>'Disassembler'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.cctor()">
+            <Messages>
+             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Disassembler'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetOpcodeMask(System.UInt16)">
+            <Messages>
+             <Message Id="Opcode" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberShouldBeCompoundWord">
+               <Item>Opcode</Item>
+               <Item>'Disassembler.GetOpcodeMask(ushort)'</Item>
+               <Item>OpCode</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="GraphicsDevice">
+          <Messages>
+           <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Created="2011-01-30 23:24:45Z">
+            <Issue>
+             <Item>'GraphicsDevice'</Item>
+             <Item>'Device'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#GetBufferPosition(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.GetBufferPosition(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.GetBufferPosition(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetPixel(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.GetPixel(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.GetPixel(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnPixelSet(System.Int32,System.Int32,System.Boolean)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.OnPixelSet(int, int, bool)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.OnPixelSet(int, int, bool)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+             <Message Id="On" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameter">
+               <Item>'GraphicsDevice.OnPixelSet(int, int, bool)'</Item>
+               <Item>'on'</Item>
+               <Item>On</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnScreenClear()">
+            <Messages>
+             <Message Id="OnScreen" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>OnScreen</Item>
+               <Item>'GraphicsDevice.OnScreenClear()'</Item>
+               <Item>Onscreen</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetPixel(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.SetPixel(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'GraphicsDevice.SetPixel(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="PixelSetEventArgs">
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'PixelSetEventArgs.PixelSetEventArgs(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'PixelSetEventArgs.PixelSetEventArgs(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'PixelSetEventArgs.X'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-30 20:42:58Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'PixelSetEventArgs.Y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Profiler">
+          <Members>
+           <Member Name="#CountOpcode(Eimu.Core.Systems.SChip8.ChipOpCode)">
+            <Messages>
+             <Message Id="Opcode" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-01-30 22:18:05Z">
+              <Issue Name="MemberShouldBeCompoundWord">
+               <Item>Opcode</Item>
+               <Item>'Profiler.CountOpcode(ChipOpCode)'</Item>
+               <Item>OpCode</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DumpStats()">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2011-01-30 20:42:58Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'int.ToString()'</Item>
+               <Item>'Profiler.DumpStats()'</Item>
+               <Item>'int.ToString(IFormatProvider)'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SChipMachine">
+          <Members>
+           <Member Name="#Boot()">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Reserved">
+               <Item>'SChipMachine.Boot()'</Item>
+               <Item>'NullReferenceException'</Item>
+              </Issue>
+              <Issue Name="Reserved">
+               <Item>'SChipMachine.Boot()'</Item>
+               <Item>'NullReferenceException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Dispose(System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotDeclareProtectedMembersInSealedTypes" Category="Microsoft.Design" CheckId="CA1047" Created="2011-01-30 23:29:09Z">
+              <Issue Name="Member">
+               <Item>'SChipMachine.Dispose(bool)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FONT_SIZE">
+            <Messages>
+             <Message Id="FONT" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>FONT</Item>
+               <Item>'SChipMachine.FONT_SIZE'</Item>
+               <Item>Font</Item>
+              </Issue>
+             </Message>
+             <Message Id="SIZE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>SIZE</Item>
+               <Item>'SChipMachine.FONT_SIZE'</Item>
+               <Item>Size</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>'SChipMachine.FONT_SIZE'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#InitCore`1()">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2011-01-30 20:45:45Z">
+              <Issue>
+               <Item>'SChipMachine.InitCore&lt;TCodeEngine&gt;()'</Item>
+               <Item>'TCodeEngine'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MEMORY_SIZE">
+            <Messages>
+             <Message Id="MEMORY" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>MEMORY</Item>
+               <Item>'SChipMachine.MEMORY_SIZE'</Item>
+               <Item>Memory</Item>
+              </Issue>
+             </Message>
+             <Message Id="SIZE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>SIZE</Item>
+               <Item>'SChipMachine.MEMORY_SIZE'</Item>
+               <Item>Size</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>'SChipMachine.MEMORY_SIZE'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#PROGRAM_ENTRY_POINT">
+            <Messages>
+             <Message Id="ENTRY" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>ENTRY</Item>
+               <Item>'SChipMachine.PROGRAM_ENTRY_POINT'</Item>
+               <Item>Entry</Item>
+              </Issue>
+             </Message>
+             <Message Id="POINT" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>POINT</Item>
+               <Item>'SChipMachine.PROGRAM_ENTRY_POINT'</Item>
+               <Item>Point</Item>
+              </Issue>
+             </Message>
+             <Message Id="PROGRAM" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>PROGRAM</Item>
+               <Item>'SChipMachine.PROGRAM_ENTRY_POINT'</Item>
+               <Item>Program</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2011-01-30 20:45:45Z">
+              <Issue Name="Member">
+               <Item>'SChipMachine.PROGRAM_ENTRY_POINT'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SendBeep()">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:45:45Z">
+              <Issue>
+               <Item>'SChipMachine.SendBeep()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Eimu.Core.Systems.SChip8.Engines">
+        <Types>
+         <Type Name="Interpreter">
+          <Members>
+           <Member Name="#Add_7(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Add_7(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Add_8(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Add_8(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Add_F(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Add_F(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#And(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.And(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CallF(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.CallF(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Clr(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Clr(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="inst" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'inst'</Item>
+               <Item>'Interpreter.Clr(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Drw(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Drw(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Exit(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Exit(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'Interpreter.Exit(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="inst" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'inst'</Item>
+               <Item>'Interpreter.Exit(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ExtOff(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.ExtOff(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="inst" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'inst'</Item>
+               <Item>'Interpreter.ExtOff(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ExtOn(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.ExtOn(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="inst" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'inst'</Item>
+               <Item>'Interpreter.ExtOn(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Jp_B(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Jp_B(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Jump_1(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Jump_1(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_6(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_6(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_8(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_8(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_A(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_A(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_DT(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_DT(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F07(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F07(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F0A(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F0A(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F29(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F29(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F30(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F30(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F33(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F33(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F55(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F55(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F65(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F65(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F75(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F75(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_F85(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_F85(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Load_ST(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Load_ST(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Or(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Or(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Ret(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Ret(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="inst" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'inst'</Item>
+               <Item>'Interpreter.Ret(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Rnd(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Rnd(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Se_3(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Se_3(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Se_5(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Se_5(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Shl(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Shl(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Shr(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Shr(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sknp(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Sknp(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Skp(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Skp(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sne_4(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Sne_4(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sne_9(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Sne_9(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sub(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Sub(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Subn(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Subn(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sys(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Sys(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'Interpreter.Sys(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="inst" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-01-30 20:42:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'inst'</Item>
+               <Item>'Interpreter.Sys(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Xor(Eimu.Core.Systems.SChip8.ChipInstruction)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-30 20:42:58Z">
+              <Issue>
+               <Item>'Interpreter.Xor(ChipInstruction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Interpreter+OpcodeTag">
+          <Messages>
+           <Message TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813" Created="2011-01-30 20:42:58Z">
+            <Issue>
+             <Item>'Interpreter.OpcodeTag'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Notes>
+   <User Name="Bryan">
+    <Note Id="0" Modified="2011-01-30 21:17:10Z">Rgb name is fine to me</Note>
+   </User>
+  </Notes>
+  <Rules>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813">
+    <Resolution Name="Default">Seal {0}, if possible.</Resolution>
+   </Rule>
+   <Rule TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405">
+    <Resolution Name="Default">{0} is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: {1}</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberShouldBeCompoundWord">The discrete term '{0}' in member name {1} should be expressed as a compound word, '{2}'.</Resolution>
+    <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareProtectedMembersInSealedTypes" Category="Microsoft.Design" CheckId="CA1047">
+    <Resolution Name="Member">Make member {0} private, public, or internal (Friend in Visual Basic).</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051">
+    <Resolution Name="Default">Because field {0} is visible outside of its declaring type, change its accessibility to private and add a property, with the same accessibility as the field has currently, to provide access to it.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201">
+    <Resolution Name="Reserved">{0} creates an exception of type {1}, an exception type that is reserved by the runtime and should never be raised by managed code. If this exception instance might be thrown, use a different exception type.</Resolution>
+   </Rule>
+   <Rule TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004">
+    <Resolution Name="Default">Consider a design where {0} doesn't require explicit type parameter {1} in any call to it.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
+    <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
+    <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
+    <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
+    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707">
+    <Resolution Name="Member">Remove the underscores from member name {0}.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716">
+    <Resolution Name="Member">Rename virtual/interface member {0} so that it no longer conflicts with the reserved language keyword '{1}'. Using a reserved keyword as the name of a virtual/interface member makes it harder for consumers in other languages to override/implement the member.</Resolution>
+    <Resolution Name="MemberParameter">In virtual/interface member {0}, rename parameter {1} so that it no longer conflicts with the reserved language keyword '{2}'. Using a reserved keyword as the name of a parameter on a virtual/interface member makes it harder for consumers in other languages to override/implement the member.</Resolution>
+   </Rule>
+   <Rule TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810">
+    <Resolution Name="Default">Initialize all static fields in {0} when those fields are declared and remove the explicit static constructor.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAllNonSerializableFields" Category="Microsoft.Usage" CheckId="CA2235">
+    <Resolution Name="Default">Field {0} is a member of type {1}, which is serializable, but is of type {2}, which is not serializable. Add the NonSerializedAttribute to {0}.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
+    <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="IFormatProviderAlternateString">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify {3} as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify {4}.</Resolution>
+   </Rule>
+   <Rule TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726">
+    <Resolution Name="MemberNoAlternate">Replace the term '{0}' in member name {1} with an appropriate alternate or remove it entirely.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

@@ -1,0 +1,112 @@
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine}{
+\section{Eimu::Core::Systems::SChip8::SChipMachine Class Reference}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine}\index{Eimu::Core::Systems::SChip8::SChipMachine@{Eimu::Core::Systems::SChip8::SChipMachine}}
+}
+Inheritance diagram for Eimu::Core::Systems::SChip8::SChipMachine:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a1d35658ed65fadfb1d25904cc916375e}{
+void {\bfseries SetFontResource} (Stream ch8, Stream schip)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a1d35658ed65fadfb1d25904cc916375e}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a958f0545d28bdaf7ecde92d72ee41237}{
+void {\bfseries SetCollision} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a958f0545d28bdaf7ecde92d72ee41237}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_abf12d13f55915fffc1dda1c90d674665}{
+void {\bfseries SetKeyPress} (ChipKey key)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_abf12d13f55915fffc1dda1c90d674665}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a0e14a70a61e11e4710533a574f2aa741}{
+void {\bfseries Step} (int cycles)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a0e14a70a61e11e4710533a574f2aa741}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ab112d33a522b4d052731769a42a3b02c}{
+void {\bfseries Run} (int entryAddress)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ab112d33a522b4d052731769a42a3b02c}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ac8ed2965e74f07410ae3e760a1dea8af}{
+void {\bfseries Dispose} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ac8ed2965e74f07410ae3e760a1dea8af}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a798c8d015cab624ff0b478318dc04fad}{
+const int {\bfseries FONT\_\-SIZE} = 5}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a798c8d015cab624ff0b478318dc04fad}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a195414fac20da1b42123f526b15219d3}{
+const int {\bfseries MEMORY\_\-SIZE} = 4096}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a195414fac20da1b42123f526b15219d3}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ad24c3fe6254c9869acfd856651009a8b}{
+const int {\bfseries PROGRAM\_\-ENTRY\_\-POINT} = 0x200}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ad24c3fe6254c9869acfd856651009a8b}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a6526d25de5fb4f57e73e80a404a5f2e7}{
+override void {\bfseries OnMachineState} (RunState state)}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a6526d25de5fb4f57e73e80a404a5f2e7}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_aca397ce02e5befdf1c5871f2b873be34}{
+override bool {\bfseries Boot} ()}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_aca397ce02e5befdf1c5871f2b873be34}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a7b84018fd4b19417a162bd28826b4d45}{
+\hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_code_engine}{CodeEngine} {\bfseries CodeEngineCore}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a7b84018fd4b19417a162bd28826b4d45}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ad5484d9abdcf0ef9e65a4c3d099f8a4e}{
+\hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_audio_device}{AudioDevice} {\bfseries CurrentAudioDevice}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_ad5484d9abdcf0ef9e65a4c3d099f8a4e}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_af19c24fe10b15fe343426cbf42028453}{
+\hyperlink{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_graphics_device}{GraphicsDevice} {\bfseries CurrentGraphicsDevice}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_af19c24fe10b15fe343426cbf42028453}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a29a87acb1d7726ce0c40b565ec10b9e7}{
+int {\bfseries ExtraCycleSpeed}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a29a87acb1d7726ce0c40b565ec10b9e7}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a95cd98f9494a16733605b5d235a7b78f}{
+HLEMode {\bfseries HleMode}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_a95cd98f9494a16733605b5d235a7b78f}
+
+\item 
+\hypertarget{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_af1cd6c40b2e6fce79c0d48b3146149be}{
+bool {\bfseries Enable1802Dyanrec}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}}
+\label{class_eimu_1_1_core_1_1_systems_1_1_s_chip8_1_1_s_chip_machine_af1cd6c40b2e6fce79c0d48b3146149be}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+SChipMachine.cs\end{DoxyCompactItemize}

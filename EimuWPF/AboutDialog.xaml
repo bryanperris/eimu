@@ -1,0 +1,49 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Eimu.AboutDialog"
+        Title="About" Height="356" Width="499" WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize">
+    <Grid>
+    	<Image Margin="175,8,176,0" Source="Resources/eimu.png" Stretch="Fill" Height="132" VerticalAlignment="Top"/>
+    	<Label Content="A Chip emulator written in C#" Margin="165,200,141,0" VerticalAlignment="Top" d:LayoutOverrides="Width" Height="26" />
+    	<Label Content="Special Thanks:" Height="25" Margin="195,252,192,0" VerticalAlignment="Top"/>
+    	<Label x:Name="m_Label_Version" Content="Version: " Margin="207,146,112,0" Height="29" VerticalAlignment="Top"/>
+    	<Rectangle Margin="0,-23.225,239.088,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="1.736" Height="425.006" VerticalAlignment="Top">
+    		<Rectangle.RenderTransform>
+    			<TransformGroup>
+    				<ScaleTransform/>
+    				<SkewTransform/>
+    				<RotateTransform Angle="-89.962"/>
+    				<TranslateTransform/>
+    			</TransformGroup>
+    		</Rectangle.RenderTransform>
+    		<Rectangle.Fill>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="#FFB1B1B1" Offset="0.488"/>
+    				<GradientStop Offset="1"/>
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#00FCFCFC" Offset="0.016"/>
+    			</LinearGradientBrush>
+    		</Rectangle.Fill>
+    	</Rectangle>
+    	<Rectangle Margin="0,26,239.088,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="1.736" Height="425" VerticalAlignment="Top">
+    		<Rectangle.RenderTransform>
+    			<TransformGroup>
+    				<ScaleTransform/>
+    				<SkewTransform/>
+    				<RotateTransform Angle="-89.962"/>
+    				<TranslateTransform/>
+    			</TransformGroup>
+    		</Rectangle.RenderTransform>
+    		<Rectangle.Fill>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="#FFB1B1B1" Offset="0.488"/>
+    				<GradientStop Offset="1"/>
+    				<GradientStop Color="White"/>
+    				<GradientStop Color="#00FCFCFC" Offset="0.016"/>
+    			</LinearGradientBrush>
+    		</Rectangle.Fill>
+    	</Rectangle>
+        <Label Content="Monarch Wirefly, @rauntec" Height="25" Margin="165,281,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="159" />
+    </Grid>
+</Window>
