@@ -53,7 +53,7 @@ namespace Eimu.Devices
             float m_ScaleX = (float)m_ControlContext.Width / (float)m_Frame.FrameWidth;
             float m_ScaleY = (float)m_ControlContext.Height / (float)m_Frame.FrameHeight;
 
-            GL.ClearColor(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+            GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -71,11 +71,11 @@ namespace Eimu.Devices
 
                     if (on)
                     {
-                        GL.Color4(Color.FromArgb(ForegroundColor.Red, ForegroundColor.Green, ForegroundColor.Blue));
+                        GL.Color4(Color.FromArgb(ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
                     }
                     else
                     {
-                        GL.Color4(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+                        GL.Color4(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
                     }
 
                     GL.Vertex2(x * m_ScaleX, y * m_ScaleY);
@@ -141,7 +141,7 @@ namespace Eimu.Devices
             GL.Disable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.DepthRange(-1, 100);
-            GL.ClearColor(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+            GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
             m_GContext.SwapBuffers();
         }

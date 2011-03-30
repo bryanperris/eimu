@@ -26,15 +26,16 @@ namespace Eimu.Core.Systems.Chip8X
                 int pos = 0;
                 m_FontSource.Position = 0;
                 m_SuperFontSource.Position = 0;
+                Memory mem =  m_Machine.SystemMemory;
 
                 while ((read = m_FontSource.ReadByte()) != -1)
                 {
-                    m_Machine.SystemMemory[pos++] = (byte)read;
+                   mem[pos++] = (byte)read;
                 }
 
                 while ((read = m_SuperFontSource.ReadByte()) != -1)
                 {
-                    m_Machine.SystemMemory[pos++] = (byte)read;
+                    mem[pos++] = (byte)read;
                 }
 
                 if (this.m_RomSource == null)
@@ -52,7 +53,7 @@ namespace Eimu.Core.Systems.Chip8X
 
                 while ((read = m_RomSource.ReadByte()) != -1)
                 {
-                    m_Machine.SystemMemory[pos++] = (byte)read;
+                    mem[pos++] = (byte)read;
                 }
 
                 return true;

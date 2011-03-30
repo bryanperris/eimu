@@ -14,6 +14,7 @@ using Eimu.Core.Systems.Chip8X;
 using System.Windows.Interop;
 using Eimu.Devices;
 using Eimu.Debugger;
+using Eimu.Configuration;
 
 namespace Eimu
 {
@@ -25,6 +26,7 @@ namespace Eimu
         Chip8XMachine m_Machine;
         WindowInteropHelper m_WinHelper;
         SC8DebuggerWindow m_Debugger;
+        OGLDevice renderer;
 
         public RenderWindow(Chip8XMachine machine)
         {
@@ -69,24 +71,22 @@ namespace Eimu
             m_WinHelper = new WindowInteropHelper(this);
             m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
 
-            Type intf = m_Machine.CurrentRenderBackend.GetType().GetInterface(typeof(IWinFormAttachment).Name);
-
-            if (intf != null)
-            {
-                renderPanel.EnableDoubleBuffer = ((IWinFormAttachment)m_Machine.CurrentRenderBackend).UseDoubleBugger;
-                ((IWinFormAttachment)m_Machine.CurrentRenderBackend).SetPanelHandle(renderPanel.Handle);
-                ((IWinFormAttachment)m_Machine.CurrentRenderBackend).SetWindowHandle(m_WinHelper.Handle);
-            }
-            else
-            {
-                this.Close();
-                return;
-            }
-
-
+            renderer = new OGLDevice();
+            renderer.SetPanelHandle(renderPanel.Handle);
+            renderer.SetWindowHandle(m_WinHelper.Handle);
+            renderer.Initialize();
+            renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.Red, Chip8XConfig.BackColor.Green, Chip8XConfig.BackColor.Blue);
+            renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.Red, Chip8XConfig.ForeColor.Green, Chip8XConfig.ForeColor.Blue);
+            m_Machine.VideoInterface.VideoRefresh -= new EventHandler<VideoFrameUpdate>(VideoInterface_VideoRefresh);
+            m_Machine.VideoInterface.VideoRefresh += new EventHandler<VideoFrameUpdate>(VideoInterface_VideoRefresh);
             m_Debugger = new SC8DebuggerWindow();
             m_Machine.AttachDebugger(m_Debugger);
             m_Machine.Run();
+        }
+
+        void VideoInterface_VideoRefresh(object sender, VideoFrameUpdate e)
+        {
+            renderer.Update(e);
         }
 
         private void m_MenuItem_Pause_Click(object sender, RoutedEventArgs e)
@@ -126,12 +126,12 @@ namespace Eimu
                 default: break;
             }
 
-            m_Machine.SetKeyPressed(key);
+            m_Machine.PressedKey = key;
         }
 
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
-            m_Machine.SetKeyPressed(HexKey.None);
+            m_Machine.PressedKey = HexKey.None;
         }
 
         private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)

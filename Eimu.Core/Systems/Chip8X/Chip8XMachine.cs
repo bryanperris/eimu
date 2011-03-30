@@ -65,7 +65,7 @@ namespace Eimu.Core.Systems.Chip8X
         {
             m_VideoInterface = new VideoInterface();
             m_AudioInterface = new AudioInterface();
-            m_CodeEngine = new Interpreter();
+            m_CodeEngine = new Interpreter(this);
             m_HybridDynarec = new ILDynarec<ILEmitter1802>();
             m_ResManager = new ChipResources(this);
         }
@@ -74,10 +74,6 @@ namespace Eimu.Core.Systems.Chip8X
 
         protected override void OnStateChanged(RunState state)
         {
-            IsPaused = (state == RunState.Paused);
-            m_AudioInterface.IsPaused = (state == RunState.Paused);
-            m_VideoInterface.IsPaused = (state == RunState.Paused);
-
             if (state == RunState.Stopped)
             {
                 m_CPUPause.Set();
@@ -88,7 +84,12 @@ namespace Eimu.Core.Systems.Chip8X
                 m_VideoInterface.Shutdown();
                 m_AudioInterface.Shutdown();
                 Console.WriteLine("Stopped...");
+                return;
             }
+
+            IsPaused = (state == RunState.Paused);
+            m_AudioInterface.IsPaused = (state == RunState.Paused);
+            m_VideoInterface.IsPaused = (state == RunState.Paused);
 
         }
 

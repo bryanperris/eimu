@@ -99,7 +99,6 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\Chip8XConfig.cs" />
     <Compile Include="Devices\AudioDevice.cs" />
-    <Compile Include="Devices\BeepAudioDevice.cs" />
     <Compile Include="Devices\Device.cs" />
     <Compile Include="Devices\IWinFormAttachment.cs" />
     <Compile Include="Devices\NullAudioDevice.cs" />

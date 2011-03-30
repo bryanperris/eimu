@@ -34,7 +34,7 @@ namespace Eimu.Core
 
         public Memory()
         {
-
+            Reset();
         }
 
         public virtual void WriteByte(int address, byte value)
@@ -76,7 +76,7 @@ namespace Eimu.Core
         {
             if (m_CurrentPage != null)
             {
-                if (address >= m_CurrentAddressOffset && address < m_CurrentPage.Size)
+                if (address >= m_CurrentAddressOffset && address <= m_CurrentPage.Size)
                 {
                     return m_CurrentPage;
                 }
@@ -88,7 +88,7 @@ namespace Eimu.Core
             {
                 if (m_Pages.TryGetValue(a, out page))
                 {
-                    if (address >= a && address < page.Size)
+                    if (address >= a && address <= page.Size)
                     {
                         m_CurrentPage = page;
                         m_CurrentAddressOffset = a;

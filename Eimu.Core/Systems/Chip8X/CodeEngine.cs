@@ -17,10 +17,10 @@ namespace Eimu.Core.Systems.Chip8X
         public const int TimerRate = 17;
         public event EventHandler<ChipModeChangedEventArgs> ModeChange;
         public event EventHandler KeyPressWait;
-        public VideoInterface m_VideoInterface;
         private bool m_Stop;
         private EventWaitHandle m_TimerWait;
         private bool m_DisableTimers;
+        private Chip8XMachine m_CurrentMachine;
 
         #region CPU State Fields
 
@@ -45,12 +45,13 @@ namespace Eimu.Core.Systems.Chip8X
         
         public CodeEngine(Chip8XMachine currentMachine)
         {
-            m_Memory = (ChipMemory)currentMachine.SystemMemory;
-            m_VideoInterface = currentMachine.VideoInterface;
+            m_CurrentMachine = currentMachine;
+            m_Memory = new ChipMemory();
         }
 
         public void Initialize(Chip8XMachine machine)
         {
+            m_Memory.Reset();
             m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;
             m_Stop = false;
@@ -97,7 +98,7 @@ namespace Eimu.Core.Systems.Chip8X
                 //case 8: // TODO: Sound Timer Value [hi], Timer Tone [low]
                 //case 9: return m_LastRand; // Random number (+1 in INTERRUPT routine)
                 case 10: return m_IReg;
-                case 11: return ChipMemory.MEMORY_VIDEO_OFFSET; // pointer to graphics memory, using a fake address
+                case 11: return (ushort)Memory.VideoPointer; // pointer to graphics memory, using a fake address
                 // RC, RD, RE, RF are used as general regs
                 default: return m_1802Regs[index];
             }
@@ -168,13 +169,13 @@ namespace Eimu.Core.Systems.Chip8X
             {
                 for (byte i = 0; i < inst.N; i++)
                 {
-                    read = m_Memory.ReadByte((int)(m_IReg + i));
+                    read = Memory.ReadByte((int)(m_IReg + i));
 
                     for (byte j = 0; j < 8; j++)
                     {
                         if ((read & (0x80 >> j)) != 0)
                         {
-                            if (m_VideoInterface.SetPixel((x + j), (y + i)))
+                            if (VideoInterface.SetPixel((x + j), (y + i)))
                             {
                                 m_VRegs[0xF] = 1;
                             }
@@ -186,14 +187,14 @@ namespace Eimu.Core.Systems.Chip8X
             {
                 for (int k = 0; k < 0x10; k++)
                 {
-                    ushort data = Tools.Create16(m_Memory.ReadByte((int)(m_IReg + (k << 1))), 
-                        m_Memory.ReadByte((int)(m_IReg + (k << 1) + 1)));
+                    ushort data = Tools.Create16(Memory.ReadByte((int)(m_IReg + (k << 1))), 
+                        Memory.ReadByte((int)(m_IReg + (k << 1) + 1)));
 
                     for (int m = 0; m < 0x10; m++)
                     {
                         if ((data & (((int)0x8000) >> m)) != 0)
                         {
-                            if (m_VideoInterface.SetPixel((x + m), (y + k)))
+                            if (VideoInterface.SetPixel((x + m), (y + k)))
                             {
                                 m_VRegs[0xF] = 1;
                             }
@@ -207,7 +208,7 @@ namespace Eimu.Core.Systems.Chip8X
 
         protected void OnScreenClear()
         {
-            m_VideoInterface.ClearPixels();
+            VideoInterface.ClearPixels();
         }
 
         protected void OnWaitForKey()
@@ -218,7 +219,7 @@ namespace Eimu.Core.Systems.Chip8X
 
         protected void OnPixelScroll(int dir, int length)
         {
-            m_VideoInterface.ScrollPixels(length, dir);
+            VideoInterface.ScrollPixels(length, dir);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -261,11 +262,6 @@ namespace Eimu.Core.Systems.Chip8X
         #endregion
 
         #region Properties
-
-        public ChipMemory Memory
-        {
-            get { return this.m_Memory; }
-        }
 
         public int PC
         {
@@ -340,6 +336,27 @@ namespace Eimu.Core.Systems.Chip8X
         {
             get { return this.m_ST; }
             set { this.m_ST = value; }
+        }
+
+        public Random Random
+        {
+            get { return m_Rand; }
+            set { m_Rand = value; }
+        }
+
+        public ChipMemory Memory
+        {
+            get { return m_Memory; }
+        }
+
+        public VideoInterface VideoInterface
+        {
+            get { return m_CurrentMachine.VideoInterface; }
+        }
+
+        public Chip8XMachine ParentMachine
+        {
+            get { return m_CurrentMachine; }
         }
 
         #endregion

@@ -11,6 +11,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
     [Serializable]
     public sealed class Interpreter : CodeEngine
     {
+
+        public Interpreter(Chip8XMachine machine) : base(machine) { }
+
         private Dictionary<ChipOpCode, OpcodeHandler> m_MethodCallTable;
 
         public override void OnInit()
@@ -132,9 +135,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= Chip8XMachine.MEMORY_SIZE)
+            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= (ushort)Memory.Size)
             {
-                AddressRegister = Chip8XMachine.MEMORY_SIZE;
+                AddressRegister = (ushort)Memory.Size;
                 VRegisters[0xF] = 1;
             }
             else
@@ -190,7 +193,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Rnd)]
         void Rnd(ChipInstruction inst)
         {
-            VRegisters[inst.X] = (byte)(m_Rand.Next(255) & inst.KK);
+            VRegisters[inst.X] = (byte)(this.Random.Next(255) & inst.KK);
         }
 
         // -----------------------------------------
@@ -260,7 +263,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Skp)]
         void Skp(ChipInstruction inst)
         {
-            if (VRegisters[inst.X] == m_LastKey)
+            if (VRegisters[inst.X] == PressedKey)
             {
                 IncrementPC();
             }
@@ -273,7 +276,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Sknp)]
         void Sknp(ChipInstruction inst)
         {
-            if (VRegisters[inst.X] != m_LastKey)
+            if (VRegisters[inst.X] != PressedKey)
             {
                 IncrementPC();
             }
@@ -317,17 +320,17 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Ld_F_07)]
         void Load_F07(ChipInstruction inst)
         {
-            if (m_DT < 0)
-                m_DT = 0;
+            if (DelayTimer < 0)
+                DelayTimer = 0;
 
-            this.VRegisters[inst.X] = (byte)this.m_DT;
+            this.VRegisters[inst.X] = (byte)this.DelayTimer;
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_0A)]
         void Load_F0A(ChipInstruction inst)
         {
             OnWaitForKey();
-            VRegisters[inst.X] = m_LastKey;
+            VRegisters[inst.X] = PressedKey;
         }
 
         [OpcodeTag(ChipOpCode.Ld_DT)]
@@ -396,13 +399,13 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.extOn)]
         void ExtOn(ChipInstruction inst)
         {
-            m_VideoInterface.Initialize(ChipMode.SuperChip);
+            VideoInterface.Initialize(ChipMode.SuperChip);
         }
 
         [OpcodeTag(ChipOpCode.extOff)]
         void ExtOff(ChipInstruction inst)
         {
-            m_VideoInterface.Initialize(ChipMode.Chip8);
+            VideoInterface.Initialize(ChipMode.Chip8);
         }
 
         [OpcodeTag(ChipOpCode.exit)]
