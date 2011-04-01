@@ -114,6 +114,7 @@ namespace Eimu.Core
                 else
                 {
                     m_Booted = true;
+                    Console.WriteLine("Machine has booted successfully!");
 
                     if (m_Debugger != null)
                     {

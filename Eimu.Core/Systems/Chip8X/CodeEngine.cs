@@ -55,7 +55,6 @@ namespace Eimu.Core.Systems.Chip8X
             m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;
             m_Stop = false;
-            m_PC = 0;
             m_IReg = 0;
             Array.Clear(this.m_VRegs, 0, this.m_VRegs.Length);
             Array.Clear(this.m_RPLFlags, 0, this.m_RPLFlags.Length);

@@ -32,23 +32,23 @@ namespace Eimu.Debugger
         public SC8DebuggerWindow()
         {
             InitializeComponent();
-            m_EventWaitHandle_TimeFontRefresh = new EventWaitHandle(false, EventResetMode.AutoReset);
-            m_TextBox_MemSelectedAddress.Text = "0000";
-            m_TextBox_MemSelectedAddress.TextChanged += new TextChangedEventHandler(m_TextBox_MemSelectedAddress_TextChanged);
-            m_Button_MemGotoI.Click += new RoutedEventHandler(m_Button_MemGotoI_Click);
-            m_Button_MemGotoPC.Click += new RoutedEventHandler(m_Button_MemGotoPC_Click);
-            m_TextBox_MemSelectedAddress.MouseWheel += new MouseWheelEventHandler(m_TextBox_MemSelectedAddress_MouseWheel);
-            m_TextBox_SprCurrentAddress.TextChanged += new TextChangedEventHandler(m_TextBox_SprCurrentAddress_TextChanged);
-            m_Buttion_SprGotoI.Click += new RoutedEventHandler(m_Buttion_SprGotoI_Click);
-            m_Button_SprRender.Click += new RoutedEventHandler(m_Button_SprRender_Click);
-            m_RadioButton_SprSize5.Checked += new RoutedEventHandler(m_RadioButton_SprSize5_Checked);
-            m_RadioButton_SprSize16.Checked += new RoutedEventHandler(m_RadioButton_SprSize16_Checked);
-            m_RadioButton_SprSizeCustom.Checked += new RoutedEventHandler(m_RadioButton_SprSizeCustom_Checked);
-            m_Slider_SprExtSize.ValueChanged += new RoutedPropertyChangedEventHandler<double>(m_Slider_SprExtSize_ValueChanged);
-            m_Button_MemDumpSection.Click += new RoutedEventHandler(m_Button_MemDumpSection_Click);
-            m_Button_FontDraw.Click += new RoutedEventHandler(m_Button_FontDraw_Click);
-            m_CheckBox_FontAutoRefresh.Checked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Checked);
-            m_CheckBox_FontAutoRefresh.Unchecked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Unchecked);
+            //m_EventWaitHandle_TimeFontRefresh = new EventWaitHandle(false, EventResetMode.AutoReset);
+            //m_TextBox_MemSelectedAddress.Text = "0000";
+            //m_TextBox_MemSelectedAddress.TextChanged += new TextChangedEventHandler(m_TextBox_MemSelectedAddress_TextChanged);
+            //m_Button_MemGotoI.Click += new RoutedEventHandler(m_Button_MemGotoI_Click);
+            //m_Button_MemGotoPC.Click += new RoutedEventHandler(m_Button_MemGotoPC_Click);
+            //m_TextBox_MemSelectedAddress.MouseWheel += new MouseWheelEventHandler(m_TextBox_MemSelectedAddress_MouseWheel);
+            //m_TextBox_SprCurrentAddress.TextChanged += new TextChangedEventHandler(m_TextBox_SprCurrentAddress_TextChanged);
+            //m_Buttion_SprGotoI.Click += new RoutedEventHandler(m_Buttion_SprGotoI_Click);
+            //m_Button_SprRender.Click += new RoutedEventHandler(m_Button_SprRender_Click);
+            //m_RadioButton_SprSize5.Checked += new RoutedEventHandler(m_RadioButton_SprSize5_Checked);
+            //m_RadioButton_SprSize16.Checked += new RoutedEventHandler(m_RadioButton_SprSize16_Checked);
+            //m_RadioButton_SprSizeCustom.Checked += new RoutedEventHandler(m_RadioButton_SprSizeCustom_Checked);
+            //m_Slider_SprExtSize.ValueChanged += new RoutedPropertyChangedEventHandler<double>(m_Slider_SprExtSize_ValueChanged);
+            //m_Button_MemDumpSection.Click += new RoutedEventHandler(m_Button_MemDumpSection_Click);
+            //m_Button_FontDraw.Click += new RoutedEventHandler(m_Button_FontDraw_Click);
+            //m_CheckBox_FontAutoRefresh.Checked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Checked);
+            //m_CheckBox_FontAutoRefresh.Unchecked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Unchecked);
         }
 
         void m_CheckBox_FontAutoRefresh_Unchecked(object sender, RoutedEventArgs e)

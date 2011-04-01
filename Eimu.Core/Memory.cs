@@ -30,12 +30,21 @@ namespace Eimu.Core
         private int m_MemBound;
         private Dictionary<int, MemoryPage> m_Pages;
         private MemoryPage m_CurrentPage;
-        private int m_CurrentAddressOffset;
+        private int m_CurrentAddressOffset = 0;
+        private int m_CurrentAddressBound = 0;
+        private bool m_SmartAccess = false;
 
         public Memory()
         {
-            Reset();
+            m_MemBound = 0;
+            m_CurrentAddressOffset = 0;
+            m_CurrentAddressBound = 0;
+            m_Pages = new Dictionary<int, MemoryPage>();
+            m_CurrentPage = null;
+            AllocatePages();
         }
+
+        protected abstract void AllocatePages();
 
         public virtual void WriteByte(int address, byte value)
         {
@@ -47,12 +56,12 @@ namespace Eimu.Core
             return FindPage(address).ReadByte(address);
         }
 
-        public virtual void Reset()
+        public void Reset()
         {
-            m_MemBound = 0;
-            m_CurrentAddressOffset = 0;
-            m_Pages = new Dictionary<int, MemoryPage>();
-            m_CurrentPage = null;
+            foreach (MemoryPage page in m_Pages.Values)
+            {
+                page.Clear();
+            }
         }
 
         public virtual int Size
@@ -74,30 +83,37 @@ namespace Eimu.Core
 
         private MemoryPage FindPage(int address)
         {
-            if (m_CurrentPage != null)
+            // If the address isn't out of bounds, use the same page
+            if (address >= m_CurrentAddressOffset && address < m_CurrentAddressBound)
             {
-                if (address >= m_CurrentAddressOffset && address <= m_CurrentPage.Size)
-                {
-                    return m_CurrentPage;
-                }
+                return m_CurrentPage;
             }
 
-            MemoryPage page;
+            // Else we need to figure out the new page to access
+            MemoryPage page = null;
 
-            foreach (int a in m_Pages.Keys)
+            // Check each offset address and see where address falls in range with
+            foreach (int offset in m_Pages.Keys)
             {
-                if (m_Pages.TryGetValue(a, out page))
+                // if address is >= of that key, it is a possible page
+                if (address >= offset)
                 {
-                    if (address >= a && address <= page.Size)
+                    // Get the reference of the page
+                    if (m_Pages.TryGetValue(offset, out page))
                     {
-                        m_CurrentPage = page;
-                        m_CurrentAddressOffset = a;
-                        return page;
+                        // if the address within bounds of the page, then get it, else keep searching
+                        if (address < (offset + page.Size))
+                        {
+                            m_CurrentPage = page;
+                            m_CurrentAddressBound = offset + page.Size;
+                            m_CurrentAddressOffset = offset;
+                            return page;
+                        }
                     }
                 }
             }
 
-            return null;
+            return page;
         }
 
         protected void AddPage(MemoryPage page)

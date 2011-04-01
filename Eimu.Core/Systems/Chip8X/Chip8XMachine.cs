@@ -102,6 +102,7 @@ namespace Eimu.Core.Systems.Chip8X
                 byte b = SystemMemory.ReadByte(m_CodeEngine.PC + 1);
                 ushort data = Tools.Create16(a, b);
                 ChipOpCode opcode = Disassembler.DecodeInstruction(data);
+                //Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
@@ -242,6 +243,7 @@ namespace Eimu.Core.Systems.Chip8X
         private void StartExecutionCycle()
         {
             Thread.CurrentThread.Name = "CPU Thread";
+            Console.WriteLine("Running CPU!");
 
             while (m_CodeEngine.PC < SystemMemory.Size)
             {
@@ -259,6 +261,7 @@ namespace Eimu.Core.Systems.Chip8X
             }
 
             m_CPUFinishWait.Set();
+            Console.WriteLine("CPU Stopped!");
         }
 
         #endregion
