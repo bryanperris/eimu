@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Eimu.Core.Systems.Chip8X
 {
+    public delegate void RenderCallback(VideoInterface currentInterface);
+
     [Serializable]
     public sealed class VideoInterface
     {
@@ -20,7 +22,7 @@ namespace Eimu.Core.Systems.Chip8X
         private bool m_DisableWrappingX;
         private bool m_DisableWrappingY;
         private bool m_EnableAntiFlickerHack;
-        public event EventHandler<VideoFrameUpdate> VideoRefresh;
+        private RenderCallback m_RenderCallback;
 
         public void Initialize(ChipMode mode)
         {
@@ -60,6 +62,11 @@ namespace Eimu.Core.Systems.Chip8X
 
             m_Buffer[GetBufferPosition(x, y)] = on;
 
+            if (x < 1 && y < 1 && on)
+            {
+                Console.WriteLine("??");
+            }
+
             if (!(!on && m_EnableAntiFlickerHack))
                 OnRefresh();
 
@@ -69,10 +76,17 @@ namespace Eimu.Core.Systems.Chip8X
             // src 1 ^ 1 = 0 : Make Black, Set Collision
         }
 
+        public void SetRenderCallback(RenderCallback callback)
+        {
+            m_RenderCallback = callback;
+        }
+
         private void OnRefresh()
         {
-            if (VideoRefresh != null)
-                VideoRefresh(this, new VideoFrameUpdate(CurrentResolutionX, CurrentResolutionY, m_Buffer));
+            if (m_RenderCallback != null)
+            {
+                m_RenderCallback.DynamicInvoke(new object[] { this });
+            }
         }
 
         public bool GetPixel(int x, int y)

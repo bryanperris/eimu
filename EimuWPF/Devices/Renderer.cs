@@ -28,7 +28,7 @@ namespace Eimu.Devices
         private Color m_BackColor;
         private Color m_ForeColor;
 
-        public abstract void Update(VideoFrameUpdate update);
+        public abstract void Update(VideoInterface currentInterface);
 
         public Color BackgroundColor
         {

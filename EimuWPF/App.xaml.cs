@@ -20,9 +20,8 @@ namespace Eimu
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            //base.OnStartup(e);
             Thread.CurrentThread.Name = "Main App";
-            //ThreadPool
-            base.OnStartup(e);
             StartDialog startscreen = new StartDialog();
             startscreen.Closed += new EventHandler(startscreen_Closed);
 

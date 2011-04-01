@@ -68,13 +68,13 @@ namespace Eimu.Core.Systems.Chip8X
 
         public void Shutdown()
         {
+            OnShutdown();
             m_Rand = null;
             if (m_DelayTimer != null)
             {
                 m_DelayTimer.Dispose(m_TimerWait);
                 m_TimerWait.WaitOne();
             }
-            OnInit();
         }
 
         public void IncrementPC()
@@ -256,7 +256,6 @@ namespace Eimu.Core.Systems.Chip8X
                 }
             }
         }
-
 
         #endregion
 

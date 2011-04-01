@@ -11,6 +11,8 @@ namespace Eimu.Core.Systems.Chip8X.Engines
     [Serializable]
     public sealed class Interpreter : CodeEngine
     {
+        Profiler m_Profiler;
+
 
         public Interpreter(Chip8XMachine machine) : base(machine) { }
 
@@ -19,18 +21,20 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         public override void OnInit()
         {
             m_MethodCallTable = new Dictionary<ChipOpCode, OpcodeHandler>();
+            //m_Profiler = new Profiler();
             LoadMethods();
         }
 
         public override void OnShutdown()
         {
-            base.Shutdown();
+            //m_Profiler.DumpStats();
             m_MethodCallTable.Clear();
             m_MethodCallTable = null;
         }
 
         public override void Call(ChipInstruction inst)
         {
+            //m_Profiler.CountOpcode(inst.OpCode);
             OpcodeHandler handler;
             if (m_MethodCallTable != null)
             {
@@ -135,7 +139,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= (ushort)Memory.Size)
+            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= 0x1000)
             {
                 AddressRegister = (ushort)Memory.Size;
                 VRegisters[0xF] = 1;

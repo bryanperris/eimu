@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Eimu.Core.Systems.Chip8X
 {
-    public sealed class VideoFrameUpdate : EventArgs
+    public sealed class VideoFrameUpdate
     {
         private int m_BufferSizeWidth;
         private int m_BufferSizeHeight;

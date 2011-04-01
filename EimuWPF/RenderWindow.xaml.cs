@@ -77,16 +77,10 @@ namespace Eimu
             renderer.Initialize();
             renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.Red, Chip8XConfig.BackColor.Green, Chip8XConfig.BackColor.Blue);
             renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.Red, Chip8XConfig.ForeColor.Green, Chip8XConfig.ForeColor.Blue);
-            m_Machine.VideoInterface.VideoRefresh -= new EventHandler<VideoFrameUpdate>(VideoInterface_VideoRefresh);
-            m_Machine.VideoInterface.VideoRefresh += new EventHandler<VideoFrameUpdate>(VideoInterface_VideoRefresh);
+            m_Machine.VideoInterface.SetRenderCallback(new RenderCallback(renderer.Update));
             m_Debugger = new SC8DebuggerWindow();
             m_Machine.AttachDebugger(m_Debugger);
             m_Machine.Run();
-        }
-
-        void VideoInterface_VideoRefresh(object sender, VideoFrameUpdate e)
-        {
-            renderer.Update(e);
         }
 
         private void m_MenuItem_Pause_Click(object sender, RoutedEventArgs e)
