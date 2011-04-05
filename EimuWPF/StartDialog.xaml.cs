@@ -29,7 +29,7 @@ namespace Eimu
 
 		public StartDialog()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 			m_OpenFileDialog = new OpenFileDialog();
 			m_OpenFileDialog.Filter = "Chip8X Programs (*.sc, *.ch8, *.c8)|*.sc;*.ch8;*.c8;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
 			LoadConfig();
@@ -99,6 +99,7 @@ namespace Eimu
 
         private void InitChip8XMachine()
         {
+           this.m_VM = new Chip8XMachine();
            m_VM.ProcessorCore.DisableTimers = (this.m_CheckBox_C8DisableCoreTimers.IsChecked == true);
 
            //if (m_CheckBox_C8DisableGraphics.IsChecked == true)
@@ -122,11 +123,6 @@ namespace Eimu
             m_VM.IsHybridDynarecEnabled = Chip8XConfig.use1802Recompiler;
             m_VM.MachineMode = (CDP1802Mode)m_ComboBox_HLESelector.SelectedIndex;
         }
-
-		public void SetVM(Chip8XMachine vm)
-		{
-			this.m_VM = vm;
-		}
 
 		private void m_TextBox_ProgramPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
@@ -160,6 +156,11 @@ namespace Eimu
             InitChip8XMachine();
 
 			Hide();
+
+            RenderWindow window = new RenderWindow(m_VM);
+            window.ShowDialog();
+
+            Show();
 		}
 
 		private void m_Rectangle_C8SelectedBackgroundColor_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

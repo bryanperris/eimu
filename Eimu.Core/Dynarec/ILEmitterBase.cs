@@ -24,7 +24,7 @@ namespace Eimu.Core.Dynarec
             DynamicMethod function = new DynamicMethod(
                 "SysFunc_" + address.ToString("X8"),
                 typeof(void),
-                new Type[] { coreState.GetType() },
+                new Type[] { typeof(object) },
                 typeof(ILEmitterBase).Module);
 
             m_CodeGenerator = function.GetILGenerator();

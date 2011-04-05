@@ -32,23 +32,23 @@ namespace Eimu.Debugger
         public SC8DebuggerWindow()
         {
             InitializeComponent();
-            //m_EventWaitHandle_TimeFontRefresh = new EventWaitHandle(false, EventResetMode.AutoReset);
-            //m_TextBox_MemSelectedAddress.Text = "0000";
-            //m_TextBox_MemSelectedAddress.TextChanged += new TextChangedEventHandler(m_TextBox_MemSelectedAddress_TextChanged);
-            //m_Button_MemGotoI.Click += new RoutedEventHandler(m_Button_MemGotoI_Click);
-            //m_Button_MemGotoPC.Click += new RoutedEventHandler(m_Button_MemGotoPC_Click);
-            //m_TextBox_MemSelectedAddress.MouseWheel += new MouseWheelEventHandler(m_TextBox_MemSelectedAddress_MouseWheel);
-            //m_TextBox_SprCurrentAddress.TextChanged += new TextChangedEventHandler(m_TextBox_SprCurrentAddress_TextChanged);
-            //m_Buttion_SprGotoI.Click += new RoutedEventHandler(m_Buttion_SprGotoI_Click);
-            //m_Button_SprRender.Click += new RoutedEventHandler(m_Button_SprRender_Click);
-            //m_RadioButton_SprSize5.Checked += new RoutedEventHandler(m_RadioButton_SprSize5_Checked);
-            //m_RadioButton_SprSize16.Checked += new RoutedEventHandler(m_RadioButton_SprSize16_Checked);
-            //m_RadioButton_SprSizeCustom.Checked += new RoutedEventHandler(m_RadioButton_SprSizeCustom_Checked);
-            //m_Slider_SprExtSize.ValueChanged += new RoutedPropertyChangedEventHandler<double>(m_Slider_SprExtSize_ValueChanged);
-            //m_Button_MemDumpSection.Click += new RoutedEventHandler(m_Button_MemDumpSection_Click);
-            //m_Button_FontDraw.Click += new RoutedEventHandler(m_Button_FontDraw_Click);
-            //m_CheckBox_FontAutoRefresh.Checked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Checked);
-            //m_CheckBox_FontAutoRefresh.Unchecked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Unchecked);
+            m_EventWaitHandle_TimeFontRefresh = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_TextBox_MemSelectedAddress.Text = "0000";
+            m_TextBox_MemSelectedAddress.TextChanged += new TextChangedEventHandler(m_TextBox_MemSelectedAddress_TextChanged);
+            m_Button_MemGotoI.Click += new RoutedEventHandler(m_Button_MemGotoI_Click);
+            m_Button_MemGotoPC.Click += new RoutedEventHandler(m_Button_MemGotoPC_Click);
+            m_TextBox_MemSelectedAddress.MouseWheel += new MouseWheelEventHandler(m_TextBox_MemSelectedAddress_MouseWheel);
+            m_TextBox_SprCurrentAddress.TextChanged += new TextChangedEventHandler(m_TextBox_SprCurrentAddress_TextChanged);
+            m_Buttion_SprGotoI.Click += new RoutedEventHandler(m_Buttion_SprGotoI_Click);
+            m_Button_SprRender.Click += new RoutedEventHandler(m_Button_SprRender_Click);
+            m_RadioButton_SprSize5.Checked += new RoutedEventHandler(m_RadioButton_SprSize5_Checked);
+            m_RadioButton_SprSize16.Checked += new RoutedEventHandler(m_RadioButton_SprSize16_Checked);
+            m_RadioButton_SprSizeCustom.Checked += new RoutedEventHandler(m_RadioButton_SprSizeCustom_Checked);
+            m_Slider_SprExtSize.ValueChanged += new RoutedPropertyChangedEventHandler<double>(m_Slider_SprExtSize_ValueChanged);
+            m_Button_MemDumpSection.Click += new RoutedEventHandler(m_Button_MemDumpSection_Click);
+            m_Button_FontDraw.Click += new RoutedEventHandler(m_Button_FontDraw_Click);
+            m_CheckBox_FontAutoRefresh.Checked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Checked);
+            m_CheckBox_FontAutoRefresh.Unchecked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Unchecked);
         }
 
         void m_CheckBox_FontAutoRefresh_Unchecked(object sender, RoutedEventArgs e)
@@ -421,6 +421,44 @@ namespace Eimu.Debugger
             for (int i = 0; i < m_Machine.SystemMemory.Size; i++)
             {
                 m_Machine.SystemMemory[i] = (byte)rnd.Next(0, 255);
+            }
+        }
+
+        private void m_Button_RegsSetPC_Click(object sender, RoutedEventArgs e)
+        {
+            m_Machine.ProcessorCore.PC = ushort.Parse(m_TextBox_RegsAddressBox.Text, System.Globalization.NumberStyles.HexNumber);
+        }
+
+        private void m_TextBox_RegsAddressBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string val = m_TextBox_RegsAddressBox.Text;
+            Color normal = Color.FromRgb(255, 255, 255);
+            Color bad = Color.FromRgb(255, 100, 100);
+
+            try
+            {
+                ushort address = ushort.Parse(val, System.Globalization.NumberStyles.HexNumber);
+
+                if (address < 0 || address > (m_Machine.SystemMemory.Size - 1))
+                {
+                    m_TextBox_RegsAddressBox.Background = new SolidColorBrush(bad);
+                    m_Button_RegsSetPC.IsEnabled = false;
+                }
+                else
+                {
+                    m_TextBox_RegsAddressBox.Background = new SolidColorBrush(normal);
+                    m_Button_RegsSetPC.IsEnabled = true;
+                }
+            }
+            catch (FormatException)
+            {
+                m_TextBox_RegsAddressBox.Background = new SolidColorBrush(bad);
+                m_Button_RegsSetPC.IsEnabled = false;
+            }
+            catch (OverflowException)
+            {
+                m_TextBox_SprCurrentAddress.Background = new SolidColorBrush(bad);
+                m_Button_RegsSetPC.IsEnabled = false;
             }
         }
 

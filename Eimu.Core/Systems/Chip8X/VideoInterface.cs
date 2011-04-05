@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Eimu.Core.Systems.Chip8X
 {
@@ -22,10 +23,15 @@ namespace Eimu.Core.Systems.Chip8X
         private bool m_DisableWrappingX;
         private bool m_DisableWrappingY;
         private bool m_EnableAntiFlickerHack;
-        private RenderCallback m_RenderCallback;
+        public event RenderCallback Render;
+        private Timer m_RenderInterrupt;
+        EventWaitHandle m_RenderWait;
 
         public void Initialize(ChipMode mode)
         {
+            m_RenderWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_RenderInterrupt = new Timer(new TimerCallback(OnRefresh), this, 0, 1);
+
             switch (mode)
             {
                 case ChipMode.SuperChip: m_ResX = SuperResolutionX; m_ResY = SuperResolutionY; break;
@@ -47,7 +53,7 @@ namespace Eimu.Core.Systems.Chip8X
         public void ClearPixels()
         {
             Array.Clear(m_Buffer, 0, m_Buffer.Length);
-            OnRefresh();
+            //OnRefresh();
         }
 
         public bool SetPixel(int x, int y)
@@ -62,13 +68,8 @@ namespace Eimu.Core.Systems.Chip8X
 
             m_Buffer[GetBufferPosition(x, y)] = on;
 
-            if (x < 1 && y < 1 && on)
-            {
-                Console.WriteLine("??");
-            }
-
-            if (!(!on && m_EnableAntiFlickerHack))
-                OnRefresh();
+            //if (!(!on && m_EnableAntiFlickerHack))
+            //    OnRefresh();
 
             return !on;
 
@@ -76,17 +77,20 @@ namespace Eimu.Core.Systems.Chip8X
             // src 1 ^ 1 = 0 : Make Black, Set Collision
         }
 
-        public void SetRenderCallback(RenderCallback callback)
+        public void RenderWait()
         {
-            m_RenderCallback = callback;
+             //m_RenderWait.WaitOne();
+            Thread.Sleep(8);
         }
 
-        private void OnRefresh()
+        private void OnRefresh(object state)
         {
-            if (m_RenderCallback != null)
+            if (Render != null)
             {
-                m_RenderCallback.DynamicInvoke(new object[] { this });
+                Render(this);
             }
+
+            m_RenderWait.Set();
         }
 
         public bool GetPixel(int x, int y)
@@ -103,8 +107,6 @@ namespace Eimu.Core.Systems.Chip8X
                 case 3: ScrollPixelsRight(); break;
                 default: break;
             }
-
-            OnRefresh();
         }
 
         private void ScrollPixelsDown(int n)
@@ -190,8 +192,6 @@ namespace Eimu.Core.Systems.Chip8X
             {
                 m_Buffer[offset++] = (((value >> i) & 0x1) == 1 ? true : false);
             }
-
-            OnRefresh();
         }
 
         public bool[] Pixels

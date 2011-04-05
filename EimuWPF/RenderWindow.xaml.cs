@@ -34,6 +34,15 @@ namespace Eimu
             InitializeComponent();
         }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            m_Debugger.Close();
+            m_Machine.AttachDebugger(null);
+            m_Machine.Stop();
+            renderer.Shutdown();
+            base.OnClosing(e);
+        }
+
         void machine_MachineEnded(object sender, EventArgs e)
         {
             this.Close();
@@ -77,7 +86,7 @@ namespace Eimu
             renderer.Initialize();
             renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.Red, Chip8XConfig.BackColor.Green, Chip8XConfig.BackColor.Blue);
             renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.Red, Chip8XConfig.ForeColor.Green, Chip8XConfig.ForeColor.Blue);
-            m_Machine.VideoInterface.SetRenderCallback(new RenderCallback(renderer.Update));
+            m_Machine.VideoInterface.Render += new RenderCallback(renderer.Update);
             m_Debugger = new SC8DebuggerWindow();
             m_Machine.AttachDebugger(m_Debugger);
             m_Machine.Run();
@@ -130,7 +139,8 @@ namespace Eimu
 
         private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)
         {
-            m_Debugger.Show();
+            if (m_Debugger != null)
+                m_Debugger.Show();
         }
     }
 }

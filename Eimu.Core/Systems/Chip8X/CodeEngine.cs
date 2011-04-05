@@ -202,7 +202,7 @@ namespace Eimu.Core.Systems.Chip8X
                 }
             }
 
-            Thread.Sleep(8);
+            VideoInterface.RenderWait();
         }
 
         protected void OnScreenClear()

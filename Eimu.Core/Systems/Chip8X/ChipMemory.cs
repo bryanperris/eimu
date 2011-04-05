@@ -8,7 +8,7 @@ namespace Eimu.Core.Systems.Chip8X
     public sealed class ChipMemory : Memory
     {
         public const int MEMORY_FONT_SIZE = 512;
-        public const int MEMORY_CHIP_SIZE = 3584;
+        public const int MEMORY_CHIP_SIZE = 4096;
         public const int MEMORY_STACK_SIZE =   48;
         public const int MEMORY_WORKAREA_SIZE = 255;
         public const int MEMORY_VIDEO_SIZE = 6144;
@@ -16,10 +16,9 @@ namespace Eimu.Core.Systems.Chip8X
         private int m_ChipOffset;
         private int m_VideoOffset;
 
-        private byte[] m_Buffer;
-
         public ChipMemory() : base()
         {
+            
         }
 
         public int FontPointer
