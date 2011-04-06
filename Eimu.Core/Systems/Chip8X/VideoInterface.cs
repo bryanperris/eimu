@@ -27,6 +27,11 @@ namespace Eimu.Core.Systems.Chip8X
         private Timer m_RenderInterrupt;
         EventWaitHandle m_RenderWait;
 
+        public VideoInterface()
+        {
+            m_Buffer = new bool[(SuperResolutionX + 1) * (SuperResolutionY + 1)];
+        }
+
         public void Initialize(ChipMode mode)
         {
             m_RenderWait = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -39,8 +44,6 @@ namespace Eimu.Core.Systems.Chip8X
                 case ChipMode.Chip8:
                 default: m_ResX = StandardResolutionX; m_ResY = StandardResolutionY; break;
             }
-
-            m_Buffer = new bool[(m_ResX + 1) * (m_ResY + 1)];
         }
 
         public void Shutdown()
@@ -169,29 +172,6 @@ namespace Eimu.Core.Systems.Chip8X
                 return (val);
             else
                 return 0;
-        }
-
-        public byte PeekPixels(int offset)
-        {
-            byte pixelRow = 0;
-
-            for (int i = 0; i < 8; i++)
-            {
-                if (m_Buffer[offset++])
-                    pixelRow |= 1;
-
-                pixelRow <<= 1;
-            }
-
-            return pixelRow;
-        }
-
-        public void PokePixels(int offset, byte value)
-        {
-            for (int i = 7; i >= 0; i--)
-            {
-                m_Buffer[offset++] = (((value >> i) & 0x1) == 1 ? true : false);
-            }
         }
 
         public bool[] Pixels

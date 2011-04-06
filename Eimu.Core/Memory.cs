@@ -32,10 +32,11 @@ namespace Eimu.Core
         private MemoryPage m_CurrentPage;
         private int m_CurrentAddressOffset = 0;
         private int m_CurrentAddressBound = 0;
-        private bool m_SmartAccess = false;
+        private VirtualMachine m_ParentMachine;
 
-        public Memory()
+        public Memory(VirtualMachine machine)
         {
+            m_ParentMachine = machine;
             m_MemBound = 0;
             m_CurrentAddressOffset = 0;
             m_CurrentAddressBound = 0;
@@ -48,12 +49,12 @@ namespace Eimu.Core
 
         public virtual void WriteByte(int address, byte value)
         {
-            FindPage(address).WriteByte(address, value);
+            FindPage(address).WriteByte(address - m_CurrentAddressOffset, value);
         }
 
         public virtual byte ReadByte(int address)
         {
-            return FindPage(address).ReadByte(address);
+            return FindPage(address).ReadByte(address - m_CurrentAddressOffset);
         }
 
         public void Reset()
@@ -81,7 +82,7 @@ namespace Eimu.Core
             }
         }
 
-        private MemoryPage FindPage(int address)
+        public MemoryPage FindPage(int address)
         {
             // If the address isn't out of bounds, use the same page
             if (address >= m_CurrentAddressOffset && address < m_CurrentAddressBound)
@@ -125,6 +126,11 @@ namespace Eimu.Core
         protected void ClearPages()
         {
             m_Pages.Clear();
+        }
+
+        public VirtualMachine ParentMachine
+        {
+            get { return this.m_ParentMachine; }
         }
     }
 }

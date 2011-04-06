@@ -46,7 +46,7 @@ namespace Eimu.Core.Systems.Chip8X
         public CodeEngine(Chip8XMachine currentMachine)
         {
             m_CurrentMachine = currentMachine;
-            m_Memory = new ChipMemory();
+            m_Memory = new ChipMemory(currentMachine);
         }
 
         public void Initialize(Chip8XMachine machine)
@@ -92,8 +92,8 @@ namespace Eimu.Core.Systems.Chip8X
                 case 3: return m_RoutineAddress;
                 //case 4: return 0; // Commonly used as the VIP's Program Counter
                 case 5: return (ushort)m_PC;
-                //case 6: // TOOD: Pointer to VX memory
-                //case 7: // TODO: Pointer to VY memory
+                case 6: return (ushort)m_Memory.WorkAreaPointer; // TOOD: Pointer to VX memory
+                case 7: return (ushort)m_Memory.WorkAreaPointer; // TODO: Pointer to VY memory
                 //case 8: // TODO: Sound Timer Value [hi], Timer Tone [low]
                 //case 9: return m_LastRand; // Random number (+1 in INTERRUPT routine)
                 case 10: return m_IReg;
@@ -166,14 +166,19 @@ namespace Eimu.Core.Systems.Chip8X
 
             if (inst.N > 0)
             {
+                // Loop through the sprite bytes by N
                 for (byte i = 0; i < inst.N; i++)
                 {
+                    // Get the next byte of the sprite data
                     read = Memory.ReadByte((int)(m_IReg + i));
 
+                    // Sprite is always 8 in width, loop through each bit
                     for (byte j = 0; j < 8; j++)
                     {
+                        // If we hit an on bit then Set a pixel at X, Y
                         if ((read & (0x80 >> j)) != 0)
                         {
+                            // If we colliude, set VF
                             if (VideoInterface.SetPixel((x + j), (y + i)))
                             {
                                 m_VRegs[0xF] = 1;

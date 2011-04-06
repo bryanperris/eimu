@@ -14,11 +14,11 @@ namespace Eimu.Core.Systems.Chip8X
         public const int MEMORY_VIDEO_SIZE = 6144;
         private int m_FontOffset;
         private int m_ChipOffset;
+        private int m_WorkAreaOffset;
         private int m_VideoOffset;
 
-        public ChipMemory() : base()
+        public ChipMemory(Chip8XMachine machine) : base((VirtualMachine)machine)
         {
-            
         }
 
         public int FontPointer
@@ -36,14 +36,24 @@ namespace Eimu.Core.Systems.Chip8X
             get { return m_VideoOffset; }
         }
 
+        public int WorkAreaPointer
+        {
+            get { return m_WorkAreaOffset; }
+        }
+
         protected override void AllocatePages()
         {
             m_FontOffset = Size;
             AddPage(new MemoryPage(MEMORY_FONT_SIZE));
+
             m_ChipOffset = Size;
             AddPage(new MemoryPage(MEMORY_CHIP_SIZE));
+
             m_VideoOffset = Size;
-            AddPage(new MemoryPage(MEMORY_VIDEO_SIZE));
+            AddPage(new WorkareaPage( ((Chip8XMachine)ParentMachine).ProcessorCore ));
+
+            m_VideoOffset = Size;
+            AddPage(new VideoPage( ((Chip8XMachine)ParentMachine).VideoInterface ));
         }
     }
 }

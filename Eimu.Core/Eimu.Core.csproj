@@ -63,7 +63,6 @@
     <Compile Include="Systems\Chip8X\ChipMemory.cs" />
     <Compile Include="Systems\Chip8X\ChipMode.cs" />
     <Compile Include="Systems\Chip8X\ChipResources.cs" />
-    <Compile Include="Systems\Chip8X\VideoFrameUpdate.cs" />
     <Compile Include="Systems\Chip16\C16Color.cs" />
     <Compile Include="Systems\Chip16\Chip16Machine.cs" />
     <Compile Include="Systems\CDP1802\C1802Instruction.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Systems\Chip8X\HexKey.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Systems\Chip8X\AudioDevice.cs" />
-    <Compile Include="Systems\Chip8X\Renderer.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
@@ -86,6 +84,8 @@
     <Compile Include="Systems\CDP1802\ILEmitter1802.cs" />
     <Compile Include="Systems\CDP1802\Opcodes.cs" />
     <Compile Include="Systems\CDP1802\CDP1802Mode.cs" />
+    <Compile Include="Systems\Chip8X\VideoPage.cs" />
+    <Compile Include="Systems\Chip8X\WorkareaPage.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
     <Compile Include="Systems\Chip8X\ChipInstruction.cs" />

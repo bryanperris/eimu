@@ -192,12 +192,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         public void MemoryWrite(CodeEngine engine, ushort address, byte value)
         {
-            if (address >= 0x7F00) // DMA into video memory
-            {
-                Console.WriteLine("1802 Video Poke " + address.ToString("x"));
-                engine.VideoInterface.PokePixels(address - 0x7F00, value);
-            }
-            else if (address >= 0 && address < m_CodeEngine.Memory.Size)
+            if (address <= m_CodeEngine.Memory.Size)
             {
                 engine.Memory[address] = value;
             }
@@ -209,12 +204,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         public byte MemoryRead(CodeEngine engine, ushort address)
         {
-            if (address >= 0x7F00) // DMA into video memory
-            {
-                Console.WriteLine("1802 Video Peek " + address.ToString("x"));
-                return engine.VideoInterface.PeekPixels(address - 0x7F00);
-            }
-            else if (address >= 0 && address < m_CodeEngine.Memory.Size)
+            if (address <= m_CodeEngine.Memory.Size)
             {
                 return engine.Memory[address];
             }
