@@ -86,18 +86,18 @@ namespace Eimu.Core.Systems.Chip8X
         {
             switch (index)
             {
-                case 0: return m_1802Regs[0]; // DMA pointer
-                //case 1: TODO: Interrupt VIP PC
-                //case 2: pointer to stack memory, TOOD: Handle it
+                case 0: return m_1802Regs[0]; // DMA pointer - let the game picks its DMA pointer, then we try to handle it
+                case 1: return 0; // the PC of the INTERRUPT, just return 0
+                //case 2: TODO: Pointer to fake stack memory page
                 case 3: return m_RoutineAddress;
-                //case 4: return 0; // Commonly used as the VIP's Program Counter
+                case 4: return 0; // A PC register, assuming it must point after the syscall (probably only read with SEP, which is what we want)
                 case 5: return (ushort)m_PC;
-                case 6: return (ushort)m_Memory.WorkAreaPointer; // TOOD: Pointer to VX memory
-                case 7: return (ushort)m_Memory.WorkAreaPointer; // TODO: Pointer to VY memory
-                //case 8: // TODO: Sound Timer Value [hi], Timer Tone [low]
-                //case 9: return m_LastRand; // Random number (+1 in INTERRUPT routine)
+                case 6: return (ushort)m_Memory.WorkAreaPointer; // Still need to understand these pointers more.
+                case 7: return (ushort)m_Memory.WorkAreaPointer;
+                case 8: return (ushort)((m_DT << 8) & m_ST); // Timer data
+                case 9: return m_LastRand; // Return last used random num, probably doesn't matter
                 case 10: return m_IReg;
-                case 11: return (ushort)Memory.VideoPointer; // pointer to graphics memory, using a fake address
+                case 11: return (ushort)Memory.VideoPointer; // pointer to the graphics memory page
                 // RC, RD, RE, RF are used as general regs
                 default: return m_1802Regs[index];
             }

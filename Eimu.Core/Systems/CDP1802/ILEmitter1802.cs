@@ -74,10 +74,23 @@ namespace Eimu.Core.Systems.CDP1802
 
                     switch (opcode)
                     {
+                        // All called routines must end with SEP pointing to R4!
+                        case C1802OpCodes.SEP:
+                            {
+                                if (inst.Low == 4)
+                                {
+                                    end = true; break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("1802 Emitter: Warning: SEP in code doesn't point to r4, value: " + inst.Low.ToString("X1"));
+                                    break;
+                                }
+                            } 
+
                         case C1802OpCodes.GLO: Emit_GLO(inst); break;
                         case C1802OpCodes.SEX: Emit_SEX(inst); break;
                         case C1802OpCodes.STR: Emit_STR(inst); break;
-                        case C1802OpCodes.SEP: end = true; break;
                         case C1802OpCodes.LDA: Emit_LDA(inst); break;
                         case C1802OpCodes.Sub15: EmitSubOpcodes15(inst); break;
                         case C1802OpCodes.Sub0: EmitSubOpcodes0(inst); break;
@@ -236,6 +249,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitGeneralRegisterRead(byte selectedR)
         {
+            Console.Write(" : (read) R" + selectedR.ToString("X1"));
             EmitCoreStateObject();
             EmitByteConstant(selectedR);
             EmitGeneralRegisterReadFunc();
@@ -243,6 +257,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitGeneralRegisterWrite(byte selectedR, ushort value)
         {
+            Console.Write(" : (write) R" + selectedR.ToString("X1"));
             EmitCoreStateObject();
             EmitByteConstant(selectedR);
             EmitUshortConstant(value);
@@ -261,6 +276,8 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitRegisterWrite(SelectedRegister reg)
         {
+            Console.Write(" : (write) R-" + reg.ToString());
+
             switch (reg)
             {
                 case SelectedRegister.D: ILGenerator.Emit(OpCodes.Stloc_0); break;
@@ -274,6 +291,8 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitRegisterRead(SelectedRegister reg)
         {
+            Console.Write(" : (read) R-" + reg.ToString());
+
             switch (reg)
             {
                 case SelectedRegister.D: ILGenerator.Emit(OpCodes.Ldloc_0); break;
