@@ -21,6 +21,8 @@
                     <my:MemoryViewer Height="221.04" HorizontalAlignment="Left" Margin="8,8,0,0" x:Name="memoryViewer1" VerticalAlignment="Top" Width="105" Background="White" d:LayoutOverrides="HorizontalAlignment" />
                     <Button x:Name="m_Button_MemDumpSection" Content="Dump Section" Margin="117,33.836,93,0" VerticalAlignment="Top"/>
                     <Button Content="Random Fill" Height="23" HorizontalAlignment="Left" Margin="117,62,0,0" Name="m_Button_MemRandFill" VerticalAlignment="Top" Width="104" Click="m_Button_MemRandFill_Click" />
+                    <Label Content="VidPointer" Height="28" HorizontalAlignment="Left" Margin="117,91,0,0" Name="m_Label_MemVideoPointer" VerticalAlignment="Top" Width="190" />
+                    <Button Content="Refresh" Height="23" HorizontalAlignment="Left" Margin="117,206,0,0" Name="m_Button_MemRefresh" VerticalAlignment="Top" Width="75" Click="m_Button_MemRefresh_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="Sprites">
@@ -29,7 +31,7 @@
             		<Button x:Name="m_Buttion_SprGotoI" Content="I" Margin="87.877,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20"/>
             		<GroupBox Header="Sprite Size" HorizontalAlignment="Left" Margin="203.88,10,0,8" Width="103.12">
             			<Grid Margin="0,0.02,-4,-5.02">
-            				<Slider x:Name="m_Slider_SprExtSize" Margin="-37.125,54.891,0,18.117" RenderTransformOrigin="0.125,-0.826" Maximum="16" Value="5" IsEnabled="False" Orientation="Vertical" HorizontalAlignment="Left" Width="25.178" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
+            				<Slider x:Name="m_Slider_SprExtSize" Margin="-37.285,73.77,0,18.118" RenderTransformOrigin="0.125,-0.826" Maximum="16" Value="5" IsEnabled="False" Orientation="Vertical" HorizontalAlignment="Left" Width="25.178" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
             					<Slider.RenderTransform>
             						<TransformGroup>
             							<ScaleTransform/>
@@ -41,8 +43,9 @@
             				</Slider>
             				<RadioButton x:Name="m_RadioButton_SprSize5" Content="5x8" Margin="8,8,8,0" VerticalAlignment="Top" IsChecked="True"/>
             				<RadioButton x:Name="m_RadioButton_SprSize16" Content="16x16" Margin="8,27.96,10.12,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
-            				<RadioButton x:Name="m_RadioButton_SprSizeCustom" Content="8xY" Margin="8,47.92,10.12,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
-            				<Label x:Name="m_Label_SprCusSize" Content="6" Margin="47.006,0,8,58.04" VerticalAlignment="Bottom"/>
+            				<RadioButton x:Name="m_RadioButton_SprSizeCustom" Content="8xY" Margin="8,67.88,10.12,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
+            				<Label x:Name="m_Label_SprCusSize" Content="6" Margin="47.006,0,8,47.04" VerticalAlignment="Bottom"/>
+            				<RadioButton x:Name="m_RadioButton_SprSizeScreen" Content="Screen Size" Margin="8,47.92,10.12,0" VerticalAlignment="Top" d:LayoutOverrides="Width" RenderTransformOrigin="0.625,2.511"/>
             			</Grid>
             		</GroupBox>
             		<Canvas x:Name="m_Canvas_SprSurface" Margin="8,33.96,115.12,8" Background="Black"/>
@@ -78,6 +81,13 @@
             		<Canvas x:Name="m_Canvas_FontBox16" Margin="0,0,44,10.04" HorizontalAlignment="Right" Width="50" Background="Black" Height="50" VerticalAlignment="Bottom"/>
             		<Button x:Name="m_Button_FontDraw" Content="Draw" Margin="0,8,8,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
             		<CheckBox x:Name="m_CheckBox_FontAutoRefresh" Content="Auto Refresh" Margin="0,33.96,8,0" VerticalAlignment="Top" RenderTransformOrigin="0.047,-0.058" HorizontalAlignment="Right"/>
+            	</Grid>
+            </TabItem>
+            <TabItem Header="Misc">
+            	<Grid Background="#FFE5E5E5">
+            		<Button x:Name="m_Button_MiscForce1802Rec" Content="Force 1802 Rec On" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="117"/>
+            		<Button x:Name="m_Button_MiscScreenXor" Content="XOR Screen" HorizontalAlignment="Left" Margin="8,33.96,0,0" VerticalAlignment="Top" Width="117"/>
+            		<Button x:Name="m_Button_MiscForceCPUStart" Content="Force CPU Start" HorizontalAlignment="Left" Margin="8,59.92,0,0" VerticalAlignment="Top" Width="117"/>
             	</Grid>
             </TabItem>
         </TabControl>

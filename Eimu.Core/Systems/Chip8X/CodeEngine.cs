@@ -87,13 +87,14 @@ namespace Eimu.Core.Systems.Chip8X
             switch (index)
             {
                 case 0: return m_1802Regs[0]; // DMA pointer - let the game picks its DMA pointer, then we try to handle it
-                case 1: return 0; // the PC of the INTERRUPT, just return 0
+                case 1: return m_1802Regs[1]; // the PC of the INTERRUPT, just return w/e assigned value
                 //case 2: TODO: Pointer to fake stack memory page
                 case 3: return m_RoutineAddress;
-                case 4: return 0; // A PC register, assuming it must point after the syscall (probably only read with SEP, which is what we want)
+                case 4: return m_1802Regs[4]; // A PC register, assuming it must point after the syscall (probably only read with SEP, which is what we want)
                 case 5: return (ushort)m_PC;
-                case 6: return (ushort)m_Memory.WorkAreaPointer; // Still need to understand these pointers more.
-                case 7: return (ushort)m_Memory.WorkAreaPointer;
+                // next 2 are pixel address pointers (X, Y)
+                case 6: return (ushort)(m_Memory.VideoPointer + (m_1802Regs[6] & 0x00FF));
+                case 7: return (ushort)(m_Memory.VideoPointer + (m_1802Regs[7] & 0x00FF));
                 case 8: return (ushort)((m_DT << 8) & m_ST); // Timer data
                 case 9: return m_LastRand; // Return last used random num, probably doesn't matter
                 case 10: return m_IReg;
@@ -107,16 +108,22 @@ namespace Eimu.Core.Systems.Chip8X
         {
             switch (index)
             {
-                case 0: m_1802Regs[0] = value; break;
+                case 0: m_1802Regs[0] = value; break; // DMA pointer
+                case 1: m_1802Regs[1] = value; break; // Interrupt PC
+                //case 2: TODO: Set a value in the stack directly
                 case 3: m_RoutineAddress = value; break;
-                //case 4: m_1802Regs[4] = value; break;
+                case 4: m_1802Regs[4] = value; break; // Set this reigser to w/e
                 case 5: m_PC = (int)value; break;
+                case 6: m_1802Regs[6] = value; break; // Set X pointer
+                case 7: m_1802Regs[6] = value; break; // Set Y pointer
+                case 8: OnSetDelayTimer((byte)((value & 0xFF00) >> 8)); OnSetSoundTimer((byte)(value & 0x00FF)); break; // Set timer events
+                case 9: m_Rand.Next(); break; // Randomize our random, ignore the passed in value since its random anyways
                 case 10: m_IReg = value; break;
+                case 11: break; // Don't let game attempt to change the video pointer
 
                 default:
                     {
                         m_1802Regs[index] = value; break;
-                        //Console.WriteLine("Emitter: Unknown reg write! (" + num.ToString("x") + ")"); break;
                     }
             }
         }

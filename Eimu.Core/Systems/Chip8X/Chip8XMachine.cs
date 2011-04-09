@@ -131,6 +131,16 @@ namespace Eimu.Core.Systems.Chip8X
             }
         }
 
+        /// <summary>
+        /// Dangerous to call manually outside of class
+        /// </summary>
+        public void StartCPUThread()
+        {
+            m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
+            m_ThreadCPU.IsBackground = true;
+            m_ThreadCPU.Start();
+        }
+
         protected override bool Boot()
         {
             Console.WriteLine("Booting...");
@@ -151,9 +161,7 @@ namespace Eimu.Core.Systems.Chip8X
                 return false;
             }
 
-            m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
-            m_ThreadCPU.IsBackground = true;
-            m_ThreadCPU.Start();
+            StartCPUThread();
             Console.WriteLine("Running...");
 
             return true;

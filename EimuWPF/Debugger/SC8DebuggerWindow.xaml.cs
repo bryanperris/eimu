@@ -44,11 +44,45 @@ namespace Eimu.Debugger
             m_RadioButton_SprSize5.Checked += new RoutedEventHandler(m_RadioButton_SprSize5_Checked);
             m_RadioButton_SprSize16.Checked += new RoutedEventHandler(m_RadioButton_SprSize16_Checked);
             m_RadioButton_SprSizeCustom.Checked += new RoutedEventHandler(m_RadioButton_SprSizeCustom_Checked);
+            m_RadioButton_SprSizeScreen.Checked += new RoutedEventHandler(m_RadioButton_SprSizeScreen_Checked);
             m_Slider_SprExtSize.ValueChanged += new RoutedPropertyChangedEventHandler<double>(m_Slider_SprExtSize_ValueChanged);
             m_Button_MemDumpSection.Click += new RoutedEventHandler(m_Button_MemDumpSection_Click);
             m_Button_FontDraw.Click += new RoutedEventHandler(m_Button_FontDraw_Click);
             m_CheckBox_FontAutoRefresh.Checked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Checked);
             m_CheckBox_FontAutoRefresh.Unchecked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Unchecked);
+            m_Button_MiscForce1802Rec.Click += new RoutedEventHandler(m_Button_MiscForce1802Rec_Click);
+            m_Button_MiscScreenXor.Click += new RoutedEventHandler(m_Button_MiscScreenXor_Click);
+            m_Button_MiscForceCPUStart.Click += new RoutedEventHandler(m_Button_MiscForceCPUStart_Click);
+        }
+
+        void m_Button_MiscForceCPUStart_Click(object sender, RoutedEventArgs e)
+        {
+            m_Machine.ProcessorCore.PC = 0x200;
+            m_Machine.StartCPUThread();
+        }
+
+        void m_Button_MiscScreenXor_Click(object sender, RoutedEventArgs e)
+        {
+            lock (m_Machine.VideoInterface)
+            {
+                for (int y = 0; y < m_Machine.VideoInterface.CurrentResolutionY; y++)
+                {
+                    for (int x = 0; x < m_Machine.VideoInterface.CurrentResolutionX; x++)
+                    {
+                        m_Machine.VideoInterface.SetPixel(x, y);
+                    }
+                }
+            }
+        }
+
+        void m_Button_MiscForce1802Rec_Click(object sender, RoutedEventArgs e)
+        {
+            m_Machine.IsHybridDynarecEnabled = true;
+        }
+
+        void m_RadioButton_SprSizeScreen_Checked(object sender, RoutedEventArgs e)
+        {
+            m_Slider_SprExtSize.IsEnabled = false;
         }
 
         void m_CheckBox_FontAutoRefresh_Unchecked(object sender, RoutedEventArgs e)
@@ -111,6 +145,12 @@ namespace Eimu.Debugger
         void m_Button_SprRender_Click(object sender, RoutedEventArgs e)
         {
             ushort address = ushort.Parse(m_TextBox_SprCurrentAddress.Text, NumberStyles.HexNumber);
+
+            if (m_RadioButton_SprSizeScreen.IsChecked == true)
+            {
+                DrawSpriteToCanvas(32, 64, m_Canvas_SprSurface, address);
+                return;
+            }
 
             if (m_RadioButton_SprSize16.IsChecked == false)
             {
@@ -367,6 +407,7 @@ namespace Eimu.Debugger
         private void UpdateMemory()
         {
             memoryViewer1.UpdateFields();
+            m_Label_MemVideoPointer.Content = "Video Offset: " + ((ChipMemory)m_Machine.SystemMemory).VideoPointer.ToString("X2");
         }
 
         #region IDebugger Members
@@ -460,6 +501,11 @@ namespace Eimu.Debugger
                 m_TextBox_SprCurrentAddress.Background = new SolidColorBrush(bad);
                 m_Button_RegsSetPC.IsEnabled = false;
             }
+        }
+
+        private void m_Button_MemRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateMemory();
         }
 
     }

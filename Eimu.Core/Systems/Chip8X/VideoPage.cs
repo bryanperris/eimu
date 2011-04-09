@@ -25,6 +25,8 @@ namespace Eimu.Core.Systems.Chip8X
             int index = address * 8;
             byte value = 0;
 
+            if ((index + 7) > m_VideoInterface.Pixels.Length || index > m_VideoInterface.Pixels.Length) return 0;
+
             for (int i = index; i < (index + 7); i++)
             {
                 value <<= 1;
@@ -40,6 +42,8 @@ namespace Eimu.Core.Systems.Chip8X
         public override void WriteByte(int address, byte value)
         {
             int index = address * 8;
+
+            if ((index + 7) > m_VideoInterface.Pixels.Length || index > m_VideoInterface.Pixels.Length) return;
 
             for (int i = index; i < (index + 7); i++)
             {

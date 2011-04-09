@@ -83,7 +83,7 @@ namespace Eimu.Core.Systems.CDP1802
                                 }
                                 else
                                 {
-                                    Console.WriteLine("1802 Emitter: Warning: SEP in code doesn't point to r4, value: " + inst.Low.ToString("X1"));
+                                    Console.WriteLine(" : Warning: code doesn't point to r4, value: " + inst.Low.ToString("X1"));
                                     break;
                                 }
                             } 

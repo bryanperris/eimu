@@ -49,12 +49,18 @@ namespace Eimu.Core
 
         public virtual void WriteByte(int address, byte value)
         {
-            FindPage(address).WriteByte(address - m_CurrentAddressOffset, value);
+            lock (this)
+            {
+                FindPage(address).WriteByte(address - m_CurrentAddressOffset, value);
+            }
         }
 
         public virtual byte ReadByte(int address)
         {
-            return FindPage(address).ReadByte(address - m_CurrentAddressOffset);
+            lock (this)
+            {
+                return FindPage(address).ReadByte(address - m_CurrentAddressOffset);
+            }
         }
 
         public void Reset()
