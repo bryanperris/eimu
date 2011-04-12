@@ -77,8 +77,8 @@ namespace Eimu
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             m_FormHost.Focus();
-            m_WinHelper = new WindowInteropHelper(this);
             m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
+            m_WinHelper = new WindowInteropHelper(this);
 
             renderer = new OGLDevice();
             renderer.SetPanelHandle(renderPanel.Handle);
@@ -86,7 +86,12 @@ namespace Eimu
             renderer.Initialize();
             renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.Red, Chip8XConfig.BackColor.Green, Chip8XConfig.BackColor.Blue);
             renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.Red, Chip8XConfig.ForeColor.Green, Chip8XConfig.ForeColor.Blue);
-            m_Machine.VideoInterface.Render += new RenderCallback(renderer.Update);
+            
+            if (!Chip8XConfig.disableGraphics)
+            {
+                m_Machine.VideoInterface.Render += new RenderCallback(renderer.Update);
+            }
+            
             m_Debugger = new SC8DebuggerWindow();
             m_Machine.AttachDebugger(m_Debugger);
             m_Machine.Run();

@@ -22,17 +22,17 @@ namespace Eimu.Core.Systems.Chip8X
 
         public override byte ReadByte(int address)
         {
+            // Get the index of byte equalivent spot
             int index = address * 8;
+
             byte value = 0;
 
-            if ((index + 7) > m_VideoInterface.Pixels.Length || index > m_VideoInterface.Pixels.Length) return 0;
-
-            for (int i = index; i < (index + 7); i++)
+            for (int i = 0; i < 8; i++)
             {
                 value <<= 1;
 
-                if (m_VideoInterface.Pixels[i])
-                    value |= 1;
+                if (m_VideoInterface.Pixels[index + i])
+                    value ^= 1;
 
             }
 
@@ -41,16 +41,12 @@ namespace Eimu.Core.Systems.Chip8X
 
         public override void WriteByte(int address, byte value)
         {
+            // Get the index of byte equalivent spot
             int index = address * 8;
 
-            if ((index + 7) > m_VideoInterface.Pixels.Length || index > m_VideoInterface.Pixels.Length) return;
-
-            for (int i = index; i < (index + 7); i++)
-            {
-                m_VideoInterface.Pixels[i] = ((value << (i - index)) & 0x80) == 1 ? true : false;
-            }
-
-            m_VideoInterface.RenderWait();
+            // Loop backwards writting the bits (do XOR too?)
+            for (int i = 0; i < 8; i++)
+                m_VideoInterface.Pixels[index + i] = ((value << i) & 0x80) == 0 ? false : true;
         }
 
         public override int Size

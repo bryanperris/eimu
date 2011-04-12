@@ -21,6 +21,7 @@ namespace Eimu.Core.Systems.Chip8X
         private EventWaitHandle m_TimerWait;
         private bool m_DisableTimers;
         private Chip8XMachine m_CurrentMachine;
+        private bool m_AntiFlickerHack = false;
 
         #region CPU State Fields
 
@@ -214,6 +215,9 @@ namespace Eimu.Core.Systems.Chip8X
                 }
             }
 
+            if (m_VRegs[0xF] == 1 && m_AntiFlickerHack)
+                return;
+
             VideoInterface.RenderWait();
         }
 
@@ -367,6 +371,12 @@ namespace Eimu.Core.Systems.Chip8X
         public Chip8XMachine ParentMachine
         {
             get { return m_CurrentMachine; }
+        }
+
+        public bool AntiFlickerHack
+        {
+            get { return m_AntiFlickerHack; }
+            set { m_AntiFlickerHack = value; }
         }
 
         #endregion

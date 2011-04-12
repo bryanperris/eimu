@@ -22,7 +22,6 @@ namespace Eimu.Core.Systems.Chip8X
         private int m_ResY;
         private bool m_DisableWrappingX;
         private bool m_DisableWrappingY;
-        private bool m_EnableAntiFlickerHack;
         public event RenderCallback Render;
         private Timer m_RenderInterrupt;
         EventWaitHandle m_RenderWait;
@@ -70,9 +69,6 @@ namespace Eimu.Core.Systems.Chip8X
             bool on = GetPixel(x, y) ^ true;
 
             m_Buffer[GetBufferPosition(x, y)] = on;
-
-            //if (!(!on && m_EnableAntiFlickerHack))
-            //    OnRefresh();
 
             return !on;
 
@@ -189,12 +185,6 @@ namespace Eimu.Core.Systems.Chip8X
         {
             get { return this.m_DisableWrappingY; }
             set { this.m_DisableWrappingY = value; }
-        }
-
-        public bool EnableAntiFlickerHack
-        {
-            get { return this.m_EnableAntiFlickerHack; }
-            set { this.m_EnableAntiFlickerHack = value; }
         }
 
         public int CurrentResolutionX

@@ -21,8 +21,8 @@
                     <my:MemoryViewer Height="221.04" HorizontalAlignment="Left" Margin="8,8,0,0" x:Name="memoryViewer1" VerticalAlignment="Top" Width="105" Background="White" d:LayoutOverrides="HorizontalAlignment" />
                     <Button x:Name="m_Button_MemDumpSection" Content="Dump Section" Margin="117,33.836,93,0" VerticalAlignment="Top"/>
                     <Button Content="Random Fill" Height="23" HorizontalAlignment="Left" Margin="117,62,0,0" Name="m_Button_MemRandFill" VerticalAlignment="Top" Width="104" Click="m_Button_MemRandFill_Click" />
-                    <Label Content="VidPointer" Height="28" HorizontalAlignment="Left" Margin="117,91,0,0" Name="m_Label_MemVideoPointer" VerticalAlignment="Top" Width="190" />
                     <Button Content="Refresh" Height="23" HorizontalAlignment="Left" Margin="117,206,0,0" Name="m_Button_MemRefresh" VerticalAlignment="Top" Width="75" Click="m_Button_MemRefresh_Click" />
+                    <Button x:Name="m_Button_MemGotoVideoPointer" Content="Video Pointer" Margin="117,89,93,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Sprites">
@@ -88,6 +88,7 @@
             		<Button x:Name="m_Button_MiscForce1802Rec" Content="Force 1802 Rec On" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="117"/>
             		<Button x:Name="m_Button_MiscScreenXor" Content="XOR Screen" HorizontalAlignment="Left" Margin="8,33.96,0,0" VerticalAlignment="Top" Width="117"/>
             		<Button x:Name="m_Button_MiscForceCPUStart" Content="Force CPU Start" HorizontalAlignment="Left" Margin="8,59.92,0,0" VerticalAlignment="Top" Width="117"/>
+            		<Button x:Name="m_Button_MiscVideoByteFill" Content="Video Byte Fill Test" HorizontalAlignment="Left" Margin="8,85.88,0,0" Width="117" VerticalAlignment="Top"/>
             	</Grid>
             </TabItem>
         </TabControl>

@@ -126,7 +126,7 @@ namespace Eimu.Core
         protected void AddPage(MemoryPage page)
         {
             m_Pages.Add(m_MemBound, page);
-            m_MemBound += (page.Size - 1);
+            m_MemBound += page.Size;
         }
 
         protected void ClearPages()

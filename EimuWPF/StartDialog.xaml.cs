@@ -40,7 +40,6 @@ namespace Eimu
 			#region Chip8X
 
 			Chip8XConfig.antiFlicker = m_CheckBox_C8AntiFlickerHack.IsChecked == true;
-			Chip8XConfig.disableTimers = m_CheckBox_C8DisableCoreTimers.IsChecked == true;
 			Chip8XConfig.disableGraphics = m_CheckBox_C8DisableGraphics.IsChecked == true;
 			Chip8XConfig.disableAudio = m_CheckBox_C8DisableSound.IsChecked == true;
 			Chip8XConfig.disableWrappingX = m_CheckBox_C8DisableWrappingX.IsChecked == true;
@@ -81,7 +80,6 @@ namespace Eimu
 			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(Color.FromRgb(Chip8XConfig.backgroundColorR, Chip8XConfig.backgroundColorG, Chip8XConfig.backgroundColorB));
 			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(Color.FromRgb(Chip8XConfig.foregroundColorR, Chip8XConfig.foregroundColorG, Chip8XConfig.foregroundColorB));
 			m_CheckBox_C8AntiFlickerHack.IsChecked = Chip8XConfig.antiFlicker;
-			m_CheckBox_C8DisableCoreTimers.IsChecked = Chip8XConfig.disableTimers;
 			m_CheckBox_C8DisableGraphics.IsChecked = Chip8XConfig.disableGraphics;
 			m_CheckBox_C8DisableSound.IsChecked = Chip8XConfig.disableAudio;
 			m_CheckBox_C8DisableWrappingX.IsChecked = Chip8XConfig.disableWrappingX;
@@ -100,22 +98,11 @@ namespace Eimu
         private void InitChip8XMachine()
         {
            this.m_VM = new Chip8XMachine();
-           m_VM.ProcessorCore.DisableTimers = (this.m_CheckBox_C8DisableCoreTimers.IsChecked == true);
-
-           //if (m_CheckBox_C8DisableGraphics.IsChecked == true)
-           //    m_VM.CurrentRenderBackend = new NullGraphicsDevice();
-           //else
-           //    m_VM.CurrentRenderBackend = new OGLDevice();
-            //if (m_CheckBox_C8DisableSound.IsChecked == true) m_VM.CurrentAudioDevice = new NullAudioDevice();
-            //else 
-            //m_VM.CurrentAudioDevice = new NullAudioDevice();
-            //m_VM.CurrentRenderBackend.BackgroundColor = Chip8XConfig.BackColor;
-            //m_VM.CurrentRenderBackend.ForegroundColor = Chip8XConfig.ForeColor;
 
             m_VM.VideoInterface.DisableWrappingX = (this.m_CheckBox_C8DisableWrappingX.IsChecked == true);
             m_VM.VideoInterface.DisableWrappingY = (this.m_CheckBox_C8DisableYWrap.IsChecked == true);
-            if (m_CheckBox_C8EnableHighres.IsChecked == true) m_VM.VideoInterface.Initialize(ChipMode.SuperChip);
-            m_VM.VideoInterface.EnableAntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
+            if (m_CheckBox_C8EnableHighres.IsChecked == true) m_VM.StartingChipMode = ChipMode.SuperChip;
+            m_VM.ProcessorCore.AntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
             ((ChipResources)m_VM.Resources).ProgramSource = m_RomFileSource;
             ((ChipResources)m_VM.Resources).FontSource = new FileStream(Chip8XConfig.Chip8FontPath, FileMode.Open, FileAccess.Read);
             ((ChipResources)m_VM.Resources).SuperFontSource = new FileStream(Chip8XConfig.SChipFontPath, FileMode.Open, FileAccess.Read);

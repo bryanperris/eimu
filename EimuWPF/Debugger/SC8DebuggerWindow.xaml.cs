@@ -53,6 +53,31 @@ namespace Eimu.Debugger
             m_Button_MiscForce1802Rec.Click += new RoutedEventHandler(m_Button_MiscForce1802Rec_Click);
             m_Button_MiscScreenXor.Click += new RoutedEventHandler(m_Button_MiscScreenXor_Click);
             m_Button_MiscForceCPUStart.Click += new RoutedEventHandler(m_Button_MiscForceCPUStart_Click);
+            m_Button_MiscVideoByteFill.Click += new RoutedEventHandler(m_Button_MiscVideoByteFill_Click);
+            this.Closing += new System.ComponentModel.CancelEventHandler(SC8DebuggerWindow_Closing);
+            m_Button_MemGotoVideoPointer.Click += new RoutedEventHandler(m_Button_MemGotoVideoPointer_Click);
+        }
+
+        void m_Button_MemGotoVideoPointer_Click(object sender, RoutedEventArgs e)
+        {
+            m_TextBox_MemSelectedAddress.Text = ((ChipMemory)m_Machine.SystemMemory).VideoPointer.ToString("X2");
+        }
+
+        void SC8DebuggerWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        void m_Button_MiscVideoByteFill_Click(object sender, RoutedEventArgs e)
+        {
+            int size = (m_Machine.VideoInterface.CurrentResolutionX * m_Machine.VideoInterface.CurrentResolutionY) / 8;
+            int addr = ((ChipMemory)m_Machine.SystemMemory).VideoPointer;
+
+            for (int i = 0; i <= size; i++)
+            {
+                m_Machine.SystemMemory[addr + i] = 0xFF;
+            }
         }
 
         void m_Button_MiscForceCPUStart_Click(object sender, RoutedEventArgs e)
@@ -407,7 +432,6 @@ namespace Eimu.Debugger
         private void UpdateMemory()
         {
             memoryViewer1.UpdateFields();
-            m_Label_MemVideoPointer.Content = "Video Offset: " + ((ChipMemory)m_Machine.SystemMemory).VideoPointer.ToString("X2");
         }
 
         #region IDebugger Members

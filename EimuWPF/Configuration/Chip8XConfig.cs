@@ -18,7 +18,6 @@ namespace Eimu.Configuration
         public static byte foregroundColorR = 255;
         public static byte foregroundColorG = 255;
         public static byte foregroundColorB = 255;
-        public static bool disableTimers = false;
         public static bool enableCodeCache = false;
         public static bool disableAudio = false;
         public static bool disableGraphics = false;

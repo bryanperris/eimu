@@ -35,6 +35,7 @@ namespace Eimu.Core.Systems.Chip8X
         public const int FONT_SIZE = 5;
         public const int PROGRAM_ENTRY_POINT = 0x200;
         private ResourceManager m_ResManager;
+        private ChipMode m_StartMode = ChipMode.Chip8;
 
         #region State Members
 
@@ -145,15 +146,15 @@ namespace Eimu.Core.Systems.Chip8X
         {
             Console.WriteLine("Booting...");
 
+            
             m_CodeEngine.PC = PROGRAM_ENTRY_POINT;
             m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_RequestCPUStop = false;
             m_Paused = false;
-
             m_CodeEngine.Initialize(this);
-            m_VideoInterface.Initialize(ChipMode.Chip8);
+            m_VideoInterface.Initialize(m_StartMode);
 
             if (!Resources.LoadResources())
             {
@@ -244,12 +245,20 @@ namespace Eimu.Core.Systems.Chip8X
             get { return (Memory)m_CodeEngine.Memory; }
         }
 
+        public ChipMode StartingChipMode
+        {
+            get { return m_StartMode; }
+            set { m_StartMode = value; }
+        }
+
         #endregion
 
         #region Private
 
         private void StartExecutionCycle()
         {
+            Monitor.TryEnter(this);
+
             Thread.CurrentThread.Name = "CPU Thread";
             Console.WriteLine("Running CPU!");
 
@@ -270,6 +279,8 @@ namespace Eimu.Core.Systems.Chip8X
 
             m_CPUFinishWait.Set();
             Console.WriteLine("CPU Stopped!");
+
+            Monitor.Exit(this);
         }
 
         #endregion
