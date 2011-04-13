@@ -20,6 +20,7 @@ using System;
 
 namespace Eimu.Core
 {
+    [Serializable]
     public abstract class Device
     {
         public abstract void Initialize();

@@ -18,13 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Eimu.Core.Systems.Chip8X
+namespace Eimu.Devices
 {
     [Serializable]
-    public abstract class AudioDevice : Device
+    public abstract class Device
     {
-        public abstract void BeginBeep();
-
-        public abstract void EndBeep();
+        public abstract void Initialize();
+        public abstract void Shutdown();
+        public abstract void SetPause(bool paused);
     }
 }

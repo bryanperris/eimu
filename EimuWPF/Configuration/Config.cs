@@ -106,7 +106,7 @@ namespace Eimu.Configuration
             XmlTextWriter writer = new XmlTextWriter(file, new UTF8Encoding());
             writer.WriteStartElement("EimuConfig");
             SaveObjectData(typeof(Config), writer);
-            SaveObjectData(typeof(SchipConfig), writer);
+            SaveObjectData(typeof(Chip8XConfig), writer);
             writer.WriteRaw("\r\n");
             writer.WriteFullEndElement();
             writer.Close();
@@ -136,7 +136,7 @@ namespace Eimu.Configuration
             }
 
             LoadObjectData(typeof(Config), reader);
-            LoadObjectData(typeof(SchipConfig), reader);
+            LoadObjectData(typeof(Chip8XConfig), reader);
             reader.Close();
             file.Close();
         }

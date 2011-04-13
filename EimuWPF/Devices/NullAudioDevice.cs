@@ -23,30 +23,29 @@ namespace Eimu.Devices
 {
     public class NullAudioDevice : AudioDevice
     {
-        public override void Beep()
+        public override void BeginBeep()
         {
+
         }
 
-        protected override void OnInit()
+        public override void EndBeep()
         {
+
         }
 
-        protected override void OnShutdown()
+        public override void Initialize()
         {
+
         }
 
-        protected override void OnPauseStateChange(bool paused)
+        public override void Shutdown()
         {
+
         }
 
-        public override void LoopBegin()
+        public override void SetPause(bool paused)
         {
-            
-        }
 
-        public override void LoopEnd()
-        {
-            
         }
     }
 }

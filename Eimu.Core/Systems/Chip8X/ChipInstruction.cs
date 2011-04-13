@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Globalization;
 
 namespace Eimu.Core.Systems.Chip8X
 {
@@ -76,7 +75,7 @@ namespace Eimu.Core.Systems.Chip8X
 
 		public override string ToString()
 		{
-			return m_Instruction.ToString("x", CultureInfo.CurrentCulture);
+			return m_Instruction.ToString("X4");
 		}
 	}
 }

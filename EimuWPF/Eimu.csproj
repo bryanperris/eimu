@@ -97,13 +97,15 @@
       <DependentUpon>MemoryViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Configuration\Config.cs" />
-    <Compile Include="Configuration\SchipConfig.cs" />
-    <Compile Include="Devices\BeepAudioDevice.cs" />
+    <Compile Include="Configuration\Chip8XConfig.cs" />
+    <Compile Include="Devices\AudioDevice.cs" />
+    <Compile Include="Devices\Device.cs" />
     <Compile Include="Devices\IWinFormAttachment.cs" />
     <Compile Include="Devices\NullAudioDevice.cs" />
     <Compile Include="Devices\NullGraphicsDevice.cs" />
     <Compile Include="Devices\OALDevice.cs" />
     <Compile Include="Devices\OGLDevice.cs" />
+    <Compile Include="Devices\Renderer.cs" />
     <Compile Include="ProgramInfo.cs" />
     <Compile Include="RenderPanel.cs">
       <SubType>Component</SubType>

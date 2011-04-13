@@ -44,11 +44,70 @@ namespace Eimu.Debugger
             m_RadioButton_SprSize5.Checked += new RoutedEventHandler(m_RadioButton_SprSize5_Checked);
             m_RadioButton_SprSize16.Checked += new RoutedEventHandler(m_RadioButton_SprSize16_Checked);
             m_RadioButton_SprSizeCustom.Checked += new RoutedEventHandler(m_RadioButton_SprSizeCustom_Checked);
+            m_RadioButton_SprSizeScreen.Checked += new RoutedEventHandler(m_RadioButton_SprSizeScreen_Checked);
             m_Slider_SprExtSize.ValueChanged += new RoutedPropertyChangedEventHandler<double>(m_Slider_SprExtSize_ValueChanged);
             m_Button_MemDumpSection.Click += new RoutedEventHandler(m_Button_MemDumpSection_Click);
             m_Button_FontDraw.Click += new RoutedEventHandler(m_Button_FontDraw_Click);
             m_CheckBox_FontAutoRefresh.Checked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Checked);
             m_CheckBox_FontAutoRefresh.Unchecked += new RoutedEventHandler(m_CheckBox_FontAutoRefresh_Unchecked);
+            m_Button_MiscForce1802Rec.Click += new RoutedEventHandler(m_Button_MiscForce1802Rec_Click);
+            m_Button_MiscScreenXor.Click += new RoutedEventHandler(m_Button_MiscScreenXor_Click);
+            m_Button_MiscForceCPUStart.Click += new RoutedEventHandler(m_Button_MiscForceCPUStart_Click);
+            m_Button_MiscVideoByteFill.Click += new RoutedEventHandler(m_Button_MiscVideoByteFill_Click);
+            this.Closing += new System.ComponentModel.CancelEventHandler(SC8DebuggerWindow_Closing);
+            m_Button_MemGotoVideoPointer.Click += new RoutedEventHandler(m_Button_MemGotoVideoPointer_Click);
+        }
+
+        void m_Button_MemGotoVideoPointer_Click(object sender, RoutedEventArgs e)
+        {
+            m_TextBox_MemSelectedAddress.Text = ((ChipMemory)m_Machine.SystemMemory).VideoPointer.ToString("X2");
+        }
+
+        void SC8DebuggerWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        void m_Button_MiscVideoByteFill_Click(object sender, RoutedEventArgs e)
+        {
+            int size = (m_Machine.VideoInterface.CurrentResolutionX * m_Machine.VideoInterface.CurrentResolutionY) / 8;
+            int addr = ((ChipMemory)m_Machine.SystemMemory).VideoPointer;
+
+            for (int i = 0; i <= size; i++)
+            {
+                m_Machine.SystemMemory[addr + i] = 0xFF;
+            }
+        }
+
+        void m_Button_MiscForceCPUStart_Click(object sender, RoutedEventArgs e)
+        {
+            m_Machine.ProcessorCore.PC = 0x200;
+            m_Machine.StartCPUThread();
+        }
+
+        void m_Button_MiscScreenXor_Click(object sender, RoutedEventArgs e)
+        {
+            lock (m_Machine.VideoInterface)
+            {
+                for (int y = 0; y < m_Machine.VideoInterface.CurrentResolutionY; y++)
+                {
+                    for (int x = 0; x < m_Machine.VideoInterface.CurrentResolutionX; x++)
+                    {
+                        m_Machine.VideoInterface.SetPixel(x, y);
+                    }
+                }
+            }
+        }
+
+        void m_Button_MiscForce1802Rec_Click(object sender, RoutedEventArgs e)
+        {
+            m_Machine.IsHybridDynarecEnabled = true;
+        }
+
+        void m_RadioButton_SprSizeScreen_Checked(object sender, RoutedEventArgs e)
+        {
+            m_Slider_SprExtSize.IsEnabled = false;
         }
 
         void m_CheckBox_FontAutoRefresh_Unchecked(object sender, RoutedEventArgs e)
@@ -76,8 +135,8 @@ namespace Eimu.Debugger
 
             for (int i = 0; i < memoryViewer1.FieldCount; i++)
             {
-                sb.AppendLine(address.ToString("X4") + ": " + Tools.PrintBits(m_Machine.SystemMemory.GetByte(address++)));
-                sb.AppendLine(address.ToString("X4") + ": " + Tools.PrintBits(m_Machine.SystemMemory.GetByte(address++)));
+                sb.AppendLine(address.ToString("X4") + ": " + Tools.PrintBits(m_Machine.SystemMemory.ReadByte(address++)));
+                sb.AppendLine(address.ToString("X4") + ": " + Tools.PrintBits(m_Machine.SystemMemory.ReadByte(address++)));
             }
 
             byte[] buffer = ASCIIEncoding.ASCII.GetBytes(sb.ToString());
@@ -112,6 +171,12 @@ namespace Eimu.Debugger
         {
             ushort address = ushort.Parse(m_TextBox_SprCurrentAddress.Text, NumberStyles.HexNumber);
 
+            if (m_RadioButton_SprSizeScreen.IsChecked == true)
+            {
+                DrawSpriteToCanvas(32, 64, m_Canvas_SprSurface, address);
+                return;
+            }
+
             if (m_RadioButton_SprSize16.IsChecked == false)
             {
                 if (m_RadioButton_SprSize5.IsChecked == true)
@@ -131,7 +196,7 @@ namespace Eimu.Debugger
 
         void m_Buttion_SprGotoI_Click(object sender, RoutedEventArgs e)
         {
-            m_TextBox_SprCurrentAddress.Text = m_Machine.ProcessorCore.m_IReg.ToString("X4");
+            m_TextBox_SprCurrentAddress.Text = m_Machine.ProcessorCore.AddressRegister.ToString("X4");
         }
 
         void m_TextBox_SprCurrentAddress_TextChanged(object sender, TextChangedEventArgs e)
@@ -197,7 +262,7 @@ namespace Eimu.Debugger
 
         void m_Button_MemGotoI_Click(object sender, RoutedEventArgs e)
         {
-            m_TextBox_MemSelectedAddress.Text = m_Machine.ProcessorCore.m_IReg.ToString("X4");
+            m_TextBox_MemSelectedAddress.Text = m_Machine.ProcessorCore.AddressRegister.ToString("X4");
         }
 
         void m_TextBox_MemSelectedAddress_TextChanged(object sender, TextChangedEventArgs e)
@@ -244,7 +309,7 @@ namespace Eimu.Debugger
 
                 for (int y = 0; y < ysize; y++)
                 {
-                    read = m_Machine.SystemMemory.GetByte(address + y);
+                    read = m_Machine.SystemMemory.ReadByte(address + y);
 
                     for (byte x = 0; x < 8; x++)
                     {
@@ -269,7 +334,7 @@ namespace Eimu.Debugger
 
                 for (int y = 0; y < 0x10; y++)
                 {
-                    data = Tools.Create16(m_Machine.SystemMemory.GetByte(address + (y << 1)), m_Machine.SystemMemory.GetByte(address + (y << 1) + 1));
+                    data = Tools.Create16(m_Machine.SystemMemory.ReadByte(address + (y << 1)), m_Machine.SystemMemory.ReadByte(address + (y << 1) + 1));
 
                     for (int x = 0; x < 0x10; x++)
                     {
@@ -330,33 +395,33 @@ namespace Eimu.Debugger
         {
             CodeEngine en = m_Machine.ProcessorCore;
             m_ListBox_Regs.Items.Clear();
-            m_ListBox_Regs.Items.Add("PC: " + en.m_PC.ToString("x"));
-            m_ListBox_Regs.Items.Add("I: " + en.m_IReg.ToString("x"));
-            m_ListBox_Regs.Items.Add("V0: " + en.m_VRegs[0].ToString("x"));
-            m_ListBox_Regs.Items.Add("V1: " + en.m_VRegs[1].ToString("x"));
-            m_ListBox_Regs.Items.Add("V2: " + en.m_VRegs[2].ToString("x"));
-            m_ListBox_Regs.Items.Add("V3: " + en.m_VRegs[3].ToString("x"));
-            m_ListBox_Regs.Items.Add("V4: " + en.m_VRegs[4].ToString("x"));
-            m_ListBox_Regs.Items.Add("V5: " + en.m_VRegs[5].ToString("x"));
-            m_ListBox_Regs.Items.Add("V6: " + en.m_VRegs[6].ToString("x"));
-            m_ListBox_Regs.Items.Add("V7: " + en.m_VRegs[7].ToString("x"));
-            m_ListBox_Regs.Items.Add("V8: " + en.m_VRegs[8].ToString("x"));
-            m_ListBox_Regs.Items.Add("V9: " + en.m_VRegs[9].ToString("x"));
-            m_ListBox_Regs.Items.Add("VA: " + en.m_VRegs[10].ToString("x"));
-            m_ListBox_Regs.Items.Add("VB: " + en.m_VRegs[11].ToString("x"));
-            m_ListBox_Regs.Items.Add("VC: " + en.m_VRegs[12].ToString("x"));
-            m_ListBox_Regs.Items.Add("VD: " + en.m_VRegs[13].ToString("x"));
-            m_ListBox_Regs.Items.Add("VE: " + en.m_VRegs[14].ToString("x"));
-            m_ListBox_Regs.Items.Add("VF: " + en.m_VRegs[15].ToString("x"));
+            m_ListBox_Regs.Items.Add("PC: " + en.PC.ToString("x"));
+            m_ListBox_Regs.Items.Add("I: " + en.AddressRegister.ToString("x"));
+            m_ListBox_Regs.Items.Add("V0: " + en.VRegisters[0].ToString("x"));
+            m_ListBox_Regs.Items.Add("V1: " + en.VRegisters[1].ToString("x"));
+            m_ListBox_Regs.Items.Add("V2: " + en.VRegisters[2].ToString("x"));
+            m_ListBox_Regs.Items.Add("V3: " + en.VRegisters[3].ToString("x"));
+            m_ListBox_Regs.Items.Add("V4: " + en.VRegisters[4].ToString("x"));
+            m_ListBox_Regs.Items.Add("V5: " + en.VRegisters[5].ToString("x"));
+            m_ListBox_Regs.Items.Add("V6: " + en.VRegisters[6].ToString("x"));
+            m_ListBox_Regs.Items.Add("V7: " + en.VRegisters[7].ToString("x"));
+            m_ListBox_Regs.Items.Add("V8: " + en.VRegisters[8].ToString("x"));
+            m_ListBox_Regs.Items.Add("V9: " + en.VRegisters[9].ToString("x"));
+            m_ListBox_Regs.Items.Add("VA: " + en.VRegisters[10].ToString("x"));
+            m_ListBox_Regs.Items.Add("VB: " + en.VRegisters[11].ToString("x"));
+            m_ListBox_Regs.Items.Add("VC: " + en.VRegisters[12].ToString("x"));
+            m_ListBox_Regs.Items.Add("VD: " + en.VRegisters[13].ToString("x"));
+            m_ListBox_Regs.Items.Add("VE: " + en.VRegisters[14].ToString("x"));
+            m_ListBox_Regs.Items.Add("VF: " + en.VRegisters[15].ToString("x"));
 
-            m_ListBox_Regs.Items.Add("RPL0: " + en.m_RPLFlags[0].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL1: " + en.m_RPLFlags[1].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL2: " + en.m_RPLFlags[2].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL3: " + en.m_RPLFlags[3].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL4: " + en.m_RPLFlags[4].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL5: " + en.m_RPLFlags[5].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL6: " + en.m_RPLFlags[6].ToString("x"));
-            m_ListBox_Regs.Items.Add("RPL7: " + en.m_RPLFlags[7].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL0: " + en.RPLRegisters[0].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL1: " + en.RPLRegisters[1].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL2: " + en.RPLRegisters[2].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL3: " + en.RPLRegisters[3].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL4: " + en.RPLRegisters[4].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL5: " + en.RPLRegisters[5].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL6: " + en.RPLRegisters[6].ToString("x"));
+            m_ListBox_Regs.Items.Add("RPL7: " + en.RPLRegisters[7].ToString("x"));
         }
 
         private void ListCode()
@@ -422,6 +487,49 @@ namespace Eimu.Debugger
             {
                 m_Machine.SystemMemory[i] = (byte)rnd.Next(0, 255);
             }
+        }
+
+        private void m_Button_RegsSetPC_Click(object sender, RoutedEventArgs e)
+        {
+            m_Machine.ProcessorCore.PC = ushort.Parse(m_TextBox_RegsAddressBox.Text, System.Globalization.NumberStyles.HexNumber);
+        }
+
+        private void m_TextBox_RegsAddressBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string val = m_TextBox_RegsAddressBox.Text;
+            Color normal = Color.FromRgb(255, 255, 255);
+            Color bad = Color.FromRgb(255, 100, 100);
+
+            try
+            {
+                ushort address = ushort.Parse(val, System.Globalization.NumberStyles.HexNumber);
+
+                if (address < 0 || address > (m_Machine.SystemMemory.Size - 1))
+                {
+                    m_TextBox_RegsAddressBox.Background = new SolidColorBrush(bad);
+                    m_Button_RegsSetPC.IsEnabled = false;
+                }
+                else
+                {
+                    m_TextBox_RegsAddressBox.Background = new SolidColorBrush(normal);
+                    m_Button_RegsSetPC.IsEnabled = true;
+                }
+            }
+            catch (FormatException)
+            {
+                m_TextBox_RegsAddressBox.Background = new SolidColorBrush(bad);
+                m_Button_RegsSetPC.IsEnabled = false;
+            }
+            catch (OverflowException)
+            {
+                m_TextBox_SprCurrentAddress.Background = new SolidColorBrush(bad);
+                m_Button_RegsSetPC.IsEnabled = false;
+            }
+        }
+
+        private void m_Button_MemRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateMemory();
         }
 
     }

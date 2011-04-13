@@ -25,8 +25,8 @@ namespace Eimu.Core
 {
     public enum RunState
     {
-        Stopped = 0,
+        Stopped,
         Paused,
-        Running
+        Running,
     }
 }

@@ -50,3 +50,58 @@ Function 0414: ??
 0417:  STR A       M(4A1)=7    // M(RA) = D
 0418:  BR 04                   // Goto 404 func
 }
+
+
+0026:  BZ 44 
+0028:  ORI 50      D=5A
+002A:  PLO C       RC = 005A 
+002B:  GLO F       D=A4
+002C:  ANI 0F      D=04
+002E:  ORI F0      D=F4
+0030:  PLO 6       R6 = 7EF4 
+H.Sync
+0031:  LDN 5       D=54
+0032:  SHR         D=2A
+0033:  SHR         D=15
+0034:  SHR         D=0A
+0035:  SHR         D=05
+0036:  ORI F0      D=F5
+0038:  PLO 7       R7 = 7EF5 
+
+003C:  ADI 0F      D=67
+003E:  PLO C       RC = 0067 
+003F:  LDN C       D=B7
+0040:  PLO 3       R3 = 01B7 
+0041:  SEP 3 
+H.Sync
+01B7:  LDA 5       D=M(38B)=FF
+01B8:  SEX 6 
+01B9:  ADD         D=4E
+01BA:  STR 6       M(7EF0)=4E
+01BB:  SEP 4 
+0042:  BR 1B 
+001B:  GHI 6       D=7E
+H.Sync
+001C:  PHI 7       R7 = 7EFF 
+001D:  SEX 2 
+001E:  GHI 4       D=0
+001F:  PHI C       RC = 0067 
+0020:  LDA 5       D=M(38C)=30
+0021:  PLO F       RF = 7F30 
+0022:  SHR         D=18
+H.Sync
+0023:  SHR         D=0C
+0024:  SHR         D=06
+0025:  SHR         D=03
+0026:  BZ 44 
+0028:  ORI 50      D=53
+002A:  PLO C       RC = 0053 
+002B:  GLO F       D=30
+H.Sync
+002C:  ANI 0F      D=00
+002E:  ORI F0      D=F0
+0030:  PLO 6       R6 = 7EF0 
+0031:  LDN 5       D=00
+0032:  SHR         D=00
+0033:  SHR         D=00
+0034:  SHR         D=00

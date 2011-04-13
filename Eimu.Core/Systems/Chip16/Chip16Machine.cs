@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Eimu.Core.Systems.Chip16
 {
+    [Serializable]
     public sealed class Chip16Machine
     {
         public const int MemoryMaxSize = 0xFFFF;

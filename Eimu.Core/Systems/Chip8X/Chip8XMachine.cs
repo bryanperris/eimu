@@ -24,45 +24,57 @@ using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
 using Eimu.Core.Systems.Chip8X.Engines;
-using Eimu.Core.Systems.RCA1802;
+using Eimu.Core.Systems.CDP1802;
+using Eimu.Core.Dynarec;
 
 namespace Eimu.Core.Systems.Chip8X
 {
-    [ComVisible(true)]
+    [Serializable]
     public sealed class Chip8XMachine : VirtualMachine, IDisposable
     {
         public const int FONT_SIZE = 5;
-        public const int MEMORY_SIZE = 4096;
         public const int PROGRAM_ENTRY_POINT = 0x200;
+        private ResourceManager m_ResManager;
+        private ChipMode m_StartMode = ChipMode.Chip8;
+
+        #region State Members
+
         private bool m_Paused = false;
         private bool m_RequestCPUStop;
-        private bool m_Use1802Dynarec;
+        private bool m_UseHybridDynarec;
         private int m_ExtraCycles;
         private int m_CoreSpeed = 10;
+        private CDP1802Mode m_1802Mode;
+        private CodeEngine m_CodeEngine;
+        private ILDynarec<ILEmitter1802> m_HybridDynarec;
+        private VideoInterface m_VideoInterface;
+        private AudioInterface m_AudioInterface;
         private Stream m_FontSource;
         private Stream m_SFontSource;
+
+        #endregion
+        #region Threading Members
+
         private EventWaitHandle m_CPUPause;
         private EventWaitHandle m_KeyWait;
         private EventWaitHandle m_CPUFinishWait;
         private Thread m_ThreadCPU;
-        private AudioDevice m_AudioDevice;
-        private Renderer m_Renderer;
-        private CodeEngine m_CodeEngine;
-        private C1802Mode m_HLMode;
-        private C1802Dynarec m_CDPDynarec;
-        private VideoInterface m_VideoInterface;
 
-        public Chip8XMachine()
+        #endregion
+
+        public Chip8XMachine() : base()
         {
             m_VideoInterface = new VideoInterface();
+            m_AudioInterface = new AudioInterface();
+            m_CodeEngine = new Interpreter(this);
+            m_HybridDynarec = new ILDynarec<ILEmitter1802>();
+            m_ResManager = new ChipResources(this);
         }
 
-        protected override void OnMachineState(RunState state)
-        {
-            CurrentAudioDevice.SetPause((state == RunState.Paused));
-            CurrentRenderBackend.SetPause((state == RunState.Paused));
-            IsPaused = (state == RunState.Paused);
+        #region Execution Control
 
+        protected override void OnStateChanged(RunState state)
+        {
             if (state == RunState.Stopped)
             {
                 m_CPUPause.Set();
@@ -70,37 +82,28 @@ namespace Eimu.Core.Systems.Chip8X
                 m_RequestCPUStop = true;
                 m_CPUFinishWait.WaitOne();
                 m_CodeEngine.Shutdown();
-                CurrentAudioDevice.Shutdown();
-                CurrentRenderBackend.Shutdown();
+                m_VideoInterface.Shutdown();
+                m_AudioInterface.Shutdown();
                 Console.WriteLine("Stopped...");
+                return;
             }
+
+            IsPaused = (state == RunState.Paused);
+            m_AudioInterface.IsPaused = (state == RunState.Paused);
+            m_VideoInterface.IsPaused = (state == RunState.Paused);
 
         }
-
-        public void KeyPress(HexKey key)
-        {
-            if (key != HexKey.None)
-            {
-                m_CodeEngine.LastKeyPressed = (byte)key;
-                m_KeyWait.Set();
-            }
-            else
-            {
-                m_CodeEngine.LastKeyPressed = 17;
-            }
-        }
-
-        #region Execution Control
 
         public void Step(int cycles)
         {
             while (cycles > 0)
             {
                 cycles--;
-                byte a = SystemMemory.GetByte(m_CodeEngine.PC);
-                byte b = SystemMemory.GetByte(m_CodeEngine.PC + 1);
+                byte a = SystemMemory.ReadByte(m_CodeEngine.PC);
+                byte b = SystemMemory.ReadByte(m_CodeEngine.PC + 1);
                 ushort data = Tools.Create16(a, b);
                 ChipOpCode opcode = Disassembler.DecodeInstruction(data);
+                //Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
@@ -111,8 +114,13 @@ namespace Eimu.Core.Systems.Chip8X
                     {
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
 
-                        if (m_Use1802Dynarec)
-                            m_CDPDynarec.Call(inst.NNN, m_CodeEngine);
+                        if (m_UseHybridDynarec)
+                        {
+                            if (inst.NNN < SystemMemory.Size)
+                                m_HybridDynarec.Execute(inst.NNN, m_CodeEngine);
+                            else
+                                Console.WriteLine("1802 Call is beyond memory bounds! (" + inst.NNN.ToString("X4") + ")");
+                        }
                         else
                             Console.WriteLine("Syscall Emitter Disabled!");
                     }
@@ -124,122 +132,38 @@ namespace Eimu.Core.Systems.Chip8X
             }
         }
 
-        public void Run(int entryAddress)
+        /// <summary>
+        /// Dangerous to call manually outside of class
+        /// </summary>
+        public void StartCPUThread()
         {
-            m_CodeEngine.PC = entryAddress;
+            m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
+            m_ThreadCPU.IsBackground = true;
             m_ThreadCPU.Start();
-        }
-
-        private void StartExecutionCycle()
-        {
-            Thread.CurrentThread.Name = "CPU Thread";
-
-            while (m_CodeEngine.PC < SystemMemory.Size) 
-            {
-                if (!m_RequestCPUStop)
-                {
-                    if (m_Paused)
-                        m_CPUPause.WaitOne();
-
-                    Step(m_CoreSpeed + m_ExtraCycles);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            m_CPUFinishWait.Set();
         }
 
         protected override bool Boot()
         {
             Console.WriteLine("Booting...");
 
-            if (CurrentAudioDevice == null) throw new NullReferenceException();
-            if (CurrentRenderBackend == null) throw new NullReferenceException();
+            
+            m_CodeEngine.PC = PROGRAM_ENTRY_POINT;
             m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_RequestCPUStop = false;
             m_Paused = false;
-            m_ThreadCPU = new Thread(new ThreadStart(StartExecutionCycle));
-            m_ThreadCPU.IsBackground = true;
-            SystemMemory = new Memory(MEMORY_SIZE);
-            m_CodeEngine = new Interpreter();
-            m_CodeEngine.Init(this);
-            m_CDPDynarec = new C1802Dynarec();
-            AttachDeviceCallbacks();
-            CurrentAudioDevice.Initialize();
-            CurrentRenderBackend.Initialize();
-            m_VideoInterface.Initialize(ChipMode.Chip8);
-            if (!LoadFont()) return false;
-            if (!LoadRom()) return false;
+            m_CodeEngine.Initialize(this);
+            m_VideoInterface.Initialize(m_StartMode);
+
+            if (!Resources.LoadResources())
+            {
+                Console.WriteLine("Resource load error!");
+                return false;
+            }
+
+            StartCPUThread();
             Console.WriteLine("Running...");
-            Run(PROGRAM_ENTRY_POINT);
-            return true;
-        }
-
-        private bool LoadFont()
-        {
-            try
-            {
-                int read;
-                int pos = 0;
-                m_FontSource.Position = 0;
-                m_SFontSource.Position = 0;
-
-                while ((read = m_FontSource.ReadByte()) != -1)
-                {
-                    this.SystemMemory[pos++] = (byte)read;
-                }
-
-                while ((read = m_SFontSource.ReadByte()) != -1)
-                {
-                    this.SystemMemory[pos++] = (byte)read;
-                }
-
-                return true;
-            }
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("Font is missing!");
-                return false;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Console.WriteLine("can't access font!");
-                return false;
-            }
-        }
-
-        private bool LoadRom()
-        {
-
-            if (this.MediaSource == null)
-                return false;
-
-            if (!this.MediaSource.CanRead)
-            {
-                Console.WriteLine("Source can't be read!");
-                return false;
-            }
-
-            this.MediaSource.Position = 0;
-            int read;
-            int pos = PROGRAM_ENTRY_POINT;
-
-            try
-            {
-                while ((read = MediaSource.ReadByte()) != -1)
-                {
-                    SystemMemory[pos++] = (byte)read;
-                }
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return false;
-            }
 
             return true;
         }
@@ -248,21 +172,15 @@ namespace Eimu.Core.Systems.Chip8X
 
         #region Properties
 
+        public HexKey PressedKey
+        {
+            get { return (HexKey)m_CodeEngine.PressedKey; }
+            set { m_CodeEngine.PressedKey = (byte)value; }
+        }
+
         public CodeEngine ProcessorCore
         {
             get { return this.m_CodeEngine; }
-        }
-
-        public AudioDevice CurrentAudioDevice
-        {
-            get { return this.m_AudioDevice; }
-            set { this.m_AudioDevice = value; }
-        }
-
-        public Renderer CurrentRenderBackend
-        {
-            get { return this.m_Renderer; }
-            set { this.m_Renderer = value; }
         }
 
         public int ExtraCycleSpeed
@@ -271,16 +189,16 @@ namespace Eimu.Core.Systems.Chip8X
             set { m_ExtraCycles = value; }
         }
 
-        public C1802Mode MachineMode
+        public CDP1802Mode MachineMode
         {
-            get { return this.m_HLMode; }
-            set { this.m_HLMode = value; }
+            get { return this.m_1802Mode; }
+            set { this.m_1802Mode = value; }
         }
 
-        public bool Enable1802Dyanrec
+        public bool IsHybridDynarecEnabled
         {
-            get { return this.m_Use1802Dynarec; }
-            set { this.m_Use1802Dynarec = value; }
+            get { return this.m_UseHybridDynarec; }
+            set { this.m_UseHybridDynarec = value; }
         }
 
         public Stream Chip8FontSource
@@ -312,24 +230,57 @@ namespace Eimu.Core.Systems.Chip8X
             get { return m_VideoInterface; }
         }
 
+        public AudioInterface AudioInterface
+        {
+            get { return m_AudioInterface; }
+        }
+
+        public override ResourceManager Resources
+        {
+            get { return m_ResManager; }
+        }
+
+        public override Memory SystemMemory
+        {
+            get { return (Memory)m_CodeEngine.Memory; }
+        }
+
+        public ChipMode StartingChipMode
+        {
+            get { return m_StartMode; }
+            set { m_StartMode = value; }
+        }
+
         #endregion
 
         #region Private
 
-        private void SendBeep()
+        private void StartExecutionCycle()
         {
-            m_AudioDevice.Beep();
-        }
+            Monitor.TryEnter(this);
 
-        private void AttachDeviceCallbacks()
-        {
-            m_VideoInterface.VideoRefresh -= new EventHandler<VideoFrameUpdate>(m_VideoInterface_VideoRefresh);
-            m_VideoInterface.VideoRefresh += new EventHandler<VideoFrameUpdate>(m_VideoInterface_VideoRefresh);
-        }
+            Thread.CurrentThread.Name = "CPU Thread";
+            Console.WriteLine("Running CPU!");
 
-        void m_VideoInterface_VideoRefresh(object sender, VideoFrameUpdate e)
-        {
-            m_Renderer.Update(e);
+            while (m_CodeEngine.PC < SystemMemory.Size)
+            {
+                if (!m_RequestCPUStop)
+                {
+                    if (m_Paused)
+                        m_CPUPause.WaitOne();
+
+                    Step(m_CoreSpeed + m_ExtraCycles);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            m_CPUFinishWait.Set();
+            Console.WriteLine("CPU Stopped!");
+
+            Monitor.Exit(this);
         }
 
         #endregion
@@ -346,7 +297,7 @@ namespace Eimu.Core.Systems.Chip8X
         {
             if (disposing)
             {
-                OnMachineState(RunState.Stopped);
+                OnStateChanged(RunState.Stopped);
             }
 
             m_CPUPause.Close();

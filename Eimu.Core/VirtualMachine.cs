@@ -22,39 +22,28 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Threading;
-using System.Runtime.InteropServices;
 
 namespace Eimu.Core
 {
     [Serializable]
-    [ComVisible(true)]
     public abstract class VirtualMachine
     {
         private RunState m_State;
-        private Memory m_Memory;
-        private Stream m_MediaSource;
         private bool m_Booted = false;
-        public event EventHandler<RunStateChangedArgs> RunStateChanged;
-        public event EventHandler MachineAborted;
         private IDebugger m_Debugger;
 
-        
+        // Events
+        public event EventHandler<RunStateChangedArgs> RunningStateChanged;
+        public event EventHandler MachineAborted;
+        public event EventHandler MachineStarted;
+
+        #region Abstract Methods
+
         protected abstract bool Boot();
 
-        public void SetMediaSource(Stream source)
-        {
-            this.m_MediaSource = source;
-        }
+        #endregion
 
-        public void AttachDebugger(IDebugger debugger)
-        {
-            m_Debugger = debugger;
-        }
-
-        protected Stream MediaSource
-        {
-            get { return this.m_MediaSource;}
-        }
+        #region Machine API
 
         public void Run()
         {
@@ -78,11 +67,24 @@ namespace Eimu.Core
             Run();
         }
 
-        private void Abort()
+        public void AttachDebugger(IDebugger debugger)
         {
-            if (MachineAborted != null)
-                MachineAborted(this, new EventArgs());
+            m_Debugger = debugger;
         }
+
+        #endregion
+
+        #region Virtual Methods
+
+        protected virtual void OnStateChanged(RunState state)
+        {
+            if (RunningStateChanged != null)
+                RunningStateChanged(this, new RunStateChangedArgs(state));
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void SetRunState(RunState state)
         {
@@ -96,19 +98,23 @@ namespace Eimu.Core
 
             if (m_State == RunState.Running && !m_Booted)
             {
-                bool successful = Boot();
-
-                if (!successful)
+                if (!Resources.LoadResources())
                 {
                     m_Booted = false;
                     m_State = RunState.Stopped;
-                    Console.WriteLine("Booting failed!");
-                    Abort();
-                    return;
+                    throw new VMException("Resources failed to load!");
+                }
+
+                if (!Boot())
+                {
+                    m_Booted = false;
+                    m_State = RunState.Stopped;
+                    throw new VMException("Machine has failed to boot!");
                 }
                 else
                 {
                     m_Booted = true;
+                    Console.WriteLine("Machine has booted successfully!");
 
                     if (m_Debugger != null)
                     {
@@ -124,24 +130,36 @@ namespace Eimu.Core
                 if (m_Debugger != null)
                     m_Debugger.StopDebugging();
             }
-                
-            if (RunStateChanged != null)
-                RunStateChanged(this, new RunStateChangedArgs(m_State));
 
-            OnMachineState(m_State);
+            if (RunningStateChanged != null)
+                RunningStateChanged(this, new RunStateChangedArgs(m_State));
+
+            OnStateChanged(m_State);
         }
 
-        protected abstract void OnMachineState(RunState state);
+        #endregion
+
+        #region Properties
 
         public RunState CurrentRunState
         {
-            get { return this.m_State;}
+            get { return m_State; }
         }
 
-        public Memory SystemMemory
+        public abstract ResourceManager Resources { get; }
+
+        public abstract Memory SystemMemory { get; }
+
+        public bool IsBooted
         {
-            get { return this.m_Memory; }
-            set { this.m_Memory = value; }
+            get { return m_Booted; }
         }
+
+        public IDebugger AttachedDebugger
+        {
+            get { return m_Debugger; }
+        }
+
+        #endregion
     }
 }

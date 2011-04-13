@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Eimu.Core.Systems.Chip8X
 {
+    public delegate void RenderCallback(VideoInterface currentInterface);
+
+    [Serializable]
     public sealed class VideoInterface
     {
         public const int StandardResolutionX = 64;
@@ -18,11 +22,20 @@ namespace Eimu.Core.Systems.Chip8X
         private int m_ResY;
         private bool m_DisableWrappingX;
         private bool m_DisableWrappingY;
-        private bool m_EnableAntiFlickerHack;
-        public event EventHandler<VideoFrameUpdate> VideoRefresh;
+        public event RenderCallback Render;
+        private Timer m_RenderInterrupt;
+        EventWaitHandle m_RenderWait;
+
+        public VideoInterface()
+        {
+            m_Buffer = new bool[(SuperResolutionX + 1) * (SuperResolutionY + 1)];
+        }
 
         public void Initialize(ChipMode mode)
         {
+            m_RenderWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_RenderInterrupt = new Timer(new TimerCallback(OnRefresh), this, 0, 1);
+
             switch (mode)
             {
                 case ChipMode.SuperChip: m_ResX = SuperResolutionX; m_ResY = SuperResolutionY; break;
@@ -30,14 +43,19 @@ namespace Eimu.Core.Systems.Chip8X
                 case ChipMode.Chip8:
                 default: m_ResX = StandardResolutionX; m_ResY = StandardResolutionY; break;
             }
-
-            m_Buffer = new bool[(m_ResX + 1) * (m_ResY + 1)];
         }
+
+        public void Shutdown()
+        {
+
+        }
+
+        public bool IsPaused { get; set; }
 
         public void ClearPixels()
         {
             Array.Clear(m_Buffer, 0, m_Buffer.Length);
-            OnRefresh();
+            //OnRefresh();
         }
 
         public bool SetPixel(int x, int y)
@@ -52,19 +70,26 @@ namespace Eimu.Core.Systems.Chip8X
 
             m_Buffer[GetBufferPosition(x, y)] = on;
 
-            if (!(!on && m_EnableAntiFlickerHack))
-                OnRefresh();
-
             return !on;
 
             // src 0 ^ 1 = 1 : Fill White
             // src 1 ^ 1 = 0 : Make Black, Set Collision
         }
 
-        private void OnRefresh()
+        public void RenderWait()
         {
-            if (VideoRefresh != null)
-                VideoRefresh(this, new VideoFrameUpdate(CurrentResolutionX, CurrentResolutionY, m_Buffer));
+             //m_RenderWait.WaitOne();
+            Thread.Sleep(8);
+        }
+
+        private void OnRefresh(object state)
+        {
+            if (Render != null)
+            {
+                Render(this);
+            }
+
+            m_RenderWait.Set();
         }
 
         public bool GetPixel(int x, int y)
@@ -81,8 +106,6 @@ namespace Eimu.Core.Systems.Chip8X
                 case 3: ScrollPixelsRight(); break;
                 default: break;
             }
-
-            OnRefresh();
         }
 
         private void ScrollPixelsDown(int n)
@@ -147,32 +170,6 @@ namespace Eimu.Core.Systems.Chip8X
                 return 0;
         }
 
-        public byte PeekPixels(int offset)
-        {
-            byte pixelRow = 0;
-
-            for (int i = 0; i < 8; i++)
-            {
-                if (m_Buffer[offset++])
-                    pixelRow |= 1;
-
-                pixelRow <<= 1;
-            }
-
-
-            return pixelRow;
-        }
-
-        public void PokePixels(int offset, byte value)
-        {
-            for (int i = 7; i >= 0; i--)
-            {
-                m_Buffer[offset++] = (((value >> i) & 0x1) == 1 ? true : false);
-            }
-
-            OnRefresh();
-        }
-
         public bool[] Pixels
         {
             get { return this.m_Buffer; }
@@ -188,12 +185,6 @@ namespace Eimu.Core.Systems.Chip8X
         {
             get { return this.m_DisableWrappingY; }
             set { this.m_DisableWrappingY = value; }
-        }
-
-        public bool EnableAntiFlickerHack
-        {
-            get { return this.m_EnableAntiFlickerHack; }
-            set { this.m_EnableAntiFlickerHack = value; }
         }
 
         public int CurrentResolutionX

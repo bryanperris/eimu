@@ -11,24 +11,30 @@ namespace Eimu.Core.Systems.Chip8X.Engines
     [Serializable]
     public sealed class Interpreter : CodeEngine
     {
+        Profiler m_Profiler;
+
+
+        public Interpreter(Chip8XMachine machine) : base(machine) { }
+
         private Dictionary<ChipOpCode, OpcodeHandler> m_MethodCallTable;
 
         public override void OnInit()
         {
             m_MethodCallTable = new Dictionary<ChipOpCode, OpcodeHandler>();
+            //m_Profiler = new Profiler();
             LoadMethods();
         }
 
         public override void OnShutdown()
         {
-            base.Shutdown();
+            //m_Profiler.DumpStats();
             m_MethodCallTable.Clear();
             m_MethodCallTable = null;
-            m_Rand = null;
         }
 
         public override void Call(ChipInstruction inst)
         {
+            //m_Profiler.CountOpcode(inst.OpCode);
             OpcodeHandler handler;
             if (m_MethodCallTable != null)
             {
@@ -57,7 +63,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
 
         public override string ToString()
         {
-            return "PC: " + m_PC.ToString(CultureInfo.CurrentCulture);
+            return "PC: " + PC.ToString(CultureInfo.CurrentCulture);
         }
 
         internal delegate void OpcodeHandler(ChipInstruction instruction);
@@ -119,79 +125,79 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Add_7)]
         void Add_7(ChipInstruction inst)
         {
-            m_VRegs[inst.X] += inst.KK;
+            VRegisters[inst.X] += inst.KK;
         }
 
         [OpcodeTag(ChipOpCode.Add_8)]
         void Add_8(ChipInstruction inst)
         {
-            ushort val = (ushort)(m_VRegs[inst.X] + m_VRegs[inst.Y]);
-            m_VRegs[0xF] = (byte)((val > 255) ? 1 : 0);
-            m_VRegs[inst.X] = (byte)(val & 0x00FF);
+            ushort val = (ushort)(VRegisters[inst.X] + VRegisters[inst.Y]);
+            VRegisters[0xF] = (byte)((val > 255) ? 1 : 0);
+            VRegisters[inst.X] = (byte)(val & 0x00FF);
         }
 
         [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)m_IReg + (int)m_VRegs[inst.X]) >= Chip8XMachine.MEMORY_SIZE)
+            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= 0x1000)
             {
-                m_IReg = Chip8XMachine.MEMORY_SIZE;
-                m_VRegs[0xF] = 1;
+                AddressRegister = (ushort)Memory.Size;
+                VRegisters[0xF] = 1;
             }
             else
-                m_IReg += m_VRegs[inst.X];
+                AddressRegister += VRegisters[inst.X];
         }
 
         [OpcodeTag(ChipOpCode.Or)]
         void Or(ChipInstruction inst)
         {
-            m_VRegs[inst.X] |= m_VRegs[inst.Y];
+            VRegisters[inst.X] |= VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.And)]
         void And(ChipInstruction inst)
         {
-            m_VRegs[inst.X] &= m_VRegs[inst.Y];
+            VRegisters[inst.X] &= VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.Xor)]
         void Xor(ChipInstruction inst)
         {
-            m_VRegs[inst.X] ^= m_VRegs[inst.Y];
+            VRegisters[inst.X] ^= VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.Sub)]
         void Sub(ChipInstruction inst)
         {
-            m_VRegs[0xF] = (byte)((m_VRegs[inst.X] >= m_VRegs[inst.Y]) ? 1 : 0);
-            m_VRegs[inst.X] -= m_VRegs[inst.Y];
+            VRegisters[0xF] = (byte)((VRegisters[inst.X] >= VRegisters[inst.Y]) ? 1 : 0);
+            VRegisters[inst.X] -= VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.Shr)]
         void Shr(ChipInstruction inst)
         {
-            m_VRegs[0xF] = (byte)(((m_VRegs[inst.X] & 1) == 1) ? 1 : 0);
-            m_VRegs[inst.X] /= 2;
+            VRegisters[0xF] = (byte)(((VRegisters[inst.X] & 1) == 1) ? 1 : 0);
+            VRegisters[inst.X] /= 2;
         }
 
         [OpcodeTag(ChipOpCode.Subn)]
         void Subn(ChipInstruction inst)
         {
-            m_VRegs[0xF] = (byte)((m_VRegs[inst.Y] >= m_VRegs[inst.X]) ? 1 : 0);
-            m_VRegs[inst.X] = (byte)(m_VRegs[inst.Y] - m_VRegs[inst.X]);
+            VRegisters[0xF] = (byte)((VRegisters[inst.Y] >= VRegisters[inst.X]) ? 1 : 0);
+            VRegisters[inst.X] = (byte)(VRegisters[inst.Y] - VRegisters[inst.X]);
         }
 
         [OpcodeTag(ChipOpCode.Shl)]
         void Shl(ChipInstruction inst)
         {
-            m_VRegs[0xF] = (byte)((m_VRegs[inst.X] & 0x80) >> 7);
-            m_VRegs[inst.X] *= 2;
+            VRegisters[0xF] = (byte)((VRegisters[inst.X] & 0x80) >> 7);
+            VRegisters[inst.X] *= 2;
         }
 
         [OpcodeTag(ChipOpCode.Rnd)]
         void Rnd(ChipInstruction inst)
         {
-            m_VRegs[inst.X] = (byte)(m_Rand.Next(255) & inst.KK);
+            VRegisters[inst.X] = (byte)(this.Random.Next(255) & inst.KK);
         }
 
         // -----------------------------------------
@@ -200,26 +206,26 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Sys)]
         void Sys(ChipInstruction inst)
         {
-            Console.WriteLine(this.m_IReg.ToString("x"));
+            Console.WriteLine(this.AddressRegister.ToString("x"));
         }
 
         [OpcodeTag(ChipOpCode.Jp_1)]
         void Jump_1(ChipInstruction inst)
         {
-            m_PC = inst.NNN;
+            PC = inst.NNN;
         }
 
         [OpcodeTag(ChipOpCode.Call)]
         void CallF(ChipInstruction inst)
         {
-            m_Stack.Push((ushort)m_PC);
-            m_PC = inst.NNN;
+            Stack.Push((ushort)PC);
+            PC = inst.NNN;
         }
 
         [OpcodeTag(ChipOpCode.Se_3)]
         void Se_3(ChipInstruction inst)
         {
-            if (m_VRegs[inst.X] == inst.KK)
+            if (VRegisters[inst.X] == inst.KK)
             {
                 IncrementPC();
             }
@@ -228,7 +234,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Sne_4)]
         void Sne_4(ChipInstruction inst)
         {
-            if (m_VRegs[inst.X] != inst.KK)
+            if (VRegisters[inst.X] != inst.KK)
             {
                 IncrementPC();
             }
@@ -237,7 +243,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Se_5)]
         void Se_5(ChipInstruction inst)
         {
-            if (m_VRegs[inst.X] == m_VRegs[inst.Y])
+            if (VRegisters[inst.X] == VRegisters[inst.Y])
             {
                 IncrementPC();
             }
@@ -246,7 +252,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Sne_9)]
         void Sne_9(ChipInstruction inst)
         {
-            if (m_VRegs[inst.X] != m_VRegs[inst.Y])
+            if (VRegisters[inst.X] != VRegisters[inst.Y])
             {
                 IncrementPC();
             }
@@ -255,42 +261,42 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Jp_B)]
         void Jp_B(ChipInstruction inst)
         {
-            m_PC = (ushort)(inst.NNN + m_VRegs[0]);
+            PC = (ushort)(inst.NNN + VRegisters[0]);
         }
 
         [OpcodeTag(ChipOpCode.Skp)]
         void Skp(ChipInstruction inst)
         {
-            if (m_VRegs[inst.X] == m_LastKey)
+            if (VRegisters[inst.X] == PressedKey)
             {
                 IncrementPC();
             }
             else
             {
-                //Console.WriteLine("Key checked for: " + m_VRegs[inst.X].ToString());
+                //Console.WriteLine("Key checked for: " + VRegisters[inst.X].ToString());
             }
         }
 
         [OpcodeTag(ChipOpCode.Sknp)]
         void Sknp(ChipInstruction inst)
         {
-            if (m_VRegs[inst.X] != m_LastKey)
+            if (VRegisters[inst.X] != PressedKey)
             {
                 IncrementPC();
             }
             else
             {
-                //Console.WriteLine("Key not checked for: " + m_VRegs[inst.X].ToString());
+                //Console.WriteLine("Key not checked for: " + VRegisters[inst.X].ToString());
             }
         }
 
         [OpcodeTag(ChipOpCode.Ret)]
         void Ret(ChipInstruction inst)
         {
-            if (m_Stack.Count > 0)
-                m_PC = m_Stack.Pop();
+            if (Stack.Count > 0)
+                PC = Stack.Pop();
             else
-                m_PC = 512;
+                PC = 512;
         }
 
 
@@ -300,62 +306,62 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Ld_6)]
         void Load_6(ChipInstruction inst)
         {
-            this.m_VRegs[inst.X] = inst.KK;
+            this.VRegisters[inst.X] = inst.KK;
         }
 
         [OpcodeTag(ChipOpCode.Ld_8)]
         void Load_8(ChipInstruction inst)
         {
-            this.m_VRegs[inst.X] = this.m_VRegs[inst.Y];
+            this.VRegisters[inst.X] = this.VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.Ld_A)]
         void Load_A(ChipInstruction inst)
         {
-            this.m_IReg = inst.NNN;
+            this.AddressRegister = inst.NNN;
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_07)]
         void Load_F07(ChipInstruction inst)
         {
-            if (m_DT < 0)
-                m_DT = 0;
+            if (DelayTimer < 0)
+                DelayTimer = 0;
 
-            this.m_VRegs[inst.X] = (byte)this.m_DT;
+            this.VRegisters[inst.X] = (byte)this.DelayTimer;
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_0A)]
         void Load_F0A(ChipInstruction inst)
         {
             OnWaitForKey();
-            m_VRegs[inst.X] = m_LastKey;
+            VRegisters[inst.X] = PressedKey;
         }
 
         [OpcodeTag(ChipOpCode.Ld_DT)]
         void Load_DT(ChipInstruction inst)
         {
-            OnSetDelayTimer(m_VRegs[inst.X]);
+            OnSetDelayTimer(VRegisters[inst.X]);
         }
 
         [OpcodeTag(ChipOpCode.Ld_ST)]
         void Load_ST(ChipInstruction inst)
         {
-            OnSetSoundTimer(m_VRegs[inst.X]);
+            OnSetSoundTimer(VRegisters[inst.X]);
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_29)]
         void Load_F29(ChipInstruction inst)
         {
-            m_IReg = (ushort)(m_VRegs[inst.X] * 5);
+            AddressRegister = (ushort)(VRegisters[inst.X] * 5);
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_33)]
         void Load_F33(ChipInstruction inst)
         {
-            byte val = m_VRegs[inst.X];
-            m_Memory[m_IReg] = (byte)(val / 100);
-            m_Memory[m_IReg + 1] = (byte)((val % 100) / 10);
-            m_Memory[m_IReg + 2] = (byte)((val % 100) % 10);
+            byte val = VRegisters[inst.X];
+            Memory[AddressRegister] = (byte)(val / 100);
+            Memory[AddressRegister + 1] = (byte)((val % 100) / 10);
+            Memory[AddressRegister + 2] = (byte)((val % 100) % 10);
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_55)]
@@ -363,7 +369,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         {
             for (int i = 0; i <= inst.X; i++)
             {
-                m_Memory[m_IReg + i] = m_VRegs[i];
+                Memory[AddressRegister + i] = VRegisters[i];
             }
         }
 
@@ -372,7 +378,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         {
             for (int i = 0; i <= inst.X; i++)
             {
-                m_VRegs[i] = m_Memory[m_IReg + i];
+                VRegisters[i] = Memory[AddressRegister + i];
             }
         }
 
@@ -384,26 +390,26 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         void Load_F75(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
-                m_RPLFlags[i] = m_VRegs[i];
+                RPLRegisters[i] = VRegisters[i];
         }
 
         [OpcodeTag(ChipOpCode.Ld_F_85)]
         void Load_F85(ChipInstruction inst)
         {
             for (int i = 0; i <= inst.X; i++)
-                m_VRegs[i] = m_RPLFlags[i];
+                VRegisters[i] = RPLRegisters[i];
         }
 
         [OpcodeTag(ChipOpCode.extOn)]
         void ExtOn(ChipInstruction inst)
         {
-            m_VideoInterface.Initialize(ChipMode.SuperChip);
+            VideoInterface.Initialize(ChipMode.SuperChip);
         }
 
         [OpcodeTag(ChipOpCode.extOff)]
         void ExtOff(ChipInstruction inst)
         {
-            m_VideoInterface.Initialize(ChipMode.Chip8);
+            VideoInterface.Initialize(ChipMode.Chip8);
         }
 
         [OpcodeTag(ChipOpCode.exit)]
@@ -415,7 +421,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Ld_F_30)]
         void Load_F30(ChipInstruction inst)
         {
-            m_IReg = (ushort)(80 + (m_VRegs[inst.X] * 10));
+            AddressRegister = (ushort)(80 + (VRegisters[inst.X] * 10));
         }
 
         #endregion

@@ -23,7 +23,7 @@ namespace Eimu.Core.Systems.Chip8X
 	public enum ChipOpCode
 	{
 		Unknown = 0, // Uknown Opcode 
-		Sys,         // Jump to a machine code routine at nnn.  Ignored opcode. 
+		Sys,         // Call 1802 code at address nnn
 		Clr,         // Clear the display 
 		Ret,         // Return from a subroutine. PC is set to the top value in the stack and decrements the stack pointer. 
 		Jp_1,        // Jump to location nnn. PC is set to nnn 

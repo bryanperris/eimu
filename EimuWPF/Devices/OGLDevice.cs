@@ -37,7 +37,7 @@ namespace Eimu.Devices
         private Control m_ControlContext;
         private GraphicsContext m_GContext;
         private IWindowInfo m_WindowInfo;
-        private VideoFrameUpdate m_Frame;
+        private VideoInterface m_Interface;
 
         public OGLDevice()
         {
@@ -45,15 +45,15 @@ namespace Eimu.Devices
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
         {
-            if (m_Frame == null)
+            if (m_Interface == null)
                 return;
 
             GL.Viewport(m_ControlContext.ClientRectangle);
 
-            float m_ScaleX = (float)m_ControlContext.Width / (float)m_Frame.FrameWidth;
-            float m_ScaleY = (float)m_ControlContext.Height / (float)m_Frame.FrameHeight;
+            float m_ScaleX = (float)m_ControlContext.Width / (float)m_Interface.CurrentResolutionX;
+            float m_ScaleY = (float)m_ControlContext.Height / (float)m_Interface.CurrentResolutionY;
 
-            GL.ClearColor(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+            GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -63,19 +63,17 @@ namespace Eimu.Devices
 
             GL.Begin(BeginMode.Quads);
 
-            for (int y = 0; y < m_Frame.FrameHeight; y++)
+            for (int y = 0; y < m_Interface.CurrentResolutionY; y++)
             {
-                for (int x = 0; x < m_Frame.FrameWidth; x++)
+                for (int x = 0; x < m_Interface.CurrentResolutionX; x++)
                 {
-                    bool on = m_Frame.FrameData[m_Frame.GetBufferPosition(x, y)];
-
-                    if (on)
+                    if (m_Interface.GetPixel(x, y))
                     {
-                        GL.Color4(Color.FromArgb(ForegroundColor.Red, ForegroundColor.Green, ForegroundColor.Blue));
+                        GL.Color4(Color.FromArgb(ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
                     }
                     else
                     {
-                        GL.Color4(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+                        GL.Color4(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
                     }
 
                     GL.Vertex2(x * m_ScaleX, y * m_ScaleY);
@@ -127,12 +125,6 @@ namespace Eimu.Devices
 
         #endregion
 
-        public override void Update(VideoFrameUpdate update)
-        {
-            m_Frame = update;
-            m_ControlContext.Invalidate();
-        }
-
         public override void Initialize()
         {
             GL.Disable(EnableCap.AlphaTest);
@@ -141,7 +133,7 @@ namespace Eimu.Devices
             GL.Disable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.DepthRange(-1, 100);
-            GL.ClearColor(Color.FromArgb(BackgroundColor.Red, BackgroundColor.Green, BackgroundColor.Blue));
+            GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
             m_GContext.SwapBuffers();
         }
@@ -154,6 +146,12 @@ namespace Eimu.Devices
         public override void SetPause(bool paused)
         {
             
+        }
+
+        public override void Update(VideoInterface currentInterface)
+        {
+            m_Interface = currentInterface;
+            m_ControlContext.Invalidate();
         }
     }
 }

@@ -48,11 +48,6 @@ namespace Eimu.Devices
 
         #endregion
 
-        public override void Update(VideoFrameUpdate update)
-        {
-            
-        }
-
         public override void Initialize()
         {
             
@@ -66,6 +61,10 @@ namespace Eimu.Devices
         public override void SetPause(bool paused)
         {
             
+        }
+
+        public override void Update(VideoInterface currentInterface)
+        {
         }
     }
 }

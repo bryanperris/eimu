@@ -17,14 +17,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Windows.Media;
+using Eimu.Core.Systems.Chip8X;
 
-namespace Eimu.Core.Systems.Chip8X
+namespace Eimu.Devices
 {
     [Serializable]
-    public abstract class AudioDevice : Device
+    public abstract class Renderer : Device
     {
-        public abstract void BeginBeep();
+        private Color m_BackColor;
+        private Color m_ForeColor;
 
-        public abstract void EndBeep();
+        public abstract void Update(VideoInterface currentInterface);
+
+        public Color BackgroundColor
+        {
+            get { return m_BackColor; }
+            set { m_BackColor = value; }
+        }
+
+        public Color ForegroundColor
+        {
+            get { return m_ForeColor; }
+            set { m_ForeColor = value; }
+        }
     }
 }

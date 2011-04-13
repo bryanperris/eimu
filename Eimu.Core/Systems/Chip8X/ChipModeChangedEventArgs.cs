@@ -7,16 +7,16 @@ namespace Eimu.Core.Systems.Chip8X
 {
     public sealed class ChipModeChangedEventArgs : EventArgs
     {
-        private bool m_Enabled;
+        private ChipMode m_Mode;
 
-        public ChipModeChangedEventArgs(bool enabled)
+        public ChipModeChangedEventArgs(ChipMode mode)
         {
-            m_Enabled = enabled;
+            m_Mode = mode;
         }
 
-        public bool Enabled
+        public ChipMode Mode
         {
-            get { return m_Enabled; }
+            get { return m_Mode; }
         }
     }
 }

@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Eimu.Core.Systems.Chip8X
+namespace Eimu.Devices
 {
     [Serializable]
     public abstract class AudioDevice : Device

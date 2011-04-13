@@ -14,6 +14,7 @@ using Eimu.Core.Systems.Chip8X;
 using System.Windows.Interop;
 using Eimu.Devices;
 using Eimu.Debugger;
+using Eimu.Configuration;
 
 namespace Eimu
 {
@@ -25,11 +26,21 @@ namespace Eimu
         Chip8XMachine m_Machine;
         WindowInteropHelper m_WinHelper;
         SC8DebuggerWindow m_Debugger;
+        OGLDevice renderer;
 
         public RenderWindow(Chip8XMachine machine)
         {
             m_Machine = machine;
             InitializeComponent();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            m_Debugger.Close();
+            m_Machine.AttachDebugger(null);
+            m_Machine.Stop();
+            renderer.Shutdown();
+            base.OnClosing(e);
         }
 
         void machine_MachineEnded(object sender, EventArgs e)
@@ -66,24 +77,21 @@ namespace Eimu
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             m_FormHost.Focus();
-            m_WinHelper = new WindowInteropHelper(this);
             m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
+            m_WinHelper = new WindowInteropHelper(this);
 
-            Type intf = m_Machine.CurrentRenderBackend.GetType().GetInterface(typeof(IWinFormAttachment).Name);
-
-            if (intf != null)
+            renderer = new OGLDevice();
+            renderer.SetPanelHandle(renderPanel.Handle);
+            renderer.SetWindowHandle(m_WinHelper.Handle);
+            renderer.Initialize();
+            renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.Red, Chip8XConfig.BackColor.Green, Chip8XConfig.BackColor.Blue);
+            renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.Red, Chip8XConfig.ForeColor.Green, Chip8XConfig.ForeColor.Blue);
+            
+            if (!Chip8XConfig.disableGraphics)
             {
-                renderPanel.EnableDoubleBuffer = ((IWinFormAttachment)m_Machine.CurrentRenderBackend).UseDoubleBugger;
-                ((IWinFormAttachment)m_Machine.CurrentRenderBackend).SetPanelHandle(renderPanel.Handle);
-                ((IWinFormAttachment)m_Machine.CurrentRenderBackend).SetWindowHandle(m_WinHelper.Handle);
+                m_Machine.VideoInterface.Render += new RenderCallback(renderer.Update);
             }
-            else
-            {
-                this.Close();
-                return;
-            }
-
-
+            
             m_Debugger = new SC8DebuggerWindow();
             m_Machine.AttachDebugger(m_Debugger);
             m_Machine.Run();
@@ -126,17 +134,18 @@ namespace Eimu
                 default: break;
             }
 
-            m_Machine.KeyPress(key);
+            m_Machine.PressedKey = key;
         }
 
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
-            m_Machine.KeyPress(HexKey.None);
+            m_Machine.PressedKey = HexKey.None;
         }
 
         private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)
         {
-            m_Debugger.Show();
+            if (m_Debugger != null)
+                m_Debugger.Show();
         }
     }
 }

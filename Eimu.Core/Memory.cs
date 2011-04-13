@@ -21,71 +21,122 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
-using System.Runtime.InteropServices;
 
 namespace Eimu.Core
 {
     [Serializable]
-    public class Memory
+    public abstract class Memory
     {
-        private byte[] m_Memory;
+        private int m_MemBound;
+        private Dictionary<int, MemoryPage> m_Pages;
+        private MemoryPage m_CurrentPage;
+        private int m_CurrentAddressOffset = 0;
+        private int m_CurrentAddressBound = 0;
+        private VirtualMachine m_ParentMachine;
 
-        public Memory(int size)
+        public Memory(VirtualMachine machine)
         {
-            this.m_Memory = new byte[size];
+            m_ParentMachine = machine;
+            m_MemBound = 0;
+            m_CurrentAddressOffset = 0;
+            m_CurrentAddressBound = 0;
+            m_Pages = new Dictionary<int, MemoryPage>();
+            m_CurrentPage = null;
+            AllocatePages();
         }
 
-        public virtual byte GetByte(int address)
-        {
-            if (address < m_Memory.Length)
-                return m_Memory[address];
-            else
-                return 0;
-        }
+        protected abstract void AllocatePages();
 
-        public virtual void SetByte(int address, byte value)
+        public virtual void WriteByte(int address, byte value)
         {
-            m_Memory[address] = value;
-        }
-
-        public virtual void SetBytes(byte[] buffer, int offset, int size)
-        {
-            for (int i = 0; i < size; i++)
+            lock (this)
             {
-                m_Memory[i + offset] = buffer[i];
+                FindPage(address).WriteByte(address - m_CurrentAddressOffset, value);
             }
         }
 
-        public virtual void GetBytes(byte[] buffer, int offset, int size)
+        public virtual byte ReadByte(int address)
         {
-            for (int i = 0; i < size; i++)
+            lock (this)
             {
-                buffer[i] = m_Memory[i + offset];
+                return FindPage(address).ReadByte(address - m_CurrentAddressOffset);
+            }
+        }
+
+        public void Reset()
+        {
+            foreach (MemoryPage page in m_Pages.Values)
+            {
+                page.Clear();
             }
         }
 
         public virtual int Size
         {
-            get { return this.m_Memory.Length; }
-        }
-
-        public override bool Equals(object obj)
-        {
-            return ((Memory)obj).m_Memory.SequenceEqual(this.m_Memory);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            get { return m_MemBound; }
         }
 
         public virtual byte this[int index]
         {
-            get { return m_Memory[index]; }
-            set 
+            get
             {
-              m_Memory[index] = value;
+                return ReadByte(index);
             }
+            set
+            {
+                WriteByte(index, value);
+            }
+        }
+
+        public MemoryPage FindPage(int address)
+        {
+            // If the address isn't out of bounds, use the same page
+            if (address >= m_CurrentAddressOffset && address < m_CurrentAddressBound)
+            {
+                return m_CurrentPage;
+            }
+
+            // Else we need to figure out the new page to access
+            MemoryPage page = null;
+
+            // Check each offset address and see where address falls in range with
+            foreach (int offset in m_Pages.Keys)
+            {
+                // if address is >= of that key, it is a possible page
+                if (address >= offset)
+                {
+                    // Get the reference of the page
+                    if (m_Pages.TryGetValue(offset, out page))
+                    {
+                        // if the address within bounds of the page, then get it, else keep searching
+                        if (address < (offset + page.Size))
+                        {
+                            m_CurrentPage = page;
+                            m_CurrentAddressBound = offset + page.Size;
+                            m_CurrentAddressOffset = offset;
+                            return page;
+                        }
+                    }
+                }
+            }
+
+            return page;
+        }
+
+        protected void AddPage(MemoryPage page)
+        {
+            m_Pages.Add(m_MemBound, page);
+            m_MemBound += page.Size;
+        }
+
+        protected void ClearPages()
+        {
+            m_Pages.Clear();
+        }
+
+        public VirtualMachine ParentMachine
+        {
+            get { return this.m_ParentMachine; }
         }
     }
 }
