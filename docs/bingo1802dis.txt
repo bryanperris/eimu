@@ -1,15 +1,1 @@
-function: 402
-1802 Opcode: LDA
-1802 Opcode: SEX
-1802 Opcode: GLO
-1802 Opcode: Sub15
-1802 Opcode (Sub 15): ADD
-1802 Opcode: PLO
-1802 Opcode: INC
-1802 Opcode: GHI
-1802 Opcode: Sub7
-1802 Opcode (Sub 7): ADCI
-1802 Opcode: Sub0
-1802 Opcode (Sub 0): IDL
-1802 Opcode: PHI
-1802 Opcode: SEP
+TODO: Maybe some in-depth notes on how this game works
