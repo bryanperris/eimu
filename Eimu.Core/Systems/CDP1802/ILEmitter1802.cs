@@ -30,8 +30,9 @@ namespace Eimu.Core.Systems.CDP1802
         {
             m_CodeEngine = (CodeEngine)coreState;
 
-            Console.WriteLine("1802: Emitting function: " + address.ToString("x"));
+            Console.WriteLine("1802: Emitting function: " + address.ToString("x") + "\n");
 
+            Console.WriteLine("Emitting Registers D,P,X,R,DF");
             // First emit fake registers that all functions can use
             EmitLocal(typeof(byte), false); // D local.0
             EmitLocal(typeof(byte), false); // P local.1
@@ -40,11 +41,14 @@ namespace Eimu.Core.Systems.CDP1802
             EmitLocal(typeof(byte), false); // DF local.4
 
             // Set P to 3
+            Console.Write("Setup P register");
             EmitByteConstant(3);
             EmitRegisterWrite(SelectedRegister.P);
 
+            Console.Write("\nEmitting Opcodes...");
             EmitOpcodes();
 
+            Console.WriteLine("\nEmitting Return code");
             EmitNop();
             ILGenerator.Emit(OpCodes.Ret);
         }
@@ -68,7 +72,7 @@ namespace Eimu.Core.Systems.CDP1802
                 try
                 {
                     C1802OpCodes opcode = (C1802OpCodes)inst.Hi;
-                    Console.Write("1802 Opcode: " + opcode.ToString());
+                    Console.Write("\n1802 Opcode: " + opcode.ToString() + "(" + inst.Data.ToString("X2") + ")");
 
                     MarkLabel();
 
@@ -104,9 +108,7 @@ namespace Eimu.Core.Systems.CDP1802
                         default: EmitNop(); Console.Write("  ...No Emit!"); break;
                     }
 
-                    Console.WriteLine("");
-
-                    //if (funcAddr == 0x3f3)
+                    //if (funcAddr == 0x61e)
                     //    EmitDumpRegsCall();
                 }
                 catch (ArgumentException)
@@ -304,28 +306,6 @@ namespace Eimu.Core.Systems.CDP1802
             }
         }
 
-        private void EmitLowByte()
-        {
-            ILGenerator.Emit(OpCodes.Ldc_I4_S, (ushort)0xFF);
-            ILGenerator.Emit(OpCodes.And);
-            ILGenerator.Emit(OpCodes.Conv_U1);
-        }
-
-        private void EmitHighByte()
-        {
-            ILGenerator.Emit(OpCodes.Ldc_I4_S, (ushort)0xFF);
-            ILGenerator.Emit(OpCodes.Conv_I2);
-            ILGenerator.Emit(OpCodes.And);
-            EmitByteConstant(8);
-            ILGenerator.Emit(OpCodes.Shr_Un);
-            ILGenerator.Emit(OpCodes.Conv_U1);
-        }
-
-        private void EmitNop()
-        {
-            ILGenerator.Emit(OpCodes.Nop);
-        }
-
         private void EmitIncrementPC()
         {
             EmitCoreStateObject();
@@ -347,7 +327,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         public static void DumpRegs(ushort address, CodeEngine engine, ushort d, ushort p, ushort x, ushort t, ushort df)
         {
-            Console.WriteLine("======== Register State (" + address.ToString("x") + ") =========");
+            Console.WriteLine("\n======== Register State (" + address.ToString("x") + ") =========");
             Console.WriteLine("Register D: " + d.ToString("x"));
             Console.WriteLine("Register P: " + p.ToString("x"));
             Console.WriteLine("Register X: " + x.ToString("x"));
@@ -499,6 +479,7 @@ namespace Eimu.Core.Systems.CDP1802
 
             EmitCoreStateObject();
             EmitByteConstant(inst.Low);
+            Console.Write(" (write) R" + inst.Low.ToString("X1"));
             ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
             EmitGeneralRegisterWriteFunc();
         }
@@ -593,14 +574,16 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void Emit_LDI(CdpInstruction inst)
         {
-            EmitByteConstant(GetNextOperand());
+            byte val = GetNextOperand();
+            Console.Write(" " + val.ToString("X1") + " ");
+            EmitByteConstant(val);
             EmitRegisterWrite(SelectedRegister.D);
             EmitNop();
         }
 
         private void Emit_BNZ(CdpInstruction inst)
         {
-            ushort address = Tools.Create16(inst.Hi, GetMemoryByte((ushort)(CurrentAddress++)));
+            ushort address = (ushort)((CurrentAddress & 0xF00) | GetMemoryByte((ushort)(CurrentAddress++)));
             Label lb = GetLabel(address);
 
             // Compare D to 0

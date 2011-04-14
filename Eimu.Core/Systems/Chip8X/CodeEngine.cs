@@ -52,6 +52,7 @@ namespace Eimu.Core.Systems.Chip8X
 
         public void Initialize(Chip8XMachine machine)
         {
+            m_1802Regs[0xF] = 0x7F00;
             m_Memory.Reset();
             m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;

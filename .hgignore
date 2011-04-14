@@ -2,3 +2,5 @@ syntax: glob
 bin/
 *.suo
 .hgignore
+Eimu.Core/obj/
+EimuWPF/obj/

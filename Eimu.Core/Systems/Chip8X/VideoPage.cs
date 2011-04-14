@@ -44,7 +44,7 @@ namespace Eimu.Core.Systems.Chip8X
             // Get the index of byte equalivent spot
             int index = address * 8;
 
-            // Loop backwards writting the bits (do XOR too?)
+            // Loop backwards writting the bits
             for (int i = 0; i < 8; i++)
                 m_VideoInterface.Pixels[index + i] = ((value << i) & 0x80) == 0 ? false : true;
         }
