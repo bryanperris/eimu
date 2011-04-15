@@ -95,8 +95,8 @@ namespace Eimu.Core.Systems.Chip8X
                 case 4: return m_1802Regs[4]; // A PC register, assuming it must point after the syscall (probably only read with SEP, which is what we want)
                 case 5: return (ushort)m_PC;
                 // next 2 are pixel address pointers (X, Y)
-                case 6: return (ushort)(m_Memory.VideoPointer + (m_1802Regs[6] & 0x00FF));
-                case 7: return (ushort)(m_Memory.VideoPointer + (m_1802Regs[7] & 0x00FF));
+                case 6: return (ushort)m_1802Regs[6];
+                case 7: return (ushort)m_1802Regs[7];
                 case 8: return (ushort)((m_DT << 8) & m_ST); // Timer data
                 case 9: return m_LastRand; // Return last used random num, probably doesn't matter
                 case 10: return m_IReg;

@@ -34,6 +34,11 @@ namespace Eimu
             InitializeComponent();
         }
 
+        private void UpdatePressKeyLabel()
+        {
+            m_Label_MenuPressedKey.Content = "Key Pressed: " + ((int)(m_Machine.PressedKey)).ToString("X2");
+        }
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             m_Debugger.Close();
@@ -135,11 +140,13 @@ namespace Eimu
             }
 
             m_Machine.PressedKey = key;
+            UpdatePressKeyLabel();
         }
 
         private void WindowsFormsHost_KeyUp(object sender, KeyEventArgs e)
         {
             m_Machine.PressedKey = HexKey.None;
+            UpdatePressKeyLabel();
         }
 
         private void m_MenuItem_Debugger_Click(object sender, RoutedEventArgs e)

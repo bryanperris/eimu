@@ -29,6 +29,7 @@
             	<MenuItem x:Name="m_MenuItem_About" Header="About" Click="m_MenuItem_About_Click" />
             	<MenuItem x:Name="m_MenuItem_ProjectSite" Header="Project Site" Click="m_MenuItem_ProjectSite_Click" />
             </MenuItem>
+            <Label x:Name="m_Label_MenuPressedKey" Content="Key Pressed:" Width="112.993" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" BorderThickness="0"/>
         </Menu>
     </Grid>
 </Window>
