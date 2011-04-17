@@ -37,6 +37,11 @@ namespace Eimu.Core.Dynarec
             ((EmittedCall)syscall.CreateDelegate(typeof(EmittedCall)))(coreState);
         }
 
+        public void ClearCache()
+        {
+            m_CodeBlocks.Clear();
+        }
+
         public ILEmitterBase CurrentEmitter
         {
             get { return m_Emitter; }

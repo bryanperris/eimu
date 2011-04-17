@@ -30,10 +30,51 @@ namespace Eimu
 		public StartDialog()
 		{
 			InitializeComponent();
+            m_Textbox_C8XLoadPointAddress.TextChanged += new TextChangedEventHandler(m_Textbox_C8XLoadPointAddress_TextChanged);
+            m_RadioButton_C8XNormalLoadPoint.Checked += new RoutedEventHandler(m_RadioButton_C8XNormalLoadPoint_Checked);
 			m_OpenFileDialog = new OpenFileDialog();
-			m_OpenFileDialog.Filter = "Chip8X Programs (*.sc, *.ch8, *.c8)|*.sc;*.ch8;*.c8;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
+			m_OpenFileDialog.Filter = "Chip8X Programs (*.sc, *.ch8, *.c8, *.c8x)|*.sc;*.ch8;*.c8;*.c8x;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
 			LoadConfig();
 		}
+
+        void m_RadioButton_C8XNormalLoadPoint_Checked(object sender, RoutedEventArgs e)
+        {
+            m_Button_RunEmulator.IsEnabled = true;
+            m_Textbox_C8XLoadPointAddress.Text = "0200";
+        }
+
+        void m_Textbox_C8XLoadPointAddress_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string val = m_Textbox_C8XLoadPointAddress.Text;
+            Color normal = Color.FromRgb(255, 255, 255);
+            Color bad = Color.FromRgb(255, 100, 100);
+
+            try
+            {
+                ushort address = ushort.Parse(val, System.Globalization.NumberStyles.HexNumber);
+
+                if (address < 0 || address > ushort.MaxValue)
+                {
+                    m_Textbox_C8XLoadPointAddress.Background = new SolidColorBrush(bad);
+                    m_Button_RunEmulator.IsEnabled = false;
+                }
+                else
+                {
+                    m_Textbox_C8XLoadPointAddress.Background = new SolidColorBrush(normal);
+                    m_Button_RunEmulator.IsEnabled = true;
+                }
+            }
+            catch (FormatException)
+            {
+                m_Textbox_C8XLoadPointAddress.Background = new SolidColorBrush(bad);
+                m_Button_RunEmulator.IsEnabled = false;
+            }
+            catch (OverflowException)
+            {
+                m_Textbox_C8XLoadPointAddress.Background = new SolidColorBrush(bad);
+                m_Button_RunEmulator.IsEnabled = false;
+            }
+        }
 
 		public void SaveConfig()
 		{
@@ -51,6 +92,9 @@ namespace Eimu
 			Chip8XConfig.useRecompiler = m_CheckBox_C8UseILRec.IsChecked == true;
 			Chip8XConfig.use1802Recompiler = m_CheckBox_Use1802Dynarec.IsChecked == true;
 			Chip8XConfig.hleMode = m_ComboBox_HLESelector.SelectedIndex;
+            Chip8XConfig.loadFonts = m_Checkbox_C8XLoadFonts.IsChecked == true;
+            Chip8XConfig.customLoadPoint = int.Parse(m_Textbox_C8XLoadPointAddress.Text, System.Globalization.NumberStyles.HexNumber);
+            Chip8XConfig.normalBoot = m_RadioButton_C8XNormalLoadPoint.IsChecked == true;
 
 			#endregion
 
@@ -75,7 +119,7 @@ namespace Eimu
 				}
 			}
 
-			#region SCHIP
+			#region Chip8X
 			
 			m_Rectangle_C8SelectedBackgroundColor.Fill = new SolidColorBrush(Color.FromRgb(Chip8XConfig.backgroundColorR, Chip8XConfig.backgroundColorG, Chip8XConfig.backgroundColorB));
 			m_Rectangle_C8SelectedForegroundColor.Fill = new SolidColorBrush(Color.FromRgb(Chip8XConfig.foregroundColorR, Chip8XConfig.foregroundColorG, Chip8XConfig.foregroundColorB));
@@ -91,6 +135,10 @@ namespace Eimu
 			m_CheckBox_C8UseILRec.IsChecked = Chip8XConfig.useRecompiler;
 			m_ComboBox_HLESelector.SelectedIndex = (Chip8XConfig.hleMode > m_ComboBox_HLESelector.Items.Count) ? 0 : Chip8XConfig.hleMode;
 			m_CheckBox_Use1802Dynarec.IsChecked = Chip8XConfig.use1802Recompiler;
+            m_Checkbox_C8XLoadFonts.IsChecked = Chip8XConfig.loadFonts;
+            m_Textbox_C8XLoadPointAddress.Text = Chip8XConfig.customLoadPoint.ToString("X4");
+            m_RadioButton_C8XNormalLoadPoint.IsChecked = Chip8XConfig.normalBoot;
+            m_RadioButton_C8XCustomLoadPoint.IsChecked = !Chip8XConfig.normalBoot;
 
 			#endregion
 		}
@@ -104,8 +152,13 @@ namespace Eimu
             if (m_CheckBox_C8EnableHighres.IsChecked == true) m_VM.StartingChipMode = ChipMode.SuperChip;
             m_VM.ProcessorCore.AntiFlickerHack = (this.m_CheckBox_C8AntiFlickerHack.IsChecked == true);
             ((ChipResources)m_VM.Resources).ProgramSource = m_RomFileSource;
-            ((ChipResources)m_VM.Resources).FontSource = new FileStream(Chip8XConfig.Chip8FontPath, FileMode.Open, FileAccess.Read);
-            ((ChipResources)m_VM.Resources).SuperFontSource = new FileStream(Chip8XConfig.SChipFontPath, FileMode.Open, FileAccess.Read);
+            ((ChipResources)m_VM.Resources).FontSource = new FileStream(Paths.Chip8FontPath, FileMode.Open, FileAccess.Read);
+            ((ChipResources)m_VM.Resources).SuperFontSource = new FileStream(Paths.SChipFontPath, FileMode.Open, FileAccess.Read);
+            ((ChipResources)m_VM.Resources).LoadFonts = (this.m_Checkbox_C8XLoadFonts.IsChecked == true);
+            if (m_RadioButton_C8XNormalLoadPoint.IsChecked == true)
+                ((ChipResources)m_VM.Resources).LoadPointAddress = Chip8XMachine.PROGRAM_ENTRY_POINT;
+            else
+                ((ChipResources)m_VM.Resources).LoadPointAddress = Chip8XConfig.customLoadPoint;
             m_VM.ExtraCycleSpeed = (this.m_CheckBox_C8EpicSpeed.IsChecked == true) ? 9001 : 0;
             m_VM.IsHybridDynarecEnabled = Chip8XConfig.use1802Recompiler;
             m_VM.MachineMode = (CDP1802Mode)m_ComboBox_HLESelector.SelectedIndex;

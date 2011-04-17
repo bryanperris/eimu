@@ -30,8 +30,6 @@ namespace Eimu.Configuration
 {
     public static class Config
     {
-        public const string systemDirectory = "./sys/";
-        public const string ConfigPath = "./config.xml";
         public static string romFilePath = "";
 
         // TODO: Implement serialization for non primtive types
@@ -102,7 +100,7 @@ namespace Eimu.Configuration
 
         public static void SaveConfig()
         {
-            FileStream file = new FileStream(ConfigPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+            FileStream file = new FileStream(Paths.ConfigPath, FileMode.Create, FileAccess.Write, FileShare.Read);
             XmlTextWriter writer = new XmlTextWriter(file, new UTF8Encoding());
             writer.WriteStartElement("EimuConfig");
             SaveObjectData(typeof(Config), writer);
@@ -115,10 +113,10 @@ namespace Eimu.Configuration
 
         public static void LoadConfig()
         {
-            if (!File.Exists(ConfigPath))
+            if (!File.Exists(Paths.ConfigPath))
                 SaveConfig();
 
-            FileStream file = new FileStream(ConfigPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FileStream file = new FileStream(Paths.ConfigPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             XmlTextReader reader = new XmlTextReader(file);
 
             try

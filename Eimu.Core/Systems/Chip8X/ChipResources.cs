@@ -12,6 +12,8 @@ namespace Eimu.Core.Systems.Chip8X
         private Stream m_FontSource;
         private Stream m_SuperFontSource;
         private Chip8XMachine m_Machine;
+        private bool m_LoadFonts = true;
+        private int m_ProgramLoadPoint = Chip8XMachine.PROGRAM_ENTRY_POINT;
 
         public ChipResources(Chip8XMachine machine)
         {
@@ -28,12 +30,13 @@ namespace Eimu.Core.Systems.Chip8X
                 m_SuperFontSource.Position = 0;
                 Memory mem =  m_Machine.SystemMemory;
 
-                while ((read = m_FontSource.ReadByte()) != -1)
+
+                while ((read = m_FontSource.ReadByte()) != -1 && m_LoadFonts)
                 {
                    mem[pos++] = (byte)read;
                 }
 
-                while ((read = m_SuperFontSource.ReadByte()) != -1)
+                while ((read = m_SuperFontSource.ReadByte()) != -1 && m_LoadFonts)
                 {
                     mem[pos++] = (byte)read;
                 }
@@ -49,7 +52,7 @@ namespace Eimu.Core.Systems.Chip8X
 
                 this.m_RomSource.Position = 0;
                 read = 0;
-                pos = Chip8XMachine.PROGRAM_ENTRY_POINT;
+                pos = m_ProgramLoadPoint;
 
                 while ((read = m_RomSource.ReadByte()) != -1)
                 {
@@ -92,6 +95,18 @@ namespace Eimu.Core.Systems.Chip8X
         {
             get { return m_SuperFontSource; }
             set { m_SuperFontSource = value; }
+        }
+
+        public bool LoadFonts
+        {
+            get { return m_LoadFonts; }
+            set { m_LoadFonts = value; }
+        }
+
+        public int LoadPointAddress
+        {
+            get { return m_ProgramLoadPoint; }
+            set { m_ProgramLoadPoint = value; }
         }
     }
 }

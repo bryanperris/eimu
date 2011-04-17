@@ -89,7 +89,8 @@ namespace Eimu.Core.Systems.Chip8X
             switch (index)
             {
                 case 0: return m_1802Regs[0]; // DMA pointer - let the game picks its DMA pointer, then we try to handle it
-                case 1: return m_1802Regs[1]; // the PC of the INTERRUPT, just return w/e assigned value
+                //case 1: return m_1802Regs[1]; // the PC of the INTERRUPT, just return w/e assigned value
+                case 1: return 0xF;
                 //case 2: TODO: Pointer to fake stack memory page
                 case 3: return m_RoutineAddress;
                 case 4: return m_1802Regs[4]; // A PC register, assuming it must point after the syscall (probably only read with SEP, which is what we want)

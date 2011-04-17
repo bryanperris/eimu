@@ -57,7 +57,6 @@
     <Compile Include="Dynarec\ILEmitterBase.cs" />
     <Compile Include="MemoryPage.cs" />
     <Compile Include="ResourceManager.cs" />
-    <Compile Include="RgbColor.cs" />
     <Compile Include="RunStateChangedArgs.cs" />
     <Compile Include="Systems\Chip8X\AudioInterface.cs" />
     <Compile Include="Systems\Chip8X\ChipMemory.cs" />

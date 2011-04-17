@@ -89,8 +89,8 @@ namespace Eimu
             renderer.SetPanelHandle(renderPanel.Handle);
             renderer.SetWindowHandle(m_WinHelper.Handle);
             renderer.Initialize();
-            renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.Red, Chip8XConfig.BackColor.Green, Chip8XConfig.BackColor.Blue);
-            renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.Red, Chip8XConfig.ForeColor.Green, Chip8XConfig.ForeColor.Blue);
+            renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.R, Chip8XConfig.BackColor.G, Chip8XConfig.BackColor.B);
+            renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.R, Chip8XConfig.ForeColor.G, Chip8XConfig.ForeColor.B);
             
             if (!Chip8XConfig.disableGraphics)
             {

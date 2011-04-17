@@ -84,6 +84,7 @@ namespace Eimu.Core.Systems.Chip8X
                 m_CodeEngine.Shutdown();
                 m_VideoInterface.Shutdown();
                 m_AudioInterface.Shutdown();
+                m_HybridDynarec.ClearCache();
                 Console.WriteLine("Stopped...");
                 return;
             }
@@ -146,8 +147,6 @@ namespace Eimu.Core.Systems.Chip8X
         {
             Console.WriteLine("Booting...");
 
-            
-            m_CodeEngine.PC = PROGRAM_ENTRY_POINT;
             m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -161,6 +160,8 @@ namespace Eimu.Core.Systems.Chip8X
                 Console.WriteLine("Resource load error!");
                 return false;
             }
+
+            m_CodeEngine.PC = ((ChipResources)Resources).LoadPointAddress;
 
             StartCPUThread();
             Console.WriteLine("Running...");

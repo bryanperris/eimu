@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Eimu.Core;
+using System.Windows.Media;
+using System.Runtime.Serialization;
 
 namespace Eimu.Configuration
 {
+    [Serializable]
     public static class Chip8XConfig
     {
-        public const string Chip8FontPath = Config.systemDirectory + "c8fnt.bin";
-        public const string SChipFontPath = Config.systemDirectory + "scfnt.bin";
         public static bool useRecompiler = false;
         public static bool use1802Recompiler = false;
         public static byte backgroundColorR;
@@ -29,20 +30,23 @@ namespace Eimu.Configuration
         public static bool epicSpeed = false;
         public static bool antiFlicker = false;
         public static int hleMode = 0;
+        public static bool loadFonts = true;
+        public static bool normalBoot = true;
+        public static int customLoadPoint = 0x200;
 
-        public static RgbColor BackColor
+        public static Color BackColor
         {
             get
             {
-                return new RgbColor(backgroundColorR, backgroundColorG, backgroundColorB);
+                return Color.FromRgb(backgroundColorR, backgroundColorG, backgroundColorB);
             }
         }
 
-        public static RgbColor ForeColor
+        public static Color ForeColor
         {
             get
             {
-                return new RgbColor(foregroundColorR, foregroundColorG, foregroundColorB);
+                return Color.FromRgb(foregroundColorR, foregroundColorG, foregroundColorB);
             }
         }
     }

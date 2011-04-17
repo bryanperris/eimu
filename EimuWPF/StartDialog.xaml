@@ -5,7 +5,7 @@
 	x:Class="Eimu.StartDialog"
 	x:Name="Window"
 	Title="Eimu 2.0"
-	Width="543" Icon="icon.ico" ResizeMode="NoResize" Height="450">
+	Width="543" Icon="icon.ico" ResizeMode="NoResize" Height="410">
 	<Window.Background>
 		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 			<GradientStop Color="#FFB2B2B2" Offset="1"/>
@@ -19,42 +19,62 @@
 			<RowDefinition Height="79.042" />
 			<RowDefinition Height="304"/>
 		</Grid.RowDefinitions>
-		<TabControl x:Name="m_TabControl_MachineSelector" Margin="8,8,8,0" Grid.Row="2" Height="289.856" VerticalAlignment="Top">
-			<TabItem x:Name="m_TabItem_Chip8" Header="SChip8">
+		<TabControl x:Name="m_TabControl_MachineSelector" Margin="8,8,8,0" Grid.Row="2" Height="248" VerticalAlignment="Top">
+			<TabItem x:Name="m_TabItem_Chip8" Header="Chip8X">
 				<Grid Margin="8,2.876,5,4.02">
-					<GroupBox Header="CPU Settings" Margin="8,7,0,80.04" HorizontalAlignment="Left" Width="224.057">
+					<GroupBox Header="Graphics Settings" Height="201.144" VerticalAlignment="Top" Margin="8,0,241.057,0">
 						<Grid>
-							<CheckBox x:Name="m_CheckBox_C8UseILRec" Content="Recompiler Mode" Margin="8,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="121.477" d:LayoutOverrides="HorizontalAlignment" IsEnabled="False" />
-                            <CheckBox Content="Epic Speed" Height="16" Margin="8,40,0,0" x:Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" HorizontalAlignment="Left" Width="82.057" d:LayoutOverrides="HorizontalAlignment" />
-							<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" Margin="8,24,0,0" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment" HorizontalAlignment="Left" IsEnabled="False" />
-							<GroupBox Header="Hybrid 1802 Dynarec" Margin="6,87.88,0,0" VerticalAlignment="Top" Height="51" Width="204" HorizontalAlignment="Left" d:LayoutOverrides="Width">
+							<CheckBox Content="Disable Y Wrap (Blitz)" Height="17" HorizontalAlignment="Left" Margin="8,87.266,0,0" x:Name="m_CheckBox_C8DisableYWrap" VerticalAlignment="Top" Width="154" />
+							<CheckBox Content="Enable Deflicker (works most games)" Height="16" HorizontalAlignment="Left" x:Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="228.943" Margin="8,8,0,0" />
+							<CheckBox Content="Force SuperChip Mode" Height="16" Margin="8,28,0,0" x:Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" />
+							<CheckBox Content="Disable X Wrap" Margin="8,67.96,114.943,0" x:Name="m_CheckBox_C8DisableWrappingX" Height="15.306" VerticalAlignment="Top" />
+							<CheckBox x:Name="m_CheckBox_C8DisableGraphics" Content="Disable Graphics" Margin="8,48,49.056,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
+							<Rectangle x:Name="m_Rectangle_C8SelectedBackgroundColor" Fill="Black" Margin="78,126.386,105.943,0" Stroke="Black" Height="46.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedBackgroundColor_MouseLeftButtonUp" />
+							<Rectangle x:Name="m_Rectangle_C8SelectedForegroundColor" Fill="White" Margin="59,109,0,0" Stroke="Black" Height="47.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedForegroundColor_MouseLeftButtonUp" HorizontalAlignment="Left" Width="55" />
+						</Grid>
+					</GroupBox>
+					<GroupBox Header="Misc Settings" Margin="0,0,8,0" VerticalAlignment="Top" Height="201.144" HorizontalAlignment="Right" Width="229.057">
+						<Grid>
+							<CheckBox x:Name="m_CheckBox_C8DisableSound" Content="Disable Sound" HorizontalAlignment="Left" Margin="8,27.04,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+							<CheckBox x:Name="m_CheckBox_C8PlayOnline" Content="Enable Online Play" Margin="8" IsEnabled="False" />
+						</Grid>
+					</GroupBox>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Chip8X - Advanced">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="0.2*"/>
+						<ColumnDefinition Width="0.8*"/>
+					</Grid.ColumnDefinitions>
+					<GroupBox Header="Chip8X CPU Core" Margin="-94.2,8,0,85" HorizontalAlignment="Left" Width="228.057" Grid.Column="1">
+						<Grid>
+							<CheckBox x:Name="m_CheckBox_C8UseILRec" Content="Enable Code Recompiler" Margin="5.25,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="152.477" IsEnabled="False" />
+							<CheckBox Content="Enable Speed Boost" Height="16" Margin="5.25,47.92,0,0" x:Name="m_CheckBox_C8EpicSpeed" VerticalAlignment="Top" HorizontalAlignment="Left" Width="140.477" />
+							<CheckBox x:Name="m_CheckBox_C8EnableCodeCache" Content="Enable Code Cache" Margin="5.25,27.96,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" d:LayoutOverrides="VerticalAlignment" />
+						</Grid>
+					</GroupBox>
+					<GroupBox Grid.Column="1" Header="Boot Method" Margin="137.857,8,8,8">
+						<Grid>
+							<CheckBox x:Name="m_Checkbox_C8XLoadFonts" Content="Load Fonts at 000 - 1FF" Margin="8,8,25.523,0" VerticalAlignment="Top" IsChecked="True"/>
+							<GroupBox Header="Rom Load Point" Margin="8,27.96,8,0" Height="73.627" VerticalAlignment="Top">
 								<Grid>
-									<ComboBox Height="23" HorizontalAlignment="Left" Margin="82,1,0,0" x:Name="m_ComboBox_HLESelector" VerticalAlignment="Top" Width="104" SelectedIndex="0">
-										<ComboBoxItem Content="No HLE Calls" />
-										<ComboBoxItem Content="Cosmac VIP" />
-										<ComboBoxItem Content="ETI660" />
-										<ComboBoxItem Content="Telmac 2000" />
-									</ComboBox>
-									<CheckBox Content="Enable" Height="16" HorizontalAlignment="Left" Margin="7,4,0,0" x:Name="m_CheckBox_Use1802Dynarec" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment" />
+									<RadioButton x:Name="m_RadioButton_C8XNormalLoadPoint" Content="Normal Load Point (0x200)" Margin="8,5,53.894,0" VerticalAlignment="Top" IsChecked="True"/>
+									<RadioButton x:Name="m_RadioButton_C8XCustomLoadPoint" Content="Custom Load Point" Width="125.049" HorizontalAlignment="Left" Margin="8,27.96,0,0" Height="16.373" VerticalAlignment="Top"/>
+									<TextBox x:Name="m_Textbox_C8XLoadPointAddress" HorizontalAlignment="Right" TextWrapping="Wrap" Text="0200" Margin="0,24.96,12.001,0" Width="77.893" VerticalAlignment="Top"/>
 								</Grid>
 							</GroupBox>
 						</Grid>
 					</GroupBox>
-					<Rectangle x:Name="m_Rectangle_C8SelectedBackgroundColor" Fill="Black" HorizontalAlignment="Right" Margin="0,17.386,8,0" Stroke="Black" Width="53" Height="46.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedBackgroundColor_MouseLeftButtonUp" d:LayoutOverrides="VerticalAlignment" />
-					<Rectangle x:Name="m_Rectangle_C8SelectedForegroundColor" Fill="White" Margin="0,0,25,0" Stroke="Black" Height="47.494" VerticalAlignment="Top" MouseLeftButtonUp="m_Rectangle_C8SelectedForegroundColor_MouseLeftButtonUp" HorizontalAlignment="Right" Width="55" d:LayoutOverrides="VerticalAlignment" />
-					<GroupBox Header="Graphics Settings" Margin="236.057,7,80,80.04">
+					<GroupBox Header="CDP1802 Hybrid Core" Margin="-94.2,0,0,8" VerticalAlignment="Bottom" Height="77" Width="228.057" HorizontalAlignment="Left" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" Grid.Column="1">
 						<Grid>
-							<CheckBox Content="Disable Y Wrap (Blitz)" Height="17" HorizontalAlignment="Left" Margin="0,79.266,0,0" x:Name="m_CheckBox_C8DisableYWrap" VerticalAlignment="Top" Width="154" />
-							<CheckBox Content="AnitFlicker Hack (works 99%)" Height="16" HorizontalAlignment="Left" x:Name="m_CheckBox_C8AntiFlickerHack" VerticalAlignment="Top" Width="179" />
-							<CheckBox Content="Force Super Mode" Height="16" HorizontalAlignment="Left" Margin="0,20,0,0" x:Name="m_CheckBox_C8EnableHighres" VerticalAlignment="Top" Width="114" />
-							<CheckBox Content="Disable X Wrap" HorizontalAlignment="Left" Margin="0,59.96,0,0" x:Name="m_CheckBox_C8DisableWrappingX" Width="114" Height="15.306" VerticalAlignment="Top" />
-							<CheckBox x:Name="m_CheckBox_C8DisableGraphics" Content="Disable Graphics" Margin="0,40,57.056,0" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
-						</Grid>
-					</GroupBox>
-					<GroupBox Header="Misc Settings" Margin="8,0,8,8" VerticalAlignment="Bottom" Height="68.04">
-						<Grid>
-							<CheckBox x:Name="m_CheckBox_C8DisableSound" Content="Disable Sound" HorizontalAlignment="Left" Margin="8,0,0,0" VerticalAlignment="Bottom" IsEnabled="False"/>
-							<CheckBox x:Name="m_CheckBox_C8PlayOnline" Content="Play Online" HorizontalAlignment="Left" Width="115.42" Margin="8,8,0,21.12" d:LayoutOverrides="Height" IsEnabled="False" />
+							<ComboBox HorizontalAlignment="Left" Margin="5,8,0,23.04" x:Name="m_ComboBox_HLESelector" Width="203.057" SelectedIndex="0">
+								<ComboBoxItem Content="Disable HLE Patching" />
+								<ComboBoxItem Content="Cosmac VIP Patching" />
+								<ComboBoxItem Content="ETI660 Patching" />
+								<ComboBoxItem Content="Telmac 2000 Patching" />
+							</ComboBox>
+							<CheckBox Content="Enable hybrid core for syscalls" Height="16" HorizontalAlignment="Left" Margin="5,-55,0,0" x:Name="m_CheckBox_Use1802Dynarec" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" />
 						</Grid>
 					</GroupBox>
 				</Grid>
