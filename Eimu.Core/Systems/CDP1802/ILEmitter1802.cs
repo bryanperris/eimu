@@ -41,12 +41,19 @@ namespace Eimu.Core.Systems.CDP1802
             EmitLocal(typeof(byte), false); // DF local.4
 
             // Set P to 3
-            Console.Write("Setup P register");
+            Console.Write("Setup P register fake default");
             EmitByteConstant(3);
             EmitRegisterWrite(SelectedRegister.P);
 
+            // Set X to 2
+            Console.Write("\nSetup X register fake default");
+            EmitByteConstant(2);
+            EmitRegisterWrite(SelectedRegister.X);
+
             Console.Write("\nEmitting Opcodes...");
             EmitOpcodes();
+
+            EmitReportRegsCall();
 
             Console.WriteLine("\nEmitting Return code");
             EmitNop();
@@ -109,7 +116,7 @@ namespace Eimu.Core.Systems.CDP1802
                     }
 
                     //if (funcAddr == 0x616)
-                   //     EmitDumpRegsCall();
+                        //EmitDumpRegsCall();
                 }
                 catch (ArgumentException)
                 {
@@ -325,6 +332,12 @@ namespace Eimu.Core.Systems.CDP1802
             ILGenerator.Emit(OpCodes.Call, typeof(ILEmitter1802).GetMethod("DumpRegs"));
         }
 
+        public void EmitReportRegsCall()
+        {
+            EmitCoreStateObject();
+            ILGenerator.Emit(OpCodes.Call, typeof(ILEmitter1802).GetMethod("ReportRegs"));
+        }
+
         public static void DumpRegs(ushort address, CodeEngine engine, ushort d, ushort p, ushort x, ushort t, ushort df)
         {
             Console.WriteLine("\n======== Register State (" + address.ToString("x") + ") =========");
@@ -350,6 +363,15 @@ namespace Eimu.Core.Systems.CDP1802
             Console.WriteLine("Register RE: " + engine.Read1802Register(14).ToString("x"));
             Console.WriteLine("Register RF: " + engine.Read1802Register(15).ToString("x"));
             Console.WriteLine("=================================");
+        }
+
+        public static void ReportRegs(CodeEngine engine)
+        {
+            Console.WriteLine("\n=== New Code Engine State ====");
+            Console.WriteLine("PC: " + engine.Read1802Register(5).ToString("x"));
+            Console.WriteLine("Timers: " + engine.Read1802Register(8).ToString("x"));
+            Console.WriteLine("Address Register: " + engine.Read1802Register(10).ToString("x"));
+            Console.WriteLine("==============================\n");
         }
 
         #endregion

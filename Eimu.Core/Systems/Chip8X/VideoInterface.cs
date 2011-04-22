@@ -25,9 +25,11 @@ namespace Eimu.Core.Systems.Chip8X
         public event RenderCallback Render;
         private Timer m_RenderInterrupt;
         EventWaitHandle m_RenderWait;
+        private Chip8XMachine m_ParentMachine;
 
-        public VideoInterface()
+        public VideoInterface(Chip8XMachine machine)
         {
+            m_ParentMachine = machine;
             m_Buffer = new bool[(SuperResolutionX + 1) * (SuperResolutionY + 1)];
         }
 
@@ -197,6 +199,11 @@ namespace Eimu.Core.Systems.Chip8X
         {
             get { return this.m_ResY; }
             set { this.m_ResY = value; }
+        }
+
+        public Chip8XMachine ParentMachine
+        {
+            get { return m_ParentMachine; }
         }
     }
 }

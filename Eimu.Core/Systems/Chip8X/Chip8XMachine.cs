@@ -36,6 +36,7 @@ namespace Eimu.Core.Systems.Chip8X
         public const int PROGRAM_ENTRY_POINT = 0x200;
         private ResourceManager m_ResManager;
         private ChipMode m_StartMode = ChipMode.Chip8;
+        private CodePatchEngine m_PatchEngine;
 
         #region State Members
 
@@ -64,11 +65,12 @@ namespace Eimu.Core.Systems.Chip8X
 
         public Chip8XMachine() : base()
         {
-            m_VideoInterface = new VideoInterface();
+            m_VideoInterface = new VideoInterface(this);
             m_AudioInterface = new AudioInterface();
             m_CodeEngine = new Interpreter(this);
             m_HybridDynarec = new ILDynarec<ILEmitter1802>();
             m_ResManager = new ChipResources(this);
+            m_PatchEngine = new CodePatchEngine();
         }
 
         #region Execution Control
@@ -104,15 +106,21 @@ namespace Eimu.Core.Systems.Chip8X
                 byte b = SystemMemory.ReadByte(m_CodeEngine.PC + 1);
                 ushort data = Tools.Create16(a, b);
                 ChipOpCode opcode = Disassembler.DecodeInstruction(data);
-                //Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
+                Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
+
+                if (m_PatchEngine.PatchAddress(m_CodeEngine, (ushort)(m_CodeEngine.PC - 2)))
+                {
+                    continue;
+                }
 
                 if (opcode == ChipOpCode.Unknown)
                 {
                     if (data != 0)
                     {
+                        Console.WriteLine(m_CodeEngine.PC.ToString("X2"));
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
 
                         if (m_UseHybridDynarec)

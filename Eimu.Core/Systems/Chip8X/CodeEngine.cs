@@ -53,6 +53,7 @@ namespace Eimu.Core.Systems.Chip8X
         public void Initialize(Chip8XMachine machine)
         {
             m_1802Regs[0xF] = 0x7F00;
+            
             m_Memory.Reset();
             m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;
@@ -117,7 +118,7 @@ namespace Eimu.Core.Systems.Chip8X
                 case 4: m_1802Regs[4] = value; break; // Set this reigser to w/e
                 case 5: m_PC = (int)value; break;
                 case 6: m_1802Regs[6] = value; break; // Set X pointer
-                case 7: m_1802Regs[6] = value; break; // Set Y pointer
+                case 7: m_1802Regs[7] = value; break; // Set Y pointer
                 case 8: OnSetDelayTimer((byte)((value & 0xFF00) >> 8)); OnSetSoundTimer((byte)(value & 0x00FF)); break; // Set timer events
                 case 9: m_Rand.Next(); break; // Randomize our random, ignore the passed in value since its random anyways
                 case 10: m_IReg = value; break;

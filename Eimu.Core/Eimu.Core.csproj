@@ -69,6 +69,7 @@
     <Compile Include="Systems\Chip8X\Chip8XMachine.cs" />
     <Compile Include="Systems\Chip8X\ChipOpCode.cs" />
     <Compile Include="Systems\Chip8X\CodeEngine.cs" />
+    <Compile Include="Systems\Chip8X\CodePatchEngine.cs" />
     <Compile Include="Systems\Chip8X\Disassembler.cs" />
     <Compile Include="Systems\Chip8X\Interpreter.cs" />
     <Compile Include="Systems\Chip8X\HexKey.cs" />
