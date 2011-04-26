@@ -26,6 +26,9 @@ using System.Runtime.InteropServices;
 using Eimu.Core.Systems.Chip8X.Engines;
 using Eimu.Core.Systems.CDP1802;
 using Eimu.Core.Dynarec;
+using Eimu.Core.Systems.Chip8X.Interfaces;
+using Eimu.Core.Systems.Chip8X.CodeUtils;
+using Eimu.Core.Systems.Chip8X.CodeUtils.CodeUtils;
 
 namespace Eimu.Core.Systems.Chip8X
 {
@@ -106,7 +109,7 @@ namespace Eimu.Core.Systems.Chip8X
                 byte b = SystemMemory.ReadByte(m_CodeEngine.PC + 1);
                 ushort data = Tools.Create16(a, b);
                 ChipOpCode opcode = Disassembler.DecodeInstruction(data);
-                Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
+                //Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
                 m_CodeEngine.IncrementPC();
@@ -120,7 +123,7 @@ namespace Eimu.Core.Systems.Chip8X
                 {
                     if (data != 0)
                     {
-                        Console.WriteLine(m_CodeEngine.PC.ToString("X2"));
+                        //Console.WriteLine(m_CodeEngine.PC.ToString("X2"));
                         Console.WriteLine("Syscall: " + inst.NNN.ToString("x"));
 
                         if (m_UseHybridDynarec)

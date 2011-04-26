@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Eimu.Core.Systems.Chip8X
+namespace Eimu.Core.Systems.Chip8X.CodeUtils.CodeUtils
 {
 	public static class Disassembler
 	{
@@ -31,7 +31,6 @@ namespace Eimu.Core.Systems.Chip8X
 		{
 			s_Lookup = new Dictionary<ushort, ChipOpCode>();
 
-			//s_Lookup.Add(0, ChipOpCode.Sys);
 			s_Lookup.Add(0x00E0, ChipOpCode.Clr);
 			s_Lookup.Add(0x00EE, ChipOpCode.Ret);
 			s_Lookup.Add(0x1000, ChipOpCode.Jp_1);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Eimu.Core.Systems.Chip8X
+namespace Eimu.Core.Systems.Chip8X.Interfaces
 {
     public delegate void RenderCallback(VideoInterface currentInterface);
 

@@ -15,6 +15,7 @@ using System.Windows.Interop;
 using Eimu.Devices;
 using Eimu.Debugger;
 using Eimu.Configuration;
+using Eimu.Core.Systems.Chip8X.Interfaces;
 
 namespace Eimu
 {

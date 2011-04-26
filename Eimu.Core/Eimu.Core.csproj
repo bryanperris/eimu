@@ -58,7 +58,9 @@
     <Compile Include="MemoryPage.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RunStateChangedArgs.cs" />
-    <Compile Include="Systems\Chip8X\AudioInterface.cs" />
+    <Compile Include="Systems\Chip8X\CodeUtils\CodeAnalyzer.cs" />
+    <Compile Include="Systems\Chip8X\CodeUtils\OpcodeMeta.cs" />
+    <Compile Include="Systems\Chip8X\Interfaces\AudioInterface.cs" />
     <Compile Include="Systems\Chip8X\ChipMemory.cs" />
     <Compile Include="Systems\Chip8X\ChipMode.cs" />
     <Compile Include="Systems\Chip8X\ChipResources.cs" />
@@ -67,10 +69,10 @@
     <Compile Include="Systems\CDP1802\C1802Instruction.cs" />
     <Compile Include="IDebugger.cs" />
     <Compile Include="Systems\Chip8X\Chip8XMachine.cs" />
-    <Compile Include="Systems\Chip8X\ChipOpCode.cs" />
+    <Compile Include="Systems\Chip8X\CodeUtils\ChipOpCode.cs" />
     <Compile Include="Systems\Chip8X\CodeEngine.cs" />
     <Compile Include="Systems\Chip8X\CodePatchEngine.cs" />
-    <Compile Include="Systems\Chip8X\Disassembler.cs" />
+    <Compile Include="Systems\Chip8X\CodeUtils\Disassembler.cs" />
     <Compile Include="Systems\Chip8X\Interpreter.cs" />
     <Compile Include="Systems\Chip8X\HexKey.cs" />
     <Compile Include="Device.cs" />
@@ -78,16 +80,16 @@
     <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunState.cs" />
-    <Compile Include="Systems\Chip8X\Profiler.cs" />
+    <Compile Include="Systems\Chip8X\CodeUtils\Profiler.cs" />
     <Compile Include="Systems\Chip8X\ChipModeChangedEventArgs.cs" />
-    <Compile Include="Systems\Chip8X\VideoInterface.cs" />
+    <Compile Include="Systems\Chip8X\Interfaces\VideoInterface.cs" />
     <Compile Include="Systems\CDP1802\ILEmitter1802.cs" />
     <Compile Include="Systems\CDP1802\Opcodes.cs" />
     <Compile Include="Systems\CDP1802\CDP1802Mode.cs" />
     <Compile Include="Systems\Chip8X\VideoPage.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VirtualMachine.cs" />
-    <Compile Include="Systems\Chip8X\ChipInstruction.cs" />
+    <Compile Include="Systems\Chip8X\CodeUtils\ChipInstruction.cs" />
     <Compile Include="VMException.cs" />
   </ItemGroup>
   <ItemGroup />

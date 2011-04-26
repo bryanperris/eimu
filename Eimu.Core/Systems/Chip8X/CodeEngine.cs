@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Eimu.Core.Systems.Chip8X.Interfaces;
+using Eimu.Core.Systems.Chip8X.CodeUtils;
 
 // Some RPL Register Doc
 // Test Program: Schip Test.sc

@@ -15,8 +15,6 @@ namespace Eimu.Core.Systems.Chip8X
 
             switch(address)
             {
-                case 0x4F0: engine.VRegisters[0xF] = 1; break;
-                //case 0x21C: engine.VRegisters[0x7] = 1; break;
                 default: a = false; break;
             }
 

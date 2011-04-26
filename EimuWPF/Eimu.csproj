@@ -90,6 +90,9 @@
     <Compile Include="ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CommonControls\CodeView.xaml.cs">
+      <DependentUpon>CodeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CommonControls\MemoryField.xaml.cs">
       <DependentUpon>MemoryField.xaml</DependentUpon>
     </Compile>
@@ -168,6 +171,10 @@
     <Page Include="ColorPicker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CommonControls\CodeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CommonControls\MemoryField.xaml">
       <SubType>Designer</SubType>

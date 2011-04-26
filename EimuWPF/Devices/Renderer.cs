@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Windows.Media;
 using Eimu.Core.Systems.Chip8X;
+using Eimu.Core.Systems.Chip8X.Interfaces;
 
 namespace Eimu.Devices
 {

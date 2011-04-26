@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Eimu.Core.Systems.Chip8X.Interfaces;
 
 namespace Eimu.Core.Systems.Chip8X
 {

@@ -5,14 +5,13 @@ using System.Reflection;
 using System.IO;
 using System.Globalization;
 using System.Threading;
+using Eimu.Core.Systems.Chip8X.CodeUtils;
 
 namespace Eimu.Core.Systems.Chip8X.Engines
 {
     [Serializable]
     public sealed class Interpreter : CodeEngine
     {
-        Profiler m_Profiler;
-
 
         public Interpreter(Chip8XMachine machine) : base(machine) { }
 
@@ -21,20 +20,16 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         public override void OnInit()
         {
             m_MethodCallTable = new Dictionary<ChipOpCode, OpcodeHandler>();
-            //m_Profiler = new Profiler();
             LoadMethods();
         }
 
         public override void OnShutdown()
         {
-            //m_Profiler.DumpStats();
             m_MethodCallTable.Clear();
-            m_MethodCallTable = null;
         }
 
         public override void Call(ChipInstruction inst)
         {
-            //m_Profiler.CountOpcode(inst.OpCode);
             OpcodeHandler handler;
             if (m_MethodCallTable != null)
             {
@@ -83,6 +78,18 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             }
         }
 
+        private int AddWithCarry(int a, int b, int numBytes)
+        {
+            int result = a + b;
+
+            if (result >= ((256 ^ numBytes) - 1))
+            {
+                VRegisters[0xF] = 1;
+            }
+
+            return result;
+        }
+
         #region Opcodes
 
         // ----------------------------------------
@@ -125,27 +132,19 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Add_7)]
         void Add_7(ChipInstruction inst)
         {
-            VRegisters[inst.X] += inst.KK;
+            VRegisters[inst.X] = (byte)AddWithCarry(VRegisters[inst.X], inst.KK, 1);
         }
 
         [OpcodeTag(ChipOpCode.Add_8)]
         void Add_8(ChipInstruction inst)
         {
-            ushort val = (ushort)(VRegisters[inst.X] + VRegisters[inst.Y]);
-            VRegisters[0xF] = (byte)((val > 255) ? 1 : 0);
-            VRegisters[inst.X] = (byte)(val & 0x00FF);
+            VRegisters[inst.X] = (byte)AddWithCarry(VRegisters[inst.X], VRegisters[inst.Y], 1);
         }
 
         [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= 0x1000)
-            {
-                AddressRegister = (ushort)Memory.Size;
-                VRegisters[0xF] = 1;
-            }
-            else
-                AddressRegister += VRegisters[inst.X];
+           AddressRegister = (ushort)AddWithCarry(AddressRegister, VRegisters[inst.X], 2);
         }
 
         [OpcodeTag(ChipOpCode.Or)]

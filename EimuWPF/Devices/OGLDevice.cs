@@ -28,6 +28,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform;
+using Eimu.Core.Systems.Chip8X.Interfaces;
 
 namespace Eimu.Devices
 {
