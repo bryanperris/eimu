@@ -147,6 +147,16 @@ namespace Eimu.Core.Dynarec
             m_CodeGenerator.Emit(OpCodes.Conv_U1);
         }
 
+        protected void EmitLocalStore(int localOffset)
+        {
+            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(localOffset));
+        }
+
+        protected void EmitLocalLoad(int localOffset)
+        {
+            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(localOffset));
+        }
+
         protected void EmitNop()
         {
             m_CodeGenerator.Emit(OpCodes.Nop);

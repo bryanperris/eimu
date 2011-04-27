@@ -34,13 +34,6 @@ namespace Eimu
         {
             m_Machine = machine;
             InitializeComponent();
-            this.Closing += new System.ComponentModel.CancelEventHandler(RenderWindow_Closing);
-        }
-
-        void RenderWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            m_Machine.Dispose();
-            m_GLRenderer.Shutdown();
         }
 
         private void UpdatePressKeyLabel()
@@ -54,6 +47,7 @@ namespace Eimu
             m_Machine.AttachDebugger(null);
             m_Machine.Stop();
             m_GLRenderer.Shutdown();
+            //m_Machine.Dispose(); Calling this breaks program :(, TODO
             base.OnClosing(e);
         }
 

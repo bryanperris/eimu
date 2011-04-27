@@ -85,6 +85,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             if (result >= ((256 ^ numBytes) - 1))
             {
                 VRegisters[0xF] = 1;
+                VRegisters[0x7] = 1; // Wtf does chip8 have that isnt' documented? O_O
             }
 
             return result;
@@ -272,7 +273,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             }
             else
             {
-                //Console.WriteLine("Key checked for: " + VRegisters[inst.X].ToString());
+                //Console.WriteLine("Checked for pressed key " + VRegisters[inst.X].ToString());
             }
         }
 
@@ -285,7 +286,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             }
             else
             {
-                //Console.WriteLine("Key not checked for: " + VRegisters[inst.X].ToString());
+                //Console.WriteLine("Checked for unpressed key: " + VRegisters[inst.X].ToString());
             }
         }
 

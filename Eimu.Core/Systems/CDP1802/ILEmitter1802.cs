@@ -20,7 +20,7 @@ namespace Eimu.Core.Systems.CDP1802
 
     public sealed class ILEmitter1802 : ILEmitterBase
     {
-        private bool m_Debug = false;
+        private bool m_Debug = !false;
         private CodeEngine m_CodeEngine;
 
         public ILEmitter1802()
@@ -31,7 +31,7 @@ namespace Eimu.Core.Systems.CDP1802
         {
             if (m_Debug)
             {
-                WriteDebug(message);
+                Console.Write(message);
             }
         }
 
@@ -147,6 +147,7 @@ namespace Eimu.Core.Systems.CDP1802
                 {
                     case C1802OpCodesSub15.ADD: Emit_ADD(inst); break;
                     case C1802OpCodesSub15.LDI: Emit_LDI(inst); break;
+                    case C1802OpCodesSub15.LDX: Emit_LDX(inst); break;
                     default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                 }
 
@@ -391,7 +392,7 @@ namespace Eimu.Core.Systems.CDP1802
         {
             EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
             EmitReadMemory(GetResolvedLocal(0));
             EmitRegisterWrite(SelectedRegister.D);
             EmitCoreStateObject();
@@ -409,8 +410,8 @@ namespace Eimu.Core.Systems.CDP1802
             EmitLocal(typeof(ushort), false); // value   [1]
             EmitGeneralRegisterRead(inst.Low);
             EmitRegisterRead(SelectedRegister.D);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(1);
+            EmitLocalStore(0);
             EmitWriteMemory(GetResolvedLocal(0), GetResolvedLocal(1));
             EmitNop();
         }
@@ -446,16 +447,16 @@ namespace Eimu.Core.Systems.CDP1802
 
             // Add (Memory Byte + D)
             EmitGeneralRegisterReadFunc();
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(1));
+            EmitLocalStore(1);
             EmitReadMemory(GetResolvedLocal(1));
             EmitRegisterRead(SelectedRegister.D);
             ILGenerator.Emit(OpCodes.Add);
 
             // Store result
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
 
             // load result of math result > 255
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitUshortConstant(0xFF);
             ILGenerator.Emit(OpCodes.Cgt);
 
@@ -464,7 +465,7 @@ namespace Eimu.Core.Systems.CDP1802
             EmitNop(); // else
 
             // Store math result in D
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             ILGenerator.Emit(OpCodes.Conv_U1); // cast to byte
             EmitRegisterWrite(SelectedRegister.D);
 
@@ -481,7 +482,7 @@ namespace Eimu.Core.Systems.CDP1802
             EmitNop();
 
             // Set D to result & 0xFF
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitUshortConstant(0xFF);
             ILGenerator.Emit(OpCodes.And);
             ILGenerator.Emit(OpCodes.Conv_U1); // cast to byte
@@ -506,12 +507,12 @@ namespace Eimu.Core.Systems.CDP1802
 
             EmitRegisterRead(SelectedRegister.D);
             ILGenerator.Emit(OpCodes.Or);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
 
             EmitCoreStateObject();
             EmitByteConstant(inst.Low);
             WriteDebug(" (write) R" + inst.Low.ToString("X1"));
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitGeneralRegisterWriteFunc();
         }
 
@@ -521,10 +522,10 @@ namespace Eimu.Core.Systems.CDP1802
             EmitGeneralRegisterRead(inst.Low);
             EmitByteConstant(1);
             ILGenerator.Emit(OpCodes.Add);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
             EmitCoreStateObject();
             EmitByteConstant(inst.Low);
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitGeneralRegisterWriteFunc();
         }
 
@@ -548,10 +549,10 @@ namespace Eimu.Core.Systems.CDP1802
             ILGenerator.Emit(OpCodes.Add);
             EmitRegisterRead(SelectedRegister.D);
             ILGenerator.Emit(OpCodes.Add);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
 
             // Compare result > 255
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitUshortConstant(0xFF);
             ILGenerator.Emit(OpCodes.Cgt);
 
@@ -562,7 +563,7 @@ namespace Eimu.Core.Systems.CDP1802
             EmitNop();
             EmitByteConstant(0);
             EmitRegisterWrite(SelectedRegister.DF);
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitRegisterWrite(SelectedRegister.D);
             ILGenerator.Emit(OpCodes.Br_S, brEnd);
 
@@ -571,7 +572,7 @@ namespace Eimu.Core.Systems.CDP1802
             EmitNop();
             EmitByteConstant(1);
             EmitRegisterWrite(SelectedRegister.DF);
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitUshortConstant(0xFF);
             ILGenerator.Emit(OpCodes.And);
             ILGenerator.Emit(OpCodes.Conv_U1);
@@ -595,11 +596,11 @@ namespace Eimu.Core.Systems.CDP1802
             ILGenerator.Emit(OpCodes.Ldc_I4_S, 8);
             ILGenerator.Emit(OpCodes.Shl);
             ILGenerator.Emit(OpCodes.Or);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
 
             EmitCoreStateObject();
             EmitByteConstant(inst.Low);
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitGeneralRegisterWriteFunc();
         }
 
@@ -635,10 +636,10 @@ namespace Eimu.Core.Systems.CDP1802
             EmitGeneralRegisterRead(inst.Low);
             EmitByteConstant(1);
             ILGenerator.Emit(OpCodes.Sub);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
             EmitCoreStateObject();
             EmitByteConstant(inst.Low);
-            ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
+            EmitLocalLoad(0);
             EmitGeneralRegisterWriteFunc();
         }
 
@@ -647,7 +648,7 @@ namespace Eimu.Core.Systems.CDP1802
             // Yeah baby!!!
             EmitLocal(typeof(ushort), false);
             EmitGeneralRegisterRead(inst.Low);
-            ILGenerator.Emit(OpCodes.Stloc_S, GetResolvedLocal(0));
+            EmitLocalStore(0);
             EmitReadMemory(GetResolvedLocal(0));
             EmitRegisterWrite(SelectedRegister.D);
             EmitNop();
@@ -657,6 +658,18 @@ namespace Eimu.Core.Systems.CDP1802
         {
             // Lets just change the address to the another section of code and keep emitting
             CurrentAddress = (ushort)((CurrentAddress & 0xFF00) | GetMemoryByte((ushort)(CurrentAddress++)));
+        }
+
+        private void Emit_LDX(CdpInstruction inst)
+        {
+            EmitLocal(typeof(ushort), false); // Address [0]
+            EmitCoreStateObject();
+            EmitRegisterRead(SelectedRegister.X);
+            EmitGeneralRegisterReadFunc();
+            EmitLocalStore(0);
+            EmitReadMemory(GetResolvedLocal(0));
+            EmitRegisterWrite(SelectedRegister.D);
+            EmitNop();
         }
 
         #endregion
