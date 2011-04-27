@@ -24,12 +24,34 @@ using Eimu.Core.Systems.Chip8X.Interfaces;
 namespace Eimu.Devices
 {
     [Serializable]
-    public abstract class Renderer : Device
+    public abstract class Renderer
     {
         private Color m_BackColor;
         private Color m_ForeColor;
+        private VideoInterface m_VideoInterface;
 
-        public abstract void Update(VideoInterface currentInterface);
+        public abstract void DisplayRefresh();
+
+        public virtual void Shutdown()
+        {
+            m_VideoInterface = null;
+        }
+
+        public virtual void Initialize()
+        {
+
+        }
+
+        public void AttachToVideoInterface(VideoInterface currentInterface)
+        {
+            m_VideoInterface = currentInterface;
+            m_VideoInterface.DisplayRefresh += new Core.Systems.Chip8X.Interfaces.DisplayRefresh(this.DisplayRefresh);
+        }
+
+        public VideoInterface AttachedVideoInterface
+        {
+            get { return m_VideoInterface; }
+        }
 
         public Color BackgroundColor
         {

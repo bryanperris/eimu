@@ -32,27 +32,26 @@ using Eimu.Core.Systems.Chip8X.Interfaces;
 
 namespace Eimu.Devices
 {
-    public sealed class OGLDevice : Renderer, IWinFormAttachment
+    public sealed class GLRenderer : Renderer, IWinFormAttachment
     {
 
         private Control m_ControlContext;
         private GraphicsContext m_GContext;
         private IWindowInfo m_WindowInfo;
-        private VideoInterface m_Interface;
 
-        public OGLDevice()
+        public GLRenderer()
         {
         }
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
         {
-            if (m_Interface == null)
+            if (AttachedVideoInterface == null && m_GContext.IsDisposed && !m_GContext.IsCurrent)
                 return;
 
             GL.Viewport(m_ControlContext.ClientRectangle);
 
-            float m_ScaleX = (float)m_ControlContext.Width / (float)m_Interface.CurrentResolutionX;
-            float m_ScaleY = (float)m_ControlContext.Height / (float)m_Interface.CurrentResolutionY;
+            float m_ScaleX = (float)m_ControlContext.Width / (float)AttachedVideoInterface.CurrentResolutionX;
+            float m_ScaleY = (float)m_ControlContext.Height / (float)AttachedVideoInterface.CurrentResolutionY;
 
             GL.ClearColor(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -64,11 +63,11 @@ namespace Eimu.Devices
 
             GL.Begin(BeginMode.Quads);
 
-            for (int y = 0; y < m_Interface.CurrentResolutionY; y++)
+            for (int y = 0; y < AttachedVideoInterface.CurrentResolutionY; y++)
             {
-                for (int x = 0; x < m_Interface.CurrentResolutionX; x++)
+                for (int x = 0; x < AttachedVideoInterface.CurrentResolutionX; x++)
                 {
-                    if (m_Interface.GetPixel(x, y))
+                    if (AttachedVideoInterface.GetPixel(x, y))
                     {
                         GL.Color4(Color.FromArgb(ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
                     }
@@ -128,6 +127,7 @@ namespace Eimu.Devices
 
         public override void Initialize()
         {
+            base.Initialize();
             GL.Disable(EnableCap.AlphaTest);
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Dither);
@@ -141,17 +141,12 @@ namespace Eimu.Devices
 
         public override void Shutdown()
         {
+            base.Shutdown();
             m_GContext.Dispose();
         }
 
-        public override void SetPause(bool paused)
+        public override void DisplayRefresh()
         {
-            
-        }
-
-        public override void Update(VideoInterface currentInterface)
-        {
-            m_Interface = currentInterface;
             m_ControlContext.Invalidate();
         }
     }

@@ -34,8 +34,6 @@ namespace Eimu.Core
 
         // Events
         public event EventHandler<RunStateChangedArgs> RunningStateChanged;
-        public event EventHandler MachineAborted;
-        public event EventHandler MachineStarted;
 
         #region Abstract Methods
 

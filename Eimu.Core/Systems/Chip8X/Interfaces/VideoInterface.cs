@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Eimu.Core.Systems.Chip8X.Interfaces
 {
-    public delegate void RenderCallback(VideoInterface currentInterface);
+    public delegate void DisplayRefresh();
 
     [Serializable]
     public sealed class VideoInterface
@@ -22,7 +22,7 @@ namespace Eimu.Core.Systems.Chip8X.Interfaces
         private int m_ResY;
         private bool m_DisableWrappingX;
         private bool m_DisableWrappingY;
-        public event RenderCallback Render;
+        public event DisplayRefresh DisplayRefresh;
         private Timer m_RenderInterrupt;
         EventWaitHandle m_RenderWait;
         private Chip8XMachine m_ParentMachine;
@@ -49,7 +49,6 @@ namespace Eimu.Core.Systems.Chip8X.Interfaces
 
         public void Shutdown()
         {
-
         }
 
         public bool IsPaused { get; set; }
@@ -86,9 +85,9 @@ namespace Eimu.Core.Systems.Chip8X.Interfaces
 
         private void OnRefresh(object state)
         {
-            if (Render != null)
+            if (DisplayRefresh != null)
             {
-                Render(this);
+                DisplayRefresh();
             }
 
             m_RenderWait.Set();

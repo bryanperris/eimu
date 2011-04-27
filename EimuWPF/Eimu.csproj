@@ -106,9 +106,8 @@
     <Compile Include="Devices\Device.cs" />
     <Compile Include="Devices\IWinFormAttachment.cs" />
     <Compile Include="Devices\NullAudioDevice.cs" />
-    <Compile Include="Devices\NullGraphicsDevice.cs" />
-    <Compile Include="Devices\OALDevice.cs" />
-    <Compile Include="Devices\OGLDevice.cs" />
+    <Compile Include="Devices\ALDevice.cs" />
+    <Compile Include="Devices\GLRenderer.cs" />
     <Compile Include="Devices\Renderer.cs" />
     <Compile Include="ProgramInfo.cs" />
     <Compile Include="RenderPanel.cs">

@@ -20,19 +20,28 @@ namespace Eimu.Core.Systems.CDP1802
 
     public sealed class ILEmitter1802 : ILEmitterBase
     {
+        private bool m_Debug = false;
         private CodeEngine m_CodeEngine;
 
         public ILEmitter1802()
         {
         }
 
+        private void WriteDebug(string message)
+        {
+            if (m_Debug)
+            {
+                WriteDebug(message);
+            }
+        }
+
         protected override void RunEmitter(long address, object coreState)
         {
             m_CodeEngine = (CodeEngine)coreState;
 
-            Console.WriteLine("1802: Emitting function: " + address.ToString("x") + "\n");
+            WriteDebug("1802: Emitting function: " + address.ToString("x") + "\n");
 
-            Console.WriteLine("Emitting Registers D,P,X,R,DF");
+            WriteDebug("Emitting Registers D,P,X,R,DF\n");
             // First emit fake registers that all functions can use
             EmitLocal(typeof(byte), false); // D local.0
             EmitLocal(typeof(byte), false); // P local.1
@@ -41,21 +50,21 @@ namespace Eimu.Core.Systems.CDP1802
             EmitLocal(typeof(byte), false); // DF local.4
 
             // Set P to 3
-            Console.Write("Setup P register fake default");
+            WriteDebug("Setup P register fake default");
             EmitByteConstant(3);
             EmitRegisterWrite(SelectedRegister.P);
 
             // Set X to 2
-            Console.Write("\nSetup X register fake default");
+            WriteDebug("\nSetup X register fake default");
             EmitByteConstant(2);
             EmitRegisterWrite(SelectedRegister.X);
 
-            Console.Write("\nEmitting Opcodes...");
+            WriteDebug("\nEmitting Opcodes...");
             EmitOpcodes();
 
-            EmitReportRegsCall();
+            //EmitReportRegsCall();
 
-            Console.WriteLine("\nEmitting Return code");
+            WriteDebug("\nEmitting Return code\n");
             EmitNop();
             ILGenerator.Emit(OpCodes.Ret);
         }
@@ -79,7 +88,7 @@ namespace Eimu.Core.Systems.CDP1802
                 try
                 {
                     C1802OpCodes opcode = (C1802OpCodes)inst.Hi;
-                    Console.Write("\n1802 Opcode: " + opcode.ToString() + "(" + inst.Data.ToString("X2") + ")");
+                    WriteDebug("\n1802 Opcode: " + opcode.ToString() + "(" + inst.Data.ToString("X2") + ")");
 
                     MarkLabel();
 
@@ -94,7 +103,7 @@ namespace Eimu.Core.Systems.CDP1802
                                 }
                                 else
                                 {
-                                    Console.WriteLine(" : Warning: code doesn't point to r4, value: " + inst.Low.ToString("X1"));
+                                    WriteDebug(" : Warning: code doesn't point to r4, value: " + inst.Low.ToString("X1") + "\n");
                                     break;
                                 }
                             } 
@@ -112,7 +121,7 @@ namespace Eimu.Core.Systems.CDP1802
                         case C1802OpCodes.GHI: Emit_GHI(inst); break;
                         case C1802OpCodes.PHI: Emit_PHI(inst); break;
                         case C1802OpCodes.DEC: Emit_DEC(inst); break;
-                        default: EmitNop(); Console.Write("  ...No Emit!"); break;
+                        default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                     }
 
                     //if (funcAddr == 0x616)
@@ -132,13 +141,13 @@ namespace Eimu.Core.Systems.CDP1802
             try
             {
                 C1802OpCodesSub15 opcode = (C1802OpCodesSub15)inst.Low;
-                Console.Write("  " + opcode.ToString());
+                WriteDebug("  " + opcode.ToString());
 
                 switch (opcode)
                 {
                     case C1802OpCodesSub15.ADD: Emit_ADD(inst); break;
                     case C1802OpCodesSub15.LDI: Emit_LDI(inst); break;
-                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
+                    default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                 }
 
             }
@@ -153,13 +162,13 @@ namespace Eimu.Core.Systems.CDP1802
             try
             {
                 C1802OpCodesSub3 opcode = (C1802OpCodesSub3)inst.Low;
-                Console.Write("  " + opcode.ToString());
+                WriteDebug("  " + opcode.ToString());
 
                 switch (opcode)
                 {
                     case C1802OpCodesSub3.BNZ: Emit_BNZ(inst); break;
                     case C1802OpCodesSub3.BR: Emit_BR(inst); break;
-                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
+                    default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                 }
             }
             catch (ArgumentException)
@@ -173,12 +182,12 @@ namespace Eimu.Core.Systems.CDP1802
             try
             {
                 C1802OpCodesSub7 opcode = (C1802OpCodesSub7)inst.Low;
-                Console.Write("  " + opcode.ToString());
+                WriteDebug("  " + opcode.ToString());
 
                 switch (opcode)
                 {
                     case C1802OpCodesSub7.ADCI: Emit_ADCI(inst); break;
-                    default: EmitNop(); Console.Write("  ...No Emit!"); break;
+                    default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                 }
             }
             catch (ArgumentException)
@@ -191,12 +200,12 @@ namespace Eimu.Core.Systems.CDP1802
         {
             if (inst.Low == 0)
             {
-                Console.Write(" IDL");
+                WriteDebug(" IDL");
                 EmitNop(); // Set Idle mode, we don't bother with it   
             }
             else
             {
-                Console.Write("  LDN (" + inst.Low.ToString("x") + ")");
+                WriteDebug("  LDN (" + inst.Low.ToString("x") + ")");
                 Emit_LDN(inst);
             }
 
@@ -220,7 +229,7 @@ namespace Eimu.Core.Systems.CDP1802
             }
             else
             {
-                Console.WriteLine("1802 Dynarec: Invalid Memory Write Access " + address.ToString("x"));
+                WriteDebug("1802 Dynarec: Invalid Memory Write Access " + address.ToString("x") + "\n");
             }
         }
 
@@ -232,7 +241,7 @@ namespace Eimu.Core.Systems.CDP1802
             }
             else
             {
-                Console.WriteLine("1802 Dynarec: Invalid Memory Read Access " + address.ToString("x"));
+                WriteDebug("1802 Dynarec: Invalid Memory Read Access " + address.ToString("x") + "\n");
                 return 0;
             }
         }
@@ -258,7 +267,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitGeneralRegisterRead(byte selectedR)
         {
-            Console.Write(" : (read) R" + selectedR.ToString("X1"));
+            WriteDebug(" : (read) R" + selectedR.ToString("X1"));
             EmitCoreStateObject();
             EmitByteConstant(selectedR);
             EmitGeneralRegisterReadFunc();
@@ -266,7 +275,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitGeneralRegisterWrite(byte selectedR, ushort value)
         {
-            Console.Write(" : (write) R" + selectedR.ToString("X1"));
+            WriteDebug(" : (write) R" + selectedR.ToString("X1"));
             EmitCoreStateObject();
             EmitByteConstant(selectedR);
             EmitUshortConstant(value);
@@ -285,7 +294,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitRegisterWrite(SelectedRegister reg)
         {
-            Console.Write(" : (write) R-" + reg.ToString());
+            WriteDebug(" : (write) R-" + reg.ToString());
 
             switch (reg)
             {
@@ -300,7 +309,7 @@ namespace Eimu.Core.Systems.CDP1802
 
         private void EmitRegisterRead(SelectedRegister reg)
         {
-            Console.Write(" : (read) R-" + reg.ToString());
+            WriteDebug(" : (read) R-" + reg.ToString());
 
             switch (reg)
             {
@@ -362,7 +371,7 @@ namespace Eimu.Core.Systems.CDP1802
             Console.WriteLine("Register RD: " + engine.Read1802Register(13).ToString("x"));
             Console.WriteLine("Register RE: " + engine.Read1802Register(14).ToString("x"));
             Console.WriteLine("Register RF: " + engine.Read1802Register(15).ToString("x"));
-            Console.WriteLine("=================================");
+            Console.WriteLine("=================================\n");
         }
 
         public static void ReportRegs(CodeEngine engine)
@@ -501,7 +510,7 @@ namespace Eimu.Core.Systems.CDP1802
 
             EmitCoreStateObject();
             EmitByteConstant(inst.Low);
-            Console.Write(" (write) R" + inst.Low.ToString("X1"));
+            WriteDebug(" (write) R" + inst.Low.ToString("X1"));
             ILGenerator.Emit(OpCodes.Ldloc_S, GetResolvedLocal(0));
             EmitGeneralRegisterWriteFunc();
         }
@@ -597,7 +606,7 @@ namespace Eimu.Core.Systems.CDP1802
         private void Emit_LDI(CdpInstruction inst)
         {
             byte val = GetNextOperand();
-            Console.Write(" " + val.ToString("X1") + " ");
+            WriteDebug(" " + val.ToString("X1") + " ");
             EmitByteConstant(val);
             EmitRegisterWrite(SelectedRegister.D);
             EmitNop();

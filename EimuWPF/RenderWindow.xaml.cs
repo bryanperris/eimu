@@ -16,6 +16,7 @@ using Eimu.Devices;
 using Eimu.Debugger;
 using Eimu.Configuration;
 using Eimu.Core.Systems.Chip8X.Interfaces;
+using Eimu.Core;
 
 namespace Eimu
 {
@@ -27,12 +28,19 @@ namespace Eimu
         Chip8XMachine m_Machine;
         WindowInteropHelper m_WinHelper;
         SC8DebuggerWindow m_Debugger;
-        OGLDevice renderer;
+        GLRenderer m_GLRenderer;
 
         public RenderWindow(Chip8XMachine machine)
         {
             m_Machine = machine;
             InitializeComponent();
+            this.Closing += new System.ComponentModel.CancelEventHandler(RenderWindow_Closing);
+        }
+
+        void RenderWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            m_Machine.Dispose();
+            m_GLRenderer.Shutdown();
         }
 
         private void UpdatePressKeyLabel()
@@ -45,7 +53,7 @@ namespace Eimu
             m_Debugger.Close();
             m_Machine.AttachDebugger(null);
             m_Machine.Stop();
-            renderer.Shutdown();
+            m_GLRenderer.Shutdown();
             base.OnClosing(e);
         }
 
@@ -83,24 +91,33 @@ namespace Eimu
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             m_FormHost.Focus();
-            m_Machine.MachineAborted += new EventHandler(machine_MachineEnded);
             m_WinHelper = new WindowInteropHelper(this);
 
-            renderer = new OGLDevice();
-            renderer.SetPanelHandle(renderPanel.Handle);
-            renderer.SetWindowHandle(m_WinHelper.Handle);
-            renderer.Initialize();
-            renderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.R, Chip8XConfig.BackColor.G, Chip8XConfig.BackColor.B);
-            renderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.R, Chip8XConfig.ForeColor.G, Chip8XConfig.ForeColor.B);
+            m_GLRenderer = new GLRenderer();
+            m_GLRenderer.SetPanelHandle(renderPanel.Handle);
+            m_GLRenderer.SetWindowHandle(m_WinHelper.Handle);
+            m_GLRenderer.Initialize();
+            m_GLRenderer.BackgroundColor = Color.FromRgb(Chip8XConfig.BackColor.R, Chip8XConfig.BackColor.G, Chip8XConfig.BackColor.B);
+            m_GLRenderer.ForegroundColor = Color.FromRgb(Chip8XConfig.ForeColor.R, Chip8XConfig.ForeColor.G, Chip8XConfig.ForeColor.B);
             
             if (!Chip8XConfig.disableGraphics)
             {
-                m_Machine.VideoInterface.Render += new RenderCallback(renderer.Update);
+                m_GLRenderer.AttachToVideoInterface(m_Machine.VideoInterface);
             }
             
             m_Debugger = new SC8DebuggerWindow();
             m_Machine.AttachDebugger(m_Debugger);
-            m_Machine.Run();
+
+            try
+            {
+                m_Machine.Run();
+            }
+            catch (VMException err)
+            {
+                MessageBox.Show(err.Message, "VM Runtime Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                m_GLRenderer.Shutdown();
+                this.Close();
+            }
         }
 
         private void m_MenuItem_Pause_Click(object sender, RoutedEventArgs e)
