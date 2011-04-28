@@ -22,7 +22,7 @@ namespace Eimu.Core.Systems.Chip8X
 {
     public enum HexKey : int
     {
-        None = 0, // Have to give a bogus key
+        None = 0,
         Zero = 0,
         One = 1,
         Two = 2,

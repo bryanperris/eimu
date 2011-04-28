@@ -91,11 +91,8 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             return result;
         }
 
-        #region Opcodes
-
-        // ----------------------------------------
-        // Graphics Opcodes
-        // ----------------------------------------
+        #region Graphics Instructions
+        
         [OpcodeTag(ChipOpCode.Clr)]
         private void Clr(ChipInstruction inst)
         {
@@ -126,10 +123,10 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             OnPixelScroll(3, 4);
         }
 
+        #endregion
 
-        // -----------------------------------------
-        // Math Opcodes
-        // -----------------------------------------
+        #region Math Instructions
+        
         [OpcodeTag(ChipOpCode.Add_7)]
         void Add_7(ChipInstruction inst)
         {
@@ -200,9 +197,10 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             VRegisters[inst.X] = (byte)(this.Random.Next(255) & inst.KK);
         }
 
-        // -----------------------------------------
-        // Jump Opcodes
-        // -----------------------------------------
+        #endregion
+
+        #region Branch Instructions
+        
         [OpcodeTag(ChipOpCode.Sys)]
         void Sys(ChipInstruction inst)
         {
@@ -299,10 +297,10 @@ namespace Eimu.Core.Systems.Chip8X.Engines
                 PC = 512;
         }
 
+        #endregion
 
-        // -----------------------------------------
-        // Load Opcodes
-        // -----------------------------------------
+        #region Load/Store Instructions
+        
         [OpcodeTag(ChipOpCode.Ld_6)]
         void Load_6(ChipInstruction inst)
         {
@@ -382,9 +380,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             }
         }
 
-        // -----------------------------------------
-        // Super Chips
-        // -----------------------------------------
+        #endregion
+
+        #region SuperChip Instructions
 
         [OpcodeTag(ChipOpCode.Ld_F_75)]
         void Load_F75(ChipInstruction inst)
