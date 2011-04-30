@@ -78,19 +78,6 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             }
         }
 
-        private int AddWithCarry(int a, int b, int numBytes)
-        {
-            int result = a + b;
-
-            if (result >= ((256 ^ numBytes) - 1))
-            {
-                VRegisters[0xF] = 1;
-                VRegisters[0x7] = 1; // Wtf does chip8 have that isnt' documented? O_O
-            }
-
-            return result;
-        }
-
         #region Graphics Instructions
         
         [OpcodeTag(ChipOpCode.Clr)]
@@ -130,64 +117,96 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Add_7)]
         void Add_7(ChipInstruction inst)
         {
-            VRegisters[inst.X] = (byte)AddWithCarry(VRegisters[inst.X], inst.KK, 1);
+            VRegisters[inst.X] += inst.KK;
         }
 
         [OpcodeTag(ChipOpCode.Add_8)]
         void Add_8(ChipInstruction inst)
         {
-            VRegisters[inst.X] = (byte)AddWithCarry(VRegisters[inst.X], VRegisters[inst.Y], 1);
+            int result = VRegisters[inst.X] + VRegisters[inst.Y];
+
+            if (result > (int)byte.MaxValue)
+            {
+                VRegisters[0xF] = 1;
+            }
+
+            VRegisters[inst.X] = (byte)result;
         }
 
         [OpcodeTag(ChipOpCode.Add_F)]
         void Add_F(ChipInstruction inst)
         {
-           AddressRegister = (ushort)AddWithCarry(AddressRegister, VRegisters[inst.X], 2);
+            if (((int)AddressRegister + (int)VRegisters[inst.X]) >= 0x1000)
+            {
+                AddressRegister = (ushort)Memory.Size;
+                VRegisters[0xF] = 1;
+            }
+            else
+                AddressRegister += VRegisters[inst.X];
         }
 
         [OpcodeTag(ChipOpCode.Or)]
         void Or(ChipInstruction inst)
         {
             VRegisters[inst.X] |= VRegisters[inst.Y];
+            VRegisters[0xF] = 0;
         }
 
         [OpcodeTag(ChipOpCode.And)]
         void And(ChipInstruction inst)
         {
             VRegisters[inst.X] &= VRegisters[inst.Y];
+            VRegisters[0xF] = 0;
         }
 
         [OpcodeTag(ChipOpCode.Xor)]
         void Xor(ChipInstruction inst)
         {
             VRegisters[inst.X] ^= VRegisters[inst.Y];
+            VRegisters[0xF] = 0;
         }
 
         [OpcodeTag(ChipOpCode.Sub)]
         void Sub(ChipInstruction inst)
         {
-            VRegisters[0xF] = (byte)((VRegisters[inst.X] >= VRegisters[inst.Y]) ? 1 : 0);
+            if (VRegisters[inst.X] > VRegisters[inst.Y])
+            {
+                VRegisters[0xF] = 1;
+            }
+
             VRegisters[inst.X] -= VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.Shr)]
         void Shr(ChipInstruction inst)
         {
-            VRegisters[0xF] = (byte)(((VRegisters[inst.X] & 1) == 1) ? 1 : 0);
+            if ((VRegisters[inst.X] & 1) == 1)
+            {
+                VRegisters[0xF] = 1;
+            }
+
             VRegisters[inst.X] /= 2;
         }
 
         [OpcodeTag(ChipOpCode.Subn)]
         void Subn(ChipInstruction inst)
         {
-            VRegisters[0xF] = (byte)((VRegisters[inst.Y] >= VRegisters[inst.X]) ? 1 : 0);
+            if (VRegisters[inst.Y] >= VRegisters[inst.X])
+            {
+                VRegisters[0xF] = 1;
+            }
+
             VRegisters[inst.X] = (byte)(VRegisters[inst.Y] - VRegisters[inst.X]);
         }
 
         [OpcodeTag(ChipOpCode.Shl)]
         void Shl(ChipInstruction inst)
         {
-            VRegisters[0xF] = (byte)((VRegisters[inst.X] & 0x80) >> 7);
+            if (((VRegisters[inst.X] & 0x80) >> 7) == 1)
+            {
+                VRegisters[0xF] = 1;
+            }
+
             VRegisters[inst.X] *= 2;
         }
 
@@ -310,7 +329,7 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         [OpcodeTag(ChipOpCode.Ld_8)]
         void Load_8(ChipInstruction inst)
         {
-            this.VRegisters[inst.X] = this.VRegisters[inst.Y];
+            VRegisters[inst.X] = VRegisters[inst.Y];
         }
 
         [OpcodeTag(ChipOpCode.Ld_A)]

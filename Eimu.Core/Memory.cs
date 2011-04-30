@@ -33,6 +33,7 @@ namespace Eimu.Core
         private int m_CurrentAddressOffset = 0;
         private int m_CurrentAddressBound = 0;
         private VirtualMachine m_ParentMachine;
+        private bool m_Debug1802Access;
 
         public Memory(VirtualMachine machine)
         {
@@ -51,6 +52,9 @@ namespace Eimu.Core
         {
             lock (this)
             {
+                if (m_Debug1802Access)
+                    Console.WriteLine("CDP1802 Address Write " + address.ToString("X4") + " " + value.ToString("X2"));
+
                 FindPage(address).WriteByte(address - m_CurrentAddressOffset, value);
             }
         }
@@ -59,6 +63,9 @@ namespace Eimu.Core
         {
             lock (this)
             {
+                if (m_Debug1802Access)
+                    Console.WriteLine("CDP1802 Address Read " + address.ToString("X4"));
+
                 return FindPage(address).ReadByte(address - m_CurrentAddressOffset);
             }
         }
@@ -137,6 +144,12 @@ namespace Eimu.Core
         public VirtualMachine ParentMachine
         {
             get { return this.m_ParentMachine; }
+        }
+
+        public bool IsCDP1802AccessDebugEnabled
+        {
+            get { return m_Debug1802Access; }
+            set { m_Debug1802Access = value; }
         }
     }
 }

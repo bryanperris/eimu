@@ -54,7 +54,7 @@ namespace Eimu.Core.Systems.Chip8X
         {
             get
             {
-                return m_VideoInterface.Pixels.Length / 8;
+                return 256;
             }
         }
     }

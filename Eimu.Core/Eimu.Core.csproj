@@ -58,6 +58,7 @@
     <Compile Include="MemoryPage.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RunStateChangedArgs.cs" />
+    <Compile Include="Systems\Chip8X\ChipCorePage.cs" />
     <Compile Include="Systems\Chip8X\CodeUtils\CodeAnalyzer.cs" />
     <Compile Include="Systems\Chip8X\CodeUtils\OpcodeMeta.cs" />
     <Compile Include="Systems\Chip8X\Interfaces\AudioInterface.cs" />

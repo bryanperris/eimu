@@ -10,10 +10,12 @@ namespace Eimu.Core.Systems.Chip8X
         public const int MEMORY_FONT_SIZE = 512;
         public const int MEMORY_CHIP_SIZE = 4096;
         public const int MEMORY_STACK_SIZE =   48;
-        public const int MEMORY_WORKAREA_SIZE = 255;
-        public const int MEMORY_VIDEO_SIZE = 6144;
+        public const int MEMORY_CHIPCORE_SIZE = 48;
+        public const int MEMORY_VIDEO_SIZE = 256;
         private int m_FontOffset;
         private int m_ChipOffset;
+        private int m_StackOffset;
+        private int m_ChipCoreOffset;
         private int m_VideoOffset;
 
         public ChipMemory(Chip8XMachine machine) : base((VirtualMachine)machine)
@@ -35,6 +37,16 @@ namespace Eimu.Core.Systems.Chip8X
             get { return m_VideoOffset; }
         }
 
+        public int ChipCorePointer
+        {
+            get { return m_ChipCoreOffset; }
+        }
+
+        public int StackPointer
+        {
+            get { return m_StackOffset; }
+        }
+
         protected override void AllocatePages()
         {
             m_FontOffset = Size;
@@ -43,8 +55,15 @@ namespace Eimu.Core.Systems.Chip8X
             m_ChipOffset = Size;
             AddPage(new MemoryPage(MEMORY_CHIP_SIZE));
 
+            m_StackOffset = Size;
+            AddPage(new MemoryPage(MEMORY_STACK_SIZE));
+
+            m_ChipCoreOffset = Size;
+            AddPage(new ChipCorePage(((Chip8XMachine)ParentMachine).ProcessorCore));
+
             m_VideoOffset = Size;
-            AddPage(new VideoPage( ((Chip8XMachine)ParentMachine).VideoInterface ));
+            AddPage(new VideoPage(((Chip8XMachine)ParentMachine).VideoInterface));
+            
         }
     }
 }

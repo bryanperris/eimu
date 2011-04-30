@@ -49,13 +49,14 @@ namespace Eimu.Core.Systems.Chip8X
         public CodeEngine(Chip8XMachine currentMachine)
         {
             m_CurrentMachine = currentMachine;
-            m_Memory = new ChipMemory(currentMachine);
         }
 
         public void Initialize(Chip8XMachine machine)
         {
-            m_1802Regs[0xF] = 0x7F00;
-            
+            m_Memory = new ChipMemory(m_CurrentMachine);
+            m_1802Regs[0x6] = (ushort)Memory.ChipCorePointer;
+            m_1802Regs[0x7] = (ushort)Memory.ChipCorePointer;
+            m_1802Regs[0xF] = (ushort)Memory.VideoPointer;
             m_Memory.Reset();
             m_TimerWait = new EventWaitHandle(false, EventResetMode.AutoReset);
             m_Paused = false;

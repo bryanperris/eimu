@@ -79,6 +79,9 @@ namespace Eimu.Core.Systems.CDP1802
             bool end = false;
             ushort funcAddr = (ushort)CurrentAddress;
 
+            //if (funcAddr == 0x610)
+            //    EimtMemoryDebug(true);
+
             do
             {
                 UpdateLocalOffsetBase();
@@ -124,8 +127,8 @@ namespace Eimu.Core.Systems.CDP1802
                         default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                     }
 
-                    //if (funcAddr == 0x61c)
-                    //    EmitDumpRegsCall();
+                    //if (funcAddr == 0x3f3)
+                     //   EmitDumpRegsCall();
                 }
                 catch (ArgumentException)
                 {
@@ -134,6 +137,9 @@ namespace Eimu.Core.Systems.CDP1802
                 }
             }
             while (!end);
+
+            //if (funcAddr == 0x610)
+             //   EimtMemoryDebug(false);
         }
 
         private void EmitSubOpcodes15(CdpInstruction inst)
@@ -321,6 +327,14 @@ namespace Eimu.Core.Systems.CDP1802
                 case SelectedRegister.DF: ILGenerator.Emit(OpCodes.Ldloc_S, 4); break;
                 default: break;
             }
+        }
+
+        private void EimtMemoryDebug(bool enabled)
+        {
+            EmitCoreStateObject();
+            ILGenerator.Emit(OpCodes.Callvirt, typeof(CodeEngine).GetMethod("get_Memory")); // push CodeEngine.Memory
+            EmitByteConstant((byte)(enabled ? 1 : 0));
+            ILGenerator.Emit(OpCodes.Callvirt, typeof(Memory).GetMethod("set_IsCDP1802AccessDebugEnabled"));
         }
 
         private void EmitIncrementPC()

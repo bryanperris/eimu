@@ -1,3 +1,109 @@
 ;----- Chip-8 Undocumented Opcode Testing ------
-OPTION BINARY
+OPTION CHIP8
 ALIGN OFF
+
+; ---------- Init --------
+cls
+ld v0, 0
+ld v2, 0
+
+; ----- Tests --------
+MainTests:
+jp Test_AddCarry1 ; Test 2
+jp Test_AddressOverflow ; Test 2
+jp Test_AddCarry3 ; Test 3
+jp Test_And ; Test 4
+jp Test_Or ; Test 5
+jp Test_Xor ; Test 6
+ld v0,0
+ld v1,0
+ld F,v0
+drw v0, v1, 5
+add v0, 5
+ld I,SpriteK
+drw v0, v1, 5
+fin: jp fin
+
+Test_AddCarry1
+add v2, 1
+ld vf, 0
+ld v1, 255
+ld v3, 10
+add v1, v3
+se vf, 1
+jp Error
+jp NextTest
+
+Test_AddressOverflow:
+add v2, 1
+;ld ve, 40
+;ld vf, 0
+;ld I, 4095
+;add I, ve
+;se vf, 1
+;jp Error
+jp NextTest
+
+Test_AddCarry3:
+add v2, 1
+;ld vf, 0
+;ld v1, 255
+;add v1, 100
+;se vf, 1
+;jp Error
+jp NextTest
+
+Test_And:
+add v2, 1
+ld vf, 1
+and v1, v3
+se vf, 0
+jp Error
+jp NextTest
+
+Test_Or:
+add v2, 1
+ld vf, 1
+or v1, v3
+se vf, 0
+jp Error
+jp NextTest
+
+Test_Xor:
+add v2, 1
+ld vf, 1
+xor v1, v3
+se vf, 0
+jp Error
+jp NextTest
+
+NextTest:
+add v0, 2
+jp v0, MainTests
+
+Error:
+ld v0,0
+ld v1,0
+ld I,SpriteX
+drw v0, v1, 5
+add v0, 7
+ld F,v2
+drw v0, v1, 5
+jp fin
+
+SpriteX:
+DB $.1...1..
+DB $..1.1...
+DB $...1....
+DB $..1.1...
+DB $.1...1..
+
+SpriteK:
+db $1..1....
+db $1.1.....
+db $11......
+db $1.1.....
+db $1..1....
+
+
+

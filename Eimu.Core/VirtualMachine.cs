@@ -39,6 +39,8 @@ namespace Eimu.Core
 
         protected abstract bool Boot();
 
+        protected abstract void InitializeComponents();
+
         #endregion
 
         #region Machine API
@@ -94,8 +96,13 @@ namespace Eimu.Core
                     m_Debugger.Report();
             }
 
+            // Start point of the Machine boot process
             if (m_State == RunState.Running && !m_Booted)
             {
+                // First tell the machine to initilize subcomponents
+                InitializeComponents();
+
+                // Tell the machine to load in media resources (disk, etc)
                 if (!Resources.LoadResources())
                 {
                     m_Booted = false;
@@ -103,6 +110,7 @@ namespace Eimu.Core
                     throw new VMException("Resources failed to load!");
                 }
 
+                // Tell the machine to finally run the machine
                 if (!Boot())
                 {
                     m_Booted = false;
@@ -147,6 +155,7 @@ namespace Eimu.Core
         public abstract ResourceManager Resources { get; }
 
         public abstract Memory SystemMemory { get; }
+
 
         public bool IsBooted
         {

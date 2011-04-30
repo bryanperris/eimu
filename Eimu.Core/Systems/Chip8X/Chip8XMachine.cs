@@ -28,7 +28,6 @@ using Eimu.Core.Systems.CDP1802;
 using Eimu.Core.Dynarec;
 using Eimu.Core.Systems.Chip8X.Interfaces;
 using Eimu.Core.Systems.Chip8X.CodeUtils;
-using Eimu.Core.Systems.Chip8X.CodeUtils.CodeUtils;
 
 namespace Eimu.Core.Systems.Chip8X
 {
@@ -156,27 +155,8 @@ namespace Eimu.Core.Systems.Chip8X
 
         protected override bool Boot()
         {
-            Console.WriteLine("Booting...");
-
-            m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
-            m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
-            m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
-            m_RequestCPUStop = false;
-            m_Paused = false;
-            m_CodeEngine.Initialize(this);
-            m_VideoInterface.Initialize(m_StartMode);
-
-            if (!Resources.LoadResources())
-            {
-                Console.WriteLine("Resource load error!");
-                return false;
-            }
-
-            m_CodeEngine.PC = ((ChipResources)Resources).LoadPointAddress;
-
-            StartCPUThread();
             Console.WriteLine("Running...");
-
+            StartCPUThread();
             return true;
         }
 
@@ -318,5 +298,17 @@ namespace Eimu.Core.Systems.Chip8X
         }
 
         #endregion
+
+        protected override void InitializeComponents()
+        {
+            m_CPUPause = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_KeyWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_CPUFinishWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+            m_CodeEngine.Initialize(this);
+            m_VideoInterface.Initialize(m_StartMode);
+            m_RequestCPUStop = false;
+            m_Paused = false;
+            m_CodeEngine.PC = ((ChipResources)Resources).LoadPointAddress;
+        }
     }
 }
