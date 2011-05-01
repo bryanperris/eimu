@@ -289,12 +289,13 @@ namespace Eimu.Core.Systems.Chip8X
         {
             if (disposing)
             {
-                OnStateChanged(RunState.Stopped);
+                Stop();
+                m_CPUPause.Close();
+                m_CPUFinishWait.Close();
+                m_KeyWait.Close();
+                m_VideoInterface.DisplayRefresh -= null;
+                //m_AudioInterface.
             }
-
-            m_CPUPause.Close();
-            m_CPUFinishWait.Close();
-            m_KeyWait.Close();
         }
 
         #endregion

@@ -47,7 +47,7 @@ namespace Eimu
             m_Machine.AttachDebugger(null);
             m_Machine.Stop();
             m_GLRenderer.Shutdown();
-            //m_Machine.Dispose(); Calling this breaks program :(, TODO
+            m_Machine.Dispose();
             base.OnClosing(e);
         }
 

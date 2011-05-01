@@ -88,6 +88,9 @@ namespace Eimu.Core
 
         private void SetRunState(RunState state)
         {
+            if (m_State == RunState.Stopped && state == RunState.Stopped)
+                return;
+
             m_State = state;
 
             if (state == RunState.Paused)
@@ -133,6 +136,7 @@ namespace Eimu.Core
             if (m_State == RunState.Stopped)
             {
                 m_Booted = false;
+                Resources.CloseResources();
                 if (m_Debugger != null)
                     m_Debugger.StopDebugging();
             }
