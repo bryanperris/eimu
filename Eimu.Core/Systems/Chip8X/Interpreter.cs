@@ -126,9 +126,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
             int result = VRegisters[inst.X] + VRegisters[inst.Y];
 
             if (result > (int)byte.MaxValue)
-            {
                 VRegisters[0xF] = 1;
-            }
+            else
+                VRegisters[0xF] = 0;
 
             VRegisters[inst.X] = (byte)result;
         }
@@ -170,9 +170,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         void Sub(ChipInstruction inst)
         {
             if (VRegisters[inst.X] > VRegisters[inst.Y])
-            {
                 VRegisters[0xF] = 1;
-            }
+            else
+                VRegisters[0xF] = 0;
 
             VRegisters[inst.X] -= VRegisters[inst.Y];
         }
@@ -181,9 +181,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         void Shr(ChipInstruction inst)
         {
             if ((VRegisters[inst.X] & 1) == 1)
-            {
                 VRegisters[0xF] = 1;
-            }
+            else
+                VRegisters[0xF] = 0;
 
             VRegisters[inst.X] /= 2;
         }
@@ -192,9 +192,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         void Subn(ChipInstruction inst)
         {
             if (VRegisters[inst.Y] >= VRegisters[inst.X])
-            {
                 VRegisters[0xF] = 1;
-            }
+            else
+                VRegisters[0xF] = 0;
 
             VRegisters[inst.X] = (byte)(VRegisters[inst.Y] - VRegisters[inst.X]);
         }
@@ -203,9 +203,9 @@ namespace Eimu.Core.Systems.Chip8X.Engines
         void Shl(ChipInstruction inst)
         {
             if (((VRegisters[inst.X] & 0x80) >> 7) == 1)
-            {
                 VRegisters[0xF] = 1;
-            }
+            else
+                VRegisters[0xF] = 0;
 
             VRegisters[inst.X] *= 2;
         }
