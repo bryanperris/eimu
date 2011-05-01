@@ -127,8 +127,8 @@ namespace Eimu.Core.Systems.CDP1802
                         default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                     }
 
-                    //if (funcAddr == 0x3f3)
-                     //   EmitDumpRegsCall();
+                    //if (funcAddr == 0x3ff)
+                      //  EmitDumpRegsCall();
                 }
                 catch (ArgumentException)
                 {

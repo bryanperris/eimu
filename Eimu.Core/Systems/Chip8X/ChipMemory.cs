@@ -61,8 +61,8 @@ namespace Eimu.Core.Systems.Chip8X
             m_ChipCoreOffset = Size;
             AddPage(new ChipCorePage(((Chip8XMachine)ParentMachine).ProcessorCore));
 
-            m_VideoOffset = Size;
-            AddPage(new VideoPage(((Chip8XMachine)ParentMachine).VideoInterface));
+            m_VideoOffset = 0x1300;
+            AddManualPage(m_VideoOffset, new VideoPage(((Chip8XMachine)ParentMachine).VideoInterface));
             
         }
     }

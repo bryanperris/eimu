@@ -136,6 +136,11 @@ namespace Eimu.Core
             m_MemBound += page.Size;
         }
 
+        protected void AddManualPage(int address, MemoryPage page)
+        {
+            m_Pages.Add(address, page);
+        }
+
         protected void ClearPages()
         {
             m_Pages.Clear();

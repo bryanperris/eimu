@@ -21,16 +21,16 @@ namespace Eimu.Core.Systems.Chip8X
 
         public override byte ReadByte(int address)
         {
-            if (address >= 0xF0)
-                return m_Engine.VRegisters[address - 0xF0];
+            if (address >= 0x10F0)
+                return m_Engine.VRegisters[address - 0x10F0];
             else
                 return 0;
         }
 
         public override void WriteByte(int address, byte value)
         {
-            if (address >= 0xF0)
-                m_Engine.VRegisters[address - 0xF0] = value;
+            if (address >= 0x10F0)
+                m_Engine.VRegisters[address - 0x10F0] = value;
         }
 
         public override int Size
