@@ -26,16 +26,30 @@ namespace Eimu
 		private FileStream m_RomFileSource;
 		private Chip8XMachine m_VM;
 		private ColorDialog colorDialog;
+        private bool m_Quitting;
 
 		public StartDialog()
 		{
 			InitializeComponent();
+            this.Closing += new System.ComponentModel.CancelEventHandler(StartDialog_Closing);
+            Application.Current.Exit += new ExitEventHandler(Current_Exit);
             m_Textbox_C8XLoadPointAddress.TextChanged += new TextChangedEventHandler(m_Textbox_C8XLoadPointAddress_TextChanged);
             m_RadioButton_C8XNormalLoadPoint.Checked += new RoutedEventHandler(m_RadioButton_C8XNormalLoadPoint_Checked);
 			m_OpenFileDialog = new OpenFileDialog();
 			m_OpenFileDialog.Filter = "Chip8X Programs (*.sc, *.ch8, *.c8, *.c8x)|*.sc;*.ch8;*.c8;*.c8x;|Binary Files (*.bin)|*.bin;|All Files (*.*)|*.*;";
 			LoadConfig();
 		}
+
+        void Current_Exit(object sender, ExitEventArgs e)
+        {
+            m_Quitting = true;
+        }
+
+        void StartDialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // A hack or force the program closed
+            Application.Current.Shutdown();
+        }
 
         void m_RadioButton_C8XNormalLoadPoint_Checked(object sender, RoutedEventArgs e)
         {
@@ -199,6 +213,9 @@ namespace Eimu
 
             RenderWindow window = new RenderWindow(m_VM);
             window.ShowDialog();
+
+            if (m_Quitting)
+                return;
 
             Show();
 		}

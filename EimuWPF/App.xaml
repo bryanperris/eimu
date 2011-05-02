@@ -1,6 +1,6 @@
 ﻿<Application x:Class="Eimu.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StartupUri="StartDialog.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StartupUri="StartDialog.xaml" ShutdownMode="OnLastWindowClose">
     <Application.Resources>
          
     </Application.Resources>
