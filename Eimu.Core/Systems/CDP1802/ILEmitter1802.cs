@@ -22,6 +22,9 @@ namespace Eimu.Core.Systems.CDP1802
     {
         private bool m_Debug = !false;
         private CodeEngine m_CodeEngine;
+        private int m_DebugAddress = 0x559;
+        private bool m_DebugRegs = false;
+        private bool m_DebugDMA = false;
 
         public ILEmitter1802()
         {
@@ -79,8 +82,8 @@ namespace Eimu.Core.Systems.CDP1802
             bool end = false;
             ushort funcAddr = (ushort)CurrentAddress;
 
-            //if (funcAddr == 0x610)
-            //    EimtMemoryDebug(true);
+            if (funcAddr == m_DebugAddress && m_DebugDMA)
+                EimtMemoryDebug(true);
 
             do
             {
@@ -127,8 +130,8 @@ namespace Eimu.Core.Systems.CDP1802
                         default: EmitNop(); WriteDebug("  ...No Emit!"); break;
                     }
 
-                    //if (funcAddr == 0x3ff)
-                      //  EmitDumpRegsCall();
+                    if (funcAddr == m_DebugAddress && m_DebugRegs)
+                        EmitDumpRegsCall();
                 }
                 catch (ArgumentException)
                 {
@@ -138,8 +141,8 @@ namespace Eimu.Core.Systems.CDP1802
             }
             while (!end);
 
-            //if (funcAddr == 0x610)
-             //   EimtMemoryDebug(false);
+            if (funcAddr == m_DebugAddress && m_DebugDMA)
+                EimtMemoryDebug(false);
         }
 
         private void EmitSubOpcodes15(CdpInstruction inst)

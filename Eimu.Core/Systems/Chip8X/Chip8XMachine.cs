@@ -135,6 +135,10 @@ namespace Eimu.Core.Systems.Chip8X
                         else
                             Console.WriteLine("Syscall Emitter Disabled!");
                     }
+                    else
+                    {
+                        Console.WriteLine("Warning: 0 opcode doing Nop!");
+                    }
                 }
                 else
                 {
