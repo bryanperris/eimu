@@ -45,8 +45,12 @@ namespace Eimu.Devices
 
         void m_ControlContext_Paint(object sender, PaintEventArgs e)
         {
-            if (AttachedVideoInterface == null && m_GContext.IsDisposed && !m_GContext.IsCurrent)
+            if (AttachedVideoInterface == null && m_GContext.IsDisposed)
                 return;
+
+            if (!m_GContext.IsCurrent)
+                Console.WriteLine("Warning context isn't on current thread!");
+
 
             GL.Viewport(m_ControlContext.ClientRectangle);
 
@@ -98,7 +102,6 @@ namespace Eimu.Devices
             m_ControlContext.Paint += new PaintEventHandler(m_ControlContext_Paint);
             m_WindowInfo = Utilities.CreateWindowsWindowInfo(handle);
             m_GContext = new GraphicsContext(GraphicsMode.Default, m_WindowInfo);
-
             m_GContext.MakeCurrent(m_WindowInfo);
 
             if (!m_GContext.IsCurrent)

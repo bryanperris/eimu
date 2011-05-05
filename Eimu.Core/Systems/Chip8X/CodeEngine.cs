@@ -118,7 +118,7 @@ namespace Eimu.Core.Systems.Chip8X
                 case 1: m_1802Regs[1] = value; break; // Interrupt PC
                 //case 2: TODO: Set a value in the stack directly
                 case 3: m_RoutineAddress = value; break;
-                case 4: m_1802Regs[4] = value; break; // Set this reigser to w/e
+                case 4: m_1802Regs[4] = value; break; // Set this regiser to w/e
                 case 5: m_PC = (int)value; break;
                 case 6: m_1802Regs[6] = value; break; // Set X pointer
                 case 7: m_1802Regs[7] = value; break; // Set Y pointer
