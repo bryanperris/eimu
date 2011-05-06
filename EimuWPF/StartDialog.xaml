@@ -59,22 +59,22 @@
 							<CheckBox x:Name="m_Checkbox_C8XLoadFonts" Content="Load Fonts at 000 - 1FF" Margin="8,8,25.523,0" VerticalAlignment="Top" IsChecked="True"/>
 							<GroupBox Header="Rom Load Point" Margin="8,27.96,8,0" Height="73.627" VerticalAlignment="Top">
 								<Grid>
-									<RadioButton x:Name="m_RadioButton_C8XNormalLoadPoint" Content="Normal Load Point (0x200)" Margin="8,5,53.894,0" VerticalAlignment="Top" IsChecked="True"/>
-									<RadioButton x:Name="m_RadioButton_C8XCustomLoadPoint" Content="Custom Load Point" Width="125.049" HorizontalAlignment="Left" Margin="8,27.96,0,0" Height="16.373" VerticalAlignment="Top"/>
-									<TextBox x:Name="m_Textbox_C8XLoadPointAddress" HorizontalAlignment="Right" TextWrapping="Wrap" Text="0200" Margin="0,24.96,12.001,0" Width="77.893" VerticalAlignment="Top"/>
+									<RadioButton x:Name="m_RadioButton_C8XNormalLoadPoint" Content="Default Mount Point (0x200)" Margin="8,5,43.894,0" VerticalAlignment="Top" IsChecked="True"/>
+									<RadioButton x:Name="m_RadioButton_C8XCustomLoadPoint" Content="Custom Mount Point" Width="125.049" HorizontalAlignment="Left" Margin="8,27.96,0,0" Height="16.373" VerticalAlignment="Top"/>
+									<TextBox x:Name="m_Textbox_C8XLoadPointAddress" HorizontalAlignment="Right" TextWrapping="Wrap" Text="0200" Margin="0,24.96,12.001,0" Width="64.893" VerticalAlignment="Top"/>
 								</Grid>
 							</GroupBox>
 						</Grid>
 					</GroupBox>
-					<GroupBox Header="CDP1802 Hybrid Core" Margin="-94.2,0,0,8" VerticalAlignment="Bottom" Height="77" Width="228.057" HorizontalAlignment="Left" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" Grid.Column="1">
+					<GroupBox Header="Syscall Recompiler" Margin="-94.2,0,0,8" VerticalAlignment="Bottom" Height="77" Width="228.057" HorizontalAlignment="Left" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" Grid.Column="1">
 						<Grid>
 							<ComboBox HorizontalAlignment="Left" Margin="5,8,0,23.04" x:Name="m_ComboBox_HLESelector" Width="203.057" SelectedIndex="0">
-								<ComboBoxItem Content="Disable HLE Patching" />
-								<ComboBoxItem Content="Cosmac VIP Patching" />
-								<ComboBoxItem Content="ETI660 Patching" />
-								<ComboBoxItem Content="Telmac 2000 Patching" />
+								<ComboBoxItem Content="Disable HLE Mode" />
+								<ComboBoxItem Content="Cosmac VIP HLE" />
+								<ComboBoxItem Content="ETI660 HLE" />
+								<ComboBoxItem Content="Telmac 2000 HLE" />
 							</ComboBox>
-							<CheckBox Content="Enable hybrid core for syscalls" Height="16" HorizontalAlignment="Left" Margin="5,-55,0,0" x:Name="m_CheckBox_Use1802Dynarec" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" />
+							<CheckBox Content="Enable Syscall Recompiler" Height="16" HorizontalAlignment="Left" Margin="5,-55,0,0" x:Name="m_CheckBox_Use1802Dynarec" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" />
 						</Grid>
 					</GroupBox>
 				</Grid>

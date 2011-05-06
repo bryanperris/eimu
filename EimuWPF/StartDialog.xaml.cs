@@ -214,6 +214,8 @@ namespace Eimu
             RenderWindow window = new RenderWindow(m_VM);
             window.ShowDialog();
 
+            m_VM.Resources.CloseResources();
+
             if (m_Quitting)
                 return;
 

@@ -136,7 +136,7 @@ namespace Eimu.Core
             if (m_State == RunState.Stopped)
             {
                 m_Booted = false;
-                Resources.CloseResources();
+                
                 if (m_Debugger != null)
                     m_Debugger.StopDebugging();
             }
