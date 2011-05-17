@@ -66,6 +66,7 @@ namespace Eimu.Devices
             GL.LoadMatrix(ref matrix);
 
             GL.Begin(BeginMode.Quads);
+            GL.Color4(Color.FromArgb(ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
 
             for (int y = 0; y < AttachedVideoInterface.CurrentResolutionY; y++)
             {
@@ -73,17 +74,11 @@ namespace Eimu.Devices
                 {
                     if (AttachedVideoInterface.GetPixel(x, y))
                     {
-                        GL.Color4(Color.FromArgb(ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
+                        GL.Vertex2(x * m_ScaleX, y * m_ScaleY);
+                        GL.Vertex2((x * m_ScaleX) + m_ScaleX, y * m_ScaleY);
+                        GL.Vertex2((x * m_ScaleX) + m_ScaleX, (y * m_ScaleY) + m_ScaleY);
+                        GL.Vertex2(x * m_ScaleX, (y * m_ScaleY) + m_ScaleY);
                     }
-                    else
-                    {
-                        GL.Color4(Color.FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
-                    }
-
-                    GL.Vertex2(x * m_ScaleX, y * m_ScaleY);
-                    GL.Vertex2((x * m_ScaleX) + m_ScaleX, y * m_ScaleY);
-                    GL.Vertex2((x * m_ScaleX) + m_ScaleX, (y * m_ScaleY) + m_ScaleY);
-                    GL.Vertex2(x * m_ScaleX, (y * m_ScaleY) + m_ScaleY);
                 }
             }
 
