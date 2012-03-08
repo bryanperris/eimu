@@ -108,6 +108,7 @@ namespace Eimu.Core.Systems.Chip8X
                 byte b = SystemMemory.ReadByte(m_CodeEngine.PC + 1);
                 ushort data = Tools.Create16(a, b);
                 ChipOpCode opcode = Disassembler.DecodeInstruction(data);
+                //Console.WriteLine("Instuction: " + opcode.ToString());
                 //Console.WriteLine(m_CodeEngine.PC.ToString("X2") + " " + opcode.ToString());
                 ChipInstruction inst = new ChipInstruction(data, opcode);
                 inst.Address = m_CodeEngine.PC;
