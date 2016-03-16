@@ -1,0 +1,1 @@
+  * RCA 1802 Set: http://www.cosmacelf.com/shortcourse.htm
